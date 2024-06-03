@@ -20,8 +20,12 @@ export default defineNuxtConfig({
       }
     }],
     "@vesp/nuxt-fontawesome",
-    "@nuxt/fonts"
+    "@nuxt/fonts",
+    'nuxt-vue3-google-signin'
   ],
+  googleSignIn: {
+    clientId: import.meta.env.VITE_GOOGLE_ID,
+  },
   app: {
     head:{
       script:[
