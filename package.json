@@ -21,7 +21,8 @@
     "nuxt": "^3.11.2",
     "nuxt-vue3-google-signin": "^0.0.11",
     "vue": "^3.4.27",
-    "vue-router": "^4.3.2"
+    "vue-router": "^4.3.2",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@fortawesome/free-brands-svg-icons": "^6.5.2",

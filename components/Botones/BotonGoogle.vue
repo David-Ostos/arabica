@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 // import { fetchDataUser } from '@/helpers/functionGlobal';
-import { useUserStore } from '@/stores';
+import { useUserStore } from '@/stores/user';
 import type { User } from '~/interfaces/Users';
 const router = useRouter()
 const useUser = useUserStore()

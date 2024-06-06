@@ -8,7 +8,9 @@ export default {
     },
     extend: {
       colors: {
-        dark: "rgb(17 25 40)",
+        dark: {
+          DEFAULT: "rgb(17 25 40)",
+        },
         prim: "#02AC66",
       },
       backgroundImage: {

@@ -1,13 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  ssr: true,
   modules: [
     '@pinia/nuxt',
     '@nuxt/ui',
     '@formkit/auto-animate/nuxt',
     '@nuxt/image',
     ['@nuxtjs/google-fonts',{
-      overwriting: true,
+      overwriting: false,
       families: {
         Roboto: true,
           Inter: [400, 700],
@@ -35,7 +36,7 @@ export default defineNuxtConfig({
         {property: "og:title", content: import.meta.env.VITE_NOMBRE},
         {property: "og:description", content: import.meta.env.VITE_DESCRIPCION},
         {property: "og:image", content: "/public/img/arabicagc-1-1024x511.jpg"},
-        {property: "og:url", content: "https://davidostos.netlify.app/"}
+        {property: "og:url", content: "https://desarrollo.arabicagc.com/"}
 
       ]
     }

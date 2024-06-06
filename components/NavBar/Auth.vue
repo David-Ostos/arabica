@@ -1,7 +1,6 @@
 <template>
   <header
-    :class="{'bg-transparent': !scrolled, 'bg-white dark:bg-dark': scrolled,}"
-    class=" fixed w-screen top-0 z-50 transition-all "
+    class="w-screen transition-all dark:bg-dark bg-white "
   >
     <nav
       class="flex items-center justify-between py-1 lg:px-16 "
@@ -116,7 +115,7 @@
         <!-- login -->
         <div class="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-x-9">
           <BotonSecondary link="/auth/login" contenido="Iniciar Sesión" />
-          <BotonPrimary link="/auth/registro2" contenido="Registrar" />
+          <BotonPrimary link="/auth/registro" contenido="Registrar" />
         </div>
 
         
