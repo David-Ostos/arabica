@@ -35,8 +35,8 @@ export default defineNuxtConfig({
       meta:[
         {property: "og:title", content: import.meta.env.VITE_NOMBRE},
         {property: "og:description", content: import.meta.env.VITE_DESCRIPCION},
-        {property: "og:image", content: "/public/img/arabicagc-1-1024x511.jpg"},
-        {property: "og:url", content: "https://desarrollo.arabicagc.com/"}
+        {property: "og:image", content: "https://cockpit.arabicagc.com/storage/uploads/2024/06/07/hero_uid_666361a666682.jpg"},
+        {property: "og:url", content: "https://desarrollo.arabicagc.com"}
 
       ]
     }

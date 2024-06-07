@@ -8,7 +8,86 @@
 
         <TipoUser/>
 
-        <form action="" class="flex flex-col gap-4">
+        <UForm
+          class="w-full  p-5 rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pt-6 pb-8 mb-4 "
+          :schema="schema"
+          :state="state"
+          @submit="onSubmit"
+          >
+              <!-- nombre y apellido-->
+              <div class="flex justify-between gap-4 max-w-[540px] mx-auto ">
+                <UFormGroup  label="Nombre" name="nombre" required>
+                  <UInput
+                    v-model="state.nombre"
+                    placeholder="Nombre"
+                    size="xl"
+                    :required="true"
+                    icon="i-heroicons-user"
+                    class="[&_input]:dark:bg-stone-800"
+                  />
+                </UFormGroup>
+
+                <UFormGroup  label="Apellido" name="apellido" required>
+                  <UInput
+                    v-model="state.apellido"
+                    placeholder="Apellido"
+                    size="xl"
+                    icon="i-heroicons-user"
+                    :required="true"
+                    class="[&_input]:dark:bg-stone-800"
+                  />
+                </UFormGroup>
+              </div>
+              <!-- /nombre y apellido -->
+
+              <!-- email -->
+              <div class="max-w-[540px] mx-auto">
+                <UFormGroup  label="Email" name="email" required>
+                  <UInput
+                    v-model="state.email"
+                    placeholder="Email"
+                    size="xl"
+                    icon="i-heroicons-envelope"
+                    class="[&_input]:dark:bg-stone-800"
+                  />
+                </UFormGroup>
+              </div>
+              <!-- /email -->
+
+              <!-- password -->
+              <div class="flex justify-between max-w-[540px] gap-4 mx-auto">
+                <UFormGroup  label="Password" name="password" required>
+                  <UInput
+                    v-model="state.password"
+                    type="password"
+                    placeholder="***************"
+                    size="xl"
+                    icon="i-heroicons-lock-closed"
+                    class="[&_input]:dark:bg-stone-800"
+                  />
+                </UFormGroup>
+
+                <UFormGroup  label="Confirmar Password" name="password" required>
+                  <UInput
+                    v-model="state.rePassword"
+                    type="password"
+                    placeholder="***************"
+                    size="xl"
+                    class="[&_input]:dark:bg-stone-800"
+                    icon="i-heroicons-lock-closed"
+                  />
+                </UFormGroup>
+              </div>
+              <!-- /password -->
+
+              <!-- boton registro -->
+
+              <BotonPrimary class="text-center text-white pt-4" contenido="Registrar Cuenta" />
+              
+              <!-- /boton registro -->
+            </UForm>
+
+        <!-- <form action="" class="flex flex-col gap-4">
           <input
             class="p-2 mt-8 rounded-xl border"
             type="email"
@@ -62,10 +141,11 @@
           >
             Login
           </button>
-        </form>
-        <div class="mt-6 items-center text-gray-100">
+        </form> -->
+        
+        <div class=" items-center text-gray-100">
           <hr class="border-gray-300" />
-          <p class="text-center text-sm">OR</p>
+          <p class="text-center text-sm ">O</p>
           <hr class="border-gray-300" />
         </div>
         <button
@@ -95,29 +175,29 @@
             ></path>
           </svg>
 
-          Login with Google
+          Inicia Sessión con Google
         </button>
-        <div
-          class="mt-10 text-sm border-b border-gray-500 py-5 playfair tooltip"
-        >
-          Forget password?
-        </div>
-
-        <div
-          class="mt-4 text-sm flex justify-between items-center container-mr"
-        >
-          <p class="mr-3 md:mr-0">If you don't have an account..</p>
-          <button
-            class="hover:border register text-white bg-[#002D74] hover:border-gray-400 rounded-xl py-2 px-5 hover:scale-110 hover:bg-[#002c7424] font-semibold duration-300"
-          >
-            Register
-          </button>
-        </div>
+        <div class="text-center mt-4">
+                <NuxtLink
+                  class="inline-block text-sm align-baseline dark:hover:text-primary-300 hover:text-primary-500"
+                  to="/auth/forget"
+                >
+                  ¿Olvidaste la contraseña?
+                </NuxtLink>
+              </div>
+              <div class="text-center ">
+                <NuxtLink
+                to="/auth/login"
+                  class="inline-block text-sm align-baseline dark:hover:text-primary-300 hover:text-primary-500"
+                >
+                  ¿Tienes cuenta? ¡Inicia Sesión!
+                </NuxtLink>
+              </div>
       </div>
       <div class="md:block hidden w-1/2">
         <img
           class="rounded-2xl max-h-[1600px]"
-          src="https://images.unsplash.com/photo-1552010099-5dc86fcfaa38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxmcmVzaHxlbnwwfDF8fHwxNzEyMTU4MDk0fDA&ixlib=rb-4.0.3&q=80&w=1080"
+          src="/img/registro.jpg"
           alt="login form image"
         />
       </div>
@@ -130,6 +210,10 @@
 import {ref} from "vue";
 import {useUserStore} from "@/stores/user";
 import TipoUser from "~/components/Auth/Registro/TipoUser.vue";
+import {object, string, type InferType} from "yup";
+import type {FormSubmitEvent} from "#ui/types";
+import BotonPrimary from "~/components/Botones/BotonPrimary.vue";
+
 
 definePageMeta({
   layout: 'auth'
@@ -169,4 +253,32 @@ const createUser = async () => {
   //     router.push('/');
   //   }
 };
+
+const schema = object({
+  nombre: string().required("Requerido"),
+  apellido: string().required("Requerido"),
+  email: string().email("Invalid email").required("Requerido"),
+  password: string()
+    .min(8, "Must be at least 8 characters")
+    .required("Requerido"),
+  rePassword: string()
+    .min(8, "Must be at least 8 characters")
+    .required("Requerido"),
+});
+
+type Schema = InferType<typeof schema>;
+
+const state = reactive({
+  email: undefined,
+  nombre: undefined,
+  apellido: undefined,
+  password: undefined,
+  rePassword: undefined,
+});
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  // Do something with event.data
+  console.log(event.data);
+}
+
 </script>

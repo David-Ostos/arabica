@@ -1,5 +1,5 @@
 <template>
-  <div class="font-raleway ">
+  <div class="font-roboto dark:bg-dark">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

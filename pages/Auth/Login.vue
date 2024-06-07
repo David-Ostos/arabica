@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full translate-y-1/4">
+  <div class="h-full w-full py-8  dark:bg-dark ">
     <div
       class="flex rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl"
     >
@@ -58,7 +58,11 @@
 
         <div class="mt-4 flex items-center justify-between">
           <span class="border-b w-1/5 md:w-1/4"></span>
-          <RouterLink to="/auth/registro2" class="text-xs text-gray-500 uppercase">o registrate</RouterLink>
+          
+          <!-- registrate -->
+          <RouterLink to="/auth/registro" class="text-xs text-gray-500 uppercase">o registrate</RouterLink>
+          <!-- /registrate -->
+
           <span class="border-b w-1/5 md:w-1/4"></span>
         </div>
       </div>

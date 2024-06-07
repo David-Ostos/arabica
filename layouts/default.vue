@@ -6,6 +6,7 @@ import NavBar from '@/components/NavBar/index.vue'
   <div>
     <NavBar/>
     <slot />
+    <FooterDefault/>
   </div>
 </template>
 

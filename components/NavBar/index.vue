@@ -1,6 +1,6 @@
 <template>
   <header
-    :class="{'bg-transparent': !scrolled, 'bg-white dark:bg-dark': scrolled,}"
+    :class="{'bg-transparent text-white': !scrolled, ' text-dark bg-white dark:bg-dark': scrolled,}"
     class=" fixed w-screen top-0 z-50 transition-all "
   >
     <nav
@@ -32,7 +32,7 @@
       <PopoverGroup class="hidden lg:flex lg:gap-x-9 items-center">
         <Popover class="relative">
           <PopoverButton
-            class="flex items-center gap-x-1 text-lg font-semibold leading-6 text-gray-900 dark:text-white dark:hover:text-primary hover:text-primary focus-visible:outline-none"
+            class="flex items-center gap-x-1 text-lg font-semibold leading-6 dark:text-white dark:hover:text-primary hover:text-primary focus-visible:outline-none"
           >
             Producto
             <ChevronDownIcon
@@ -100,13 +100,13 @@
           </transition>
         </Popover>
 
-        <NuxtLink to="/about" class="text-lg font-semibold leading-6 text-gray-900 dark:text-white hover:text-primary dark:hover:text-primary"
+        <NuxtLink to="/about" class="text-lg font-semibold leading-6 dark:text-white hover:text-primary dark:hover:text-primary"
           >Sobre Nosotros</NuxtLink
         >
-        <NuxtLink to="/guia" class="text-lg font-semibold leading-6 text-gray-900 dark:text-white hover:text-primary dark:hover:text-primary "
+        <NuxtLink to="/guia" class="text-lg font-semibold leading-6  dark:text-white hover:text-primary dark:hover:text-primary "
           >Como Funciona</NuxtLink
         >
-        <NuxtLink to="/ayuda" class="text-lg font-semibold leading-6 text-gray-900 dark:text-white hover:text-primary dark:hover:text-primary "
+        <NuxtLink to="/ayuda" class="text-lg font-semibold leading-6  dark:text-white hover:text-primary dark:hover:text-primary "
           >Ayuda</NuxtLink
         >
 
@@ -116,7 +116,7 @@
         <!-- login -->
         <div class="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-x-9">
           <BotonSecondary link="/auth/login" contenido="Iniciar Sesión" />
-          <BotonPrimary link="/auth/registro2" contenido="Registrar" />
+          <BotonPrimary link="/auth/registro" contenido="Registrar" />
         </div>
 
         

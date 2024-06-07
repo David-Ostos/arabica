@@ -2,45 +2,46 @@
   <!-- source: https://gist.github.com/nraloux/bce10c4148380061781b928cdab9b193 -->
   <!-- I have added support for dark mode and improved UI -->
 
-  <div class="sm:pt-24 bg-white dark:bg-gray-900">
+  <div class="sm:pt-24 bg-white dark:bg-dark">
     <!-- Container -->
     <div class="mx-auto">
-      <div class="flex justify-center px-6 py-12">
+      <div class="flex justify-center sm:px-6 sm:py-12 ">
         <!-- Row -->
-        <div class="w-full xl:w-3/4 lg:w-11/12 flex">
+        <div class="w-full xl:w-3/4 lg:w-11/12 flex sm:border sm:rounded-lg border-gray-400 dark:border-gray-700">
           <!-- Col -->
           <div
-            class="w-full h-auto bg-gray-400 dark:bg-gray-800 hidden lg:block lg:w-5/12 bg-cover rounded-l-lg"
+            class="w-full h-auto bg-gray-400 dark:bg-dark hidden lg:block lg:w-5/12 bg-cover rounded-l-lg"
             style="background-image: url('../img/registro.jpg')"
           ></div>
           <!-- Col -->
-          <div
-            class="w-full lg:w-7/12 bg-white dark:bg-gray-700 p-5 rounded-lg lg:rounded-l-none"
-          >
-            <h3 class="py-4 text-2xl text-center text-gray-800 dark:text-white">
-              ¡Registratre en <b class="text-primary">{{ nombreWeb }}</b
-              >!
-            </h3>
-            <UForm
-              class="px-8 space-y-4 pt-6 pb-8 mb-4 bg-white dark:bg-dark rounded"
-              :schema="schema"
-              :state="state"
-              @submit="onSubmit"
-            >
-              <!-- tipo de usuario -->
 
+          <UForm
+          class="w-full lg:w-7/12 bg-white dark:bg-dark p-5 rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pt-6 pb-8 mb-4 "
+          :schema="schema"
+          :state="state"
+          @submit="onSubmit"
+          >
+
+          <h3 class="py-4 text-2xl text-center text-dark dark:text-white">
+            ¡Registratre en <b class="text-primary">{{ nombreWeb }}</b
+            >!
+          </h3>
+          
+          <!-- tipo de usuario -->
+          
               <TipoUser />
 
               <!-- /tipo de usuario -->
 
               <!-- nombre y apellido-->
-              <div class="flex justify-between max-w-[540px] mx-auto">
+              <div class="flex justify-between gap-2 sm:gap-0 max-w-[540px] mx-auto">
                 <UFormGroup label="Nombre" name="nombre" required>
                   <UInput
                     v-model="state.nombre"
                     placeholder="Nombre"
                     size="xl"
                     :required="true"
+                    icon="i-heroicons-user"
                   />
                 </UFormGroup>
 
@@ -49,6 +50,7 @@
                     v-model="state.apellido"
                     placeholder="Apellido"
                     size="xl"
+                    icon="i-heroicons-user"
                     :required="true"
                   />
                 </UFormGroup>
@@ -69,28 +71,34 @@
               <!-- /email -->
 
               <!-- password -->
-              <div class="flex justify-between max-w-[540px] mx-auto">
+              <div class="flex justify-between max-w-[540px] gap-2 sm:gap-0 mx-auto">
                 <UFormGroup label="Password" name="password" required>
                   <UInput
                     v-model="state.password"
                     type="password"
                     placeholder="***************"
                     size="xl"
+                    icon="i-heroicons-lock-closed"
                   />
                 </UFormGroup>
 
-                <UFormGroup label="Password" name="password" required>
+                <UFormGroup label="Confirmar Password" name="password" required>
                   <UInput
                     v-model="state.rePassword"
                     type="password"
                     placeholder="***************"
                     size="xl"
+                    icon="i-heroicons-lock-closed"
                   />
                 </UFormGroup>
               </div>
               <!-- /password -->
 
-              <BotonPrimary class="text-center" contenido="Registrar Cuenta" />
+              <!-- boton registro -->
+
+              <BotonPrimary class="text-center text-white" contenido="Registrar Cuenta" />
+              
+              <!-- /boton registro -->
               <div class="mb-6 text-center"></div>
               <hr class="mb-6 border-t" />
               <div class="text-center">
@@ -114,7 +122,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 <style scoped>
 input[type="number"]::-webkit-inner-spin-button,
@@ -162,6 +169,10 @@ import type {FormSubmitEvent} from "#ui/types";
 import TipoUser from "~/components/Auth/Registro/TipoUser.vue";
 import BotonPrimary from "~/components/Botones/BotonPrimary.vue";
 
+definePageMeta({
+  layout: "auth"
+})
+
 const useuser = useUserStore();
 const router = useRouter();
 
@@ -170,7 +181,6 @@ const nombreWeb = import.meta.env.VITE_NOMBRE_1;
 const nombre = ref("");
 const apellido = ref("");
 const email = ref("");
-const phone = ref("");
 const password = ref("");
 const rePassword = ref("");
 

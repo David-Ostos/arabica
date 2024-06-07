@@ -2,7 +2,7 @@
   <div>
     <NuxtLink
     :to="link"
-      class="hvr-ripple-out inline-flex items-center justify-center px-4 py-2 text-base font-bold bg-primary dark:bg-primary-600 text-center text-gray-900 rounded-lg before:dark:border-primary-600 before:border-primary before:border-4 before:border-solid dark:text-white lg:px-7"
+      class="hvr-ripple-out inline-flex items-center justify-center px-4 py-2 text-base font-bold bg-primary dark:bg-primary-600 text-center  rounded-lg before:dark:border-primary-600 before:border-primary before:border-4 before:border-solid dark:text-white lg:px-7"
     >
       {{ contenido }}
     </NuxtLink>

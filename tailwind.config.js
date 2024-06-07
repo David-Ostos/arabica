@@ -14,7 +14,9 @@ export default {
         prim: "#02AC66",
       },
       backgroundImage: {
-        hero: "url('img/arabicagc-1-1024x511.jpg",
+        hero: "url('./public/img/arabicagc-1-1024x511.jpg",
+        login: "url('./public/img/login.jpeg",
+        registro: "url('./public/img/registro.jpg",
       },
     },
   },
