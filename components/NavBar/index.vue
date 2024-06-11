@@ -1,18 +1,26 @@
 <template>
   <header
     :class="{'bg-transparent text-white': !scrolled, ' text-dark bg-white dark:bg-dark': scrolled,}"
-    class=" fixed w-screen top-0 z-50 transition-all "
+    class=" fixed w-screen top-0 z-50 transition-all px-6 sm:p-0"
   >
     <nav
-      class="flex items-center justify-between py-1 lg:px-16 "
+      class="flex items-center justify-between py-4 px-6 lg:px-16 "
       aria-label="Global"
     >
       <div class="flex lg:flex-1 ">
         <NuxtLink to="/" class="-m-1.5 p-1.5" > 
           <span class="sr-only">Arabica</span>
           <NuxtImg
-            class="h-16 w-auto "
+            v-if="!scrolled"
+            class="h-14 w-auto "
             src="img/Arabica-Green-coffee.png"
+            :class="{ 'hidden': mobileMenuOpen === true}"
+            alt=""
+          />
+          <NuxtImg
+            v-if="scrolled"
+            class="h-14 w-auto "
+            src="img/ARABICA_LOGO_LIGTH.png"
             :class="{ 'hidden': mobileMenuOpen === true}"
             alt=""
           />
@@ -111,7 +119,7 @@
         >
 
         <!-- cambio de modo -->
-        <BotonesCambioModo/>
+        <!-- <BotonesCambioModo/> -->
 
         <!-- login -->
         <div class="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-x-9">
@@ -191,13 +199,7 @@
                 >Company</NuxtLink
               >
             </div>
-            <div class="py-6">
-              <NuxtLink
-                href="#"
-                class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 dark:text-white dark:hover:bg-gray-800 hover:bg-gray-50"
-                >Log in</NuxtLink
-              >
-            </div>
+            <BotonPrimary contenido="Iniciar Sesión"/>
           </div>
         </div>
       </DialogPanel>

@@ -1,6 +1,6 @@
 <template>
   <section
-    class="bg-gray-100 dark:bg-dark min-h-screen flex box-border justify-center items-center"
+    class="bg-gray-100 dark:bg-dark min-h-screen flex box-border justify-center items-center py-6"
   >
     <div class="bg-white dark:bg-stone-800  rounded-2xl flex max-w-4xl p-5 items-center">
       <div class="md:w-1/2 px-8">
@@ -12,7 +12,6 @@
           class="w-full  p-5 rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pt-6 pb-8 mb-4 "
           :schema="schema"
           :state="state"
-          @submit="onSubmit"
           >
               <!-- nombre y apellido-->
               <div class="flex justify-between gap-4 max-w-[540px] mx-auto ">
@@ -207,7 +206,6 @@
 <style scoped></style>
 
 <script setup lang="ts">
-import {ref} from "vue";
 import {useUserStore} from "@/stores/user";
 import TipoUser from "~/components/Auth/Registro/TipoUser.vue";
 import {object, string, type InferType} from "yup";
@@ -276,7 +274,7 @@ const state = reactive({
   rePassword: undefined,
 });
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
+async function onSubmit(event: any) {
   // Do something with event.data
   console.log(event.data);
 }
