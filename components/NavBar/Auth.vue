@@ -1,6 +1,6 @@
 <template>
   <header
-    class="w-screen transition-all dark:bg-dark bg-white "
+    class="w-screen transition-all dark:bg-dark bg-white px-6 sm:p-0"
   >
     <nav
       class="flex items-center justify-between sm:py-1 pt-6 px-6 lg:px-16 "
@@ -12,7 +12,7 @@
           <span class="sr-only">Arabica</span>
           <NuxtImg
             class="h-16 w-auto "
-            src="img/Arabica-Green-coffee.png"
+            src="img/ARABICA_LOGO_LIGTH.png"
             :class="{ 'hidden': mobileMenuOpen === true}"
             alt=""
           />

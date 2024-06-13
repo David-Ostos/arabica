@@ -19,6 +19,10 @@ import {useUserStore} from "@/stores/user";
 import type {User} from "~/interfaces/Users";
 import {GoogleSignInButton, type CredentialResponse} from "vue3-google-signin";
 
+defineProps({
+  tipoUser: 'comprador'| 'productor'
+})
+
 const toast = useToast();
 const router = useRouter();
 const useUser = useUserStore();
@@ -41,6 +45,8 @@ function jwt_decode(token: any) {
   } catch (error) {
     console.warn("Error al decodificar el token");
     return null;
+    console.warn("Error al decodificar el token");
+    return null;
   }
 }
 
@@ -48,7 +54,6 @@ async function login(response: any) {
   try {
     const responsePayload = await jwt_decode(response);
     console.log(responsePayload);
-
     const {sub, name, given_name, family_name, picture, email} =
       responsePayload;
 
@@ -104,4 +109,5 @@ async function verificarEmail(data: any) {
   }
 }
 </script>
+<style scoped></style>
 <style scoped></style>

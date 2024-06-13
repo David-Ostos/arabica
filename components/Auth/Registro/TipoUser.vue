@@ -10,6 +10,8 @@
     <div class="flex justify-around items-center mb-8">
       <button
         class="flex flex-col justify-center items-center p-4 border-2 dark:text-white hover:text-gray-700 hover:text-primary hover:border-primary dark:border-white rounded-md hover:dark:border-primary hover:dark:text-primary"
+        :class="tipo === true ? 'text-primary border-primary' : ''"
+        @click="tipo = true , $emit('tipoUser', 'productor')"
       >
         <UIcon name="i-ph-farm-thin" class="text-8xl" dynamic />
         <span class="font-medium">Productor</span>
@@ -17,6 +19,9 @@
 
       <button
         class="flex flex-col justify-center items-center p-4 border-2 dark:text-white hover:text-gray-700 hover:text-primary hover:border-primary dark:border-white rounded-md hover:dark:border-primary hover:dark:text-primary"
+        :class="tipo === false ? 'text-primary border-primary' : ''"
+        @click="tipo = false , $emit('tipoUser', 'comprador')"
+
       >
         <UIcon
           name="i-material-symbols-person"
@@ -33,6 +38,7 @@
 <script lang="ts" setup>
 
 const nombre = import.meta.env.VITE_NOMBRE_1
+const tipo:Ref<boolean | null> = ref(null)
 
 </script>
 

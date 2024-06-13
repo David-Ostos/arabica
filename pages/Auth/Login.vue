@@ -11,13 +11,7 @@
           Bienvenido
         </h2>
         <p class="text-xl text-gray-600 text-center">Inicia Sesión!</p>
-        <div class="mt-4 flex items-center justify-between">
-          <!--  <span class="border-b w-1/5 lg:w-1/4"></span>
-          <a href="#" class="text-xs text-center text-gray-500 uppercase"
-            >or login with email</a
-          > -->
-          <!-- <span class="border-b w-1/5 lg:w-1/4"></span> -->
-        </div>
+        
         <UForm
           class="w-full p-5 rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pt-6 pb-8 mb-4"
           :schema="schema"
@@ -78,9 +72,18 @@
         </div>
 
         <!-- /google -->
-
         <div class="mt-4 flex items-center justify-between">
           <span class="border-b w-1/5 md:w-1/4"></span>
+
+          <div class="text-center mt-4">
+          <NuxtLink
+            class="inline-block text-sm align-baseline dark:hover:text-primary-300 hover:text-primary-500"
+            to="/auth/forget"
+          >
+            ¿Olvidaste la contraseña?
+          </NuxtLink>
+        </div>
+
 
           <!-- registrate -->
           <NuxtLink
