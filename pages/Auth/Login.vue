@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full w-full py-8  dark:bg-dark ">
+  <div class="h-screen w-full py-8 dark:bg-dark">
     <div
-      class="flex rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl"
+      class="flex rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl sm:pt-10"
     >
       <div
         class="hidden lg:block lg:w-1/2 bg-cover bg-[url('/../img/login.jpeg')]"
@@ -18,49 +18,76 @@
           > -->
           <!-- <span class="border-b w-1/5 lg:w-1/4"></span> -->
         </div>
-        <div class="mt-4">
-          <label class="block text-gray-700 text-sm font-bold mb-2"
-            >Email</label
-          >
-          <input
-            class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
-            type="email"
-          />
-        </div>
-        <div class="mt-4">
-          <div class="flex justify-between">
-            <label class="block text-gray-700 text-sm font-bold mb-2"
-              >Contraseña</label
-            >
-            <a href="#" class="text-xs text-gray-500"
-              >Olvidaste la contraseña?</a
-            >
+        <UForm
+          class="w-full p-5 rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pt-6 pb-8 mb-4"
+          :schema="schema"
+          :state="state"
+          @submit="onSubmit"
+        >
+          <!-- email -->
+          <div class="max-w-[540px] mx-auto">
+            <UFormGroup label="Email" name="email" required>
+              <UInput
+                v-model="state.email"
+                placeholder="Email"
+                size="xl"
+                icon="i-heroicons-envelope"
+                class="[&_input]:dark:bg-stone-800"
+              />
+            </UFormGroup>
           </div>
-          <input
-            class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
-            type="password"
-          />
-        </div>
+          <!-- /email -->
 
-        <!-- google -->
-
-        <BotonGoogle class="text-center w-full rounded-md pt-6" />
-
-        <!-- /google -->
+          <!-- password -->
+          <div class="max-w-[540px] mx-auto">
+            <UFormGroup label="Password" name="password" required>
+              <UInput
+                v-model="state.password"
+                :type="input"
+                placeholder="***************"
+                size="xl"
+                icon="i-heroicons-lock-closed"
+                class="[&_input]:dark:bg-stone-800 z-10"
+              />
+            </UFormGroup>
+          </div>
+          <!-- /password -->
+        </UForm>
 
         <div class="mt-8 w-fit mx-auto">
           <button
-            class="bg-gray-700 text-white font-bold py-2 px-[90px] w-full rounded hover:bg-gray-600"
+            class="bg-primary text-white font-bold py-2 px-[100px] w-full rounded hover:bg-primary-600"
           >
             Inicia Sesión
           </button>
         </div>
+        <div class="mt-4 flex items-center justify-between">
+          <span class="border-b w-1/6 md:w-1/5"></span>
+
+          <p class="text-center text-gray-700">O Inicia Sessión con Google</p>
+
+          <span class="border-b w-1/6 md:w-1/5"></span>
+        </div>
+
+        <!-- google -->
+        <div
+          class="flex justify-center mx-auto px-12 py-4 items-center gap-4 w-fit rounded-full"
+        >
+          <BotonGoogle class=" " />
+          <!-- <p >Inicia Sessión con Google</p> -->
+        </div>
+
+        <!-- /google -->
 
         <div class="mt-4 flex items-center justify-between">
           <span class="border-b w-1/5 md:w-1/4"></span>
-          
+
           <!-- registrate -->
-          <RouterLink to="/auth/registro" class="text-xs text-gray-500 uppercase">o registrate</RouterLink>
+          <NuxtLink
+            to="/auth/registro"
+            class="text-xs !text-primary hover:!text-primary-700 uppercase"
+            >¿No tienes cuenta? Registrate</NuxtLink
+          >
           <!-- /registrate -->
 
           <span class="border-b w-1/5 md:w-1/4"></span>
@@ -71,12 +98,42 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {object, string, type InferType} from "yup";
+import type {FormSubmitEvent} from "#ui/types";
 import BotonGoogle from "~/components/Botones/BotonGoogle.vue";
 
 definePageMeta({
   layout: "auth",
 });
+
+const input:Ref<"password" | "text"> = ref("password");
+
+function cambioInput() {
+  if (input.value === "password") {
+    input.value = "text";
+  } else {
+    input.value = "password";
+  }
+}
+
+const schema = object({
+  email: string().email("Invalid email").required("Requerido"),
+  password: string()
+    .min(8, "Must be at least 8 characters")
+    .required("Requerido"),
+});
+
+type Schema = InferType<typeof schema>;
+
+const state = reactive({
+  email: undefined,
+  password: undefined,
+});
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  // Do something with event.data
+  console.log(event.data);
+}
 
 let email = ref("");
 let password = ref("");

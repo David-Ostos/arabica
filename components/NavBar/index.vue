@@ -4,15 +4,15 @@
     class=" fixed w-screen top-0 z-50 transition-all "
   >
     <nav
-      class="flex items-center justify-between py-1 lg:px-16 "
+      class="flex items-center justify-between py-4 px-10 lg:px-16 "
       aria-label="Global"
     >
       <div class="flex lg:flex-1 ">
         <NuxtLink to="/" class="-m-1.5 p-1.5" > 
           <span class="sr-only">Arabica</span>
           <NuxtImg
-            class="h-16 w-auto "
-            src="img/Arabica-Green-coffee.png"
+            class="h-14 w-auto "
+            :src=" !scrolled ? 'img/Arabica-Green-coffee.png' : 'img/logo_ligth.png'"
             :class="{ 'hidden': mobileMenuOpen === true}"
             alt=""
           />
@@ -111,7 +111,7 @@
         >
 
         <!-- cambio de modo -->
-        <BotonesCambioModo/>
+        <!-- <BotonesCambioModo/> -->
 
         <!-- login -->
         <div class="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-x-9">
@@ -133,25 +133,25 @@
       <DialogPanel
         class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto dark:bg-dark bg-white px-6 py-6 sm:max-w-sm sm:ring-1 dark:sm:text-white sm:ring-gray-900/10"
       >
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between ">
           <NuxtLink to="" class="-m-1.5 p-1.5">
             <span class="sr-only">Arabica</span>
             <NuxtImg
-              class="h-20 w-auto "
-              src="img/Arabica-Green-coffee.png"
+              class="h-16 w-auto "
+              :src="$colorMode.preference === 'dark' ? 'img/Arabica-Green-coffee.png' : 'img/logo_ligth.png'"
               alt=""
             />
           </NuxtLink>
           <button
             type="button"
-            class="-m-2.5 rounded-md p-2.5 text-white"
+            class="-m-2.5 rounded-md p-2.5 text-dark dark:text-white"
             @click="mobileMenuOpen = false"
           >
             <span class="sr-only">Cerrar menu</span>
             <XMarkIcon class="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-        <div class="mt-6 flow-root">
+        <div class="mt-8 flow-root">
           <div class="-my-6 divide-y divide-gray-500/10">
             <div class="space-y-2 py-6">
               <Disclosure as="div" class="-mx-3" v-slot="{open}">
@@ -191,13 +191,7 @@
                 >Company</NuxtLink
               >
             </div>
-            <div class="py-6">
-              <NuxtLink
-                href="#"
-                class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 dark:text-white dark:hover:bg-gray-800 hover:bg-gray-50"
-                >Log in</NuxtLink
-              >
-            </div>
+            <BotonPrimary contenido="Iniciar Sesión"/>
           </div>
         </div>
       </DialogPanel>

@@ -1,6 +1,6 @@
 <template>
   <section
-    class="bg-gray-100 dark:bg-dark min-h-screen flex box-border justify-center items-center"
+    class="bg-gray-100 dark:bg-dark min-h-screen flex box-border justify-center items-center py-6"
   >
     <div class="bg-white dark:bg-stone-800  rounded-2xl flex max-w-4xl p-5 items-center">
       <div class="md:w-1/2 px-8">
@@ -207,7 +207,6 @@
 <style scoped></style>
 
 <script setup lang="ts">
-import {ref} from "vue";
 import {useUserStore} from "@/stores/user";
 import TipoUser from "~/components/Auth/Registro/TipoUser.vue";
 import {object, string, type InferType} from "yup";

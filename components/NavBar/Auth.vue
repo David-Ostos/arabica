@@ -113,7 +113,7 @@
         >
 
         <!-- cambio de modo -->
-        <BotonesCambioModo/>
+        <!-- <BotonesCambioModo/> -->
 
         <!-- login -->
         <div class="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-x-9">
@@ -196,7 +196,11 @@
               >
             </div>
             <div class="flex justify-between pl-3 py-10">
-              <BotonesCambioModo/>
+              <!-- cambio de modo  -->
+              
+              <!-- <BotonesCambioModo/> -->
+              
+              <!-- /cambio de modo  -->
 
               <BotonSecondary class="text-end" link="/auth/login" contenido="Iniciar Sesión" />
 
