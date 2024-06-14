@@ -1,7 +1,10 @@
 export interface User {
+  _id?: string;
   nombre: string;
+  apellido: string;
   password?: string;
   email: string;
-  _id: string;
-  tipoUser: 'productor'| 'comprador'
+  picture: string
+  tipoUser?: 'productor'| 'comprador'
+  tipoLogin?: 'google' | 'backend'
 }

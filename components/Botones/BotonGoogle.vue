@@ -16,16 +16,19 @@
 <script setup lang="ts">
 // import { fetchDataUser } from '@/helpers/functionGlobal';
 import {useUserStore} from "@/stores/user";
+import {useShowModalsStore} from "@/stores/showModals";
 import type {User} from "~/interfaces/Users";
 import {GoogleSignInButton, type CredentialResponse} from "vue3-google-signin";
 
-defineProps({
-  tipoUser: 'comprador'| 'productor'
+const props = defineProps({
+  tipoUser: String
 })
 
 const toast = useToast();
 const router = useRouter();
+const ShowModalsStore = useShowModalsStore();
 const useUser = useUserStore();
+
 // handle success event
 const handleLoginSuccess = (response: CredentialResponse) => {
   const {credential} = response;
@@ -43,8 +46,6 @@ function jwt_decode(token: any) {
     const payload = JSON.parse(window.atob(token.split(".")[1]));
     return payload;
   } catch (error) {
-    console.warn("Error al decodificar el token");
-    return null;
     console.warn("Error al decodificar el token");
     return null;
   }
@@ -75,7 +76,7 @@ async function verificarEmail(data: any) {
 
   try {
     const correoVerificado = await fetch(
-      `https://cockpit.arabicagc.com/api/content/items/usuarios?filter={email:'${data.email}'}`,
+      `https://cockpit.arabicagc.com/api/content/item/usuarios?filter={email:'${data.email}'}`,
       {
         cache: "no-cache",
       }
@@ -83,31 +84,41 @@ async function verificarEmail(data: any) {
 
     const dataUserFetch: User = await correoVerificado.json();
 
-    console.log(dataUserFetch?.email);
+    console.log(dataUserFetch);
 
     if (dataUserFetch?.email != undefined) {
       const dataUserSaved = {
         email: dataUserFetch?.email,
         picture: data.picture,
       };
-      console.log(dataUserSaved);
+      // console.log(dataUserSaved);
 
       localStorage.clear();
       localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
 
-      // await fetchDataUser()
-      if (dataUserFetch.tipoUser === "comprador")
+       await useUser.fetchDataUser()
+      .then(() =>{
+         router.push(`/${dataUserFetch.tipoUser}`);
+       })
+
+      /* if(dataUserFetch.tipoUser === "comprador"){
         router.push("/compradores/perfil");
-      }else if (dataUserFetch.tipoUser === "productor") {
-        router.push("/productores/perfil"); 
+      }else if(dataUserFetch.tipoUser === "productor"){
+        router.push("/productores/perfil");  
         }
-    else {
-      router.push("/")
+        */
+    }else {
+      useUser.dataUser = {
+        nombre: data.given_name,
+        apellido: data.family_name,
+        email: data.email,
+        picture: data.picture,
+      }
+      ShowModalsStore.showModalTipoGoogle = true;
     }
   } catch (error) {
     console.log(error);
   }
 }
 </script>
-<style scoped></style>
 <style scoped></style>
