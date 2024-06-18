@@ -11,7 +11,7 @@
           Bienvenido
         </h2>
         <p class="text-xl text-gray-600 text-center">Inicia Sesión!</p>
-        
+
         <UForm
           class="w-full p-5 rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pt-6 pb-8 mb-4"
           :schema="schema"
@@ -20,7 +20,27 @@
         >
           <!-- email -->
           <div class="max-w-[540px] mx-auto">
-            <UFormGroup label="Email" name="email" required>
+            <div
+              v-if="noMatche === true"
+              class="flex gap-1 items-center text-center border-red-500 border rounded-md text-red-500 text-sm p-4 mb-4 my-2 w-fit mx-auto"
+            >
+              <UIcon
+                name="i-heroicons-exclamation-triangle"
+                class="!text-yellow-500"
+              />
+              <p>Contraseña o correo incorrecto</p>
+            </div>
+
+            <UFormGroup
+              label="Email"
+              name="email"
+              required
+              :class="
+                noMatche === true
+                  ? ' [&_input]:focus:!ring-red-500 [&_input]:!ring-red-500 [&_input]:!text-red-500 [&_input]:placeholder:!text-red-500 [&_span]:!text-red-500 [&_p]:!block [&_label]:!text-red-500 '
+                  : ''
+              "
+            >
               <UInput
                 v-model="state.email"
                 placeholder="Email"
@@ -34,7 +54,16 @@
 
           <!-- password -->
           <div class="max-w-[540px] mx-auto">
-            <UFormGroup label="Password" name="password" required>
+            <UFormGroup
+              label="Password"
+              name="password"
+              required
+              :class="
+                noMatche === true
+                  ? ' [&_input]:focus:!ring-red-500 [&_input]:!ring-red-500 [&_input]:!text-red-500 [&_input]:placeholder:!text-red-500 [&_span]:!text-red-500 [&_p]:block [&_label]:text-red-500 '
+                  : ''
+              "
+            >
               <UInput
                 v-model="state.password"
                 type="password"
@@ -44,23 +73,25 @@
                 class="[&_input]:dark:bg-stone-800 z-10"
               />
             </UFormGroup>
+
             <NuxtLink
-            class="inline-block text-sm align-baseline !text-primary hover:!text-primary-700"
-            to="/auth/forget"
-          >
-            ¿Olvidaste la contraseña?
-          </NuxtLink>
+              class="inline-block text-sm align-baseline !text-primary hover:!text-primary-700"
+              to="/auth/forget"
+            >
+              ¿Olvidaste la contraseña?
+            </NuxtLink>
           </div>
           <!-- /password -->
+          <div class="mt-8 w-fit mx-auto">
+            <UButton
+              type="submit"
+              class="bg-primary text-white font-bold py-2 px-[5.5rem] w-full rounded hover:bg-primary-600"
+              label="Inicia Sesión"
+            >
+            </UButton>
+          </div>
         </UForm>
 
-        <div class="mt-8 w-fit mx-auto">
-          <button
-            class="bg-primary text-white font-bold py-2 px-[100px] w-full rounded hover:bg-primary-600"
-          >
-            Inicia Sesión
-          </button>
-        </div>
         <div class="mt-4 flex items-center justify-between">
           <span class="border-b w-1/6 md:w-1/5"></span>
 
@@ -81,7 +112,6 @@
         <div class="mt-4 flex items-center justify-between">
           <span class="border-b w-1/5 md:w-1/4"></span>
 
-
           <!-- registrate -->
           <NuxtLink
             to="/auth/registro"
@@ -99,14 +129,18 @@
 
 <script setup lang="ts">
 import {object, string, type InferType} from "yup";
-import type {FormSubmitEvent} from "#ui/types";
+import type {FormError, FormSubmitEvent} from "#ui/types";
 import BotonGoogle from "~/components/Botones/BotonGoogle.vue";
-import TipoUserModal from "~/components/Modals/TipoUser.modal.vue";
+
+const useUser = useUserStore();
+const toast = useToast();
+const router = useRouter();
 
 definePageMeta({
   layout: "auth",
 });
 
+const noMatche = ref(false);
 
 const schema = object({
   email: string().email("Invalid email").required("Requerido"),
@@ -124,13 +158,77 @@ const state = reactive({
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with event.data
-  console.log(event.data);
+
+  try {
+    const response = await fetch(
+      `${
+        import.meta.env.VITE_URL_API
+      }/api/content/item/usuarios?filter={email:'${
+        event.data.email
+      }'}&fields={_state: false, _modified: false, _mby: false, _created: false, _cby: false}`,
+      {
+        cache: "no-cache",
+      }
+    );
+    if (response.status === 404) {
+      toast.add({
+        id: "email_no_resgistrado",
+        title: "El correo no esta registrado",
+        description: "Si no tienes cuenta, registrate.",
+        icon: "i-heroicons-exclamation-circle",
+        timeout: 5000,
+        color: "yellow",
+        actions: [
+          {
+            label: "Registrarte",
+            click: () => {
+              router.push("/auth/registro");
+            },
+          },
+        ],
+      });
+    } else if (response.status === 200) {
+      const dataUserFetch = await response.json();
+
+      if (!dataUserFetch.tipoLogin.includes("backend")) {
+        toast.add({
+          id: "email_login_google_only",
+          title: "El correo fue registrado por google",
+          description:
+            "Has iniciado sesión utilizando Google y aún no has establecido una contraseña propia. Por favor, inicia sesión mediante Google y procede a crear una nueva contraseña en la sección de perfil de tu cuenta.",
+          icon: "i-heroicons-exclamation-circle",
+          timeout: 5000,
+          color: "yellow",
+        });
+      } else if (event.data.password !== dataUserFetch.password) {
+        toast.add({
+          id: "no_match_password",
+          title: "La contraseña o el correo no coinciden",
+          icon: "i-heroicons-exclamation-circle",
+          timeout: 5000,
+          color: "yellow",
+        });
+        noMatche.value = true;
+      } else {
+        const dataUserSaved = {
+          email: state.email,
+          picture: dataUserFetch.picture,
+        };
+
+        localStorage.clear();
+        localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
+        console.log(dataUserFetch);
+        useUser.dataUser = dataUserFetch;
+        router.push(`/${dataUserFetch.tipoUser}`);
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 let email = ref("");
 let password = ref("");
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

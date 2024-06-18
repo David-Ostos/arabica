@@ -7,9 +7,11 @@ const useUser = useUserStore();
 export default async function verificarEmail(data: any) {
   //AQUI HACES UN FETCH PARA VERIFICAR EL EMAIL
 
+  console.log(`${import.meta.env.VITE_URL_API}/api/content/items/usuarios?filter={email:'${data.email}'}`);
+
   try {
     const correoVerificado = await fetch(
-      `https://cockpit.arabicagc.com/api/content/items/usuarios?filter={email:'${data.email}'}`,
+      `${import.meta.env.VITE_URL_API}/api/content/items/usuarios?filter={email:'${data.email}'}`,
       {
         cache: "no-cache",
       }

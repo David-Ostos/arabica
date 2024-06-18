@@ -1,10 +1,11 @@
 export interface User {
-  _id?: string;
-  nombre: string;
-  apellido: string;
-  password?: string;
-  email: string;
-  picture: string
+  _id?: string | undefined;
+  nombre: string | undefined;
+  apellido: string | undefined;
+  password?: string | undefined;
+  email: string | undefined;
+  picture?: string | undefined;
   tipoUser?: 'productor'| 'comprador'
-  tipoLogin?: 'google' | 'backend'
+  tipoLogin?: ['google'] | ['backend'] | ['backend','google']
+  rePassword?: string | undefined
 }

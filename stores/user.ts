@@ -7,12 +7,12 @@ export const useUserStore = defineStore('user', () => {
 
   const fetchDataUser = async () => {
 
-    if (localStorage.getItem('dataUser') != null) {
+    if (localStorage.getItem('dataUser') !== null) {
       const dataUserSaved = await JSON.parse(localStorage.getItem('dataUser') ?? '{}')
   
       try {
         const peticionUser = await fetch(
-          `https://cockpit.arabicagc.com/api/content/items/usuarios?filter={email:'${dataUserSaved.email}'}`,
+          `${import.meta.env.VITE_URL_API}/api/content/item/usuarios?filter={email:'${dataUserSaved.email}'}`,
           {
             cache: 'no-cache'
           }
@@ -20,9 +20,8 @@ export const useUserStore = defineStore('user', () => {
   
         const dataUserFetch = await peticionUser.json()
   
-        console.log(dataUserFetch)
         if (dataUserFetch === undefined) return
-        if (dataUserFetch?.correoAsociado != undefined) {
+        if (dataUserFetch?.email != undefined) {
           logged.value = true
           const {
             _id,
@@ -38,11 +37,20 @@ export const useUserStore = defineStore('user', () => {
           dataUser.value = {
             ...dataUserFetch 
           }
-          console.log(dataUser.value);
+          // console.log(dataUser.value);
         }
       } catch (error) {
         console.log(error)
       }
+    }else{
+      /**
+       * 
+       * // todo:
+       * aqui se puede agrergar logica si se quiere mostrar una informacion cuando el usuario inicie en la app 
+       * 
+       */
+
+      // console.log('nay');
     }
   }
 

@@ -6,17 +6,37 @@
       class="bg-white dark:bg-stone-800 rounded-2xl flex max-w-4xl p-5 items-center"
     >
       <div class="md:w-1/2 px-8">
-        <h2 class="font-bold text-3xl text-white text-center mb-4">
-          Regístrate en <B class="text-primary">{{ nombreWeb }}</B>
-        </h2>
-
-        <TipoUser @tipo-user="tipoU" />
-
         <UForm
-          class="w-full p-5 rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pt-6 pb-8 mb-4"
+          class="w-full px-5 rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pb-4 mb-4"
           :schema="schema"
           :state="state"
+          @submit="onSubmit"
+          :validate="validations"
         >
+          <h2 class="font-bold text-3xl text-dark text-center mb-4">
+            Regístrate en <B class="text-primary">{{ nombreWeb }}</B>
+          </h2>
+          <div
+            :class="faltaTipo ? ' border-2 border-red-500 py-4 rounded-md' : ''"
+          >
+            <TipoUser
+              @tipo-user="tipoU"
+              class="px-2"
+              v-model="state.tipoUser"
+              @click="faltaTipo = false"
+            />
+            <p
+              v-if="faltaTipo"
+              class="text-sm text-red-500 text-center pb-4 -m-4"
+            >
+              Selecciona un tipo
+            </p>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="border-b md:w-1/2"></span>
+            <span class="border-b md:w-1/2"></span>
+          </div>
+
           <!-- nombre y apellido-->
           <div class="flex justify-between gap-4 max-w-[540px] mx-auto">
             <UFormGroup label="Nombre" name="nombre" required>
@@ -62,7 +82,7 @@
             <UFormGroup label="Password" name="password" required>
               <UInput
                 v-model="state.password"
-                type="password"
+                :type="selected ? 'text' : 'password'"
                 placeholder="***************"
                 size="xl"
                 icon="i-heroicons-lock-closed"
@@ -70,63 +90,57 @@
               />
             </UFormGroup>
 
-            <UFormGroup label="Confirmar Password" name="password" required>
+            <UFormGroup label="Confirmar Password" name="rePassword" required>
               <UInput
                 v-model="state.rePassword"
-                type="password"
+                :type="selected ? 'text' : 'password'"
                 placeholder="***************"
                 size="xl"
-                class="[&_input]:dark:bg-stone-800"
+                class="[&_input]:dark:bg-stone-800 line-clamp-1"
                 icon="i-heroicons-lock-closed"
               />
             </UFormGroup>
           </div>
           <!-- /password -->
 
+          <div>
+            <UCheckbox
+              icon="i-heroicons-eye"
+              v-model="selected"
+              name="mostrar"
+              label="Mostrar"
+              @click="selected = !selected"
+            />
+          </div>
+
           <!-- boton registro -->
-
-          <BotonPrimary
-            class="text-center text-white pt-4"
-            contenido="Registrar Cuenta"
-          />
-
+          <div class="text-center text-white pt-4">
+            <UButton
+              class="hvr-ripple-out hover:!bg-primary inline-flex items-center justify-center px-4 py-2 text-base font-bold bg-primary dark:bg-primary-600 text-center rounded-lg before:dark:border-primary-600 before:border-primary before:border-4 before:border-solid text-white lg:px-7 cursor-pointer"
+              type="submit"
+              >Registrar Cuenta
+            </UButton>
+          </div>
           <!-- /boton registro -->
         </UForm>
-        <div class="items-center text-dark ">
-          <hr class="border-dark" />
-          <p class="text-center text-sm py-1">O</p>
-          <hr class="border-dark" />
-        </div>
-        <button
-          class="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300 dark:text-dark hover:bg-[#60a8bc4f] font-medium"
-        >
-          <svg
-            class="mr-3"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 48 48"
-            width="25px"
-          >
-            <path
-              fill="#FFC107"
-              d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
-            ></path>
-            <path
-              fill="#FF3D00"
-              d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
-            ></path>
-            <path
-              fill="#4CAF50"
-              d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-            ></path>
-            <path
-              fill="#1976D2"
-              d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
-            ></path>
-          </svg>
+        <div class="flex items-center justify-between">
+          <span class="border-b w-1/6 md:w-1/5"></span>
 
-          Inicia Sessión con Google
-        </button>
-        <div class="text-center mt-4">
+          <p class="text-center text-gray-700">O Inicia Sessión con Google</p>
+
+          <span class="border-b w-1/6 md:w-1/5"></span>
+        </div>
+
+        <!-- google -->
+        <div
+          class="flex justify-center mx-auto px-12 py-4 items-center gap-4 w-fit rounded-full"
+        >
+          <BotonGoogle />
+          <!-- <p >Inicia Sessión con Google</p> -->
+        </div>
+
+        <!-- /google -->
+        <div class="text-center">
           <NuxtLink
             to="/auth/login"
             class="inline-block text-sm align-baseline dark:hover:text-primary-300 hover:text-primary-500"
@@ -151,47 +165,194 @@
 import {useUserStore} from "@/stores/user";
 import TipoUser from "~/components/Auth/Registro/TipoUser.vue";
 import {object, string, type InferType} from "yup";
-import type {FormSubmitEvent} from "#ui/types";
+import type {FormError, FormSubmitEvent} from "#ui/types";
 import BotonPrimary from "~/components/Botones/BotonPrimary.vue";
+import type {User} from "~/interfaces/Users";
+import BotonGoogle from "~/components/Botones/BotonGoogle.vue";
 
 definePageMeta({
   layout: "auth",
 });
 
-const useuser = useUserStore();
+const useUser = useUserStore();
 const router = useRouter();
+const ShowModalsStore = useShowModalsStore();
+const toast = useToast();
 
-const tipoUser:Ref<'comprador' | 'productor' | ''> = ref('') 
+const selected = ref(false);
 
-const tipoU = (tipo: 'comprador'| 'productor') =>{
+const faltaTipo = ref(false);
+
+const tipoUser: Ref<"comprador" | "productor" | undefined> = ref(undefined);
+
+const tipoU = (tipo: "comprador" | "productor") => {
   console.log(tipo);
-}
+  tipoUser.value = tipo;
+};
 const nombreWeb = import.meta.env.VITE_NOMBRE_1;
 
 const schema = object({
   nombre: string().required("Requerido"),
   apellido: string().required("Requerido"),
-  email: string().email("Invalid email").required("Requerido"),
+  email: string().email("Email invalido").required("Requerido"),
   password: string()
-    .min(8, "Must be at least 8 characters")
+    .min(8, "La contraseña debe tener 8 caracteres")
     .required("Requerido"),
   rePassword: string()
-    .min(8, "Must be at least 8 characters")
+    .min(8, "La contraseña debe tener 8 caracteres")
     .required("Requerido"),
 });
 
 type Schema = InferType<typeof schema>;
 
-const state = reactive({
+let state: User = reactive({
   email: undefined,
   nombre: undefined,
   apellido: undefined,
   password: undefined,
   rePassword: undefined,
+  tipoUser: tipoUser.value,
+  tipoLogin: ["backend"],
 });
 
+const validations = (stat: any): FormError[] => {
+  const errors = [];
+  if (tipoUser.value === undefined) {
+    faltaTipo.value = true;
+    errors.push({
+      path: "tipoUser",
+      message: "No has seleccionado el tipo de cuenta.",
+    });
+  }
+
+  if (stat.password !== stat.rePassword) {
+    errors.push({
+      path: "password",
+      message: "Las contraseñas no coinciden",
+    });
+  }
+  return errors;
+};
+
 async function onSubmit(event: any) {
-  // Do something with event.data
-  console.log(event.data);
+  state.nombre = state.nombre!.toLowerCase();
+  state.apellido = state.apellido!.toLowerCase();
+  delete state.rePassword;
+  state.tipoUser = tipoUser.value;
+
+  faltaTipo!.value = false;
+  try {
+    verificarEmail(state);
+    return;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function verificarEmail(data: User) {
+  //AQUI HACES UN FETCH PARA VERIFICAR EL EMAIL
+  try {
+    const correoVerificado = await fetch(
+      `${
+        import.meta.env.VITE_URL_API
+      }/api/content/item/usuarios?filter={email:'${data.email}'}`,
+      {
+        cache: "no-cache",
+      }
+    );
+    if (correoVerificado.status === 200) {
+      toast.add({
+        id: "email_repetido",
+        title: "Email ya registrado",
+        description: "El correo ya esta registrado intenta con otro correo.",
+        icon: "i-heroicons-exclamation-circle",
+        timeout: 5000,
+        color: "yellow",
+      });
+      return;
+    } else {
+      const dataUserSaved = {
+        email: data.email,
+        picture: undefined
+      }
+
+      localStorage.clear();
+      localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
+
+      try {
+        const response = fetch(
+    `${import.meta.env.VITE_URL_API}/api/content/item/usuarios`,
+    {
+      method: "POST",
+      headers: {
+        "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+          data
+      }),
+    }
+  );
+  if ((await response).status === 412) {
+    console.log("error");
+    return;
+  } else {
+    useUser.dataUser = data;
+    console.log(useUser.dataUser);
+    router.push(`/${data.tipoUser}`);
+  }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 </script>
+
+<style scoped>
+@-webkit-keyframes hvr-ripple-out {
+  100% {
+    top: -12px;
+    right: -12px;
+    bottom: -12px;
+    left: -12px;
+    opacity: 0;
+  }
+}
+@keyframes hvr-ripple-out {
+  100% {
+    top: -12px;
+    right: -12px;
+    bottom: -12px;
+    left: -12px;
+    opacity: 0;
+  }
+}
+.hvr-ripple-out {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  position: relative;
+}
+.hvr-ripple-out:before {
+  content: "";
+  position: absolute;
+  border-radius: 12px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+}
+.hvr-ripple-out:hover:before,
+.hvr-ripple-out:focus:before,
+.hvr-ripple-out:active:before {
+  -webkit-animation-name: hvr-ripple-out;
+  animation-name: hvr-ripple-out;
+}
+</style>

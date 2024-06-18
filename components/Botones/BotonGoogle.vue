@@ -54,7 +54,6 @@ function jwt_decode(token: any) {
 async function login(response: any) {
   try {
     const responsePayload = await jwt_decode(response);
-    console.log(responsePayload);
     const {sub, name, given_name, family_name, picture, email} =
       responsePayload;
 
@@ -76,17 +75,23 @@ async function verificarEmail(data: any) {
 
   try {
     const correoVerificado = await fetch(
-      `https://cockpit.arabicagc.com/api/content/item/usuarios?filter={email:'${data.email}'}`,
+      `${import.meta.env.VITE_URL_API}/api/content/item/usuarios?filter={email:'${data.email}'}`,
       {
         cache: "no-cache",
       }
     );
-
+    if(correoVerificado.status === 404){
+      useUser.dataUser = {
+        nombre: data.given_name,
+        apellido: data.family_name,
+        email: data.email,
+        picture: data.picture,
+      }
+      ShowModalsStore.showModalTipoGoogle = true;
+      return
+    }
     const dataUserFetch: User = await correoVerificado.json();
 
-    console.log(dataUserFetch);
-
-    if (dataUserFetch?.email != undefined) {
       const dataUserSaved = {
         email: dataUserFetch?.email,
         picture: data.picture,
@@ -100,23 +105,7 @@ async function verificarEmail(data: any) {
       .then(() =>{
          router.push(`/${dataUserFetch.tipoUser}`);
        })
-
-      /* if(dataUserFetch.tipoUser === "comprador"){
-        router.push("/compradores/perfil");
-      }else if(dataUserFetch.tipoUser === "productor"){
-        router.push("/productores/perfil");  
-        }
-        */
-    }else {
-      useUser.dataUser = {
-        nombre: data.given_name,
-        apellido: data.family_name,
-        email: data.email,
-        picture: data.picture,
-      }
-      ShowModalsStore.showModalTipoGoogle = true;
-    }
-  } catch (error) {
+    }catch (error) {
     console.log(error);
   }
 }

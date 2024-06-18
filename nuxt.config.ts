@@ -54,7 +54,7 @@ export default defineNuxtConfig({
         {
           property: "og:image",
           content:
-            "https://cockpit.arabicagc.com/storage/uploads/2024/06/07/hero_uid_666361a666682.jpg",
+            `${import.meta.env.VITE_URL_API}/storage/uploads/2024/06/07/hero_uid_666361a666682.jpg`,
         },
         {property: "og:url", content: "https://desarrollo.arabicagc.com"},
       ],
