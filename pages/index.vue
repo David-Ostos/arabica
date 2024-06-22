@@ -8,6 +8,7 @@
   <HomeHero2/>
   <HomePorQueElegirnos/>
   <HomeDetallesDeEnvio/>
+  <HomeTestimonios/>
 </template>
 
 <style scoped></style>

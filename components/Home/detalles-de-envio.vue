@@ -1,6 +1,6 @@
 <template>
   <div ref="container" class="py-20">
-    <div class="flex mx-4 md:mx-40">
+    <div class=" flex-col-reverse md:flex-row flex mx-4 md:mx-40">
       <div class="basis-1/2">
         <span class="text-primary mb-4"> DETALLES DE ENVÍO </span>
 
@@ -17,7 +17,7 @@
           preocuparte.
         </p>
 
-        <BotonPrimary contenido="¡Cómpralo ahora!" @click="conteo" class="mt-8"/>
+        <BotonPrimary contenido="¡Cómpralo ahora!" link="/auth/registro" class=" text-center md:text-start mt-8"/>
       </div>
       <div class="relative mt-20">
         <NuxtImg
