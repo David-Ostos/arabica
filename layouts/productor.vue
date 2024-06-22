@@ -1,8 +1,10 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import NavbarProductor from '~/components/NavBar/Navbar.Productor.vue';
+</script>
 
 <template>
   <div>
-    Layout: productor
+    <NavbarProductor/>
     <slot />
   </div>
 </template>

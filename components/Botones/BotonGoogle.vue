@@ -103,7 +103,7 @@ async function verificarEmail(data: any) {
 
        await useUser.fetchDataUser()
       .then(() =>{
-         router.push(`/${dataUserFetch.tipoUser}`);
+         router.push(`/dashboard/${dataUserFetch.tipoUser}`);
        })
     }catch (error) {
     console.log(error);

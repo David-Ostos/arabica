@@ -70,7 +70,7 @@
                 placeholder="***************"
                 size="xl"
                 icon="i-heroicons-lock-closed"
-                class="[&_input]:dark:bg-stone-800 z-10"
+                class="[&_input]:dark:bg-stone-800"
               />
             </UFormGroup>
 
@@ -213,13 +213,15 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         const dataUserSaved = {
           email: state.email,
           picture: dataUserFetch.picture,
+          logged: true,
+          tipoUser : dataUserFetch.tipoUser
         };
 
         localStorage.clear();
         localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
         console.log(dataUserFetch);
         useUser.dataUser = dataUserFetch;
-        router.push(`/${dataUserFetch.tipoUser}`);
+        router.push(`/dashboard/${dataUserFetch.tipoUser}`);
       }
     }
   } catch (error) {

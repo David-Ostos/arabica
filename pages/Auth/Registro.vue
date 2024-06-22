@@ -273,15 +273,19 @@ async function verificarEmail(data: User) {
     } else {
       const dataUserSaved = {
         email: data.email,
-        picture: undefined
+        picture: undefined,
+        tipoUser: tipoUser.value,
+        logged : true
       }
 
       localStorage.clear();
       localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
 
+      // console.log({data})
+
       try {
         const response = fetch(
-    `${import.meta.env.VITE_URL_API}/api/content/item/usuarios`,
+    `https://prueba.arabicagc.com/api/content/item/usuarios`,
     {
       method: "POST",
       headers: {
@@ -294,12 +298,12 @@ async function verificarEmail(data: User) {
     }
   );
   if ((await response).status === 412) {
-    console.log("error");
+    console.log(response);
     return;
   } else {
     useUser.dataUser = data;
-    console.log(useUser.dataUser);
-    router.push(`/${data.tipoUser}`);
+    // console.log(useUser.dataUser);
+    router.push(`/dashboard/${data.tipoUser}`);
   }
       } catch (error) {
         console.log(error)
