@@ -3,29 +3,48 @@
     <div class="flex flex-col justify-center items-center">
       <span class="text-primary text-center uppercase">Testimonios</span>
 
-      <h2 class="text-xl md:text-6xl font-bold md:leading-[1.2] my-4">Observen sus historias</h2>
+      <h2 class="text-xl md:text-6xl font-bold md:leading-[1.2] my-4">
+        Observen sus historias
+      </h2>
 
       <UCarousel
+        arrows
+        :prev-button="{
+          color: 'gray',
+          icon: 'i-heroicons-arrow-left-20-solid',
+          class: '-left-12',
+        }"
+        :next-button="{
+          color: 'gray',
+          icon: 'i-heroicons-arrow-right-20-solid',
+          class: '-right-12',
+        }"
         ref="carouselRef"
         v-slot="{item}"
         :items="items"
         :ui="{item: 'basis-full'}"
         class="mx-20"
+        :class="inClick ? 'cursor-grab' : 'cursor-grabbing'"
+        @mousedown="handleCursor"
+        @mouseup="handleCursor"
         indicators
       >
-        <div class="mb-20 mt-8 ">
-          <p class="leading-7 text-[#7a7a7a] font-raleway text-2xl text-center font-semibold">{{ item.testimonio }}</p>
+        <div class="mb-20 mt-8">
+          <p
+            class="leading-7 text-[#7a7a7a] font-raleway text-2xl text-center font-semibold"
+          >
+            {{ item.testimonio }}
+          </p>
 
           <div class="flex justify-center items-center mt-8 gap-4">
             <UAvatar size="xl" :src="item.avatar" alt="Avatar" />
 
             <div class="text-start">
-
-              <p class="text-[#03764d] font-semibold ">
+              <p class="text-[#03764d] font-semibold">
                 {{ item.name }}
               </p>
 
-              <p class="uppercase text-[#333333] tracking-widest font-semibold ">
+              <p class="uppercase text-[#333333] tracking-widest font-semibold">
                 {{ item.rol }}
               </p>
             </div>
@@ -43,6 +62,12 @@ import user3 from "~/public/img/testimonio_3.jpg";
 
 const carouselRef = ref();
 
+const inClick = ref(true);
+
+function handleCursor() {
+  inClick.value = !inClick.value;
+}
+
 onMounted(() => {
   setInterval(() => {
     if (!carouselRef.value) return;
@@ -52,7 +77,7 @@ onMounted(() => {
     }
 
     carouselRef.value.next();
-  }, 30000);
+  }, 3000);
 });
 
 const items = [

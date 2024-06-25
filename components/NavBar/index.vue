@@ -14,10 +14,10 @@
       <div class="flex lg:flex-1">
         <NuxtLink to="/" class="-m-1.5 p-1.5">
           <span class="sr-only">Arabica</span>
-          <NuxtImg
+          <img
             class="h-14 w-auto"
             :src="
-              !scrolled ? 'img/Arabica-Green-coffee.png' : 'img/logo_ligth.png'
+              !scrolled ? imgLogin : imgLoginLitgh
             "
             alt=""
           />
@@ -122,35 +122,27 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {
-  Dialog,
-  DialogPanel,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
   Popover,
   PopoverButton,
-  PopoverGroup,
   PopoverPanel,
 } from "@headlessui/vue";
 import {
-  ArrowPathIcon,
   Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
-  XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import {
   ChevronDownIcon,
   PhoneIcon,
   PlayCircleIcon,
 } from "@heroicons/vue/20/solid";
-import BotonLogin from "../Botones/BotonPrimary.vue";
 import BotonPrimary from "../Botones/BotonPrimary.vue";
 import BotonSecondary from "../Botones/BotonSecondary.vue";
 import {useGlobalStore} from "~/stores/global";
-import Avatar from "../Dropdowns/NavBar/Avatar/avatar.comprador.vue";
+
+import imgLogin from '/img/Arabica-Green-coffee.png'
+import imgLoginLitgh from '/img/logo_ligth.png'
+
+console.log(imgLogin, imgLoginLitgh);
+
 
 const useGlobal = useGlobalStore();
 const useUser = useUserStore();

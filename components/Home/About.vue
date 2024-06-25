@@ -12,7 +12,7 @@
         <BotonPrimary class="mt-6 text-center md:text-start" contenido="Registrate" link="/auth/registro" />
       </div>
 
-      <NuxtImg class="basis-1/3 w-screen md:w-[600px]" src="/img/home-about.jpg" />
+      <img class="basis-1/3 w-screen md:w-[600px]" src="/img/home-about.jpg" />
 
       <div></div>
     </div>

@@ -3,23 +3,27 @@
     ref="nav1"
     class="fixed w-screen top-0 z-50 transition-all text-dark bg-white dark:bg-dark border-b-2 rounded-lg shadow-sm"
   >
-    <div class="container py-4 px-12 flex justify-between items-center">
+  <div class="container py-4 sm:px-12 px-8">
+    <div class="flex justify-between  sm:justify-between items-center">
       <div class="flex">
         <NuxtLink to="/" class="-m-1.5 p-1.5">
           <span class="sr-only">Arabica</span>
-          <NuxtImg
-            class="h-14 w-auto"
-            src="img/logo_ligth.png"
+          <img
+            class="h-14 "
+            :src="imgLoginLitgh"
             :class="{hidden: mobileMenuOpen === true}"
             alt="Logo Arabica"
           />
         </NuxtLink>
       </div>
 
-      <SearchComprador />
+      <SearchComprador class="hidden sm:block" />
 
       <DropdownsNavBarAvatarComprador />
     </div>
+
+    <SearchComprador class="sm:hidden mt-4" />
+  </div>
 
     <Dialog
       v-if="!useUser.logged"
@@ -34,7 +38,7 @@
         <div class="flex items-center justify-between">
           <NuxtLink to="" class="-m-1.5 p-1.5">
             <span class="sr-only">Arabica</span>
-            <NuxtImg
+            <img
               class="h-16 w-auto"
               :src="
                 $colorMode.preference === 'dark'
@@ -102,11 +106,16 @@
         </div>
       </DialogPanel>
     </Dialog>
-
-    <DropdownsNavBarAvatarComprador v-if="useUser.logged"/>
-
   </header>
-  <div class="mt-[88px] border-b-2 rounded-md">
+  <div class="">
+  </div>
+  <UHorizontalNavigation
+    :links="items"
+    class=" hidden sm:flex mt-[88px] !justify-center border-b border-gray-200 dark:border-gray-800"
+    :ui="{}"
+  />
+
+  <!--   <div class="mt-[88px] border-b-2 rounded-md">
     <ul class="flex justify-center py-4 gap-4">
       <li
         v-for="(item, index) in items"
@@ -132,7 +141,7 @@
         </NuxtLink>
       </li>
     </ul>
-  </div>
+  </div> -->
 </template>
 
 <script setup lang="ts">
@@ -143,14 +152,9 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
 } from "@headlessui/vue";
 import {
   ArrowPathIcon,
-  Bars3Icon,
   ChartPieIcon,
   CursorArrowRaysIcon,
   FingerPrintIcon,
@@ -164,6 +168,7 @@ import {
 } from "@heroicons/vue/20/solid";
 import BotonPrimary from "../Botones/BotonPrimary.vue";
 import {useGlobalStore} from "~/stores/global";
+import imgLoginLitgh from "~/public/img/logo_ligth_new.png";
 
 const useGlobal = useGlobalStore();
 const useUser = useUserStore();
@@ -176,39 +181,33 @@ const navHeight = ref(0);
 const items = [
   {
     label: "Panel de control",
-    name: "/dashboard/comprador",
-    icon: "i-heroicons-cog-8-tooth",
-    link: `/dashboard/${useUser.dataUser.tipoUser}`,
+    // icon: "i-heroicons-cog-8-tooth",
+    to: `/dashboard/${useUser.dataUser.tipoUser}`,
   },
   {
     label: "Solicitudes",
-    name: "solicitudes",
-    link: `/dashboard/${useUser.dataUser.tipoUser}/productores`,
-    icon: "i-heroicons-book-open",
+    to: `/dashboard/${useUser.dataUser.tipoUser}/solicitudes`,
+    // icon: "i-heroicons-book-open",
   },
   {
     label: "Planificadores",
-    name: "planificadores",
-    icon: "i-heroicons-megaphone",
-    link: `/dashboard/${useUser.dataUser.tipoUser}/inventario`,
+    // icon: "i-heroicons-megaphone",
+    to: `/dashboard/${useUser.dataUser.tipoUser}/planificadores`,
   },
   {
     label: "Muestras",
-    name: "muestras",
-    icon: "i-heroicons-signal",
-    link: `/dashboard/${useUser.dataUser.tipoUser}/solicita`,
+    // icon: "i-heroicons-signal",
+    to: `/dashboard/${useUser.dataUser.tipoUser}/muestras`,
   },
   {
     label: "Pedidos",
-    name: "pedidos",
-    icon: "i-heroicons-arrow-left-on-rectangle",
-    link: `/dashboard/${useUser.dataUser.tipoUser}/perfil/ajustes`,
+    // icon: "i-heroicons-arrow-left-on-rectangle",
+    to: `/dashboard/${useUser.dataUser.tipoUser}/pedidos`,
   },
   {
     label: "Facturas",
-    name: "ventas",
-    icon: "i-heroicons-arrow-left-on-rectangle",
-    link: `/dashboard/${useUser.dataUser.tipoUser}/perfil/ajustes`,
+    // icon: "i-heroicons-arrow-left-on-rectangle",
+    to: `/dashboard/${useUser.dataUser.tipoUser}/facturas`,
   },
 ];
 

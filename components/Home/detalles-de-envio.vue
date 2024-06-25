@@ -20,7 +20,7 @@
         <BotonPrimary contenido="¡Cómpralo ahora!" link="/auth/registro" class=" text-center md:text-start mt-8"/>
       </div>
       <div class="relative mt-20">
-        <NuxtImg
+        <img
           src="/img/detalles-home.png"
           width="570"
           height="380"

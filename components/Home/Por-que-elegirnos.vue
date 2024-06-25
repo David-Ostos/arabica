@@ -37,11 +37,11 @@
       </div>
         <div class="md:relative md:basis-1/2 mx-8 sm:mx-0 ">
           <div class="md:absolute mb-10 md:mb-0 -right-4 top-40 ring-white ring-8 ring-offset-4 rounded-full shadow-md  ">
-            <NuxtImg src="/img/elejirnos_1.webp" width="500" height="500" class="rounded-full "fit="cover"/>
+            <img src="/img/elejirnos_1.webp" width="500" height="500" class="rounded-full "fit="cover"/>
           </div>
           
           <div class=" right-96 bottom-12 hidden md:block md:absolute ring-white ring-8 ring-offset-4 rounded-full shadow-md ">
-            <NuxtImg src="/img/elejirnos_2.jpg" width="250" height="250" class=" rounded-full" fit="cover"/>
+            <img src="/img/elejirnos_2.jpg" width="250" height="250" class=" rounded-full" fit="cover"/>
           </div>
         </div>
         

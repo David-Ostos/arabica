@@ -7,9 +7,9 @@
       <div class="flex lg:flex-1">
         <NuxtLink to="/" class="-m-1.5 p-1.5">
           <span class="sr-only">Arabica</span>
-          <NuxtImg
+          <img
             class="h-16 w-auto"
-            src="img/ARABICA_LOGO_LIGTH.png"
+            src="/img/ARABICA_LOGO_LIGTH.png"
             alt=""
           />
         </NuxtLink>
@@ -38,7 +38,7 @@
               {{ item.label }}
             </ULink>
           </li>
-          <li><BotonSecondary contenido="Registrarte" link="/auth/registro" /></li>
+          <li><BotonSecondary :contenido="ruta === 'login' ? 'Registrate' : 'Inicia Sesión'" :link="`/auth/${ruta}`" /></li>
         </ul>
       </div>
 
@@ -161,7 +161,7 @@
             <div class="flex items-center justify-between px-8">
               <NuxtLink to="/" class="">
                 <span class="sr-only">Arabica</span>
-                <NuxtImg class="h-14 w-auto" src="img/logo_ligth.png" alt="" />
+                <img class="h-14 w-auto" src="/img/ARABICA_LOGO_LIGTH.png" alt="" />
               </NuxtLink>
 
               <UButton
@@ -224,7 +224,7 @@
         <div class="flex items-center justify-between">
           <NuxtLink to="/" class="-m-1.5">
             <span class="sr-only">Arabica</span>
-            <NuxtImg
+            <img
               class="h-14 w-auto"
               src="img/logo_ligth.png"
               alt=""
@@ -297,39 +297,16 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
-/* import {
-  Dialog,
-  DialogPanel,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
-} from "@headlessui/vue"; */
 import {
-  ArrowPathIcon,
   Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
-  XMarkIcon,
 } from "@heroicons/vue/24/outline";
-import {
-  ChevronDownIcon,
-  PhoneIcon,
-  PlayCircleIcon,
-} from "@heroicons/vue/20/solid";
-import BotonLogin from "../Botones/BotonPrimary.vue";
 import BotonPrimary from "../Botones/BotonPrimary.vue";
 import BotonSecondary from "../Botones/BotonSecondary.vue";
-import Avatar from "../Dropdowns/NavBar/Avatar/avatar.comprador.vue";
 
-const useUser = useUserStore();
 const scrolled = ref(false);
 const route = useRoute()
+
+const ruta = ref()
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
@@ -342,6 +319,15 @@ function handleScroll() {
   scrolled.value = window.scrollY > 50;
 }
 const mobileMenuOpen = ref(false);
+
+console.log(route.path);
+
+if(route.path.includes('login')){
+  ruta.value = 'login' 
+}else if(route.path.includes('registro')){
+  ruta.value = 'registro' 
+
+}
 
 const links = [{
   label: 'Sobre nosotros',
@@ -362,7 +348,7 @@ const links = [{
 }, ]
 
 
-const products = [
+/* const products = [
   {
     name: "Analytics",
     description: "Get a better understanding of your traffic",
@@ -397,6 +383,6 @@ const products = [
 const callsToAction = [
   {name: "Watch demo", href: "#", icon: PlayCircleIcon},
   {name: "Contact sales", href: "#", icon: PhoneIcon},
-];
+]; */
 
 </script>

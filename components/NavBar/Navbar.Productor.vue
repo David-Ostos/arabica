@@ -1,15 +1,15 @@
 <template>
   <header
     ref="nav1"
-    class="fixed w-screen top-0 z-50 transition-all text-dark bg-white dark:bg-dark border-b-2 rounded-lg shadow-sm"
+    class="fixed w-screen top-0  z-50 transition-all text-dark bg-white dark:bg-dark border-b-2 rounded-lg shadow-sm"
   >
-    <div class="container py-4 px-12 flex justify-between items-center" >
+    <div class="container mx-auto py-4 px-12 flex justify-between items-center" >
       <div class="flex ">
         <NuxtLink to="/" class="-m-1.5 p-1.5">
           <span class="sr-only">Arabica</span>
-          <NuxtImg
+          <img
             class="h-14 w-auto"
-            src="img/logo_ligth.png"
+            :src="imgLoginLitgh"
             :class="{hidden: mobileMenuOpen === true}"
             alt="Logo Arabica"
           />
@@ -18,7 +18,7 @@
 
       <SearchComprador/>
 
-      <Avatar />
+      <DropdownsNavBarAvatarProductor />
     </div>
 
     <Dialog
@@ -34,7 +34,7 @@
         <div class="flex items-center justify-between">
           <NuxtLink to="" class="-m-1.5 p-1.5">
             <span class="sr-only">Arabica</span>
-            <NuxtImg
+            <img
               class="h-16 w-auto"
               :src="
                 $colorMode.preference === 'dark'
@@ -102,7 +102,7 @@
         </div>
       </DialogPanel>
     </Dialog>
-    <DropdownsNavBarAvatarComprador v-if="useUser.logged"/>
+    <!-- <DropdownsNavBarAvatarComprador v-if="useUser.logged"/> -->
 
   </header>
   <div class="mt-[88px] border-b-2 rounded-md">
@@ -133,14 +133,10 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
+
 } from "@headlessui/vue";
 import {
   ArrowPathIcon,
-  Bars3Icon,
   ChartPieIcon,
   CursorArrowRaysIcon,
   FingerPrintIcon,
@@ -154,7 +150,7 @@ import {
 } from "@heroicons/vue/20/solid";
 import BotonPrimary from "../Botones/BotonPrimary.vue";
 import {useGlobalStore} from "~/stores/global";
-import Avatar from "../Dropdowns/NavBar/Avatar/avatar.comprador.vue";
+import imgLoginLitgh from '~/public/img/logo_ligth.png'
 
 const useGlobal = useGlobalStore();
 const useUser = useUserStore();

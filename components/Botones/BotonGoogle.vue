@@ -14,11 +14,10 @@
 </template>
 
 <script setup lang="ts">
-// import { fetchDataUser } from '@/helpers/functionGlobal';
+import {GoogleSignInButton, type CredentialResponse} from "vue3-google-signin";
 import {useUserStore} from "@/stores/user";
 import {useShowModalsStore} from "@/stores/showModals";
 import type {User} from "~/interfaces/Users";
-import {GoogleSignInButton, type CredentialResponse} from "vue3-google-signin";
 
 const props = defineProps({
   tipoUser: String
@@ -32,7 +31,6 @@ const useUser = useUserStore();
 // handle success event
 const handleLoginSuccess = (response: CredentialResponse) => {
   const {credential} = response;
-  console.log("Access Token", credential);
   login(credential);
 };
 
@@ -95,6 +93,8 @@ async function verificarEmail(data: any) {
       const dataUserSaved = {
         email: dataUserFetch?.email,
         picture: data.picture,
+        logged: true,
+        tipoUser : dataUserFetch.tipoUser
       };
       // console.log(dataUserSaved);
 

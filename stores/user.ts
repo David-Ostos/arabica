@@ -56,7 +56,7 @@ export const useUserStore = defineStore('user', () => {
         // console.log('nay');
       }
     }else{
-      console.log('No permitido el acceso en esta plataforma');
+      return
     }
   }
 
