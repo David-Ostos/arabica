@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" class="py-20">
+  <div ref="container" class="pb-20 bg-gray-50">
     <div class=" flex-col-reverse md:flex-row flex mx-4 md:mx-40">
       <div class="basis-1/2">
         <span class="text-primary mb-4"> DETALLES DE ENVÍO </span>

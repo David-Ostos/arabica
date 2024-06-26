@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[url('img/bg-testimonio.png')] py-20">
+  <div class="bg-[url('/img/bg-testimonio.png')] py-20" :class="`bg-[url('${bg}')]`">
     <div class="flex flex-col justify-center items-center">
       <span class="text-primary text-center uppercase">Testimonios</span>
 
@@ -59,6 +59,7 @@
 import user1 from "~/public/img/testimonio_1.jpg";
 import user2 from "~/public/img/testimonio_2.jpg";
 import user3 from "~/public/img/testimonio_3.jpg";
+import bg from "~/public/img/bg-testimonio.png"
 
 const carouselRef = ref();
 

@@ -3,7 +3,8 @@
     ref="nav1"
     class="fixed w-screen top-0 z-50 transition-all text-dark bg-white dark:bg-dark border-b-2 rounded-lg shadow-sm"
   >
-  <div class="container py-4 sm:px-12 px-8">
+  <div class="container pt-1 sm:px-12 px-8 mx-auto">
+
     <div class="flex justify-between  sm:justify-between items-center">
       <div class="flex">
         <NuxtLink to="/" class="-m-1.5 p-1.5">
@@ -111,7 +112,7 @@
   </div>
   <UHorizontalNavigation
     :links="items"
-    class=" hidden sm:flex mt-[88px] !justify-center border-b border-gray-200 dark:border-gray-800"
+    class=" hidden sm:flex mt-[60px] !justify-center border-b border-gray-200 dark:border-gray-800"
     :ui="{}"
   />
 

@@ -1,9 +1,9 @@
 <template>
   <header
     ref="nav1"
-    class="fixed w-screen top-0  z-50 transition-all text-dark bg-white dark:bg-dark border-b-2 rounded-lg shadow-sm"
+    class="fixed w-screen top-0 z-50 transition-all text-dark bg-white dark:bg-dark border-b-2 rounded-xl shadow-sm"
   >
-    <div class="container mx-auto py-4 px-12 flex justify-between items-center" >
+    <div class="container mx-auto py-1  px-12 flex justify-between items-center" >
       <div class="flex ">
         <NuxtLink to="/" class="-m-1.5 p-1.5">
           <span class="sr-only">Arabica</span>
@@ -20,9 +20,9 @@
 
       <DropdownsNavBarAvatarProductor />
     </div>
-
+<!-- 
     <Dialog
-      v-if="!useUser.logged"
+      v-if="useUser.logged"
       class="lg:hidden"
       @close="mobileMenuOpen = false"
       :open="mobileMenuOpen"
@@ -101,102 +101,59 @@
           </div>
         </div>
       </DialogPanel>
-    </Dialog>
+    </Dialog> -->
     <!-- <DropdownsNavBarAvatarComprador v-if="useUser.logged"/> -->
 
   </header>
-  <div class="mt-[88px] border-b-2 rounded-md">
-    <ul class="flex justify-center py-4 gap-4 ">
-
-      <li 
-        v-for="item, index in items" 
-        :key="index"
-        @click="console.log($route.path.includes(item.label.toLowerCase()))"
-        >
-        <NuxtLink 
-          class="cursor-pointer font-medium hover:!text-primary"
-          :class="{ '!text-primary': $route.path.includes(item.label.toLowerCase()), '!text-gray-500': !$route.path.includes(item.label.toLowerCase()) }"
-          :to="item.link"
-        >
-          {{ item.label }}
-        </NuxtLink>
-      </li>
-    </ul>
-  </div>
+  <UHorizontalNavigation
+    :links="items"
+    class=" hidden sm:flex mt-[65px] !justify-center border-b border-gray-200 dark:border-gray-800"
+    :ui="{}"
+  />
 </template>
 
 <script setup lang="ts">
 import {ref} from "vue";
-import {
-  Dialog,
-  DialogPanel,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-
-} from "@headlessui/vue";
-import {
-  ArrowPathIcon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
-  XMarkIcon,
-} from "@heroicons/vue/24/outline";
-import {
-  ChevronDownIcon,
-  PhoneIcon,
-  PlayCircleIcon,
-} from "@heroicons/vue/20/solid";
-import BotonPrimary from "../Botones/BotonPrimary.vue";
 import {useGlobalStore} from "~/stores/global";
-import imgLoginLitgh from '~/public/img/logo_ligth.png'
+import imgLoginLitgh from '~/public/img/logo_ligth_new.png'
 
 const useGlobal = useGlobalStore();
-const useUser = useUserStore();
 
 const scrolled = ref(false);
 const nav1 = ref();
+const mobileMenuOpen = ref(false);
 
-const navHeight = ref(0);
 
 const items = [{
     label: 'Panel de control',
-    name:'dashboard',
-    icon: 'i-heroicons-cog-8-tooth',
-    link: `/dashboard/${useUser.dataUser.tipoUser}`,
+    // icon: 'i-heroicons-cog-8-tooth',
+    to: `/dashboard/productor`,
   }, {
     label: 'Productores',
-    name:'productores',
-    link: `/dashboard/${useUser.dataUser.tipoUser}/productores`,
-    icon: 'i-heroicons-book-open',
+    to: `/dashboard/productor/productores`,
+    // icon: 'i-heroicons-book-open',
     
   }, {
     label: 'Inventario',
-    name:'inventario',
-    icon: 'i-heroicons-megaphone',
-    link: `/dashboard/${useUser.dataUser.tipoUser}/inventario`,
+    // icon: 'i-heroicons-megaphone',
+    to: `/dashboard/productor/inventario`,
     
   }, {
     label: 'Solicita',
-    name:'solicita',
-    icon: 'i-heroicons-signal',
-    link: `/dashboard/${useUser.dataUser.tipoUser}/solicita`,
+    // icon: 'i-heroicons-signal',
+    to: `/dashboard/productor/solicita`,
   }, {
     label: 'Pedidos de Muestra',
-    name:'muestra',
-    icon: 'i-heroicons-arrow-left-on-rectangle',
-    link: `/dashboard/${useUser.dataUser.tipoUser}/perfil/ajustes`,    
+    // icon: 'i-heroicons-arrow-left-on-rectangle',
+    to: `/dashboard/productor/pedidos_muestras`,    
   }, {
     label: 'Ventas',
-    name:'ventas',
-    icon: 'i-heroicons-arrow-left-on-rectangle',
-    link: `/dashboard/${useUser.dataUser.tipoUser}/perfil/ajustes`,    
+    // icon: 'i-heroicons-arrow-left-on-rectangle',
+    to: `/dashboard/productor/ventas`,    
   }, {
     label: 'Clientes',
-    name:'clientes',
-    icon: 'i-heroicons-arrow-left-on-rectangle',
-    link: `/dashboard/${useUser.dataUser.tipoUser}/perfil/ajustes`,    
+    // icon: 'i-heroicons-arrow-left-on-rectangle',
+    to: `/dashboard/productor/clientes`,    
   }
 ]
 
@@ -216,7 +173,7 @@ function handleScroll() {
   scrolled.value = window.scrollY > 50;
 }
 
-const products = [
+/* const products = [
   {
     name: "Analytics",
     description: "Get a better understanding of your traffic",
@@ -251,7 +208,6 @@ const products = [
 const callsToAction = [
   {name: "Watch demo", href: "#", icon: PlayCircleIcon},
   {name: "Contact sales", href: "#", icon: PhoneIcon},
-];
+]; */
 
-const mobileMenuOpen = ref(false);
 </script>

@@ -84,6 +84,8 @@ async function verificarEmail(data: any) {
         apellido: data.family_name,
         email: data.email,
         picture: data.picture,
+        tipoLogin: ["google"],
+        verificado: false,
       }
       ShowModalsStore.showModalTipoGoogle = true;
       return

@@ -213,6 +213,7 @@ let state: User = reactive({
   rePassword: undefined,
   tipoUser: tipoUser.value,
   tipoLogin: ["backend"],
+  verificado: false
 });
 
 const validations = (stat: any): FormError[] => {

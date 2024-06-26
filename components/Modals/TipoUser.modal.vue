@@ -79,7 +79,6 @@ const registrar = async () => {
       body: JSON.stringify({
         data: {
           ...userStore.dataUser,
-          tipoLogin: ["google"],
         },
       }),
     }

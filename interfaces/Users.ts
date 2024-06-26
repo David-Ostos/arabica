@@ -8,4 +8,5 @@ export interface User {
   tipoUser?: 'productor'| 'comprador'
   tipoLogin?: ['google'] | ['backend'] | ['backend','google']
   rePassword?: string | undefined
+  verificado?: boolean 
 }
