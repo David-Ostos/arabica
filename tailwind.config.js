@@ -9,9 +9,10 @@ export default {
     extend: {
       colors: {
         dark: {
-          DEFAULT: "rgb(17 25 40)",
+          DEFAULT: "#232933",
         },
         prim: "#02AC66",
+        secundary: "#707a89",
       },
       backgroundImage: {
         hero: "url('./public/img/arabicagc-1-1024x511.jpg",
