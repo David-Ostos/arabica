@@ -1,15 +1,24 @@
 <script setup lang="ts">
 import {number, object, string, type InferType} from "yup";
 import type {FormError, FormSubmitEvent} from "#ui/types";
+import { useShowModalsStore } from '../../../../stores/showModals';
 
 const useUser = useUserStore();
+const useModal = useShowModalsStore();
 
 const faltaTipo = ref(false);
+const load = ref(false);
+
+const nombreValidado = ref(false);
+const rucValidado = ref(false);
+const razonSocialValidado = ref(false);
+const correoValidado = ref(false);
+const numeroTelefonicoValidado = ref(false);
 
 const tipoP = (tipo: string) => {
-  faltaTipo.value = false
+  faltaTipo.value = false;
   state.tipoProductor = tipo;
-  validations(state)
+  validations(state);
 };
 
 const schema = object({
@@ -42,22 +51,25 @@ const state = reactive({
   direccion: undefined,
   correo: useUser.dataUser.email,
   numeroTelefonico: undefined,
-  tipoProductor: '',
+  tipoProductor: "",
+  idUsuario: {
+    email: useUser.dataUser.email,
+    _id: useUser.dataUser._id,
+  },
 });
 
 const validations = (stat: any): FormError[] => {
   let errors = [];
-  
-  if (stat.tipoProductor === '') {
+
+  if (stat.tipoProductor === "") {
     faltaTipo.value = true;
     errors.push({
       path: "tipoProductor",
       message: "No has seleccionado el tipo de cuenta.",
     });
-  }else{
-    errors = []
+  } else {
+    errors = [];
   }
-
 
   if (stat.ruc !== undefined && stat.ruc.length !== 11) {
     errors.push({
@@ -66,22 +78,143 @@ const validations = (stat: any): FormError[] => {
     });
   }
 
-
-
   return errors;
 };
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
+  load.value = true;
+  let datosDuplicados = false;
   // Do something with event.data
-  console.log(event.data);
-  console.log(state);
+  let data: any = event.data;
+
+  try {
+    const fetchVerificarUser = await fetch(
+      `${
+        import.meta.env.VITE_URL_API
+      }/api/content/items/productores?fields={"nombre": true,"origen": false,"ruc": true,"razonSocial": true,"direccion": false,"correo": true,"numeroTelefonico": true,"tipoProductor": false,"idUsuario":false }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+        },
+      }
+    );
+    const responseVerificacion = await fetchVerificarUser.json();
+    console.log(responseVerificacion);
+
+    const verificarNombre = responseVerificacion.some(
+      (productor: any) => productor.nombre === state.nombre
+    );
+    const verificarRuc = responseVerificacion.some(
+      (productor: any) => productor.ruc === state.ruc
+    );
+    const verificarRazonSocial = responseVerificacion.some(
+      (productor: any) => productor.razonSocial === state.razonSocial
+    );
+    const verificarCorreo = responseVerificacion.some(
+      (productor: any) => productor.correo === state.correo
+    );
+    const verificarNumeroTelefonico = responseVerificacion.some(
+      (productor: any) => productor.numeroTelefonico === state.numeroTelefonico
+    );
+
+    if (verificarNombre) {
+      nombreValidado.value = true;
+      datosDuplicados = true;
+    }
+
+    if (verificarRuc) {
+      datosDuplicados = true;
+      rucValidado.value = true;
+    }
+
+    if (verificarRazonSocial) {
+      datosDuplicados = true;
+      razonSocialValidado.value = true;
+    }
+
+    if (verificarCorreo) {
+      datosDuplicados = true;
+      correoValidado.value = true;
+    }
+
+    if (verificarNumeroTelefonico) {
+      datosDuplicados = true;
+      numeroTelefonicoValidado.value = true;
+    }
+
+    if (!datosDuplicados) {
+      nombreValidado.value = false;
+      rucValidado.value = false;
+      razonSocialValidado.value = false;
+      correoValidado.value = false;
+      numeroTelefonicoValidado.value = false;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_URL_API}/api/content/item/productores`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+          },
+          body: JSON.stringify({data}),
+        }
+      );
+      const res = await response.json();
+
+      console.log(res);
+
+      // Se reutiliza la variable 'data' para hacer la inyecciond e datos nuevos al ususario
+      data = {
+        _id: useUser.dataUser._id,
+        verificado: true,
+        perfilProductor: {
+          _model: "productores",
+          _id: res._id,
+        },
+      };
+
+      console.log(data);
+
+      const update = await fetch(
+        `${import.meta.env.VITE_URL_API}/api/content/item/usuarios`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+          },
+          body: JSON.stringify({data}),
+        }
+      );
+
+      const resUpdate = await update.json();
+
+      useUser.dataUser.verificado = true;
+      useModal.showModalProductorVerificate = false
+
+      console.log(resUpdate);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  load.value = false;
 }
 
 function agregarGuiones(cadena: any) {
   console.log(cadena.data);
-  return cadena.data.replace(/(\d{3})/g, '$1-');
+  return cadena.data.replace(/(\d{3})/g, "$1-");
 }
-
+const prueba = [
+  "CENTRAL DE COOPERATIVAS COCLA Ltda. N° 281",
+  "Cusco",
+  "13452587452",
+  "ASSOCIACION DNI.CAT",
+  "Jr. Unión 234, Cusco",
+  "985909993",
+];
 </script>
 
 <template>
@@ -128,24 +261,37 @@ function agregarGuiones(cadena: any) {
             required
             :ui="{
               label: {
-                base : 'ml-[20px]'
-              }
+                base: 'ml-[20px]',
+              },
             }"
           >
             <UInput
+              :class="
+                nombreValidado
+                  ? '[&_input]:focus:ring-red-500 [&_input]:!ring-red-500'
+                  : ''
+              "
               v-model="state.nombre"
               :ui="{
                 rounded: 'rounded-full',
               }"
               placeholder="CENTRAL DE COOPERATIVAS COCLA Ltda. N° 281"
             />
+
+            <span
+              class="text-red-500 text-sm text-center ml-[20px]"
+              v-if="nombreValidado"
+              >Este nombre ya esta registrado</span
+            >
           </UFormGroup>
+
           <UFormGroup
             required
-            size="xl":ui="{
+            size="xl"
+            :ui="{
               label: {
-                base : 'ml-[20px]'
-              }
+                base: 'ml-[20px]',
+              },
             }"
             label="Origen"
             name="origen"
@@ -163,13 +309,23 @@ function agregarGuiones(cadena: any) {
 
         <div class="flex flex-col md:flex-row justify-between gap-4 my-6">
           <UFormGroup
-          :ui="{
+            :ui="{
               label: {
-                base : 'ml-[20px]'
-              }
-            }" label="R.U.C" size="xl" name="ruc" class="w-80 lg:w-96" required>
+                base: 'ml-[20px]',
+              },
+            }"
+            label="R.U.C"
+            size="xl"
+            name="ruc"
+            class="w-80 lg:w-96"
+            required
+          >
             <UInput
-              class=""
+              :class="
+                rucValidado
+                  ? '[&_input]:focus:ring-red-500 [&_input]:!ring-red-500'
+                  : ''
+              "
               v-model="state.ruc"
               :ui="{
                 rounded: 'rounded-full',
@@ -177,22 +333,37 @@ function agregarGuiones(cadena: any) {
               }"
               placeholder="13452587452"
               ><template #leading>
-                <span class="text-gray-500 dark:text-gray-400 text-base">R.U.C: </span>
+                <span class="text-gray-500 dark:text-gray-400 text-base"
+                  >R.U.C:
+                </span>
               </template>
             </UInput>
+
+            <span
+              class="text-red-500 text-sm text-center ml-[20px]"
+              v-if="rucValidado"
+              >EL R.U.C ya esta registrado</span
+            >
           </UFormGroup>
+
           <UFormGroup
             required
-            size="xl":ui="{
+            size="xl"
+            :ui="{
               label: {
-                base : 'ml-[20px]'
-              }
+                base: 'ml-[20px]',
+              },
             }"
             label="Razón Social"
             name="razonSocial"
             class="w-80 lg:w-96"
           >
             <UInput
+              :class="
+                razonSocialValidado
+                  ? '[&_input]:focus:ring-red-500 [&_input]:!ring-red-500'
+                  : ''
+              "
               v-model="state.razonSocial"
               :ui="{
                 rounded: 'rounded-full',
@@ -200,16 +371,23 @@ function agregarGuiones(cadena: any) {
               placeholder="ASSOCIACION DNI.CAT"
             >
             </UInput>
+
+            <span
+              class="text-red-500 text-sm text-center ml-[20px]"
+              v-if="razonSocialValidado"
+              >La Razón Social ya esta registrada</span
+            >
           </UFormGroup>
         </div>
 
         <div class="flex flex-col md:flex-row justify-between gap-4 my-6">
           <UFormGroup
             label="Dirección"
-            size="xl":ui="{
+            size="xl"
+            :ui="{
               label: {
-                base : 'ml-[20px]'
-              }
+                base: 'ml-[20px]',
+              },
             }"
             name="direccion"
             class="w-80 lg:w-96"
@@ -224,28 +402,39 @@ function agregarGuiones(cadena: any) {
             >
             </UInput>
           </UFormGroup>
+
           <UFormGroup
             required
             :ui="{
               label: {
-                base : 'ml-[20px]',
+                base: 'ml-[20px]',
               },
-              help: 'text-xs sm:text-base mx-[12px] text-justify'
+              help: 'text-xs sm:text-sm mx-[12px] text-justify',
             }"
             size="xl"
             label="Correo Electronico"
             name="correo"
             class="w-80 lg:w-96"
-            
             help="Este correo es al que le va a llegar la información de la plataforma, si es diferente del que utiliza para iniciar sesión debe cambiarlo"
           >
             <UInput
+              :class="
+                correoValidado
+                  ? '[&_input]:focus:ring-red-500 [&_input]:!ring-red-500'
+                  : ''
+              "
               v-model="state.correo"
               :ui="{
                 rounded: 'rounded-full',
               }"
             >
             </UInput>
+
+            <span
+              class="text-red-500 text-sm text-center ml-[20px]"
+              v-if="correoValidado"
+              >El correo electronico ya esta registrado</span
+            >
           </UFormGroup>
         </div>
         <UFormGroup
@@ -253,21 +442,32 @@ function agregarGuiones(cadena: any) {
           size="xl"
           label="Número de Telefóno"
           name="numeroTelefonico"
-          class="w-80 lg:w-96":ui="{
-              label: {
-                base : 'ml-[20px]'
-              }
-            }"
-        ><!-- @input="agregarGuiones" -->
+          class="w-80 lg:w-96"
+          :ui="{
+            label: {
+              base: 'ml-[20px]',
+            },
+          }"
+          ><!-- @input="agregarGuiones" -->
           <UInput
+            :class="
+              numeroTelefonicoValidado
+                ? '[&_input]:focus:ring-red-500 [&_input]:!ring-red-500'
+                : ''
+            "
             v-model="state.numeroTelefonico"
-            
             :ui="{
               rounded: 'rounded-full',
             }"
             placeholder="+51 985909993"
           >
           </UInput>
+
+          <span
+            class="text-red-500 text-sm text-center ml-[20px]"
+            v-if="numeroTelefonicoValidado"
+            >El numero de telefono ya esta registrado</span
+          >
         </UFormGroup>
 
         <UButton
@@ -276,6 +476,7 @@ function agregarGuiones(cadena: any) {
           class="mt-8"
           size="xl"
           type="submit"
+          :loading="load"
         >
           Enviar
         </UButton>
