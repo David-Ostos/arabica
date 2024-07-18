@@ -213,7 +213,6 @@ let state: User = reactive({
   rePassword: undefined,
   tipoUser: tipoUser.value,
   tipoLogin: ["backend"],
-  verificado: false
 });
 
 const validations = (stat: any): FormError[] => {
@@ -241,7 +240,7 @@ async function onSubmit(event: any) {
   delete state.rePassword;
   state.tipoUser = tipoUser.value;
 
-  faltaTipo!.value = false;
+  faltaTipo.value = false;
   try {
     verificarEmail(state);
     return;
@@ -254,11 +253,13 @@ async function verificarEmail(data: User) {
   //AQUI HACES UN FETCH PARA VERIFICAR EL EMAIL
   try {
     const correoVerificado = await fetch(
-      `${
-        import.meta.env.VITE_URL_API
-      }/api/content/item/usuarios?filter={email:'${data.email}'}`,
+      `${import.meta.env.VITE_URL_API
+          }/api/content/item/usuarios?filter={email:'${data.email}'}&fields={"email": true}`,
       {
         cache: "no-cache",
+        headers: {
+          "api-key": import.meta.env.VITE_COCKPIT_API_KEY
+        }
       }
     );
     if (correoVerificado.status === 200) {
@@ -276,6 +277,9 @@ async function verificarEmail(data: User) {
         email: data.email,
         picture: undefined,
         tipoUser: tipoUser.value,
+        verificado: false ,
+        perfilCompleto : false,
+        perfilBase: false,
         logged : true
       }
 

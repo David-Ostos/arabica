@@ -10,7 +10,6 @@
         <p class="text-[#707a89] text-sm font-bold">{{ item.titulo }}</p>
         <span v-if="!useUser.dataUser.verificado" 
           class="text-primary font-bold text-xs cursor-pointer"
-          @click="useModal.showModalProductorVerificate = true"
         >Verifíquese. > </span>
       </div>
     </div>

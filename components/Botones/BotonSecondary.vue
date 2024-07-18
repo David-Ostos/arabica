@@ -4,6 +4,8 @@
     :to="link"
       class="hvr-ripple-out inline-flex items-center justify-center px-4 py-2 text-base font-semibold text-center rounded-lg dark:text-white lg:px-7 cursor-pointer "
     >
+    <UIcon v-if="loading" name="i-heroicons-arrow-path-20-solid" class="animate-spin"/>
+
       {{ contenido }}
     </NuxtLink>
   </div>
@@ -13,7 +15,8 @@
 
 defineProps({
   link: String,
-  contenido: String
+  contenido: String,
+  loading: Boolean
 })
 
 </script>

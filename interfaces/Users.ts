@@ -8,5 +8,11 @@ export interface User {
   tipoUser?: 'productor'| 'comprador'
   tipoLogin?: ['google'] | ['backend'] | ['backend','google']
   rePassword?: string | undefined
-  verificado?: boolean 
+  verificado?: boolean ,
+  perfilProductor?: {
+    _model: "productores",
+    _id: string,
+  },
+  perfilCompleto?: boolean,
+  perfilBase?: boolean
 }

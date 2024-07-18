@@ -56,7 +56,7 @@
                 >
                   {{ item.label }}
                   <ChevronDownIcon
-                    class="h-5 w-5 flex-none text-gray-400"
+                    class="h-5 w-5 flex-none"
                     aria-hidden="true"
                   />
                 </PopoverButton>
@@ -70,7 +70,7 @@
                   leave-to-class="opacity-0 translate-y-1"
                 >
                   <PopoverPanel
-                    class="absolute -left-8 top-full mt-8 shadow-sm rounded-t-none w-80 overflow-hidden rounded-3xl bg-white dark:bg-dark ring-gray-900/5"
+                    class="absolute -left-8 top-full mt-4 shadow-sm  w-80 overflow-hidden rounded-3xl bg-white dark:bg-dark ring-gray-900/5"
                     :class="scrolled ? ' ring-0' : ' ring-1 shadow-lg '"
                   >
                     <div class="p-4">
@@ -84,7 +84,7 @@
                         >
                           <UIcon
                             :name="subItem.icon"
-                            class="text-lg text-gray-600 dark:text-white group-hover:text-primary dark:hover:text-primary"
+                            class="text-lg  dark:text-white group-hover:text-primary dark:hover:text-primary"
                             aria-hidden="true"
                             dynamic
                           />
@@ -107,11 +107,14 @@
                 </transition>
               </Popover>
             </li>
-            <li>
+            <li v-if="!useUser.logged">
               <BotonSecondary link="/auth/login" contenido="Iniciar Sesión" />
             </li>
-            <li>
+            <li v-if="!useUser.logged">
               <BotonPrimary link="/auth/registro" contenido="Registrar" />
+            </li>
+            <li v-if="useUser.logged">
+              <BotonSecondary :link="`/dashboard/${useUser.dataUser.tipoUser}`" contenido="Panel de Control" />
             </li>
             <!-- <div v-if="useUser.logged">
           <Avatar />
@@ -133,6 +136,8 @@ import BotonSecondary from "../Botones/BotonSecondary.vue";
 
 import imgLogo from "/img/Arabica-Green-coffee.png";
 import imgLogoLitgh from "/img/logo_ligth_new.png";
+
+const useUser = useUserStore()
 
 const nav1 = ref();
 const mobileMenuOpen = ref(false);

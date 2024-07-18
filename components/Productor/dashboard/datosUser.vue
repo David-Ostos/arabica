@@ -1,7 +1,10 @@
 <template>
 <div class=" mt-10">
       <div class="flex items-center gap-4">
-        <UAvatar :size="useUser.dataUser.picture !== null ? 'xl' : '2xl'" :src=" useUser.dataUser.picture !== null ? useUser.dataUser.picture : '/img/avatar.png'" />
+        <UAvatar 
+        class="bg-white"
+          :size="pictureTrue ? 'xl' : '2xl'" 
+          :src="picture" />
         <div>
           <h1 class="text-2xl font-raleway font-bold capitalize [&_b]:hover:text-primary">Bienvenido, <b class="font-bold"> {{ useUser.dataUser.nombre }} </b></h1>
           <div v-if="useUser.dataUser.verificado"
@@ -23,12 +26,13 @@
   
           <div v-else
             class="flex gap-4 item-center">
-            <span @click="useModal.showModalProductorVerificate = true" 
-              class="gap-1 flex items-center hover:text-primary cursor-pointer"
+            <span @click="" 
+              class="gap-1 flex items-center hover:!text-primary cursor-pointer"
             >
               <UIcon class="text-xl" color="#e8a331"  name="i-tabler-alert-triangle-filled" dynamic/>
               <span
               >Vendedor no Verificado</span>
+              <UIcon name="i-ic-round-keyboard-arrow-right" class="text-[28px] font-black  -ml-1" dynamic/>
             </span>
             
             <!-- <div class="gap-1 flex items-center">
@@ -47,6 +51,21 @@
 <script lang="ts" setup>
 const useUser = useUserStore()
 const useModal = useShowModalsStore()
+const picture = ref()
+const pictureTrue = ref(false)
+
+onMounted(()=>{
+  if(useUser.dataUser.picture){
+    picture.value = useUser.dataUser.picture
+    pictureTrue.value = true
+  }else{
+    picture.value = '/img/avatar.png'
+    pictureTrue.value = false
+  }
+})
+
+
+
 </script>
 
 <style>

@@ -1,6 +1,19 @@
 <script setup lang="ts">
 const useUser = useUserStore();
 
+const picture = ref()
+const pictureTrue = ref(false)
+
+onMounted(()=>{
+  if(useUser.dataUser.picture){
+    picture.value = useUser.dataUser.picture
+    pictureTrue.value = true
+  }else{
+    picture.value = '/img/avatar.png'
+    pictureTrue.value = false
+  }
+})
+
 const items = [
   /* [
     {
@@ -46,12 +59,8 @@ const items = [
   >
     <div class="flex items-center">
       <UAvatar
-        size="xl"
-        :src="
-          useUser.dataUser.picture !== null
-            ? useUser.dataUser.picture
-            : '/img/avatar.png'
-        "
+        :size="pictureTrue ? 'xl' : '2xl'" 
+          :src="picture"
       >
       </UAvatar>
       <UIcon

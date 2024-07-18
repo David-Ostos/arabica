@@ -1,3 +1,4 @@
+import type { PerfilProductor } from "~/interfaces/PerfilProductor"
 import type { User } from "~/interfaces/Users"
 
 export const useUserStore = defineStore('user', () => {
@@ -5,6 +6,7 @@ export const useUserStore = defineStore('user', () => {
   const router = useRouter()
 
   const dataUser = ref({} as User)
+  const perfilUser = ref({} as PerfilProductor)
   const logged = ref(false)
 
   const fetchDataUser = async () => {
@@ -12,20 +14,30 @@ export const useUserStore = defineStore('user', () => {
       // código que usa localStorage
       if (localStorage.getItem('dataUser') !== null) {
         const dataUserSaved = await JSON.parse(localStorage.getItem('dataUser') ?? '{}')
-    
         try {
           const peticionUser = await fetch(
-            `${import.meta.env.VITE_URL_API}/api/content/item/usuarios?filter={email:'${dataUserSaved.email}'}`,
+            `${import.meta.env.VITE_URL_API}/api/content/item/usuarios?filter={email:'${dataUserSaved.email}'}&populate=1&fields={"_state": false,"_modified": false,"_mby": false,"_created": false,"_cby": false,"verificacion": false,}`,
             {
               cache: 'no-cache'
             }
           )
     
           const dataUserFetch = await peticionUser.json()
-    
+
+          if(dataUserFetch.perfilProductor !== null){
+            delete dataUserFetch.perfilProductor._state
+            delete dataUserFetch.perfilProductor._modified
+            delete dataUserFetch.perfilProductor._mby
+            delete dataUserFetch.perfilProductor._created
+            delete dataUserFetch.perfilProductor._cby
+            delete dataUserFetch.perfilProductor._model
+            delete dataUserFetch.perfilProductor.idUsuario
+          }
+
           if (dataUserFetch === undefined) return
-          if (dataUserFetch?.email != undefined) {
+          if (dataUserFetch?.email !== undefined) {
             logged.value = true
+            /* 
             const {
               _id,
               nombre,
@@ -35,17 +47,28 @@ export const useUserStore = defineStore('user', () => {
               tipoUser,
               tipoLogin,
               picture,
-            } = await dataUserFetch
+            } = await dataUserFetch 
+             */
     
+            if(dataUserFetch.perfilProductor !== null){
+              perfilUser.value = {
+                ...dataUserFetch.perfilProductor
+              }
+              delete dataUserFetch.perfilProductor
+            }
+
             dataUser.value = {
               ...dataUserFetch 
             }
-            // console.log(dataUser.value);
+
+
           }
         } catch (error) {
           console.log(error)
         }
       }else{
+
+        console.log('hola');
         /**
          * 
          * // todo:
@@ -70,6 +93,7 @@ export const useUserStore = defineStore('user', () => {
   return {
     dataUser,
     logged,
+    perfilUser,
     fetchDataUser,
     logout
   }

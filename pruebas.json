@@ -1,0 +1,14 @@
+{
+  "correo": "davidostos2@gmail.com",
+  "direccion": "Jr. Unión 234, Cusco",
+  "idUsuario": {
+    "_model": "usuarios",
+    "_id": "f13d0e57616234ded90002c7"
+  },
+  "nombre": "CENTRAL DE COOPERATIVAS COCLA Ltda. N° 281",
+  "numeroTelefonico": "985909993",
+  "origen": "Cusco",
+  "razonSocial": "ASSOCIACION DNI.CAT",
+  "ruc": "13452587452",
+  "tipoProductor": "asociacion"
+}

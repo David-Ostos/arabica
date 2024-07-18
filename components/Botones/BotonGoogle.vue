@@ -20,8 +20,8 @@ import {useShowModalsStore} from "@/stores/showModals";
 import type {User} from "~/interfaces/Users";
 
 const props = defineProps({
-  tipoUser: String
-})
+  tipoUser: String,
+});
 
 const toast = useToast();
 const router = useRouter();
@@ -73,12 +73,17 @@ async function verificarEmail(data: any) {
 
   try {
     const correoVerificado = await fetch(
-      `${import.meta.env.VITE_URL_API}/api/content/item/usuarios?filter={email:'${data.email}'}`,
+      `${
+        import.meta.env.VITE_URL_API
+      }/api/content/item/usuarios?filter={email:'${data.email}'}`,
       {
         cache: "no-cache",
+        headers: {
+          "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+        },
       }
     );
-    if(correoVerificado.status === 404){
+    if (correoVerificado.status === 404) {
       useUser.dataUser = {
         nombre: data.given_name,
         apellido: data.family_name,
@@ -86,28 +91,33 @@ async function verificarEmail(data: any) {
         picture: data.picture,
         tipoLogin: ["google"],
         verificado: false,
-      }
+        perfilCompleto: false,
+        perfilBase: false
+      };
       ShowModalsStore.showModalTipoGoogle = true;
-      return
-    }
-    const dataUserFetch: User = await correoVerificado.json();
-
+      return;
+    }else{
+      const dataUserFetch: User = await correoVerificado.json();
+  
       const dataUserSaved = {
         email: dataUserFetch?.email,
         picture: data.picture,
         logged: true,
-        tipoUser : dataUserFetch.tipoUser
+        tipoUser: dataUserFetch.tipoUser,
+        perfilCompleto: dataUserFetch.perfilCompleto,
+        verificado: dataUserFetch.verificado,
+        perfilBase: dataUserFetch.perfilBase,
       };
       // console.log(dataUserSaved);
-
+  
       localStorage.clear();
       localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
-
-       await useUser.fetchDataUser()
-      .then(() =>{
-         router.push(`/dashboard/${dataUserFetch.tipoUser}`);
-       })
-    }catch (error) {
+  
+      await useUser.fetchDataUser().then(() => {
+        router.push(`/dashboard/${dataUserFetch.tipoUser}`);
+      });
+    }
+  } catch (error) {
     console.log(error);
   }
 }

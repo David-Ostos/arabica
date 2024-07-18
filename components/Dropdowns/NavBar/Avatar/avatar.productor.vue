@@ -1,6 +1,19 @@
 <script setup lang="ts">
 const useUser = useUserStore();
 
+const picture = ref()
+const pictureTrue = ref(false)
+
+onMounted(()=>{
+  if(useUser.dataUser.picture){
+    picture.value = useUser.dataUser.picture
+    pictureTrue.value = true
+  }else{
+    picture.value = '/img/avatar.png'
+    pictureTrue.value = false
+  }
+})
+
 const items = [
   [
     {
@@ -16,6 +29,11 @@ const items = [
       to: `/dashboard/productor`,
     },
     {
+      label: "Lotes de Café",
+      icon: "i-heroicons-archive-box",
+      to: `/dashboard/productor/lotes`,
+    },
+    /* {
       label: "Productores",
       to: `/dashboard/productor/productores`,
       icon: "i-tabler-brand-redhat",
@@ -29,7 +47,7 @@ const items = [
       label: "Solicita",
       icon: "i-heroicons-signal",
       to: `/dashboard/productor/solicita`,
-    },
+    }, */
     {
       label: "Pedidos de Muestra",
       icon: "i-tabler-coffee",
@@ -40,11 +58,11 @@ const items = [
       icon: "i-tabler-brand-shopee",
       to: `/dashboard/productor/ventas`,
     },
-    {
+    /* {
       label: "Clientes",
       icon: "i-tabler-heart-handshake",
       to: `/dashboard/productor/clientes`,
-    },
+    }, */
   ],
   [
     {
@@ -82,24 +100,24 @@ const items = [
     },
   ],
 ];
+
 </script>
 
 <template>
   <UDropdown
     :items="items"
-    :ui="{item: {disabled: 'cursor-text select-text'}}"
+    :ui="{
+      item: {
+      disabled: 'cursor-text select-text'
+    },
+    width: 'w-56'
+  }"
     :popper="{placement: 'bottom-start'}"
   >
-    <div class="flex items-center">
+    <div class="flex items-center ">
       <UAvatar
-        :size="useUser.dataUser.picture !== null
-            ? 'md'
-            : 'xl'"
-        :src="
-          useUser.dataUser.picture !== null
-            ? useUser.dataUser.picture
-            : '/img/avatar.png'
-        "
+        :size="pictureTrue ? 'xl' : '2xl'" 
+          :src="picture"
       >
       </UAvatar>
       <UIcon
@@ -145,7 +163,7 @@ const items = [
         <span class="truncate font-bold">{{ item.label }}</span>
         <UIcon
           :name="item.icon_2"
-          class="flex-shrink-0 h-4 w-4  "
+          class="ml-8 flex-shrink-0 h-4 w-4  "
           dynamic
         />
       </NuxtLink>

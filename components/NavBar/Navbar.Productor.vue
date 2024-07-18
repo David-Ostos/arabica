@@ -1,5 +1,6 @@
 <template>
-  <header
+  <div class="relative z-50">
+    <header
     ref="nav1"
     class="fixed w-screen top-0 z-50 transition-all text-dark bg-white dark:bg-dark border-b-2 rounded-xl shadow-sm"
   >
@@ -105,11 +106,19 @@
     <!-- <DropdownsNavBarAvatarComprador v-if="useUser.logged"/> -->
 
   </header>
-  <UHorizontalNavigation
-    :links="items"
-    class=" hidden sm:flex mt-[65px] !justify-center border-b border-gray-200 dark:border-gray-800"
-    :ui="{}"
-  />
+
+  <div 
+    :class="!useUser.dataUser.verificado ? 'mt-[58px]' : 'mt-[65px]'">
+    <ProductorHorizontalPerfil class=""/>
+    <UHorizontalNavigation
+      v-if="!$route.path.includes('perfil')"
+      :links="items"
+      class=" hidden sm:flex  !justify-center border-b border-gray-200  dark:border-gray-800 shadow-xl rounded-b-xl"
+      :ui="{}"
+    />
+  
+  </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -118,6 +127,7 @@ import {useGlobalStore} from "~/stores/global";
 import imgLoginLitgh from '~/public/img/logo_ligth_new.png'
 
 const useGlobal = useGlobalStore();
+const useUser = useUserStore()
 
 const scrolled = ref(false);
 const nav1 = ref();
@@ -129,20 +139,25 @@ const items = [{
     // icon: 'i-heroicons-cog-8-tooth',
     to: `/dashboard/productor`,
   }, {
+    label: 'Lotes de Café',
+    to: `/dashboard/productor/lotes`,
+    // icon: 'i-heroicons-book-open',
+    
+  },/* {
     label: 'Productores',
     to: `/dashboard/productor/productores`,
     // icon: 'i-heroicons-book-open',
     
-  }, {
+  } ,*/ /* {
     label: 'Inventario',
     // icon: 'i-heroicons-megaphone',
     to: `/dashboard/productor/inventario`,
     
-  }, {
+  }, */ /* {
     label: 'Solicita',
     // icon: 'i-heroicons-signal',
     to: `/dashboard/productor/solicita`,
-  }, {
+  } ,*/ {
     label: 'Pedidos de Muestra',
     // icon: 'i-heroicons-arrow-left-on-rectangle',
     to: `/dashboard/productor/pedidos_muestras`,    
@@ -150,11 +165,11 @@ const items = [{
     label: 'Ventas',
     // icon: 'i-heroicons-arrow-left-on-rectangle',
     to: `/dashboard/productor/ventas`,    
-  }, {
+  }, /* {
     label: 'Clientes',
     // icon: 'i-heroicons-arrow-left-on-rectangle',
     to: `/dashboard/productor/clientes`,    
-  }
+  } */
 ]
 
 onMounted(() => {

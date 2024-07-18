@@ -1,5 +1,5 @@
 <template>
-  <div v-if="ShowModalsStore.showModalTipoGoogle">
+  <div v-show="ShowModalsStore.showModalTipoGoogle">
     <div
       class="fixed w-screen h-lvh bg-gray-700 opacity-25 z-[55]"
       @click="ShowModalsStore.showModalTipoGoogle = false"
@@ -19,6 +19,7 @@
           <div class="w-full md:w-2/3 bg-white flex flex-col space-y-2 p-3">
             <div class="flex justify-end item-center">
               <UButton
+                v-if="ShowModalsStore.showModalTipoGoogle"
                 :padded="false"
                 icon="i-heroicons-x-mark-20-solid"
                 size="sm"
@@ -40,6 +41,7 @@
             <BotonSecondary
               class="text-center text-dark"
               contenido="Regitrar"
+              :loading="loading"
               @click="registrar"
             />
           </div>
@@ -52,14 +54,15 @@
 <script lang="ts" setup>
 import {useShowModalsStore} from "../../stores/showModals";
 import TipoUser from "~/components/Auth/Registro/TipoUser.vue";
-import BotonPrimary from "../Botones/BotonPrimary.vue";
 import BotonSecondary from "../Botones/BotonSecondary.vue";
-import type {User} from "~/interfaces/Users";
 import {useRouter} from "vue-router";
 
 const ShowModalsStore = useShowModalsStore();
-const userStore = useUserStore();
+const useUser = useUserStore();
 const router = useRouter();
+
+const loading = ref(false)
+
 
 const tipoUser = ref("" as "comprador" | "productor");
 const tipoU = (tipo: "comprador" | "productor") => {
@@ -67,7 +70,12 @@ const tipoU = (tipo: "comprador" | "productor") => {
 };
 
 const registrar = async () => {
-  userStore.dataUser.tipoUser = tipoUser.value;
+  loading.value = true;
+  useUser.dataUser.tipoUser = tipoUser.value;
+
+  localStorage.clear();
+  localStorage.setItem("dataUser", JSON.stringify(useUser.dataUser));
+
   const response = fetch(
     `${import.meta.env.VITE_URL_API}/api/content/item/usuarios`,
     {
@@ -78,18 +86,21 @@ const registrar = async () => {
       },
       body: JSON.stringify({
         data: {
-          ...userStore.dataUser,
+          ...useUser.dataUser,
         },
       }),
     }
   );
   if ((await response).status === 412) {
     console.log("error");
+    loading.value = false;
     return;
   } else {
-    await userStore.fetchDataUser();
+    await useUser.fetchDataUser();
     ShowModalsStore.showModalTipoGoogle = false;
-    router.push(`/${userStore.dataUser.tipoUser}`);
+    loading.value = false;
+    console.log(`/dashboard/${useUser.dataUser.tipoUser}`);
+    router.push(`/dashboard/${useUser.dataUser.tipoUser}`);
   }
 };
 </script>

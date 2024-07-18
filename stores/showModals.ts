@@ -3,10 +3,10 @@ export const useShowModalsStore = defineStore('showModals', () => {
 
   const showModalTipoGoogle = ref(false) 
 
-  const showModalProductorVerificate = ref(false)
+  const showModalProductorPerfilCompleto = ref(false)
 
   return {
     showModalTipoGoogle,
-    showModalProductorVerificate
+    showModalProductorPerfilCompleto
   }
 })

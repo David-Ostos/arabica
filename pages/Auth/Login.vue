@@ -161,13 +161,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
   try {
     const response = await fetch(
-      `${
-        import.meta.env.VITE_URL_API
-      }/api/content/item/usuarios?filter={email:'${
-        event.data.email
-      }'}&fields={_state: false, _modified: false, _mby: false, _created: false, _cby: false}`,
+      `${import.meta.env.VITE_URL_API}/api/content/item/usuarios?filter={email:'${
+        event.data.email}'}&fields={_state: false, _modified: false, _mby: false, _created: false, _cby: false}`,
       {
         cache: "no-cache",
+        headers: {
+          "api-key": import.meta.env.VITE_COCKPIT_API_KEY
+        }
       }
     );
     if (response.status === 404) {
@@ -214,12 +214,14 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           email: state.email,
           picture: dataUserFetch.picture,
           logged: true,
+          verificado: dataUserFetch.verificado ,
+          perfilCompleto : dataUserFetch.perfilCompleto,
+          perfilBase: dataUserFetch.perfilBase,
           tipoUser : dataUserFetch.tipoUser
         };
 
         localStorage.clear();
         localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
-        console.log(dataUserFetch);
         useUser.dataUser = dataUserFetch;
         router.push(`/dashboard/${dataUserFetch.tipoUser}`);
       }
@@ -228,9 +230,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     console.log(error);
   }
 }
-
-let email = ref("");
-let password = ref("");
 </script>
 
 <style scoped lang="scss"></style>

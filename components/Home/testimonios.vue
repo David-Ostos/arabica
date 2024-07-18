@@ -23,7 +23,7 @@
         v-slot="{item}"
         :items="items"
         :ui="{item: 'basis-full'}"
-        class="mx-20"
+        class="md:mx-20 w-64 md:w-auto mx-auto"
         :class="inClick ? 'cursor-grab' : 'cursor-grabbing'"
         @mousedown="handleCursor"
         @mouseup="handleCursor"
@@ -31,7 +31,7 @@
       >
         <div class="mb-20 mt-8">
           <p
-            class="leading-7 text-[#7a7a7a] font-raleway text-2xl text-center font-semibold"
+            class="leading-7 text-[#7a7a7a] font-raleway md:text-2xl text-center font-semibold"
           >
             {{ item.testimonio }}
           </p>
