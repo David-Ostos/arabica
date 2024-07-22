@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <div class="-mt-16 ml-12 relative w-fit">
+    <div class="-mt-16 relative w-fit">
       <UAvatar
         class="ring-4 ring-offset-[3px] ring-primary bg-white"
         :ui="{
@@ -21,15 +21,15 @@
       </div>
 
     </div>
-    <div class="mx-8 my-4 ">
-      <h2 v-if="useUser.perfilUser.nombre !== undefined"
+    <div class=" my-4 ">
+      <h2 v-if="useProductor.perfilProductor.nombre !== undefined"
         class="text-2xl font-bold relative w-fit pr-8"
       >
-        {{ useUser.perfilUser.nombre }} <UIcon class=" cursor-pointer text-xl text-primary absolute top-0 right-0" name="i-ph-pencil-fill" dynamic/>
+        {{ useProductor.perfilProductor.nombre }} <UIcon class=" cursor-pointer text-xl text-primary absolute top-0 right-0" name="i-ph-pencil-fill" dynamic/>
       </h2>
       <div class="flex gap-4">
-        <p class="flex items-center gap-2 text-lg text-secundary capitalize"><UIcon name="i-openmoji-flag-peru" dynamic/> {{ useUser.perfilUser.origen }}</p>
-        <p class="flex items-center gap-2 text-lg text-secundary capitalize"><UIcon name="i-bxs-leaf" class="text-primary" dynamic /> {{ useUser.perfilUser.tipoProductor }}</p>
+        <p class="flex items-center gap-2 text-lg text-secundary capitalize"><UIcon name="i-openmoji-flag-peru" dynamic/> {{ useProductor.perfilProductor.origen }}</p>
+        <p class="flex items-center gap-2 text-lg text-secundary capitalize"><UIcon name="i-bxs-leaf" class="text-primary" dynamic /> {{ useProductor.perfilProductor.tipoProductor }}</p>
       </div>
     </div>
   </div>
@@ -37,6 +37,7 @@
 
 <script lang="ts" setup>
 const useUser = useUserStore();
+const useProductor = useProductorStore();
 
 const picture = ref()
 const pictureTrue = ref(false)
@@ -58,10 +59,6 @@ const data = reactive({
 })
 
 console.log();
-
-if(Object.keys(useUser.perfilUser).length === 0){
-  
-}
 
 </script>
 

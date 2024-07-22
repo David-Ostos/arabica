@@ -3,10 +3,11 @@ import NavbarProductor from '~/components/NavBar/Navbar.Productor.vue';
 </script>
 
 <template>
-  <div class="mb-96">
+  <div>
     <NavbarProductor/>
     <ProductorPerfilLayout/>
     <slot />
+    <ProductorFooter/>
   </div>
 </template>
 

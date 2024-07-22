@@ -3,7 +3,7 @@ export default defineAppConfig({
     dark: 'rgb(17 25 40)',
     notifications: {
       // Show toasts at the top right of the screen
-      position: 'top-0 bottom-auto'
+      position: 'top-0  bottom-auto'
     }
   }
 

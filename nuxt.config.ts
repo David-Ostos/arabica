@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   devtools: {enabled: true},
   ssr: false,
+
   modules: [
     "@pinia/nuxt",
     "@nuxt/ui",
@@ -25,11 +26,13 @@ export default defineNuxtConfig({
     ],
     "@vesp/nuxt-fontawesome",
     "@nuxt/fonts",
-    'nuxt-vue3-google-signin'
+    'nuxt-vue3-google-signin',
   ],
+
   googleSignIn: {
     clientId: import.meta.env.VITE_GOOGLE_ID,
   },
+
   app: {
     head: {
       script: [
@@ -60,6 +63,7 @@ export default defineNuxtConfig({
       ],
     },
   },
+
   fontawesome: {
     icons: {
       solid: [
@@ -90,12 +94,16 @@ export default defineNuxtConfig({
       regular: ["file-lines"],
     },
   },
+
   colorMode: {
     preference: "light",
     fallback: "light",
     classSuffix: "",
   },
+
   pinia: {
     storesDirs: ["./stores/**"],
   },
+
+  compatibilityDate: "2024-07-22",
 });

@@ -3,17 +3,18 @@
     <div>
       <div v-for="items in prestigio">
         <div v-for="key in Object.keys(items)" class="mb-4">
-          <div class="flex justify-between mb-4">
-            <h3 class="capitalize font-medium text-xl">{{ key }}</h3>
+          <div
+            class="shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-md py-5 px-4 text-center"
+          >
+          <div class="flex justify-between mb-4 border-b pb-4">
+            <h2 class="capitalize font-medium text-xl">{{ key }}</h2>
             <UIcon
               name="i-ph-pencil-fill"
-              class="text-primary justify-self-stretch text-xl"
+              class="text-primary justify-self-stretch text-xl cursor-pointer"
               dynamic
             />
           </div>
-          <div
-            class="flex items-center justify-center gap-4 shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-md py-5 px-4 text-center"
-          >
+          <div class="flex items-center justify-center gap-4">
             <div
               v-for="item in items[key].slice(0, 4)"
               class="border rounded-md flex flex-col items-center p-2"
@@ -48,6 +49,8 @@
               </div>
             </div>
           </div>
+            
+          </div>
         </div>
       </div>
     </div>
@@ -55,7 +58,7 @@
 </template>
 
 <script lang="ts" setup>
-const useUser = useUserStore();
+const useProductor = useProductorStore();
 
 const prestigio: any = [
   {
@@ -104,9 +107,9 @@ const prestigio: any = [
 
 /* [
   {
-    equipo: useUser.perfilUser.equipo,
-    premios: useUser.perfilUser.premios,
-    certificaciones: useUser.perfilUser.certificaciones,
+    equipo: useProductor.perfilProductor.equipo,
+    premios: useProductor.perfilProductor.premios,
+    certificaciones: useProductor.perfilProductor.certificaciones,
   },
 ]; */
 

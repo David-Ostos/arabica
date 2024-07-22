@@ -16,6 +16,7 @@
           class="w-full p-5 rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pt-6 pb-8 mb-4"
           :schema="schema"
           :state="state"
+          :validations="validations"
           @submit="onSubmit"
         >
           <!-- email -->
@@ -131,9 +132,10 @@
 import {object, string, type InferType} from "yup";
 import type {FormError, FormSubmitEvent} from "#ui/types";
 import BotonGoogle from "~/components/Botones/BotonGoogle.vue";
+import { toast } from 'vue3-toastify';
+/* import Swal from 'sweetalert2'; */
 
 const useUser = useUserStore();
-const toast = useToast();
 const router = useRouter();
 
 definePageMeta({
@@ -149,6 +151,19 @@ const schema = object({
     .required("Requerido"),
 });
 
+const validations = (stat: any): FormError[] => {
+  const errors = [];
+  noMatche.value === false
+  
+  if (stat.password !== stat.rePassword) {
+    errors.push({
+      path: "password",
+      message: "Las contraseñas no coinciden",
+    });
+  }
+  return errors;
+}; 
+
 type Schema = InferType<typeof schema>;
 
 const state = reactive({
@@ -158,7 +173,7 @@ const state = reactive({
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with event.data
-
+  console.log(event)
   try {
     const response = await fetch(
       `${import.meta.env.VITE_URL_API}/api/content/item/usuarios?filter={email:'${
@@ -171,45 +186,56 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       }
     );
     if (response.status === 404) {
-      toast.add({
-        id: "email_no_resgistrado",
-        title: "El correo no esta registrado",
-        description: "Si no tienes cuenta, registrate.",
-        icon: "i-heroicons-exclamation-circle",
-        timeout: 5000,
-        color: "yellow",
-        actions: [
-          {
-            label: "Registrarte",
-            click: () => {
-              router.push("/auth/registro");
-            },
-          },
-        ],
-      });
+
+      toast.warn('El correo no esta registrado. Si no tienes cuenta, registrate.',{
+        onClick(event) {
+          router.push("/auth/registro");
+        },
+      })
+      // toast.add({
+        // id: "email_no_resgistrado",
+        // title: "El correo no esta registrado",
+        // description: "Si no tienes cuenta, registrate.",
+        // icon: "i-heroicons-exclamation-circle",
+        // timeout: 5000,
+        // color: "yellow",
+        // actions: [
+          // {
+            // label: "Registrarte",
+            // click: () => {
+              // router.push("/auth/registro");
+            // },
+          // },
+        // ],
+      // });
     } else if (response.status === 200) {
       const dataUserFetch = await response.json();
 
       if (!dataUserFetch.tipoLogin.includes("backend")) {
-        toast.add({
+        toast.warning('El correo fue registrado por google. Has iniciado sesión utilizando Google y aún no has establecido una contraseña propia. Por favor, inicia sesión mediante Google y procede a crear una nueva contraseña en la sección de perfil de tu cuenta.')
+        /* toast.add({
           id: "email_login_google_only",
           title: "El correo fue registrado por google",
           description:
             "Has iniciado sesión utilizando Google y aún no has establecido una contraseña propia. Por favor, inicia sesión mediante Google y procede a crear una nueva contraseña en la sección de perfil de tu cuenta.",
           icon: "i-heroicons-exclamation-circle",
           timeout: 5000,
-          color: "yellow",
+          color: "yellow", 
         });
+        */
       } else if (event.data.password !== dataUserFetch.password) {
-        toast.add({
+        toast.warn('La contraseña o el correo no coinciden')
+        /* toast.add({
           id: "no_match_password",
           title: "La contraseña o el correo no coinciden",
           icon: "i-heroicons-exclamation-circle",
           timeout: 5000,
           color: "yellow",
-        });
+        }); */
         noMatche.value = true;
-      } else {
+      } /* else if(dataUserFetch){
+
+      } */else {
         const dataUserSaved = {
           email: state.email,
           picture: dataUserFetch.picture,

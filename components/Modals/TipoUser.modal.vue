@@ -75,7 +75,7 @@ const registrar = async () => {
 
   localStorage.clear();
   localStorage.setItem("dataUser", JSON.stringify(useUser.dataUser));
-
+  console.log(useUser.dataUser);
   const response = fetch(
     `${import.meta.env.VITE_URL_API}/api/content/item/usuarios`,
     {

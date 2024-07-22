@@ -3,6 +3,7 @@ const useUser = useUserStore();
 
 const picture = ref()
 const pictureTrue = ref(false)
+const loadingImg = ref(true)
 
 onMounted(()=>{
   if(useUser.dataUser.picture){
@@ -106,9 +107,12 @@ const items = [
     :popper="{offsetDistance: 5, placement: 'bottom-start'}"
   >
     <div class="flex items-center">
+      <USkeleton v-if="loadingImg" class="w-full h-full" :ui="{
+								background: 'bg-secundary'
+							}" />
       <UAvatar
         :size="pictureTrue ? 'xl' : '2xl'" 
-        :src="picture"
+        :src="picture" @load="loadingImg = true"
       >
       </UAvatar>
       <UIcon

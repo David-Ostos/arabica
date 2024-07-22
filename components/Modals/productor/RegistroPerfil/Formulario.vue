@@ -6,6 +6,7 @@ import type { PerfilProductor } from "~/interfaces/PerfilProductor";
 
 const useUser = useUserStore();
 const useModal = useShowModalsStore();
+const useProductor = useProductorStore()
 
 const faltaTipo = ref(false);
 const load = ref(false);
@@ -166,7 +167,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       );
       const res = await response.json();
 
-      useUser.perfilUser = data
+      useProductor.perfilProductor = data
 
 
       // Se reutiliza la variable 'data' para hacer la inyecciond e datos nuevos al ususario

@@ -1,18 +1,24 @@
 <script setup lang="ts">
+import App from '~/app.vue';
+
 const useUser = useUserStore();
 
-const picture = ref()
-const pictureTrue = ref(false)
-
-onMounted(()=>{
-  if(useUser.dataUser.picture){
-    picture.value = useUser.dataUser.picture
-    pictureTrue.value = true
-  }else{
-    picture.value = '/img/avatar.png'
-    pictureTrue.value = false
+const picture = ref();
+const pictureTrue = ref(false);
+const loadingImg = ref(true);
+const avatar = ref() 
+const img = ref()
+onMounted(() => {
+  if (useUser.dataUser.picture) {
+    picture.value = useUser.dataUser.picture;
+    pictureTrue.value = true;
+  } else {
+    picture.value = "/img/avatar.png";
+    pictureTrue.value = false;
   }
-})
+});
+
+
 
 const items = [
   [
@@ -68,10 +74,10 @@ const items = [
     {
       label: "Servicio de envio",
       icon: "i-tabler-ship",
-      icon_2: 'i-tabler-arrow-badge-right',
+      icon_2: "i-tabler-arrow-badge-right",
       to: `/servicio_envio`,
-      slot: 'envio'
-    }
+      slot: "envio",
+    },
   ],
   [
     {
@@ -88,7 +94,8 @@ const items = [
       label: "Ayuda",
       icon: "i-tabler-help",
       to: `/ayuda`,
-    },{
+    },
+    {
       label: "Arabica.com",
       icon: "i-tabler-world",
       to: `/ayuda`,
@@ -100,7 +107,6 @@ const items = [
     },
   ],
 ];
-
 </script>
 
 <template>
@@ -108,18 +114,22 @@ const items = [
     :items="items"
     :ui="{
       item: {
-      disabled: 'cursor-text select-text'
-    },
-    width: 'w-56'
-  }"
+        disabled: 'cursor-text select-text',
+      },
+      width: 'w-56',
+    }"
     :popper="{placement: 'bottom-start'}"
   >
-    <div class="flex items-center ">
-      <UAvatar
-        :size="pictureTrue ? 'xl' : '2xl'" 
-          :src="picture"
-      >
-      </UAvatar>
+    <div class="flex items-center">
+      <USkeleton
+        v-if="!loadingImg"
+        class="w-14 h-14 rounded-full"
+        :ui="{
+          background: 'bg-secundary',
+        }"
+      />
+  
+      <UAvatar v-if="loadingImg" :size="pictureTrue ? 'xl' : '2xl'" :src="picture"/>
       <UIcon
         name="i-material-symbols-arrow-drop-down-rounded"
         class="!text-3xl"
@@ -144,7 +154,7 @@ const items = [
         <UIcon
           dynamic
           :name="item.icon"
-          class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 "
+          class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500"
         />
         <span class="truncate">{{ item.label }}</span>
       </NuxtLink>
@@ -152,20 +162,12 @@ const items = [
     <template #envio="{item}">
       <NuxtLink
         :to="item.link"
-        class="flex gap-4 w-full items-center text-primary-600 "
+        class="flex gap-4 w-full items-center text-primary-600"
         @click="item.action"
       >
-        <UIcon
-          dynamic
-          :name="item.icon"
-          class="flex-shrink-0 h-4 w-4  "
-        />
+        <UIcon dynamic :name="item.icon" class="flex-shrink-0 h-4 w-4" />
         <span class="truncate font-bold">{{ item.label }}</span>
-        <UIcon
-          :name="item.icon_2"
-          class="ml-8 flex-shrink-0 h-4 w-4  "
-          dynamic
-        />
+        <UIcon :name="item.icon_2" class="ml-8 flex-shrink-0 h-4 w-4" dynamic />
       </NuxtLink>
     </template>
   </UDropdown>

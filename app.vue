@@ -19,7 +19,6 @@ router.options.scrollBehavior = (to, from) => {
   }
 }
 
-
 await useUser.fetchDataUser()
 .catch((e) => console.log(e))
 
@@ -32,7 +31,6 @@ await useUser.fetchDataUser()
       <NuxtPage />
     </NuxtLayout>
   </div>
-  <UNotifications />
 </template>
 <style>
 

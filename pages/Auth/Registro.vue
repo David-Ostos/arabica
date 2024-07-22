@@ -166,7 +166,6 @@ import {useUserStore} from "@/stores/user";
 import TipoUser from "~/components/Auth/Registro/TipoUser.vue";
 import {object, string, type InferType} from "yup";
 import type {FormError, FormSubmitEvent} from "#ui/types";
-import BotonPrimary from "~/components/Botones/BotonPrimary.vue";
 import type {User} from "~/interfaces/Users";
 import BotonGoogle from "~/components/Botones/BotonGoogle.vue";
 
@@ -206,13 +205,21 @@ const schema = object({
 type Schema = InferType<typeof schema>;
 
 let state: User = reactive({
-  email: undefined,
   nombre: undefined,
   apellido: undefined,
   password: undefined,
-  rePassword: undefined,
+  email: undefined,
+  picture: '',
   tipoUser: tipoUser.value,
   tipoLogin: ["backend"],
+  perfilProductor:{
+    _model:'productores',
+    _id:'',
+  },
+  verificado: false,
+  perfilCompleto : false,
+  perfilBase: false,
+  rePassword: undefined,
 });
 
 const validations = (stat: any): FormError[] => {
@@ -239,6 +246,8 @@ async function onSubmit(event: any) {
   state.apellido = state.apellido!.toLowerCase();
   delete state.rePassword;
   state.tipoUser = tipoUser.value;
+  console.log(event.data);
+  console.log(state);
 
   faltaTipo.value = false;
   try {
@@ -283,14 +292,20 @@ async function verificarEmail(data: User) {
         logged : true
       }
 
+
+      console.log({data});
+
       localStorage.clear();
       localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
 
-      // console.log({data})
+       console.log({data})
+       console.log({
+          data: data
+      });
 
       try {
         const response = fetch(
-    `https://prueba.arabicagc.com/api/content/item/usuarios`,
+    `${import.meta.env.VITE_URL_API}/api/content/item/usuarios`,
     {
       method: "POST",
       headers: {
@@ -303,7 +318,7 @@ async function verificarEmail(data: User) {
     }
   );
   if ((await response).status === 412) {
-    console.log(response);
+    console.log(await response);
     return;
   } else {
     useUser.dataUser = data;

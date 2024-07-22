@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const route = useRoute()
-
+const usePerfilProductor = useProductorStore().perfilProductor
 const links = [ {
-  label: 'Panorámica',
+  label: `Acerca de`,
   // icon: 'i-heroicons-home',
   to: '/dashboard/productor/perfil'
 }, {
@@ -17,6 +17,12 @@ const links = [ {
 </script>
 
 <template>
-  <UHorizontalNavigation :links="links" class="border-b border-gray-200 dark:border-gray-800 mx-6" />
+  <UHorizontalNavigation 
+    :links="links" 
+    class="border-b border-gray-200 dark:border-gray-800 -mx-2" 
+    :ui="{
+      base:'max-w-40'
+    }" 
+  />
 </template>
 

@@ -7,6 +7,13 @@ export default {
       raleway: "Raleway",
     },
     extend: {
+      height: {
+        "screen-topBar-footer": "calc(100vh - 130px)",
+      },
+      transitionProperty: {
+        width: "width",
+        height: "height",
+      },
       colors: {
         dark: {
           DEFAULT: "#232933",

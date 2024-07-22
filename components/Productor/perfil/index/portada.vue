@@ -3,17 +3,21 @@
     class="relative shadow-xl rounded-3xl"
     :class="!useUser.dataUser.verificado ? '-mt-2 z-0 block' : ''"
   >
-    <div class="overflow-hidden rounded-b-3xl">
+    <div class="overflow-hidden rounded-b-3xl h-[400px]  object-center transition-all duration-700">
+      <USkeleton v-show="loadingImg" class="w-full h-full transition-all duration-700" :ui="{
+								background: 'bg-secundary'
+							}" />
       <img
         @click="isOpen = true"
         :src="
-          !useUser.perfilUser.imgPortada
+          !useProductor.perfilProductor.imgPortada
             ? portada
-            : useUser.perfilUser.imgPortada
+            : useProductor.perfilProductor.imgPortada
         "
         alt="Imagen portada"
         height="400"
-        class="h-[400px] w-full object-cover rounded-b-3xl cursor-pointer hover:brightness-75 transition-all duration-1000"
+        @load="loadingImg = false"
+        class="h-[400px] w-full object-cover object-center rounded-b-3xl cursor-pointer hover:brightness-75 transition-all duration-1000"
       />
     </div>
     <div
@@ -27,11 +31,7 @@
   <!-- modal de visualizacion de imagen de portada -->
   <div>
     <UModal
-      v-if="
-        useUser.perfilUser.imgPortada !== '' ||
-        useUser.perfilUser.imgPortada !== undefined ||
-        useUser.perfilUser.imgPortada !== null
-      "
+      v-if="useProductor.perfilProductor.imgPortada"
       v-model="isOpen"
       :ui="{
         width: 'sm:max-w-fit',
@@ -54,10 +54,8 @@
         />
         <img
           :src="
-            useUser.perfilUser.imgPortada === '' ||
-            useUser.perfilUser.imgPortada === undefined
-              ? portada
-              : useUser.perfilUser.imgPortada
+            useProductor.perfilProductor.imgPortada ? portada
+              : useProductor.perfilProductor.imgPortada
           "
           class="max-h-[600px] object-contain rounded-3xl shadow-xl"
           alt=""
@@ -71,7 +69,9 @@
 <script lang="ts" setup>
 import portada from "../../../../public/img/portada.jpg";
 const useUser = useUserStore();
+const useProductor = useProductorStore()
 const isOpen = ref(false);
+const loadingImg = ref(true);
 </script>
 
 <style></style>

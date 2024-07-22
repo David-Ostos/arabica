@@ -5,9 +5,11 @@
       class="rounded-b-3xl shadow-lg"
     >
     <ProductorPerfilIndexPortada />
-    <ProductorPerfilIndexAvatar/>
-    <ProductorPerfilHorizontalNavigation/>
-    <ProductorPerfilIndexCompletarPerfil/>
+    <div class="mx-20">
+      <ProductorPerfilIndexAvatar />
+      <ProductorPerfilHorizontalNavigation />
+    </div>
+    <ProductorPerfilIndexCompletarPerfil />
   </div>
 </template>
 
