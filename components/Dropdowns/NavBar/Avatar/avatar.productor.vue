@@ -1,23 +1,17 @@
 <script setup lang="ts">
-import App from '~/app.vue';
+import Avatar from '~/components/global/avatar.vue';
+
 
 const useUser = useUserStore();
 
 const picture = ref();
-const pictureTrue = ref(false);
-const loadingImg = ref(true);
-const avatar = ref() 
-const img = ref()
 onMounted(() => {
   if (useUser.dataUser.picture) {
     picture.value = useUser.dataUser.picture;
-    pictureTrue.value = true;
   } else {
     picture.value = "/img/avatar.png";
-    pictureTrue.value = false;
   }
 });
-
 
 
 const items = [
@@ -121,15 +115,7 @@ const items = [
     :popper="{placement: 'bottom-start'}"
   >
     <div class="flex items-center">
-      <USkeleton
-        v-if="!loadingImg"
-        class="w-14 h-14 rounded-full"
-        :ui="{
-          background: 'bg-secundary',
-        }"
-      />
-  
-      <UAvatar v-if="loadingImg" :size="pictureTrue ? 'xl' : '2xl'" :src="picture"/>
+      <Avatar :picture="picture"/>
       <UIcon
         name="i-material-symbols-arrow-drop-down-rounded"
         class="!text-3xl"

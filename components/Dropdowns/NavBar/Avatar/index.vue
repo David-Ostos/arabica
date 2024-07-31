@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Avatar from '~/components/global/avatar.vue';
+
 const useUser = useUserStore();
 
 const picture = ref()
@@ -58,11 +60,7 @@ const items = [
     :popper="{offsetDistance: 5, placement: 'bottom-start'}"
   >
     <div class="flex items-center">
-      <UAvatar
-        :size="pictureTrue ? 'xl' : '2xl'" 
-          :src="picture"
-      >
-      </UAvatar>
+      <Avatar :picture="picture"/>
       <UIcon
         name="i-material-symbols-arrow-drop-down-rounded"
         class="!text-3xl"

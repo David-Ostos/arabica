@@ -19,13 +19,9 @@
               v-for="item in items[key].slice(0, 4)"
               class="border rounded-md flex flex-col items-center p-2"
             >
-              <UAvatar
-                size="xl"
+              <Avatar
                 v-if="key === 'equipo'"
-                :src="item.img !== '' ? item.img : '' "
-                icon="i-heroicons-photo"
-                alt=""
-                class="rounded-full w-16 h-16 object-cover object-top"
+                :picture="item.img !== '' ? item.img : '' "
               />
               <img v-else :src="item.img" alt="" class="rounded-xl w-32" />
 

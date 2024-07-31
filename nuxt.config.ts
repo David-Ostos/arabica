@@ -27,10 +27,32 @@ export default defineNuxtConfig({
     "@vesp/nuxt-fontawesome",
     "@nuxt/fonts",
     'nuxt-vue3-google-signin',
+    '@nuxtjs/mdc',
   ],
 
   googleSignIn: {
     clientId: import.meta.env.VITE_GOOGLE_ID,
+  },
+
+  mdc: {
+    highlight: {
+      theme: {
+        default: 'vitesse-light',
+        dark: 'material-theme-palenight'
+      },
+      preload: [
+        'sql'
+      ]
+    },
+    remarkPlugins: {
+      'remark-mdc': {
+        options: {
+          experimental: {
+            autoUnwrap: true
+          }
+        }
+      }
+    }
   },
 
   app: {

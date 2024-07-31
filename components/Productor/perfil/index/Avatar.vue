@@ -1,17 +1,11 @@
 <template>
   <div class="">
     <div class="-mt-16 relative w-fit">
-      <UAvatar
+      <Avatar
         class="ring-4 ring-offset-[3px] ring-primary bg-white"
-        :ui="{
-          background:'bg-white',
-          size: {
-            '3xl': 'h-[120px] w-[120px] text-3xl',
-          },
-        }"
-        size="3xl" 
-          :src="picture"
-        icon="i-heroicons-photo"
+        clases="h-[120px] w-[120px]"
+        clases-icon="text-3xl"
+        :picture="picture"
         alt="Avatar"
       />
       <div

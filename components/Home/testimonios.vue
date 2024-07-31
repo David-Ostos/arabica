@@ -37,8 +37,7 @@
           </p>
 
           <div class="flex justify-center items-center mt-8 gap-4">
-            <UAvatar size="xl" :src="item.avatar" alt="Avatar" />
-
+            <Avatar :picture="item.avatar"/>
             <div class="text-start">
               <p class="text-[#03764d] font-semibold">
                 {{ item.name }}

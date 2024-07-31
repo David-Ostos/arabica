@@ -1,6 +1,6 @@
 <template>
 	<div class="relative mx-auto w-auto">
-		<a href="#"
+		<NuxtLink :to="`/lote/${item._id}`"
 			class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
 			<div class="shadow p-4 rounded-lg bg-white">
 				<div class="flex justify-center relative rounded-lg overflow-hidden h-52">
@@ -78,7 +78,7 @@
 					<div class="grid grid-cols-2 pt-4 border-t">
 						<div class="flex items-center">
 							<div class="relative">
-								<UAvatar :src="useUser.dataUser.picture ? useUser.dataUser.picture : ''" icon="i-heroicons-photo" />
+								<Avatar :picture="useUser.dataUser.picture ? useUser.dataUser.picture : ''"/>
 							</div>
 	
 						</div>
@@ -93,7 +93,7 @@
 				</div>
 
 			</div>
-		</a>
+		</NuxtLink>
 	</div>
 </template>
 

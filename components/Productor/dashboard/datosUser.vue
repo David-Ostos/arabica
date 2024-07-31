@@ -1,10 +1,7 @@
 <template>
 <div class=" mt-10">
       <div class="flex items-center gap-4">
-        <UAvatar 
-        class="bg-white"
-          :size="pictureTrue ? 'xl' : '2xl'" 
-          :src="picture" />
+        <Avatar :picture="picture"/>
         <div>
           <h1 class="text-2xl font-raleway font-bold capitalize [&_b]:hover:text-primary">Bienvenido, <b class="font-bold"> {{ useUser.dataUser.nombre }} </b></h1>
           <div v-if="useUser.dataUser.verificado"

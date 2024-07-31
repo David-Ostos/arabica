@@ -110,11 +110,10 @@ const items = [
       <USkeleton v-if="loadingImg" class="w-full h-full" :ui="{
 								background: 'bg-secundary'
 							}" />
-      <UAvatar
-        :size="pictureTrue ? 'xl' : '2xl'" 
-        :src="picture" @load="loadingImg = true"
-      >
-      </UAvatar>
+      <div class=" rounded-full">
+        <img class="h-8 w-8" 
+        :src="picture" @load="loadingImg = true" alt="">
+      </div>
       <UIcon
         name="i-material-symbols-arrow-drop-down-rounded"
         class="!text-3xl"
