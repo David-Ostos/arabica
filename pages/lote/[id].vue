@@ -8,7 +8,7 @@
         >
           <div class="row-span-2 col-span-4">
             <img
-              :src="galeria[0]"
+              :src="galeria[0].link"
               class="rounded-xl h-full w-full object-cover"
               alt=""
             />
@@ -19,7 +19,7 @@
           >
             <div
               v-for="img in galeria.slice(1)"
-              class="h-full w-full flex items-center justify-between"
+              class="h-full w-full flex items-center justify-between overflow-hidden rounded-xl"
             >
               <div
                 v-if="img.enty === true"
@@ -33,8 +33,8 @@
               </div>
               <div v-else class="rounded-xl">
                 <img
-                  :src="img"
-                  class="rounded-xl h-full w-full object-cover"
+                  :src="img.link"
+                  class="rounded-xl h-72 w-56 object-cover"
                   alt=""
                 />
               </div>
@@ -59,8 +59,8 @@
 
               <div class="h-24 w-24 rounded-xl">
                 <img
-                  v-if="lote.productor.picture"
-                  :src="lote.productor.picture"
+                  v-if="lote.productor!.picture"
+                  :src="lote.productor!.picture"
                   @load="loadingImg = true"
                   class="rounded-xl"
                   alt=""
@@ -76,13 +76,13 @@
 
             <div class="text-4xl flex gap-4 items-center">
               <UIcon
-                v-if="like === true"
+                v-if="!like"
                 name="i-heroicons-heart"
                 class="cursor-pointer"
                 @click="like = !like"
               />
               <UIcon
-                v-if="like === false"
+                v-if="like"
                 class="text-rose-500 cursor-pointer"
                 name="i-heroicons-heart-16-solid"
                 @click="like = !like"
@@ -90,6 +90,7 @@
               <UIcon
                 class="text-3xl text-gray-500"
                 name="i-heroicons-arrow-up-tray"
+                @click="copiarUrl"
               />
             </div>
           </div>
@@ -104,7 +105,7 @@
               class="flex items-center text-xl text-primary-600 font-bold gap-1 hover:text-primary"
             >
               <p class="">
-                {{ lote.productor.nombre }}
+                {{ lote.productor!.nombre }}
               </p>
               <UIcon class="" name="i-heroicons-check-badge-20-solid" />
             </div>
@@ -115,13 +116,13 @@
           <p
             class="uppercase text-4xl text-gray-700 whitespace-nowrap leading-tight rounded-xl font-bold tracking-wider"
           >
-            {{ lote.precio.toString().replace(".", ",") }} usd / lb
+            {{ lote.precio!.toString().replace(".", ",") }} usd / lb
           </p>
           <span v-if="lote.pruebaGratis"class="uppercase font-bold text-stone-700 text-2xl"
             >Puedes solicitar muestra Gratis.</span
             >
             <span v-if="!lote.pruebaGratis"class="uppercase font-bold text-stone-700 text-2xl"
-            >solicitar muestra</span>
+            >no posee muestra gratis</span>
         </div>
         <UButton class="text-center py-2 text-4xl mx-auto justify-center w-full"
           >OFERTAR</UButton
@@ -131,12 +132,12 @@
 
       <!-- datos del lote  -->
       <div
-        class="col-span-4 h-screen-topBar-footer overflow-hidden p-4 border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl "
+        class="col-span-4 h-screen overflow-hidden p-4 border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl "
       >
-      <ProductorLotesAcordion :items="item"/>
+      <LotesAcordion :items="item"/>
       </div>
       <!-- ubicación -->
-      <div class="col-span-3 h-screen-topBar-footer p-4  border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl ">
+      <div class="col-span-3 h-screen p-4  border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl ">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d16138252.902658958!2d-85.72576594757281!3d-9.06347592792652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c850c05914f5%3A0xf29e011279210648!2zUGVyw7o!5e0!3m2!1ses!2sve!4v1721330794106!5m2!1ses!2sve"
           class="border-none rounded-md w-full h-full"
@@ -152,17 +153,32 @@
 <script lang="ts" setup>
 import BotonPrimary from "~/components/Botones/BotonPrimary.vue";
 import type {Lotes} from "~/interfaces/Lotes";
+import { useRouter } from 'vue-router';
+import {toast} from "vue3-toastify";
 
 definePageMeta({
   layout: "lote",
 })
 
+
+const router = useRoute();
+
+
+const copiarUrl = () => {
+  const url = window.location.href;
+  navigator.clipboard.writeText(url)
+    .then(() => {
+      toast.success('¡URL copiada al portapapeles!');
+    })
+    .catch(err => {
+      toast.error('Error al copiar la URL:', err);
+    });
+};
 const like = ref(false);
 
 const route = useRoute();
 const useLotes = useLotesStore();
 
-console.log(route.params.id);
 const loadingImg = ref(false);
 
 const lotes: Lotes[] = useLotes.lotes.filter(
@@ -171,9 +187,8 @@ const lotes: Lotes[] = useLotes.lotes.filter(
 const lote = ref(lotes[0]);
 const galeria = ref();
 
-console.log(lote.value);
 
-if (lote.value.galeria.length === 0) {
+if (lote.value.galeria!.length === 0) {
   galeria.value = [
     {
       img: "i-heroicons-photo",
@@ -192,15 +207,16 @@ if (lote.value.galeria.length === 0) {
       enty: true,
     },
   ];
-} else if (lote.value.galeria.length < 4) {
+} else if (lote.value.galeria!.length < 4) {
   galeria.value = [
-    ...lote.value.galeria,
-    ...Array(4 - lote.value.galeria.length).fill({
+    ...lote.value.galeria!,
+    ...Array(4 - lote.value.galeria!.length).fill({
+      id: '',
       img: "i-heroicons-photo",
       enty: true,
     }),
   ];
-} else if (lote.value.galeria.length === 4) {
+} else if (lote.value.galeria!.length === 4) {
   galeria.value = lote.value.galeria;
 }
 
@@ -211,10 +227,14 @@ const item = [{
   slot:'datos',
   contenido:{
     origen: lote.value.origen,
-    productor: lote.value.productor.nombre,
+    departamento: lote.value.departamento,
     variedad: lote.value.variedad,
     proceso: lote.value.proceso,
-    puntaje: lote.value.score,
+    puntaje: lote.value.puntaje,
+    productor: lote.value.productor!.nombre,
+    perfil: lote.value.perfil,
+    'cantidad del lote': lote.value.cantidadLote,
+    pais: lote.value.pais,
   },
   isActive: true
 },{ 

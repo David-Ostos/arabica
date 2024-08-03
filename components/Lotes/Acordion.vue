@@ -31,7 +31,6 @@ const props = defineProps({
 ;
 const items = ref(props.items);
 
-console.log(items.value);
 
 const toggle = (id: string) => {
   items.value!.forEach((item: any) => {

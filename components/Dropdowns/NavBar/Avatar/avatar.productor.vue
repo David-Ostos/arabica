@@ -5,12 +5,15 @@ import Avatar from '~/components/global/avatar.vue';
 const useUser = useUserStore();
 
 const picture = ref();
+console.log(picture.value);
 onMounted(() => {
   if (useUser.dataUser.picture) {
     picture.value = useUser.dataUser.picture;
   } else {
     picture.value = "/img/avatar.png";
   }
+console.log(picture.value);
+  
 });
 
 
@@ -47,7 +50,7 @@ const items = [
       label: "Solicita",
       icon: "i-heroicons-signal",
       to: `/dashboard/productor/solicita`,
-    }, */
+    },
     {
       label: "Pedidos de Muestra",
       icon: "i-tabler-coffee",
@@ -64,15 +67,15 @@ const items = [
       to: `/dashboard/productor/clientes`,
     }, */
   ],
-  [
-    {
+  /* [
+     {
       label: "Servicio de envio",
       icon: "i-tabler-ship",
       icon_2: "i-tabler-arrow-badge-right",
       to: `/servicio_envio`,
       slot: "envio",
-    },
-  ],
+    }, 
+  ], */
   [
     {
       label: "Perfil",
@@ -92,7 +95,7 @@ const items = [
     {
       label: "Arabica.com",
       icon: "i-tabler-world",
-      to: `/ayuda`,
+      to: `/`,
     },
     {
       label: "Cerrar sessión",
@@ -115,7 +118,7 @@ const items = [
     :popper="{placement: 'bottom-start'}"
   >
     <div class="flex items-center">
-      <Avatar :picture="picture"/>
+      <Avatar />
       <UIcon
         name="i-material-symbols-arrow-drop-down-rounded"
         class="!text-3xl"

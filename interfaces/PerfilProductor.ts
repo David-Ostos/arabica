@@ -7,28 +7,45 @@ export interface PerfilProductor {
   direccion: string;
   correo: string;
   numeroTelefonico: string;
-  tipoProductor: 'individual' | 'Asociación' | 'cooperativa';
-  idUsuario: {
-    email: string;
-    _id: string;
-  };
+  tipoProductor: TipoProductor;
+  idUsuario: IdUsuario;
   imgPortada?: string;
   descripcion: string;
-  equipo?: [{
-    nombre: string;
-    rol: string;
-    redes: string[];
-    img: string;
-  }];
-  premios: [{
-    nombre: string;
-    categoria: string;
-    img: string;
-  }];
-  certificaciones: [{
-    nombre: string;
-    categoria: string;
-    img: string;
-  }];
+  equipo?: equipo[];
+  premios: Premios[];
+  certificaciones: Certificaciones[];
   relaciones?: string[];
+  lotes: Lotes[]
 }
+
+
+export type Lotes = {
+  _model: 'lotes',
+  _id: string
+}
+
+export type Certificaciones = {
+  nombre: string;
+  categoria: string;
+  img: string;
+}
+
+export type Premios = {
+  nombre: string;
+  categoria: string;
+  img: string;
+}
+
+export type equipo = {
+  nombre: string;
+  rol: string;
+  redes: string[];
+  img: string;
+}
+
+export type IdUsuario = {
+  email: string;
+  _id: string;
+}
+
+export type TipoProductor = 'individual' | 'Asociación' | 'cooperativa'

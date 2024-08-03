@@ -1,9 +1,9 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+
+</script>
 
 <template>
-  <div>
-    Page: Ayuda
-  </div>
+  <Construccion/>
 </template>
 
 <style scoped></style>

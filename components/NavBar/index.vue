@@ -5,10 +5,9 @@
     leave-to-class="opacity-0"
     enter-active-class="transition duration-300"
     leave-active-class="transition duration-300"
-    :class="{
-      'bg-transparent !text-white': !scrolled,
-      ' !text-dark bg-white dark:bg-dark rounded-xl shadow-md': scrolled,
-    }"
+    :class="[!scrolled && $route.path === '/' ? 'bg-transparent !text-white' :'border-b rounded-3xl shadow-sm' ,{
+      ' !text-dark bg-white dark:bg-dark rounded-xl shadow-md ': scrolled,
+    }]"
     class="fixed w-screen top-0 z-50 transition duration-300"
   >
     <header ref="nav1">
@@ -21,7 +20,7 @@
             <span class="sr-only">Arabica</span>
             <img
               class="h-14 w-auto"
-              :src="!scrolled ? imgLogo : imgLogoLitgh"
+              :src="!scrolled && $route.path === '/' ? imgLogo : imgLogoLitgh"
               alt=""
             />
           </NuxtLink>
@@ -138,7 +137,7 @@ import imgLogo from "/img/Arabica-Green-coffee.png";
 import imgLogoLitgh from "/img/logo_ligth_new.png";
 
 const useUser = useUserStore()
-
+console.log(useUser.dataUser);
 const nav1 = ref();
 const mobileMenuOpen = ref(false);
 

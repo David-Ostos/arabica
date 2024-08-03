@@ -1,21 +1,19 @@
 <template>
   <div class="my-20 mx-20">
     <div class="overflow-auto">
-      <h1
-        class="text-center text-3xl text-gray-700 font-bold"
-      >
-        Crea tu Lote de Café
+      <h1 class="text-center text-3xl text-gray-700 font-bold">
+        Edite su Lote de Café
       </h1>
       <h3 class="text-2xl mb-8 text-gray-600">Agrega las imagenes</h3>
       <div class="grid grid-cols-2 gap-8">
-        <!-- galeria -->
+        <!-- Galerria -->
         <div
           class="col-span-1 grid-area-1 h-[510px] h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4"
         >
           <div class="grid grid-cols-4 col-span-2 grid-rows-4 gap-4 h-full">
             <div
               v-if="loading"
-              class="row-span-2 col-span-4 flex justify-center items-center border rounded-xl p-4 cursor-pointer overflow-hidden brightness-75 bg-gray-100 opacity-55"
+              class="row-span-2 col-span-4 flex justify-center items-center border rounded-xl cursor-pointer overflow-hidden brightness-75 bg-gray-100 opacity-55"
             >
               <l-squircle
                 size="37"
@@ -29,17 +27,17 @@
 
             <div
               v-show="!loading"
-              class="row-span-2 col-span-4 border rounded-xl p-4 cursor-pointer overflow-hidden hover:brightness-75"
+              class="row-span-2 col-span-4 rounded-xl cursor-pointer overflow-hidden hover:brightness-75"
               :class="
                 !pictures[0].enty
                   ? 'flex justify-center items-center h-full w-full '
-                  : 'hover:bg-gray-100 '
+                  : 'hover:bg-gray-100 border'
               "
               @click=""
             >
               <img
                 v-if="!pictures[0].enty"
-                :src="pictures[0].img"
+                :src="pictures[0].link"
                 class="rounded-xl h-full w-full object-cover"
                 alt=""
               />
@@ -56,8 +54,7 @@
             >
               <div
                 v-for="img in pictures.slice(1)"
-                class="h-full w-full flex items-center justify-center cursor-pointer overflow-hidden hover:brightness-75 hover:bg-gray-100 rounded-xl hover:scale-105"
-                @click="console.log(img)"
+                class="h-full w-full flex items-center justify-center cursor-pointer overflow-hidden hover:brightness-75 hover:bg-gray-100 rounded-xl"
               >
                 <div
                   v-if="loading"
@@ -74,34 +71,30 @@
                 </div>
                 <div v-show="!loading" v-if="img.enty === true" class="">
                   <UIcon
-                    :name="img.img"
-                    class="rounded-xl h-28 w-full object-cover opacity-55 hover:scale-105"
+                    :name="img.link"
+                    class="rounded-xl h-28 w-full object-cover opacity-55"
                     alt=""
                     dynamic
                   />
                 </div>
-                <div
-                  v-show="!loading"
-                  v-else
-                  class="rounded-xl hover:brightness-50"
-                >
+                <div v-show="!loading" v-else class="rounded-xl">
                   <img
-                    :src="img.img"
-                    class="rounded-xl h-full w-full object-cover hover:scale-105"
+                    :src="img.link"
+                    class="rounded-xl h-72 w-full object-cover"
                     alt=""
                   />
                 </div>
               </div>
+
             </div>
             <!-- barrar de carga -->
 
-            <UProgress :value="porcentaje" :color="color" class="col-span-4">
+            <UProgress :value="porcentaje" :color="color" class="col-span-4 animate-pulse">
               <template #indicator="{percent}">
-                <div
-                  class="text-right "
-                  :style="{width: `${percent}%`}"
-                >
-                  <span v-if="faseUpload === 'none'" class="text-gray-500 w-fit"
+                <div class="text-right" :style="{width: `${percent}%`}">
+                  <span
+                    v-if="faseUpload === 'none'"
+                    class="text-gray-500 w-fit"
                     >Esperando...</span
                   >
                   <span
@@ -110,18 +103,14 @@
                     >{{ faseUpload }}</span
                   >
                   <span
-                    v-else-if="faseUpload === 'Subiendo Lote...'"
+                    v-else-if="faseUpload === 'Actualizando el lote...'"
                     class="text-amber-500 w-fit"
                     >{{ faseUpload }}</span
                   >
-                  <span
-                    v-else-if="faseUpload === 'Actualizando Lotes locales...'"
-                    class="text-orange-500"
-                    >{{ faseUpload }}</span
-                  >
+
                   <span
                     v-else-if="faseUpload === 'Subida Completada'"
-                    class="text-primary-500 "
+                    class="text-primary-500"
                     >✔ Subida completada.</span
                   >
                   <span
@@ -135,8 +124,9 @@
             <!-- /barra de carga -->
           </div>
         </div>
+        <!-- /Galeria -->
 
-        <!-- formulartio -->
+        <!-- Formulario -->
         <div
           class="flex flex-col w-full p-4 rounded-xl border justify-between h-ful shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
         >
@@ -336,7 +326,7 @@
               }"
               class="col-start-2 text-center col-span-4"
             >
-              Crear Lote</UButton
+              Editar Lote</UButton
             >
           </UForm>
         </div>
@@ -353,9 +343,10 @@ import type {Lotes} from "~/interfaces/Lotes";
 import {squircle} from "ldrs";
 import {toast} from "vue3-toastify";
 
+type Schema = InferType<typeof schema>;
+
 squircle.register();
 
-// Default values shown
 
 definePageMeta({
   middleware: "productor",
@@ -363,24 +354,44 @@ definePageMeta({
 });
 
 const useProductor = useProductorStore();
-const useUser = useUserStore();
 const useLotes = useLotesStore();
-const router = useRouter();
+const route = useRoute();
 
-const pictures = ref([] as any);
+const lote = useLotes.lotes.filter((lote) => lote._id === route.params.id)[0];
+
+
+const state: Lotes = reactive({
+  nombre: lote.nombre,
+  origen: lote.origen,
+  departamento: lote.departamento,
+  variedad: lote.variedad,
+  proceso: lote.proceso,
+  puntaje: lote.puntaje,
+  perfil: lote.perfil,
+  cantidadLote: lote.cantidadLote,
+  pais: lote.pais,
+  precio: lote.precio,
+  certificaciones: lote.certificaciones,
+  descripcion: lote.descripcion,
+  galeria: lote.galeria,
+  productor: lote.productor,
+  pruebaGratis: lote.pruebaGratis,
+});
+
+const pictures = ref(state.galeria as any);
 const loading = ref(false);
 const inputFile = ref();
 const filesSave = ref();
 const lotes = useProductor.lotes;
 verificarGaleria();
+
 const porcentaje = ref(0);
 
 const faseUpload = ref(
   "none" as
     | "none"
     | "Subiendo Imagenes..."
-    | "Subiendo Lote..."
-    | "Actualizando Lotes locales..."
+    | "Actualizando el lote..."
     | "Subida Completada"
     | "error"
 );
@@ -391,10 +402,8 @@ const color = computed(() => {
       return "gray";
     case faseUpload.value === "Subiendo Imagenes...":
       return "blue";
-    case faseUpload.value === "Subiendo Lote...":
+    case faseUpload.value === "Actualizando el lote...":
       return "amber";
-    case faseUpload.value === "Actualizando Lotes locales...":
-      return "orange";
     case faseUpload.value === "error":
       return "red";
     default:
@@ -404,27 +413,28 @@ const color = computed(() => {
 
 const md = ref("");
 
+// estas funciones son para verificar si la galeria cumple con 4 elementos si no los rellena
 function crearGaleria(pictures: any) {
   if (pictures.length === 0) {
     return (pictures = [
       {
         id: "1",
-        img: "i-icon-park-outline-add-picture",
+        link: "i-icon-park-outline-add-picture",
         enty: true,
       },
       {
         id: "2",
-        img: "i-icon-park-outline-add-picture",
+        link: "i-icon-park-outline-add-picture",
         enty: true,
       },
       {
         id: "3",
-        img: "i-icon-park-outline-add-picture",
+        link: "i-icon-park-outline-add-picture",
         enty: true,
       },
       {
         id: "4",
-        img: "i-icon-park-outline-add-picture",
+        link: "i-icon-park-outline-add-picture",
         enty: true,
       },
     ]);
@@ -432,7 +442,7 @@ function crearGaleria(pictures: any) {
     return (pictures = [
       ...pictures,
       ...Array(4 - pictures.length).fill({
-        img: "i-icon-park-outline-add-picture",
+        link: "i-icon-park-outline-add-picture",
         enty: true,
       }),
     ]);
@@ -443,161 +453,6 @@ function crearGaleria(pictures: any) {
 function verificarGaleria() {
   pictures.value = crearGaleria(pictures.value);
 }
-const state: Lotes = reactive({
-  nombre: undefined,
-  origen: undefined,
-  departamento: undefined,
-  variedad: undefined,
-  proceso: undefined,
-  puntaje: undefined,
-  perfil: undefined,
-  cantidadLote: undefined,
-  pais: "perú",
-  precio: undefined,
-  certificaciones: undefined,
-  descripcion: undefined,
-  galeria: [],
-  productor: {
-    _id: useProductor.perfilProductor._id,
-    nombre: useProductor.perfilProductor.nombre,
-    picture: useUser.dataUser.picture,
-  },
-  pruebaGratis: false,
-  ocultar: false,
-});
-
-/* const inputs = ref([
-  {
-    selects: [
-      {
-        label: "Origen",
-        name: "origen",
-        options: ["chavin", "moche", "nasca"],
-        searchable: "Buscar origen...",
-        placeholder: "Selecciona el origen",
-        value: state.origen,
-      },
-      {
-        label: "Departamento",
-        name: "departamento",
-        options: [
-          "piura",
-          "amazonas",
-          "cajamarca",
-          "san martin",
-          "huanuco",
-          "pasco",
-          "junin",
-          "ayacucho",
-          "cusco",
-          "puno",
-        ],
-        searchable: "Buscar departamento...",
-        placeholder: "Selecciona el departamento",
-        value: state.departamento,
-      },
-      {
-        label: "Variedad",
-        name: "variedad",
-        options: [
-          "geisha",
-          "typical",
-          "bourbon",
-          "maragogipe",
-          "pacamara",
-          "caturra",
-          "catui",
-          "tabi",
-          "new world",
-          "costa rica",
-          "castilla",
-          "catimor",
-          "otros",
-        ],
-        searchable: "Buscar variedad...",
-        placeholder: "Selecciona el variedad",
-        value: state.variedad,
-      },
-      {
-        label: "Proceso",
-        name: "proceso",
-        options: [
-          "sueves washing",
-          "anaerobic washing",
-          "honey",
-          "prolonged fermentation",
-          "natural",
-          "natural anaerobic",
-          "experimental",
-        ],
-        searchable: "Buscar proceso...",
-        placeholder: "Selecciona el proceso",
-        value: state.proceso,
-      },
-      {
-        label: "Puntaje",
-        name: "puntaje",
-        options: ["80-90+", "70-80+", "60-70+"],
-        searchable: "Buscar puntaje...",
-        placeholder: "Selecciona el puntaje",
-        value: state.puntaje,
-      },
-      {
-        label: "Perfil",
-        name: "perfil",
-        options: [
-          "floral",
-          "fruit tree",
-          "vegetable",
-          "citrus o sweet",
-          "caramelized sugars",
-          "dried fruit",
-          "pecan / chocolate",
-          "clean cup",
-        ],
-        searchable: "Buscar perfil...",
-        placeholder: "Selecciona el perfil",
-        value: state.perfil,
-      },
-      {
-        label: "Cantidad del lote",
-        name: "cantidadLote",
-        options: ["lotes completos", "micro lote (5pp - 20qq)", "nano lote"],
-        searchable: "Buscar la cantidad del lote...",
-        placeholder: "Selecciona la cantidad del lote",
-        value: state.cantidadLote,
-      },
-      {
-        label: "País",
-        name: "pais",
-        options: ["peru"],
-        searchable: "Buscar País...",
-        placeholder: "Selecciona el País",
-        value: state.pais,
-      },
-    ],
-    inputs: [
-      {
-        label: "Nombre",
-        name: "nombre",
-        value: state.nombre,
-        tipo: "text",
-      },
-      {
-        label: "Precio",
-        name: "precio",
-        value: state.precio,
-        tipo: "text",
-      },
-      // {
-      //   label: "Descripcion",
-      //   name: "descripcion",
-      //   value: state.descripcion,
-      //   tipo: "text",
-      // },
-    ],
-  },
-]); */
 
 const schema = object({
   nombre: string().required("Este campo es requerido"),
@@ -613,46 +468,11 @@ const schema = object({
   pruebaGratis: boolean(),
 });
 
-type Schema = InferType<typeof schema>;
-async function addLoteProductor(newLote: {_id: string; _model: string}[]) {
-  try {
-    // @ts-ignore
-    await axios({
-      url: `${import.meta.env.VITE_URL_API}/api/content/item/productores`,
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
-      },
-      onUploadProgress: (progressEvent) => {
-        console.log(progressEvent);
-        faseUpload.value = "Actualizando Lotes locales...";
-        const progressPercent = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total!
-        );
-        porcentaje.value = progressPercent;
-      },
-      data: {
-        data: {
-          _id: useProductor.perfilProductor._id,
-          lotes: newLote,
-        },
-      },
-    }).then((res) => {
-      console.log(res.data);
-    });
-  } catch (e) {
-    console.log(e);
-  }
-}
-
+// funcion para agegar las imagenes a la galeria para que el usuario las visualice antes de subirlas
 async function handleFileUpload(event: any) {
-  console.log(event);
-
   filesSave.value = event;
-  console.log(filesSave.value);
-
   const files = [...event];
+
 
   pictures.value = [];
 
@@ -668,12 +488,9 @@ async function handleFileUpload(event: any) {
     "image/*",
   ];
 
-  console.log(files);
   const cumpleConTipos = verificar.every((file: any) => {
     return archivosPermitidos.includes(file.type);
   });
-
-  console.log(cumpleConTipos);
 
   if (cumpleConTipos) {
     if (files.length > 0 && files.length <= 4) {
@@ -685,7 +502,7 @@ async function handleFileUpload(event: any) {
         const imagePromise = new Promise((resolve, reject) => {
           reader.onload = () => {
             const dataURL = reader.result;
-            resolve({id: i, img: dataURL, enty: false});
+            resolve({id: i, link: dataURL, enty: false});
           };
           reader.onerror = reject;
           reader.readAsDataURL(file);
@@ -697,6 +514,10 @@ async function handleFileUpload(event: any) {
       // Espera a que todas las promesas se resuelvan (imágenes cargadas)
       const imagesData = await Promise.all(imagePromises);
       pictures.value = imagesData;
+      toast.success(
+        "Imagenes preparadas para subir"
+      );
+      state.galeria = []
     } else {
       toast.error(
         "Solo se aceptan archivos de formato .gif, .png, .jpg, .jpeg, webp"
@@ -712,9 +533,8 @@ async function handleFileUpload(event: any) {
   verificarGaleria();
 }
 
+// funcion para subir las imagenes 
 async function UploadFiles(files: any) {
-  console.log(files);
-  let status;
   if (files) {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
@@ -722,8 +542,6 @@ async function UploadFiles(files: any) {
     }
 
     try {
-      // await axios.post(`${import.meta.env.VITE_URL_API}/api/assets/upload`);
-
       // @ts-ignore
       await axios(
         // @ts-ignore
@@ -734,9 +552,7 @@ async function UploadFiles(files: any) {
           headers: {
             "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
           },
-          data: formData,
-          onUploadProgress: (progressEvent) => {
-            console.log(progressEvent);
+          onUploadProgress: (progressEvent: any) => {
             faseUpload.value = "Subiendo Imagenes...";
             const progressPercent = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total!
@@ -744,6 +560,7 @@ async function UploadFiles(files: any) {
             porcentaje.value = progressPercent;
             // Actualiza tu interfaz con el porcentaje de progreso
           },
+          data: formData,
         }
       )
         .then((res) => {
@@ -756,98 +573,84 @@ async function UploadFiles(files: any) {
             });
             return ++count;
           });
-          return (status = {status: true, tipo: "success"});
+          return {status: true, tipo: "success"};
         })
         .catch((e) => {
           console.log(e);
-          faseUpload.value = "error";
           if (e.code === "ERR_NETWORK") {
             toast.info("Problemas en la conexion intente mas tarde.");
-            return (status = {status: false, tipo: "otros"});
-          } else {
-            return (status = {status: false, tipo: "error"});
+            return {status: false, tipo: "otros"};
           }
+          return {status: false, tipo: "error"};
         });
+      return {status: true};
     } catch (e) {
       console.log(e);
-      faseUpload.value = "error";
-
-      return (status = {status: false, tipo: "error"});
+      return {status: false, tipo: "error"};
     }
   } else {
     toast.error("No hay imagenes para subir.");
-    return (status = {status: false, tipo: "otros"});
+    return {status: false, tipo: "otros"};
   }
-  return status;
 }
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with event.data
   loading.value = true;
   state.precio = +state.precio!;
-  const uploadImg = await UploadFiles(filesSave.value);
-  console.log(uploadImg);
-  if (uploadImg!.status) {
+  let uploadImg;
+  if (state.galeria !== lote.galeria) {
+    uploadImg = await UploadFiles(filesSave.value);
+  } else {
+    uploadImg = {status: true};
+  }
+  if (uploadImg.status) {
     try {
-        // @ts-ignore
+      // @ts-ignore
+
       await axios(
         // @ts-ignore
         {
           url: `${
             import.meta.env.VITE_URL_API
-          }/api/content/item/lotes?fields={"_state": false,"_modified": false,"_mby": false,"_created": false,"_cby": false,"verificacion": false,}`,
+          }/api/content/item/lotes?fields={"_mby": false, "_modified": false }`,
           method: "POST",
           mode: "cors",
           headers: {
             "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
           },
           onUploadProgress: (progressEvent: any) => {
-            console.log(progressEvent);
-            faseUpload.value = "Subiendo Lote...";
+            faseUpload.value = "Actualizando el lote...";
             const progressPercent = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total!
             );
             porcentaje.value = progressPercent;
           },
-          data: {data: state},
+          data: {
+            data: {
+              _id: route.params.id,
+              ...state,
+            },
+          },
         }
       )
         .then(async (res) => {
-          console.log(res);
-
-          useLotes.lotes.push(res.data);
-
-          state.nombre = undefined;
-          state.origen = undefined;
-          state.departamento = undefined;
-          state.variedad = undefined;
-          state.proceso = undefined;
-          state.puntaje = undefined;
-          state.perfil = undefined;
-          state.cantidadLote = undefined;
-          state.precio = undefined;
-          state.galeria = [];
-          state.pruebaGratis = false;
-          state.certificaciones = undefined;
-          state.descripcion = undefined;
-          pictures.value = [];
           inputFile.value = "";
           loading.value = false;
-
           verificarGaleria();
 
-          const newLote = useProductor.perfilProductor.lotes;
-          newLote.push({
-            _model: "lotes",
-            _id: res.data._id,
-          });
+          const updateLoteIndice = useLotes.lotes.findIndex(
+            (lote) => lote._id === route.params.id
+          );
 
-          await addLoteProductor(newLote);
-
-          toast.success("Se ha agregado el lote satisfactoriamente");
+          if (updateLoteIndice !== -1) {
+            useLotes.lotes[updateLoteIndice] = {...res.data};
+          }
+          toast.success("Se ha editado el lote satisfactoriamente");
         })
         .catch((error) => {
-          faseUpload.value = "error";
+    faseUpload.value = "error";
+
           console.log(error);
           if (error.code === "ERR_NETWORK") {
             toast.info("Problemas en la conexion intente mas tarde.");
@@ -858,19 +661,19 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           }
           loading.value = false;
         })
-        .finally(() => {
+        .finally(()=>{
           faseUpload.value = "Subida Completada";
         });
     } catch (error) {
-      faseUpload.value = "error";
+    faseUpload.value = "error";
 
       console.log(error);
       loading.value = false;
     }
   } else {
-    loading.value = false;
     faseUpload.value = "error";
-    if (uploadImg!.tipo === "otros") {
+    loading.value = false;
+    if (uploadImg.tipo === "otros") {
       return false;
     } else {
       toast.warn(

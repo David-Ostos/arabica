@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import type { Lotes } from '~/interfaces/Lotes'
+import axios from 'axios'
 
 export const useLotesStore = defineStore('lotes', () => {
 
@@ -7,98 +8,48 @@ const useProductor = useProductorStore();
 const useUser = useUserStore()
 
 
-  const lotes:Ref<Lotes[]> = ref([
-    {
-      _id: '1',
-      nombre: "Fazendas Dutra Organic Natural, 15up, Single Origin, RFA",
-      origen: "chavin",
-      departamento: "piura",
-      variedad: "geisha",
-      proceso: "sueves washing",
-      score: "80-90+",
-      perfil: "floral",
-      lotsQuantity: "lotes completos",
-      certificaciones: "organic",
-      pais: "peru",
-      precio: 10.23,
-      descripcion: "",
-      galeria: ["https://cockpit.arabicagc.com/assets/link/894398f73337377bca00009b","https://cockpit.arabicagc.com/assets/link/89439adf3165302dda000092"],
-      productor: {
-        _id: useProductor.perfilProductor._id,
-        nombre: useProductor.perfilProductor.nombre,
-        picture: useUser.dataUser.picture
-      },
-      pruebaGratis: true,
-    },
-    {
-      _id: '2',
-      nombre: "Fazendas Dutra Organic Natural, 15up, Single Origin, RFA",
-      origen: "chavin",
-      departamento: "piura",
-      variedad: "geisha",
-      proceso: "sueves washing",
-      score: "80-90+",
-      perfil: "floral",
-      lotsQuantity: "lotes completos",
-      certificaciones: "organic",
-      pais: "peru",
-      precio: 10.23,
-      descripcion: "",
-      galeria: ["https://cockpit.arabicagc.com/assets/link/89439ae133356380570001cc"],
-      productor: {
-        _id: useProductor.perfilProductor._id,
-        nombre: useProductor.perfilProductor.nombre,
-        picture: useUser.dataUser.picture
-      },
-      pruebaGratis: false,
-    },
-    {
-      _id: '3',
-      nombre: "Fazendas Dutra Organic Natural, 15up, Single Origin, RFA",
-      origen: "chavin",
-      departamento: "piura",
-      variedad: "geisha",
-      proceso: "sueves washing",
-      score: "80-90+",
-      perfil: "floral",
-      lotsQuantity: "lotes completos",
-      certificaciones: "organic",
-      pais: "peru",
-      precio: 10.23,
-      descripcion: "",
-      galeria: ["https://cockpit.arabicagc.com/assets/link/8943997b61646385de000184"],
-      productor: {
-        _id: useProductor.perfilProductor._id,
-        nombre: useProductor.perfilProductor.nombre,
-        picture: useUser.dataUser.picture
-      },
-      pruebaGratis: true,
-    },
-    {
-      _id: '4',
-      nombre: "Fazendas Dutra Organic Natural, 15up, Single Origin, RFA",
-      origen: "chavin",
-      departamento: "piura",
-      variedad: "geisha",
-      proceso: "sueves washing",
-      score: "80-90+",
-      perfil: "floral",
-      lotsQuantity: "lotes completos",
-      certificaciones: "organic",
-      pais: "peru",
-      precio: 10.23,
-      descripcion: "",
-      galeria: ["https://cockpit.arabicagc.com/assets/link/89439adf3165302dda000092"],
-      productor: {
-        _id: useProductor.perfilProductor._id,
-        nombre: useProductor.perfilProductor.nombre,
-        picture: useUser.dataUser.picture
-      },
-      pruebaGratis: false,
-    },
-  ]) 
+  const lotes:Ref<Lotes[]> = ref([]) 
+
+  async function getDataLotes(){
+
+    try {
+      await axios.get(`${import.meta.env.VITE_URL_API}/api/content/items/lotes?fields={"_state": false,"_modified": false,"_mby": false,"_created": false,"_cby": false,"verificacion": false,}`,{
+        headers: {
+          "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+        },
+      })
+      .then( async (res) =>{
+        console.log(res.data);
+        lotes.value = res.data;
+
+        // este codigo esta para modificar los datos de los lotes por si se agrego un nuevo campo a la base de datos
+
+        /* lotes.value.forEach( async (lote) => {
+          console.log({data: {_id: lote._id, ocultar: false}});
+          if(!lote.ocultar){
+            await axios.post(`${import.meta.env.VITE_URL_API}/api/content/item/lotes`,
+              // @ts-ignore
+              {
+                data:  {"_id": lote._id, "ocultar": false},
+              },{
+                headers: {
+                  "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+                  "Content-Type": "application/json",
+                },
+              }
+            ).then(res => console.log(res.data)).catch(err => console.log(err))
+          }
+        }) */
+      })
+      
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
 
   return{
-    lotes
+    lotes,
+    getDataLotes
   }
 })

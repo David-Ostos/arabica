@@ -1,9 +1,10 @@
 <template>
   <div class="overflow-hidden rounded-full h-14 w-14" 
     :class="clases"
+    @click="console.log(loadingImg)"
   >
     <USkeleton
-        v-if="!loadingImg && picture"
+        v-if="!loadingImg && useUser.dataUser.picture"
         class="h-14 w-14 rounded-full"
         :class="clases"
         :ui="{
@@ -11,10 +12,11 @@
         }"
       />
   
-      <div  class="h-14 w-14 rounded-full" :class="clases" >
-        <img v-if="picture" :src="picture" @load="loadingImg = true" class=" rounded-full" :class="clases"  alt=""/>
+      <div else  class="h-14 w-14 rounded-full" :class="clases" >
+        <img :src="useUser.dataUser.picture ? useUser.dataUser.picture : '/img/avatar.png' " 
+        @load="loadingImg = true" class=" rounded-full" :class="clases"  alt=""/>
         <div class="flex justify-center items-center h-full bg-gray-300">
-          <UIcon v-if="!picture"
+          <UIcon v-if="!useUser.dataUser.picture"
           :name="icon ? icon : 'i-heroicons-photo'" 
           class=" rounded-full"
           :class="clasesIcon"
@@ -25,9 +27,8 @@
 </template>
 
 <script lang="ts" setup>
-
+const useUser = useUserStore()
 const props = defineProps({
-  picture: String,
   clases: String,
   clasesIcon:String,
   icon: String,

@@ -26,6 +26,7 @@
 <script lang="ts" setup>
 const useModal = useShowModalsStore()
 const useUser = useUserStore()
+console.log(useUser.dataUser);
 onMounted(()=>{
   if(!useUser.dataUser.perfilBase)
   useModal.showModalProductorPerfilCompleto = true

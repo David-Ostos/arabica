@@ -3,7 +3,7 @@ import NavbarProductor from '~/components/NavBar/Navbar.Productor.vue';
 </script>
 
 <template>
-  <div class="min-h-screen">
+  <div>
     <NavbarProductor/>
     <ProductorPerfilLayout/>
     <slot />

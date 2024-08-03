@@ -13,6 +13,9 @@ export default async function verificarEmail(data: any) {
     const correoVerificado = await fetch(
       `${import.meta.env.VITE_URL_API}/api/content/items/usuarios?filter={email:'${data.email}'}`,
       {
+        headers: {
+          "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+        },
         cache: "no-cache",
       }
     );

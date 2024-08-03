@@ -19,16 +19,20 @@ export const useUserStore = defineStore("user", () => {
           const peticionUser = await fetch(
             `${
               import.meta.env.VITE_URL_API
-            }/api/content/item/usuarios?filter={email:'${
+            }/api/content/items/usuarios?filter={email:'${
               dataUserSaved.email
             }'}&populate=1&fields={"_state": false,"_modified": false,"_mby": false,"_created": false,"_cby": false,"verificacion": false,}`,
             {
               cache: "no-cache",
-            }
+              headers: {
+                "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+              },
+            },
           );
 
-          const dataUserFetch = await peticionUser.json();
-
+          const dataUserFetch = (await peticionUser.json())[0];
+          
+          console.log(dataUserFetch);
           if (dataUserFetch.perfilProductor !== null) {
             delete dataUserFetch.perfilProductor._state;
             delete dataUserFetch.perfilProductor._modified;

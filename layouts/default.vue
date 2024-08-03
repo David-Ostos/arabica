@@ -11,7 +11,7 @@ const useGlobal = useGlobalStore()
 <template>
   <div>
     <NavBar/>
-    <div class="h-[88px]"></div>
+    <div :class="$route.path === '/' ? 'h-[88px]': 'h-16'"></div>
     <slot  />
     <FooterDefault/>
   </div>

@@ -1,11 +1,11 @@
 <template>
-	<div class="relative mx-auto w-auto">
+	<div v-if="item" class="relative mx-auto w-auto">
 		<NuxtLink :to="`/lote/${item._id}`"
 			class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
 			<div class="shadow p-4 rounded-lg bg-white">
 				<div class="flex justify-center relative rounded-lg overflow-hidden h-52">
 					<div class="transition-transform duration-500 transform ease-in-out hover:scale-110 w-full">
-						<div v-if="item.galeria.length === 0"
+						<div v-if=" item.galeria && item.galeria.length === 0"
 							class="absolute inset-0 bg-black opacity-10 flex justify-center items-center">
 							<UIcon name="i-heroicons-photo" class="text-white text-[150px]" />
 						</div>
@@ -13,7 +13,7 @@
 							<USkeleton v-if="loadingImg" class="w-full h-full" :ui="{
 								background: 'bg-secundary'
 							}" />
-							<img :src="item.galeria[0]" alt="" @load="loadingImg = false"/>
+							<img :src="item.galeria![0].link" alt="" @load="loadingImg = false"/>
 						</div>
 					</div>
 
@@ -43,19 +43,24 @@
 				</div>
 
 				<div class="my-4 h-[84px] transition-all duration-1000">
-					<h2
-						class="font-bold text-base md:text-lg text-gray-700 line-clamp-2 hover:line-clamp-none transition-all duration-1000">
-						{{ item.nombre }}
-					</h2>
-					<div class="flex justify-between font-medium items-center text-sm  text-gray-700  mt-2 gap-1  transition-all duration-600">
-						<div class="flex gap-1  ">
-							<p class=" ">
-								{{ item.productor.nombre }} 
+					<UTooltip :text="item.nombre" :popper="{ placement: 'bottom-end' }" :ui="{
+						background: 'bg-dark',
+						color: 'text-white'
+					}" >
+						<h2
+							class="font-bold text-base md:text-lg text-gray-700 truncate  transition-all duration-1000">
+							{{ item.nombre }}
+						</h2>
+					</UTooltip>
+					<div class=" font-medium items-center text-sm truncate text-gray-700  my-2 transition-all duration-600">
+						<div class="flex gap-1 ">
+							<p class="mb-2 ">
+								{{ item.productor!.nombre }} 
 							</p>
 							<UIcon name="i-heroicons-check-badge-20-solid" class="text-base text-primary-500" />
 						</div>
 						<div>
-							<div v-if="item.pruebaGratis" class=" text-primary-600 hover:text-primary-700 items-center flex text-xs">
+							<div v-if="item.pruebaGratis" class=" text-primary-600 hover:text-primary-700 items-center justify-end text-end w-full flex text-xs">
 								<UIcon name="i-heroicons-check-20-solid" class="text-lg" />
 								<p class="uppercase">Muestra gratis disponible</p>
 							</div>
@@ -86,7 +91,7 @@
 						<div class="flex justify-end  ">
 							<p class="inline-block font-semibold text-gray-700 whitespace-nowrap leading-tight rounded-xl">
 								<span class="text-xl uppercase"> $ </span>
-								<span class="text-xl">{{ item.precio.toString().replace('.', ',') }} USD/<b class="text-base">kg</b></span>
+								<span class="text-xl">{{ item.precio!.toString().replace('.', ',') }} USD/<b class="text-base">kg</b></span>
 							</p>
 						</div>
 					</div>
@@ -118,11 +123,11 @@ onMounted(() => {
 			},
 			puntaje: {
 				icon: "",
-				nombre: props.item.score,
+				nombre: props.item.puntaje,
 			},
 			cantidad: {
 				icon: "",
-				nombre: props.item.lotsQuantity,
+				nombre: props.item.cantidadLote,
 			},
 		},
 	];

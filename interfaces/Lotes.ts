@@ -8,7 +8,7 @@ export interface Lotes{
   puntaje?: Puntaje ;
   perfil?: Perfil;
   cantidadLote?: CantidadLote;
-  certificaciones?: Certificaciones[];
+  certificaciones?: Certificaciones;
   pais?: Paises;
   precio?: number;
   descripcion?: string;
@@ -18,14 +18,15 @@ export interface Lotes{
     nombre?: string,
     picture?: string 
   };
-  pruebaGratis?: boolean
+  pruebaGratis?: boolean,
+  ocultar?: boolean
 }
 
-export type Certificaciones = {
+export type Certificaciones = 'organic' | 'fair trade' | 'rain fores' | 'imocert o jas' /* {
   tipo: 'organic' | 'fair trade' | 'rain fores' | 'imocert o jas',
   nombre: string,
   url?: string
-}
+} */
 
 export type Origen = 'chavin' | 'moche' | 'nasca';
 
@@ -46,5 +47,5 @@ export type Paises = 'perú'
 export type Galeria = {
   _id: string,
   link: string,
-  position: number
+  position: number,
 }
