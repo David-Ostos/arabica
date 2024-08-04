@@ -197,12 +197,6 @@
             <UIcon name="i-heroicons-plus-circle" class="font-bold" />
           </div>
         </div>
-
-        <!-- <NuxtLink
-          to="/guia/verificados"
-          class="flex items-center gap-1 justify-center text-sm text-white"
-          ><UIcon name="i-mdi-alert-circle" dynamic />Descubrir más</NuxtLink -->
-        >
       </div>
     </div>
   </div>
@@ -212,6 +206,7 @@ import {toast} from "vue3-toastify";
 import {useLotesStore} from "~/stores/Lotes";
 import crearLote from "/img/crear_lote.webp";
 import axios from "axios";
+import type { Lotes } from "~/interfaces/PerfilProductor";
 
 definePageMeta({
   middleware: "productor",
@@ -250,8 +245,6 @@ function verificarLotes(){
 
 onMounted(()=>{
 verificarLotes()
-
-  console.log({lotesOcultos} , {lotesVisibles})
 })
 
 const links = ref([
@@ -328,10 +321,31 @@ async function deleteLote(id: string, nombre: string) {
           const indiceLoteProductor = lotes.findIndex(
             (lote) => lote._id === id
           );
+
+          const indiceLoteOculto = lotesOcultos.value.findIndex(
+            (lote: Lotes) => lote._id === id
+          ).value
+
+          const indiceLoteVisible = lotesVisibles.value.findIndex(
+            (lote: Lotes) => lote._id === id
+          )
+
           if (indiceLote > -1) {
-            lotes.splice(indiceLoteProductor, 1);
             useLotes.lotes.splice(indiceLote, 1);
           }
+
+          if(indiceLoteProductor > -1){
+            lotes.splice(indiceLoteProductor, 1);
+          }
+
+          if(indiceLoteOculto > -1){
+            lotesOcultos.value.splice(indiceLoteOculto, 1);
+          }
+          
+          if(indiceLoteVisible > -1){
+            lotesVisibles.value.splice(indiceLoteVisible, 1);
+          }
+          
           toast.success(`Se a eliminado correctamente el lote con el nombre: ${nombre}`);
         }
       });

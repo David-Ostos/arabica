@@ -8,27 +8,17 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@formkit/auto-animate/nuxt",
     "@nuxt/image",
-    [
-      "@nuxtjs/google-fonts",
-      {
-        overwriting: false,
-        families: {
-          Roboto: true,
-          Inter: [400, 700],
-          "Josefin+Sans": true,
-          Lato: [100, 300],
-          Raleway: {
-            wght: [100, 400],
-            ital: [100],
-          },
-        },
-      },
-    ],
     "@vesp/nuxt-fontawesome",
     "@nuxt/fonts",
     'nuxt-vue3-google-signin',
     '@nuxtjs/mdc',
   ],
+  fonts:{
+    families:[
+      {name: 'Roboto', provider: 'google',weights:[100,300,400,500,700,800,900]},
+      {name: 'Raleway', provider: 'google'},
+    ]
+  },
 
   googleSignIn: {
     clientId: import.meta.env.VITE_GOOGLE_ID,

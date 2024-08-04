@@ -25,7 +25,7 @@
 
   <div 
     :class="!useUser.dataUser.verificado ? 'mt-[58px]' : 'mt-[65px]'">
-    <ProductorHorizontalPerfil class=""/>
+    <!-- <ProductorHorizontalPerfil class=""/> -->
     <UHorizontalNavigation
       v-if="!$route.path.includes('perfil')"
       :links="items"

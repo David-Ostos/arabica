@@ -2,11 +2,11 @@
 export default {
   content: [],
   theme: {
-    fontFamily: {
-      roboto: "Roboto",
-      raleway: "Raleway",
-    },
     extend: {
+      fontFamily: {
+        roboto: "Roboto",
+        raleway: "Raleway",
+      },
       height: {
         "screen-topBar-footer": "calc(100vh - 130px)",
       },
