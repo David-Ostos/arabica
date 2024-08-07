@@ -1,3 +1,4 @@
+import { LayoutKey } from '../.nuxt/types/layouts';
 <template>
   <div class="flex gap-8 z-0 justify-between relative flex-grow mr-8">
 
@@ -41,8 +42,12 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { useLotesStore } from "~/stores/Lotes";
+definePageMeta({
+  layout: 'lote'
+})
+
 const isOpen = ref(false);
+
 
 const useLotes = useLotesStore()
 </script>

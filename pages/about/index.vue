@@ -1,8 +1,12 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+definePageMeta({
+  layout: 'lote'
+})
+</script>
 
 <template>
   <div>
-    Page: About
+    <Construccion/>
   </div>
 </template>
 

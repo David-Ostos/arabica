@@ -292,7 +292,7 @@
               <USelectMenu
                 :ui="{select: 'capitalize'}"
                 searchable
-                searchable-placeholder="Buscar la cantidad del lote...."
+                searchable-plotesVisibles.valuelaceholder="Buscar la cantidad del lote...."
                 class="w-full capitalize"
                 placeholder="Selecciona la cantidad del lote"
                 :options="[
@@ -310,7 +310,7 @@
                 searchable-placeholder="Buscar País..."
                 class="w-full capitalize"
                 placeholder="Selecciona el País"
-                :options="['peru']"
+                :options="['perú']"
                 v-model="state.pais"
               />
             </UFormGroup>
@@ -837,12 +837,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           verificarGaleria();
 
           const newLote = useProductor.perfilProductor.lotes;
-          newLote.push({
+          newLote!.push({
             _model: "lotes",
             _id: res.data._id,
           });
 
-          await addLoteProductor(newLote);
+          await addLoteProductor(newLote!);
 
           toast.success("Se ha agregado el lote satisfactoriamente");
         })

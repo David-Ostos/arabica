@@ -46,6 +46,7 @@ export default defineNuxtConfig({
   },
 
   app: {
+    pageTransition: { name: 'page', mode: 'in-out' },
     head: {
       script: [
         {src: "https://accounts.google.com/gsi/client", async: true},

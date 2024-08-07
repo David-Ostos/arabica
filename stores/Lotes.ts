@@ -19,7 +19,6 @@ const useUser = useUserStore()
         },
       })
       .then( async (res) =>{
-        console.log(res.data);
         lotes.value = res.data;
 
         // este codigo esta para modificar los datos de los lotes por si se agrego un nuevo campo a la base de datos

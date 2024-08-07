@@ -5,14 +5,12 @@ import Avatar from '~/components/global/avatar.vue';
 const useUser = useUserStore();
 
 const picture = ref();
-console.log(picture.value);
 onMounted(() => {
   if (useUser.dataUser.picture) {
     picture.value = useUser.dataUser.picture;
   } else {
     picture.value = "/img/avatar.png";
   }
-console.log(picture.value);
   
 });
 

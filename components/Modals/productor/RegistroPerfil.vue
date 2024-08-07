@@ -1,9 +1,11 @@
 <template>
-  <div>
+  <div class="">
     <UModal v-model="useModal.showModalProductorPerfilCompleto" prevent-close :ui="{
-      width: ' sm:max-w-screen-lg'
+      width: ' sm:max-w-screen-lg',
+      
     }">
-      <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800',width: ' w-[800px]' }">
+      
+      <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800',width: ' w-[800px]', }">
         <!-- <template #header>
           <div class="flex items-center gap-4 ">
             <img src="/img/logo_ligth.png" alt="" class="h-12 ">

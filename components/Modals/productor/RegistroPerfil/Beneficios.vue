@@ -1,7 +1,7 @@
 <template>
   <div class="mt-10 flex flex-col justify-center items-center font-roboto">
     <h3 class="text-center text-3xl font-bold ">Beneficios para los productores verificados</h3>
-    <p class="font-thin text-dark mt-6 max-w-[700px] text-center">Como productor verificado tendrá más visibilidad y potencial de venta. Una etiqueta de productor verificado es un signo de confianza y una celebración de la transparencia y la calidad.</p>
+    <p class="font-medium text-gray-800 mt-6 max-w-[700px] text-center">Como productor verificado tendrá más visibilidad y potencial de venta. Una etiqueta de productor verificado es un signo de confianza y una celebración de la transparencia y la calidad.</p>
     <div  class="flex flex-col lg:flex-row justify-center my-4">
       <div v-for="item in items" class="flex flex-col gap-4 justify-center items-center md:basis-1/3 p-4 text-center">
         <div class="flex justify-center items-center w-auto h-auto p-4 rounded-full text-4xl text-white" style="background-image: radial-gradient(circle at 87.5% 12.5%, #e7f000 0, #c9ed00 10%, #a8e800 20%, #86e000 30%, #5fd600 40%, #29ca0d 50%, #00bd26 60%, #00b235 70%, #00a742 80%, #009f4d 90%, #009758 100%);">

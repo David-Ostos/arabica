@@ -6,6 +6,7 @@ const useUser = useUserStore();
 const useLotes = useLotesStore();
 const router = useRouter()
 
+
 router.options.scrollBehavior = (to, from) => {
   if( from.path.includes('perfil') && to.path.includes('perfil')){
     window.scrollTo({
@@ -49,6 +50,15 @@ await useLotes.getDataLotes()
     border-radius: 17px;
     border:0px solid #555777;
   }
-                
+  
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  filter: blur(1rem);
+}
 
 </style>

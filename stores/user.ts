@@ -32,7 +32,6 @@ export const useUserStore = defineStore("user", () => {
 
           const dataUserFetch = (await peticionUser.json())[0];
           
-          console.log(dataUserFetch);
           if (dataUserFetch.perfilProductor !== null) {
             delete dataUserFetch.perfilProductor._state;
             delete dataUserFetch.perfilProductor._modified;

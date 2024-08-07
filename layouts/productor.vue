@@ -6,12 +6,15 @@ import NavbarProductor from '~/components/NavBar/Navbar.Productor.vue';
     <div>
       <NavbarProductor class="mt-[4.2rem]"/>
       <ProductorPerfilLayout/>
-      <div :class="$route.path.includes('usuario') ? 'flex bg-gray-100 h-full ' : ''">
-        <ProductorUsuarioLayout class="h-full"/>
-        <slot />
+      <div :class="$route.path.includes('usuario') ? 'grid grid-cols-8 bg-gray-100 h-full ' : ''">
+        <ProductorUsuarioLayout class=" h-full col-span-2"/>
+        <div class="col-span-6">
+
+          <slot  />
+        </div>
       </div>
+      <ProductorFooter />
     </div>
-    <ProductorFooter />
 </template>
 
 <style scoped></style>

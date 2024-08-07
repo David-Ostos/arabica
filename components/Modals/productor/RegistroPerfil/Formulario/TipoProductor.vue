@@ -7,10 +7,10 @@
     >
       Elija su tipo de cuenta <b class="text-red-500 text-base absolute">*</b>
     </h3>
-    <div class="flex justify-around items-center mb-8">
+    <div class="flex justify-around items-center mb-8 ">
       <div
         v-for="item in items"
-        class="w-[90px] sm:w-[190px] h-[130px] sm:h-[180px] flex flex-col justify-start  items-center p-4 border-2 dark:text-white  hover:text-primary hover:border-primary dark:border-white rounded-md hover:dark:border-primary hover:dark:text-primary"
+        class=" transition-all duration-500 w-[90px] sm:w-[190px] h-[130px] sm:h-[180px] flex flex-col justify-start bg-gray-100 hover:bg-white shadow items-center p-4 border dark:text-white  hover:text-primary hover:border-primary dark:border-white rounded-md hover:dark:border-primary hover:dark:text-primary cursor-pointer"
         :class="tipo === item.show ? 'text-primary border-primary' : ''"
         @click="tipo = item.show , $emit('tipoProductor', item.tipo)"
       >
@@ -23,6 +23,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { TipoProductor } from '~/interfaces/PerfilProductor';
+
 
 const tipo:Ref<number> = ref(0)
 
