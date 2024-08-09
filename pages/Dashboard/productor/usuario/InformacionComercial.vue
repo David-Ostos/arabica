@@ -12,11 +12,14 @@
       <UForm
         :schema="schema"
         :state="state"
+        :validate="validate"
         @submit="onSubmit"
         class="flex flex-col p-8 w-full"
       >
         <div class="grid grid-cols-5 gap-8 relative w-full mb-4">
-          <div class="grid grid-cols-8 col-span-5 w-full gap-8 h-fit capitalize">
+          <div
+            class="grid grid-cols-8 col-span-5 w-full gap-8 h-fit capitalize"
+          >
             <UFormGroup
               required
               class="col-span-5 h-fit"
@@ -39,7 +42,8 @@
               name="numeroTelefonico"
               class="col-span-5"
             >
-            <div class="grid grid-cols-12  w-full focus-visible:ring-2 ring-primary group rounded-md"
+              <div
+                class="grid grid-cols-12 w-full focus-visible:ring-2 ring-primary group rounded-md"
               >
                 <div class="col-span-2 cursor-pointer relative">
                   <div
@@ -49,7 +53,9 @@
                     <span class="col-span-1 ml-1">{{
                       state.numeroTelefonico!.bandera
                     }}</span>
-                    <span class="col-span-1">{{ state.numeroTelefonico!.code }}</span>
+                    <span class="col-span-1">{{
+                      state.numeroTelefonico!.code
+                    }}</span>
                     <UIcon
                       :class="selectActive ? 'rotate-180' : ''"
                       class="col-span-1text-lg h-fit w-fit justify-self-center"
@@ -84,11 +90,14 @@
                         <span>{{ item.bandera }}</span>
                         <span>{{ item.code }}</span>
                       </li>
-                      <li v-show="filterCodeTelefono().length === 0" class="mx-2">
-                    <span class="text-sm text-gray-400"
-                      >No se encuentra...</span
-                    >
-                  </li>
+                      <li
+                        v-show="filterCodeTelefono().length === 0"
+                        class="mx-2"
+                      >
+                        <span class="text-sm text-gray-400"
+                          >No se encuentra...</span
+                        >
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -102,7 +111,12 @@
               </div>
             </UFormGroup>
 
-            <UFormGroup required class="col-span-5" label="Correo" name="correo">
+            <UFormGroup
+              required
+              class="col-span-5"
+              label="Correo"
+              name="correo"
+            >
               <UInput
                 placeholder="ejemplo@gmai.com"
                 icon="i-heroicons-envelope"
@@ -111,7 +125,12 @@
               />
             </UFormGroup>
 
-            <UFormGroup required class="col-span-8" label="Dirección de Negocio" name="direccion.direccion1">
+            <UFormGroup
+              required
+              class="col-span-8"
+              label="Dirección de Negocio"
+              name="direccion.direccion1"
+            >
               <UInput
                 placeholder="Ingrese su ubicación"
                 icon="i-heroicons-envelope"
@@ -120,7 +139,12 @@
               />
             </UFormGroup>
 
-            <UFormGroup required class="col-span-4" label="Linea 2 de dirección" name="direccion.direccion2">
+            <UFormGroup
+              required
+              class="col-span-4"
+              label="Linea 2 de dirección"
+              name="direccion.direccion2"
+            >
               <UInput
                 placeholder="Ingrese su ubicación"
                 icon="i-heroicons-envelope"
@@ -129,7 +153,12 @@
               />
             </UFormGroup>
 
-            <UFormGroup required class="col-span-2" label="Codigo Postal" name="direccion.codigoPostal">
+            <UFormGroup
+              required
+              class="col-span-2"
+              label="Codigo Postal"
+              name="direccion.codigoPostal"
+            >
               <UInput
                 placeholder="Ingrese su ubicación"
                 icon="i-heroicons-envelope"
@@ -138,7 +167,12 @@
               />
             </UFormGroup>
 
-            <UFormGroup required class="col-span-2" label="Ciudad" name="direccion.ciudad">
+            <UFormGroup
+              required
+              class="col-span-2"
+              label="Ciudad"
+              name="direccion.ciudad"
+            >
               <UInput
                 placeholder="Ingrese su ubicación"
                 icon="i-heroicons-envelope"
@@ -146,12 +180,10 @@
                 size="xl"
               />
             </UFormGroup>
-
-
           </div>
 
-
-          <div class=" p-4 absolute right-0 top-0">
+          <!-- logo  -->
+          <div class="p-4 absolute right-0 top-0">
             <span class="text-gray-500 font-semibold">Logo del Comercio</span>
 
             <div
@@ -192,12 +224,46 @@
                 </div>
               </div>
             </div>
-            <span class="text-xs text-gray-500 font-semibold mx-auto w-[max-content] flex"
+            <span
+              class="text-xs text-gray-500 font-semibold mx-auto w-[max-content] flex"
               >Al menos 200 por 200 píxeles. Tamaño máximo 6MB.</span
             >
           </div>
+          <!-- /logo  -->
+
         </div>
+
         
+        <div class="mt-6">
+          <div class="flex justify-between items-center border-t py-8">
+            <h1 class="text-gray-700 text-sm font-semibold ">
+              {{ certificaciones.length }} Certificaciones
+            </h1>
+            <UButton type="button" class="w-fit self-end px-3 h-10 font-bold"
+              @click="certificaciones.push({
+                certificacion: '',
+                picture: '',
+                year: '',
+              })" >
+              <UIcon
+                name="i-ic-baseline-add-circle-outline"
+                class="text-white text-2xl font-bold"
+                dynamic
+              />
+              Agregr certificado
+            </UButton>
+          </div>
+          <ProductorUsuarioInformacionComercioCertificados
+            v-for="item in certificaciones"
+            :certificaciones="item"
+          />
+        </div>
+
+        <div>
+          <UFormGroup label="Redes Sociales" class="border-t py-8">
+          </UFormGroup>
+        </div>
+
         <UButton
           class="w-fit self-end px-3 py-[10px] font-bold"
           :ui="{
@@ -206,7 +272,6 @@
             },
           }"
           type="submit"
-          @click="onSubmit"
           :loading="loading"
         >
           Guardar cambios
@@ -222,7 +287,7 @@ definePageMeta({
   middleware: "productor",
 });
 import {object, string, type InferType} from "yup";
-import type {FormSubmitEvent} from "#ui/types";
+import type {FormError, FormSubmitEvent} from "#ui/types";
 import type {PerfilProductor} from "~/interfaces/PerfilProductor";
 
 const useProductor = useProductorStore();
@@ -1373,6 +1438,19 @@ const codeCountry = [
   },
 ];
 
+const certificaciones = ref([
+  {
+    certificacion: "Nombre",
+    picture: "",
+    year: "2024",
+  },
+  {
+    certificacion: "Nombre",
+    picture: "",
+    year: "2024",
+  },
+]);
+
 const searchQuery = ref("");
 
 const indiceChile = codeCountry.findIndex((code) => code.code === "+56");
@@ -1416,16 +1494,21 @@ const state: PerfilProductor = reactive({
   correo: useProductor.perfilProductor.correo,
   direccion: useProductor.perfilProductor.direccion,
   logo: useProductor.perfilProductor.logo,
+  certificaciones: useProductor.perfilProductor.certificaciones,
 });
+
+const validate = (state: any): FormError[] => {
+  const errors = [] as any;
+
+  return errors;
+};
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with event.data
-  console.log('dat');
+  console.log(state);
+  console.log("dat");
   console.log(event.data);
-
 }
-
-
 </script>
 
 <style scoped>

@@ -38,22 +38,21 @@ export type Lotes = {
 }
 
 export type Certificaciones = {
-  nombre?: string;
-  categoria?: string;
-  img?: string;
+  year?: string;
+  certificacion?: string;
+  picture?: string;
 }
 
 export type Premios = {
+  year?: string;
   nombre?: string;
-  categoria?: string;
-  img?: string;
 }
 
 export type equipo = {
   nombre?: string;
+  apellido?: string[];
   rol?: string;
-  redes?: string[];
-  img?: string;
+  picture?: string;
 }
 
 export type IdUsuario = {
