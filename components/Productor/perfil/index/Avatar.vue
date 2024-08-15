@@ -17,7 +17,7 @@
     </div>
     <div class=" my-4 ">
       <h2 v-if="useProductor.perfilProductor.nombre !== undefined"
-        class="text-2xl font-bold relative w-fit pr-8"
+        class="text-2xl font-bold relative w-fit pr-8 capitalize"
       >
         {{ useProductor.perfilProductor.nombre }} <UIcon class=" cursor-pointer text-xl text-primary absolute top-0 right-0" name="i-ph-pencil-fill" dynamic/>
       </h2>

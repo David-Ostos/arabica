@@ -10,7 +10,7 @@
     >
       <div class="absolute right-4">
         <div
-          class="mb-4 text-xl border rounded-md p-2 flex justify-center items-center"
+          class="mb-4 text-xl border rounded-md p-2 flex justify-center items-center cursor-pointer"
           @click="isOpen = !isOpen"
         >
           <UIcon name="i-ic-round-menu" class="" dynamic />
@@ -65,8 +65,11 @@
           class="flex gap-1 items-center mb-8 py-4 cursor-pointer text-gray-800 hover:!text-primary-600 transition-all duration-100 w-fit"
           @click="hiddenVisibles = !hiddenVisibles"
         >
-          <h1 class="font-bold text-base md:text-lg" @click="">
-            {{ lotesVisibles.length }} Lotes Ocultos
+          <h1 v-if="lotesVisibles.length > 1" class="font-bold text-base md:text-lg" @click="">
+            {{ lotesVisibles.length }} Lotes Activos
+          </h1>
+          <h1 v-if="lotesVisibles.length === 1" class="font-bold text-base md:text-lg" @click="">
+            {{ lotesVisibles.length }} Lote Activo
           </h1>
 
           <div>
@@ -135,10 +138,12 @@
           class="flex gap-1 items-center mt-6 mb-8 py-4 cursor-pointer text-gray-800 hover:!text-primary-600 transition-all duration-100 w-fit"
           @click="hiddenOcultos = !hiddenOcultos"
         >
-          <h1 class="font-bold text-base md:text-lg" @click="">
+          <h1 v-if="lotesVisibles.length > 1" class="font-bold text-base md:text-lg" @click="">
             {{ lotesOcultos.length }} Lotes Ocultos
           </h1>
-
+          <h1 v-if="lotesVisibles.length === 1" class="font-bold text-base md:text-lg" @click="">
+            {{ lotesOcultos.length }} Lote Oculto
+          </h1>
           <div>
             <UIcon
               v-if="lotesOcultos.length !== 0"
@@ -206,7 +211,7 @@
       class="flex w-full mt-5 pb-10 transition-width ease-in-out duration-700 mx-auto flex-grow h-screen-topBar-footer overflow-auto"
     >
       <div
-        class="bg-[url('/img/crear_lote.jpg')] w-full flex flex-col justify-center items-center text-center my-10 px-4 rounded-2xl shadow-xl bg-top gap-4 bg-cover"
+        class="bg-[url('/img/crear_lote.webp')] w-full flex flex-col justify-center items-center text-center my-10 px-4 rounded-2xl shadow-xl bg-top gap-4 bg-cover"
         :class="`bg-[url(${crearLote})]`"
       >
         <h1
@@ -214,7 +219,7 @@
         >
           ¿Que esperas? Agrega tu primer Lote de café.
         </h1>
-        <p class="font-thin text-white max-w-[800px]">
+        <p class="font-mediun text-white max-w-[800px]">
           En el menu de la izquierda puedes agregar tus lotes o en el boton de
           abajo.
         </p>
@@ -231,6 +236,7 @@
     <!-- /cuado no hay lotes creados -->
   </div>
 
+  <!-- Modal de eliminar lote -->
   <div>
     <UModal v-model="isOpenModal">
       <div class="p-8">

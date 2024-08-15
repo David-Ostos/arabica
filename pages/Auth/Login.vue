@@ -85,6 +85,7 @@
           <!-- /password -->
           <div class="mt-8 w-fit mx-auto">
             <UButton
+              :loading="loading"
               type="submit"
               class="bg-primary text-white font-bold py-2 px-[5.5rem] w-full rounded hover:bg-primary-600"
               label="Inicia Sesión"
@@ -137,7 +138,7 @@ import { toast } from 'vue3-toastify';
 
 const useUser = useUserStore();
 const router = useRouter();
-
+const loading = ref(false)
 definePageMeta({
   layout: "auth",
 });
@@ -173,7 +174,7 @@ const state = reactive({
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with event.data
-  console.log(event)
+  loading.value = true
   try {
     const response = await fetch(
       `${import.meta.env.VITE_URL_API}/api/content/item/usuarios?filter={email:'${
@@ -192,7 +193,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           router.push("/auth/registro");
         },
       })
-      // toast.add({
         // id: "email_no_resgistrado",
         // title: "El correo no esta registrado",
         // description: "Si no tienes cuenta, registrate.",
@@ -210,28 +210,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       // });
     } else if (response.status === 200) {
       const dataUserFetch = await response.json();
+      console.log(dataUserFetch);
 
+      
       if (!dataUserFetch.tipoLogin.includes("backend")) {
         toast.warning('El correo fue registrado por google. Has iniciado sesión utilizando Google y aún no has establecido una contraseña propia. Por favor, inicia sesión mediante Google y procede a crear una nueva contraseña en la sección de perfil de tu cuenta.')
-        /* toast.add({
-          id: "email_login_google_only",
-          title: "El correo fue registrado por google",
-          description:
-            "Has iniciado sesión utilizando Google y aún no has establecido una contraseña propia. Por favor, inicia sesión mediante Google y procede a crear una nueva contraseña en la sección de perfil de tu cuenta.",
-          icon: "i-heroicons-exclamation-circle",
-          timeout: 5000,
-          color: "yellow", 
-        });
-        */
       } else if (event.data.password !== dataUserFetch.password) {
         toast.warn('La contraseña o el correo no coinciden')
-        /* toast.add({
-          id: "no_match_password",
-          title: "La contraseña o el correo no coinciden",
-          icon: "i-heroicons-exclamation-circle",
-          timeout: 5000,
-          color: "yellow",
-        }); */
         noMatche.value = true;
       } /* else if(dataUserFetch){
 
@@ -254,6 +239,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     }
   } catch (error) {
     console.log(error);
+  } finally{
+  loading.value = false
   }
 }
 </script>

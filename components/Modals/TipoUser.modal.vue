@@ -56,6 +56,8 @@ import {useShowModalsStore} from "../../stores/showModals";
 import TipoUser from "~/components/Auth/Registro/TipoUser.vue";
 import BotonSecondary from "../Botones/BotonSecondary.vue";
 import {useRouter} from "vue-router";
+import axios from "axios";
+import { toast } from "vue3-toastify";
 
 const ShowModalsStore = useShowModalsStore();
 const useUser = useUserStore();
@@ -72,11 +74,50 @@ const tipoU = (tipo: "comprador" | "productor") => {
 const registrar = async () => {
   loading.value = true;
   useUser.dataUser.tipoUser = tipoUser.value;
+  if(tipoUser.value === 'productor')  useUser.dataUser.perfilProductor = { _model: 'productores', _id: '' }
+  if(tipoUser.value === 'comprador')  useUser.dataUser.perfilComprador = { _model: 'compradores', _id: '' }
+  
+  console.log(useUser.dataUser);
 
   localStorage.clear();
   localStorage.setItem("dataUser", JSON.stringify(useUser.dataUser));
   console.log(useUser.dataUser);
-  const response = fetch(
+
+  try {
+          // @ts-ignore
+        await axios(
+          // @ts-ignore
+          {
+            url: `${import.meta.env.VITE_URL_API}/api/content/item/usuarios?fields={"_state": false,"_modified": false,"_mby": false,"_created": false,"_cby": false}`,
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+            },
+            data: {data: useUser.dataUser},
+          }
+        ).then(async (res) => {
+          if (res.status === 412) {
+            console.log(res);
+            loading.value = false;
+            toast.error("Hubo un problema, intente nuevamente");
+
+          } else {
+            await useUser.fetchDataUser();
+            ShowModalsStore.showModalTipoGoogle = false;
+            loading.value = false;
+            toast.success("Usuario creado satisfactoriamente.", {
+              onClose: () => {
+                router.push(`/dashboard/${useUser.dataUser.tipoUser}`);
+              },
+            });
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+  /* const response = fetch(
     `${import.meta.env.VITE_URL_API}/api/content/item/usuarios`,
     {
       method: "POST",
@@ -91,17 +132,8 @@ const registrar = async () => {
       }),
     }
   );
-  if ((await response).status === 412) {
-    console.log("error");
-    loading.value = false;
-    return;
-  } else {
-    await useUser.fetchDataUser();
-    ShowModalsStore.showModalTipoGoogle = false;
-    loading.value = false;
-    console.log(`/dashboard/${useUser.dataUser.tipoUser}`);
-    router.push(`/dashboard/${useUser.dataUser.tipoUser}`);
-  }
+
+  } */
 };
 </script>
 

@@ -38,12 +38,12 @@ const links = [
     icon:'',
     // icon: 'i-heroicons-home',
     to: '/dashboard/productor/usuario/informacionComercial'
-  }, {
+  },/*  {
     label: 'Notificaciones',
     icon:'',
     // icon: 'i-heroicons-chart-bar',
     to: `/dashboard/productor/usuario/notificaciones`
-  }, {
+  }, */ {
     label: 'Elimanar Cuenta',
     icon:'',
     // icon: 'i-heroicons-command-line',

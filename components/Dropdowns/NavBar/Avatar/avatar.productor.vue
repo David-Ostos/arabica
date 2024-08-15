@@ -4,16 +4,6 @@ import Avatar from '~/components/global/avatar.vue';
 
 const useUser = useUserStore();
 
-const picture = ref();
-onMounted(() => {
-  if (useUser.dataUser.picture) {
-    picture.value = useUser.dataUser.picture;
-  } else {
-    picture.value = "/img/avatar.png";
-  }
-  
-});
-
 
 const items = [
   [
@@ -125,7 +115,7 @@ const items = [
     </div>
     <template #account="{item}">
       <div class="text-left">
-        <p>Sessión iniciada con</p>
+        <p>Sesión iniciada con</p>
         <p class="truncate font-medium text-gray-900 dark:text-white">
           {{ useUser.dataUser.email }}
         </p>

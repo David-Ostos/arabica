@@ -1,10 +1,12 @@
 <template>
+  <div v-show="selectActiveCertificado " @click="selectActiveCertificado = false" class="fixed top-0 right-0 w-full h-full "></div>
+  <div v-show="selectActiveYear" @click="selectActiveYear = false" class="fixed top-0 right-0 w-full h-full "></div>
   <div class="text-gray-800 py-4 border-b">
     
     <div>
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-11 gap-4 relative">
 
-        <div class="col-span-1 relative">
+        <div class="col-span-5 relative">
           <h1>Certificación</h1>
           <button
             type="button"
@@ -35,6 +37,9 @@
               <li
                 v-for="item in filterCertificados()"
                 class="mb-2 p-1 ring-primary hover:ring rounded-md cursor-pointer"
+                @click="useProductor.perfilProductor.certificaciones![index!].certificacion = item;
+                selectActiveCertificado = false; console.log(useProductor.perfilProductor.certificaciones);"
+                
               >
                 {{ item }}
               </li>
@@ -49,7 +54,7 @@
           </div>
         </div>
 
-        <div class="col-span-1 relative">
+        <div class="col-span-5 relative">
           <h1>Primer año de certificación</h1>
           <button
             type="button"
@@ -79,6 +84,8 @@
             <ul class="m-4 text-gray-800">
               <li
                 v-for="item in filterYear()"
+                @click="useProductor.perfilProductor.certificaciones![index!].year = item;
+                selectActiveYear = false"
                 class="mb-2 p-1 ring-primary hover:ring rounded-md cursor-pointer"
               >
                 {{ item }}
@@ -94,6 +101,10 @@
           </div>
         </div>
 
+        <div class="col-span-1">
+          <UIcon name="i-clarity-remove-line" class="text-rose-500 text-3xl absolute bottom-2 cursor-pointer" dynamic @click="useProductor.perfilProductor.certificaciones?.splice(index,1)" />
+        </div>
+
       </div>
     </div>
   </div>
@@ -103,12 +114,14 @@
 import type {Certificaciones} from "~/interfaces/PerfilProductor";
 
 const props = defineProps<{
-  certificaciones?: Certificaciones;
+  certificaciones?: Certificaciones,
+  index: number
 }>();
-
+const useProductor = useProductorStore()
 const selectActiveCertificado = ref(false);
 const selectActiveYear = ref(false);
-const cantidadCertificados = ref(undefined);
+
+useProductor.perfilProductor.certificaciones![props.index]._id = props.index.toString()
 
 
 const years = computed(() => {

@@ -3,7 +3,7 @@
     class="bg-gray-100 dark:bg-dark min-h-screen flex box-border justify-center items-center py-6"
   >
     <div
-      class="bg-white dark:bg-stone-800 rounded-2xl flex max-w-4xl p-5 items-center"
+      class="border bg-white dark:bg-stone-800 rounded-2xl flex max-w-4xl p-5 items-center"
     >
       <div class="md:w-1/2 px-8">
         <UForm
@@ -116,7 +116,8 @@
           <!-- boton registro -->
           <div class="text-center text-white pt-4">
             <UButton
-              class="hvr-ripple-out hover:!bg-primary inline-flex items-center justify-center px-4 py-2 text-base font-bold bg-primary dark:bg-primary-600 text-center rounded-lg before:dark:border-primary-600 before:border-primary before:border-4 before:border-solid text-white lg:px-7 cursor-pointer"
+              :loading="loading"
+              class="hvr-ripple-out hover:!bg-primary px-4 py-2 text-base font-bold bg-primary dark:bg-primary-600 text-center rounded-lg before:dark:border-primary-600 before:border-primary before:border-4 before:border-solid text-white lg:px-7 cursor-pointer"
               type="submit"
               >Registrar Cuenta
             </UButton>
@@ -168,6 +169,8 @@ import {object, string, type InferType} from "yup";
 import type {FormError, FormSubmitEvent} from "#ui/types";
 import type {User} from "~/interfaces/Users";
 import BotonGoogle from "~/components/Botones/BotonGoogle.vue";
+import {toast} from "vue3-toastify";
+import axios from "axios";
 
 definePageMeta({
   layout: "auth",
@@ -176,7 +179,8 @@ definePageMeta({
 const useUser = useUserStore();
 const router = useRouter();
 const ShowModalsStore = useShowModalsStore();
-const toast = useToast();
+
+const loading = ref(false);
 
 const selected = ref(false);
 
@@ -209,15 +213,11 @@ let state: User = reactive({
   apellido: undefined,
   password: undefined,
   email: undefined,
-  picture: '',
+  picture: "",
   tipoUser: tipoUser.value,
   tipoLogin: ["backend"],
-  perfilProductor:{
-    _model:'productores',
-    _id:'',
-  },
   verificado: false,
-  perfilCompleto : false,
+  perfilCompleto: false,
   perfilBase: false,
   rePassword: undefined,
 });
@@ -233,6 +233,7 @@ const validations = (stat: any): FormError[] => {
   }
 
   if (stat.password !== stat.rePassword) {
+    toast.error('Las contraseñas no coinciden.')
     errors.push({
       path: "password",
       message: "Las contraseñas no coinciden",
@@ -242,12 +243,11 @@ const validations = (stat: any): FormError[] => {
 };
 
 async function onSubmit(event: any) {
+  loading.value = true;
   state.nombre = state.nombre!.toLowerCase();
   state.apellido = state.apellido!.toLowerCase();
   delete state.rePassword;
   state.tipoUser = tipoUser.value;
-  console.log(event.data);
-  console.log(state);
 
   faltaTipo.value = false;
   try {
@@ -260,77 +260,78 @@ async function onSubmit(event: any) {
 
 async function verificarEmail(data: User) {
   //AQUI HACES UN FETCH PARA VERIFICAR EL EMAIL
+  if(data.tipoUser === 'productor')  data.perfilProductor = { _model: 'productores', _id: '' }
+  if(data.tipoUser === 'comprador')  data.perfilComprador = { _model: 'compradores', _id: '' }
+  console.log(data);
+
   try {
     const correoVerificado = await fetch(
-      `${import.meta.env.VITE_URL_API
-          }/api/content/item/usuarios?filter={email:'${data.email}'}&fields={"email": true}`,
+      `${
+        import.meta.env.VITE_URL_API
+      }/api/content/item/usuarios?filter={email:'${
+        data.email
+      }'}&fields={"email": true}`,
       {
         cache: "no-cache",
         headers: {
-          "api-key": import.meta.env.VITE_COCKPIT_API_KEY
-        }
+          "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+        },
       }
     );
     if (correoVerificado.status === 200) {
-      toast.add({
-        id: "email_repetido",
-        title: "Email ya registrado",
-        description: "El correo ya esta registrado intenta con otro correo.",
-        icon: "i-heroicons-exclamation-circle",
-        timeout: 5000,
-        color: "yellow",
-      });
+      toast.info("El correo ya esta registrado intenta con otro correo.");
       return;
     } else {
       const dataUserSaved = {
         email: data.email,
         picture: undefined,
         tipoUser: tipoUser.value,
-        verificado: false ,
-        perfilCompleto : false,
+        verificado: false,
+        perfilCompleto: false,
         perfilBase: false,
-        logged : true
-      }
-
-
-      console.log({data});
-
+        logged: true,
+      };
       localStorage.clear();
       localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
-
-       console.log({data})
-       console.log({
-          data: data
-      });
-
       try {
-        const response = fetch(
-    `${import.meta.env.VITE_URL_API}/api/content/item/usuarios`,
-    {
-      method: "POST",
-      headers: {
-        "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-          data
-      }),
-    }
-  );
-  if ((await response).status === 412) {
-    console.log(await response);
-    return;
-  } else {
-    useUser.dataUser = data;
-    // console.log(useUser.dataUser);
-    router.push(`/dashboard/${data.tipoUser}`);
-  }
+          // @ts-ignore
+        await axios(
+          // @ts-ignore
+          {
+            url: `${import.meta.env.VITE_URL_API}/api/content/item/usuarios?fields={"_state": false,"_modified": false,"_mby": false,"_created": false,"_cby": false}`,
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+            },
+            data: {data},
+          }
+        ).then((res) => {
+          if (res.status === 412) {
+            console.log(res);
+          } else {
+            delete res.data._state
+            delete res.data._modified
+            delete res.data._mby
+            delete res.data._created
+            delete res.data._cby
+            useUser.dataUser = res.data;
+            // console.log(useUser.dataUser);
+            toast.success("Usuario creado satisfactoriamente.", {
+              onClose: () => {
+                router.push(`/dashboard/${data.tipoUser}`);
+              },
+            });
+          }
+        });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
   } catch (error) {
     console.log(error);
+  } finally {
+    loading.value = false;
   }
 }
 </script>
@@ -355,7 +356,6 @@ async function verificarEmail(data: User) {
   }
 }
 .hvr-ripple-out {
-  display: inline-block;
   vertical-align: middle;
   -webkit-transform: perspective(1px) translateZ(0);
   transform: perspective(1px) translateZ(0);

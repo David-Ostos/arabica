@@ -1,9 +1,7 @@
 <template>
   <div class="my-20 mx-20">
     <div class="overflow-auto">
-      <h1
-        class="text-center text-3xl text-gray-700 font-bold"
-      >
+      <h1 class="text-center text-3xl text-gray-700 font-bold">
         Crea tu Lote de Café
       </h1>
       <h3 class="text-2xl mb-8 text-gray-600">Agrega las imagenes</h3>
@@ -97,10 +95,7 @@
 
             <UProgress :value="porcentaje" :color="color" class="col-span-4">
               <template #indicator="{percent}">
-                <div
-                  class="text-right "
-                  :style="{width: `${percent}%`}"
-                >
+                <div class="text-right" :style="{width: `${percent}%`}">
                   <span v-if="faseUpload === 'none'" class="text-gray-500 w-fit"
                     >Esperando...</span
                   >
@@ -121,7 +116,7 @@
                   >
                   <span
                     v-else-if="faseUpload === 'Subida Completada'"
-                    class="text-primary-500 "
+                    class="text-primary-500"
                     >✔ Subida completada.</span
                   >
                   <span
@@ -352,6 +347,7 @@ import type {FormSubmitEvent} from "#ui/types";
 import type {Lotes} from "~/interfaces/Lotes";
 import {squircle} from "ldrs";
 import {toast} from "vue3-toastify";
+import type {Lotes as lotesProductor} from "../../../../interfaces/PerfilProductor";
 
 squircle.register();
 
@@ -465,139 +461,6 @@ const state: Lotes = reactive({
   pruebaGratis: false,
   ocultar: false,
 });
-
-/* const inputs = ref([
-  {
-    selects: [
-      {
-        label: "Origen",
-        name: "origen",
-        options: ["chavin", "moche", "nasca"],
-        searchable: "Buscar origen...",
-        placeholder: "Selecciona el origen",
-        value: state.origen,
-      },
-      {
-        label: "Departamento",
-        name: "departamento",
-        options: [
-          "piura",
-          "amazonas",
-          "cajamarca",
-          "san martin",
-          "huanuco",
-          "pasco",
-          "junin",
-          "ayacucho",
-          "cusco",
-          "puno",
-        ],
-        searchable: "Buscar departamento...",
-        placeholder: "Selecciona el departamento",
-        value: state.departamento,
-      },
-      {
-        label: "Variedad",
-        name: "variedad",
-        options: [
-          "geisha",
-          "typical",
-          "bourbon",
-          "maragogipe",
-          "pacamara",
-          "caturra",
-          "catui",
-          "tabi",
-          "new world",
-          "costa rica",
-          "castilla",
-          "catimor",
-          "otros",
-        ],
-        searchable: "Buscar variedad...",
-        placeholder: "Selecciona el variedad",
-        value: state.variedad,
-      },
-      {
-        label: "Proceso",
-        name: "proceso",
-        options: [
-          "sueves washing",
-          "anaerobic washing",
-          "honey",
-          "prolonged fermentation",
-          "natural",
-          "natural anaerobic",
-          "experimental",
-        ],
-        searchable: "Buscar proceso...",
-        placeholder: "Selecciona el proceso",
-        value: state.proceso,
-      },
-      {
-        label: "Puntaje",
-        name: "puntaje",
-        options: ["80-90+", "70-80+", "60-70+"],
-        searchable: "Buscar puntaje...",
-        placeholder: "Selecciona el puntaje",
-        value: state.puntaje,
-      },
-      {
-        label: "Perfil",
-        name: "perfil",
-        options: [
-          "floral",
-          "fruit tree",
-          "vegetable",
-          "citrus o sweet",
-          "caramelized sugars",
-          "dried fruit",
-          "pecan / chocolate",
-          "clean cup",
-        ],
-        searchable: "Buscar perfil...",
-        placeholder: "Selecciona el perfil",
-        value: state.perfil,
-      },
-      {
-        label: "Cantidad del lote",
-        name: "cantidadLote",
-        options: ["lotes completos", "micro lote (5pp - 20qq)", "nano lote"],
-        searchable: "Buscar la cantidad del lote...",
-        placeholder: "Selecciona la cantidad del lote",
-        value: state.cantidadLote,
-      },
-      {
-        label: "País",
-        name: "pais",
-        options: ["peru"],
-        searchable: "Buscar País...",
-        placeholder: "Selecciona el País",
-        value: state.pais,
-      },
-    ],
-    inputs: [
-      {
-        label: "Nombre",
-        name: "nombre",
-        value: state.nombre,
-        tipo: "text",
-      },
-      {
-        label: "Precio",
-        name: "precio",
-        value: state.precio,
-        tipo: "text",
-      },
-      // {
-      //   label: "Descripcion",
-      //   name: "descripcion",
-      //   value: state.descripcion,
-      //   tipo: "text",
-      // },
-    ],
-  },
-]); */
 
 const schema = object({
   nombre: string().required("Este campo es requerido"),
@@ -789,7 +652,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log(uploadImg);
   if (uploadImg!.status) {
     try {
-        // @ts-ignore
+      // @ts-ignore
       await axios(
         // @ts-ignore
         {
@@ -841,7 +704,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             _model: "lotes",
             _id: res.data._id,
           });
-
+          //@ts-ignore
           await addLoteProductor(newLote!);
 
           toast.success("Se ha agregado el lote satisfactoriamente");

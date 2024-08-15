@@ -15,8 +15,15 @@ export interface PerfilProductor {
   premios?: Premios[];
   certificaciones?: Certificaciones[];
   relaciones?: string[];
-  lotes?: Lotes[],
+  lotes?: LotesProductor[];
   logo?: string;
+  redes?: Redes[]
+}
+
+export type Redes = {
+  linkbase?: string
+  linkUsuario?: string
+  icon?:string
 }
 
 export type Direccion = {
@@ -32,23 +39,26 @@ export type NumeroTelefonico = {
   bandera?: string
 }
 
-export type Lotes = {
+export type LotesProductor = {
   _model?: 'lotes',
   _id?: string
 }
 
 export type Certificaciones = {
+  _id?: string;
   year?: string;
   certificacion?: string;
   picture?: string;
 }
 
 export type Premios = {
+  _id?: string;
   year?: string;
   nombre?: string;
 }
 
 export type equipo = {
+  _id?: string;
   nombre?: string;
   apellido?: string[];
   rol?: string;

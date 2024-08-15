@@ -4,20 +4,14 @@ definePageMeta({
   layout: "productor",
   middleware: "productor",
 });
-
-
 </script>
 
 <template>
-  <div class="mt-8 mx-10">
-    <div class="flex gap-12 justify-between">
-     <ProductorPerfilPanoramicaHistoria/>
-     <ProductorPerfilPanoramicaPrestigio/>
-    </div>
-    <div class="flex gap-12 justify-between">
-      <ProductorPerfilPanoramicaRelaciones/>
-      <ProductorPerfilPanoramicaMaps/>
-    </div>
+  <div class="grid grid-cols-2 gap-12 mx-20 my-8">
+    <div class="col-span-1"><ProductorPerfilPanoramicaHistoria /></div>
+    <div class="col-span-1"><ProductorPerfilPanoramicaPrestigio /></div>
+    <div class="col-span-1"><ProductorPerfilPanoramicaRelaciones /></div>
+    <div class="col-span-1"><ProductorPerfilPanoramicaMaps /></div>
   </div>
 </template>
 

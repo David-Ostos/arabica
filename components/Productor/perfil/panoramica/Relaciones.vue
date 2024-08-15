@@ -1,5 +1,5 @@
 <template>
-  <div class="w-1/2">
+  <div class="">
     <div class=" shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-md py-5 px-4 ">
       <div class="flex justify-between mb-4 ">
         <h3 class="capitalize font-medium text-xl ">Relaciones</h3>

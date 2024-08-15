@@ -10,7 +10,7 @@
       </h3>
     </div>
     <UForm
-      @click="console.log(isActiveCodePhone);"
+      @click="console.log(isActiveCodePhone)"
       :schema="schema"
       :state="state"
       class="space-y-4 lg:border rounded-xl shadow-inner py-8 md:mx-20 my-8 bg-white"
@@ -352,6 +352,9 @@ import type {
   PerfilProductor,
   TipoProductor,
 } from "~/interfaces/PerfilProductor";
+import type {localStoreDataUser} from "~/interfaces/localStore.dataUser";
+import {toast} from "vue3-toastify";
+import axios from "axios";
 
 const useUser = useUserStore();
 const useGlobal = useGlobalStore();
@@ -1591,6 +1594,29 @@ const state: PerfilProductor = reactive({
   },
   imgPortada: "",
   descripcion: "",
+  certificaciones: [],
+  equipo: [],
+  premios: [],
+  logo: "",
+  lotes: [],
+  relaciones: [],
+  redes: [
+    {
+      linkbase: "facebook.com/",
+      linkUsuario: "",
+      icon: "i-mdi-facebook",
+    },
+    {
+      linkbase: "instagram.com/",
+      linkUsuario: "",
+      icon: "i-mdi-instagram",
+    },
+    {
+      linkbase: "youtube.com/",
+      linkUsuario: "",
+      icon: "i-mdi-youtube",
+    },
+  ],
 });
 
 const validations = (stat: any): FormError[] => {
@@ -1620,6 +1646,8 @@ const validations = (stat: any): FormError[] => {
   return errors;
 };
 
+console.log(useUser.dataUser);
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   load.value = true;
   let datosDuplicados = false;
@@ -1630,7 +1658,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     const fetchVerificarUser = await fetch(
       `${
         import.meta.env.VITE_URL_API
-      }/api/content/items/productores?fields={"nombre": true,"origen": false,"ruc": true,"razonSocial": true,"direccion": false,"correo": true,"numeroTelefonico": true,"tipoProductor": false,"idUsuario":false }`,
+      }/api/content/items/productores?fields={"nombre": true,"ruc": true,"razonSocial": true,"correo": true,"numeroTelefonico": true,"_id": false}`,
       {
         method: "GET",
         headers: {
@@ -1642,42 +1670,58 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     const responseVerificacion = await fetchVerificarUser.json();
 
     const verificarNombre = responseVerificacion.some(
-      (productor: any) => productor.nombre === state.nombre
+      (productor: any) =>
+        productor.nombre.toLowerCase() === state.nombre!.toLowerCase()
     );
     const verificarRuc = responseVerificacion.some(
       (productor: any) => productor.ruc === state.ruc
     );
     const verificarRazonSocial = responseVerificacion.some(
-      (productor: any) => productor.razonSocial === state.razonSocial
+      (productor: any) =>
+        productor.razonSocial.toLowerCase() === state.razonSocial!.toLowerCase()
     );
     const verificarCorreo = responseVerificacion.some(
-      (productor: any) => productor.correo === state.correo
+      (productor: any) =>
+        productor.correo.toLowerCase() === state.correo!.toLowerCase()
     );
     const verificarNumeroTelefonico = responseVerificacion.some(
-      (productor: any) => productor.numeroTelefonico === state.numeroTelefonico
+      (productor: any) =>
+        productor.numeroTelefonico.numero === state.numeroTelefonico!.numero
     );
 
     if (verificarNombre) {
+      toast.info(
+        "El nombre de perfil ya esta registrado, por favor utilice otro."
+      );
       nombreValidado.value = true;
       datosDuplicados = true;
     }
 
     if (verificarRuc) {
+      toast.info("EL R.U.C ya esta registrado, por favor utilice otro.");
       datosDuplicados = true;
       rucValidado.value = true;
     }
 
     if (verificarRazonSocial) {
+      toast.info("La Razón Social ya esta registrado, por favor utilice otro.");
+
       datosDuplicados = true;
       razonSocialValidado.value = true;
     }
 
     if (verificarCorreo) {
+      toast.info("EL correo ya esta registrado, por favor utilice otro.");
+
       datosDuplicados = true;
       correoValidado.value = true;
     }
 
     if (verificarNumeroTelefonico) {
+      toast.info(
+        "EL numero de telefono ya esta registrado, por favor utilice otro."
+      );
+
       datosDuplicados = true;
       numeroTelefonicoValidado.value = true;
     }
@@ -1689,47 +1733,64 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       correoValidado.value = false;
       numeroTelefonicoValidado.value = false;
 
-      const response = await fetch(
-        `${import.meta.env.VITE_URL_API}/api/content/item/productores`,
+      // @ts-ignore
+      await axios(
+        // @ts-ignore
         {
+          url: `${
+            import.meta.env.VITE_URL_API
+          }/api/content/item/productores?fields={_state: false,_modified:false,_mby: false,_created: false,_cby: false}`,
           method: "POST",
+          mode: "cors",
           headers: {
-            "Content-Type": "application/json",
             "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
           },
-          body: JSON.stringify({data}),
+          data: {data},
         }
-      );
-      const res = await response.json();
+      ).then(async (res) => {
+        delete res.data._state;
+        delete res.data._modified;
+        delete res.data._mby;
+        delete res.data._created;
+        delete res.data._cby;
+        useProductor.perfilProductor = res.data;
 
-      useProductor.perfilProductor = data;
-
-      // Se reutiliza la variable 'data' para hacer la inyecciond e datos nuevos al ususario
-      data = {
-        _id: useUser.dataUser._id,
-        perfilBase: true,
-        perfilProductor: {
-          _model: "productores",
-          _id: res._id,
-        },
-      };
-
-      const update = await fetch(
-        `${import.meta.env.VITE_URL_API}/api/content/item/usuarios`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+        // Se reutiliza la variable 'data' para hacer la inyecciond e datos nuevos al ususario
+        data = {
+          _id: useUser.dataUser._id,
+          perfilBase: true,
+          perfilProductor: {
+            _model: "productores",
+            _id: res.data._id,
           },
-          body: JSON.stringify({data}),
-        }
-      );
+        };
 
-      const resUpdate = await update.json();
+        const update = await fetch(
+          `${import.meta.env.VITE_URL_API}/api/content/item/usuarios`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+            },
+            body: JSON.stringify({data}),
+          }
+        );
 
-      useUser.dataUser.perfilBase = true;
-      useModal.showModalProductorPerfilCompleto = false;
+        const resUpdate = await update.json();
+        console.log(resUpdate);
+
+        const dataUserSaved: localStoreDataUser = await JSON.parse(
+          localStorage.getItem("dataUser") ?? "{}"
+        );
+
+        dataUserSaved.perfilBase = true;
+        localStorage.removeItem("dataUser");
+        localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
+
+        useUser.dataUser.perfilBase = true;
+        useModal.showModalProductorPerfilCompleto = false;
+      });
     }
   } catch (error) {
     console.log(error);

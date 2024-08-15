@@ -1,6 +1,6 @@
 <template>
   <header
-    class="w-screen transition-all dark:bg-dark bg-white px-6 sm:p-0 border-b rounded-md shadow-sm"
+    class=" w-full transition-all dark:bg-dark bg-white px-6 sm:p-0 border-b rounded-md shadow-sm"
   >
     <nav
       class="flex items-center justify-between py-4 px-6 lg:px-16"

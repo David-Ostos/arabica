@@ -1,4 +1,4 @@
-import { LayoutKey } from '../.nuxt/types/layouts';
+
 <template>
   <div class="flex gap-8 z-0 justify-between relative flex-grow mr-8">
 

@@ -42,7 +42,8 @@
 					</span>
 				</div>
 
-				<div class="my-4 h-[84px] transition-all duration-1000">
+				<div class="mt-2 mb-1 h-[84px] transition-all duration-1000">
+
 					<UTooltip :text="item.nombre" :popper="{ placement: 'bottom-end' }" :ui="{
 						background: 'bg-dark',
 						color: 'text-white'
@@ -52,15 +53,18 @@
 							{{ item.nombre }}
 						</h2>
 					</UTooltip>
-					<div class=" font-medium items-center text-sm truncate text-gray-700  my-2 transition-all duration-600">
+					<div class=" font-medium items-center text-sm truncate text-gray-700  transition-all duration-600">
+
 						<div class="flex gap-1 ">
 							<p class="mb-2 ">
 								{{ item.productor!.nombre }} 
 							</p>
 							<UIcon name="i-heroicons-check-badge-20-solid" class="text-base text-primary-500" />
 						</div>
-						<div>
-							<div v-if="item.pruebaGratis" class=" text-primary-600 hover:text-primary-700 items-center justify-end text-end w-full flex text-xs">
+					
+					</div>
+					<div>
+							<div v-if="item.pruebaGratis" class=" text-primary-600 hover:text-primary-700 items-center  w-full flex text-xs">
 								<UIcon name="i-heroicons-check-20-solid" class="text-lg" />
 								<p class="uppercase">Muestra gratis disponible</p>
 							</div>
@@ -69,7 +73,6 @@
 								<p class="uppercase">Muestra gratis no disponible</p>
 							</div>
 						</div>
-					</div>
 				</div>
 				<div v-for="campo in campos" class="border-t pt-2"> 
 					<div class="pb-4">

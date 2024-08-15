@@ -13,6 +13,10 @@ export interface User {
     _model: "productores",
     _id: string,
   },
+  perfilComprador?: {
+    _model: "compradores",
+    _id: string,
+  },
   perfilCompleto?: boolean,
   perfilBase?: boolean
 }
