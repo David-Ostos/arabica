@@ -2,10 +2,10 @@
   <div class="my-10">
     <div class="grid grid-cols-7 gap-8 mx-20">
       <!-- Galeria del lote -->
-      <div class="col-span-4 h-screen-topBar-footer overflow-hidden h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4">
-        <div
-          class="grid grid-cols-4 col-span-2 grid-rows-4 gap-4 h-full"
-        >
+      <div
+        class="col-span-4 h-screen-topBar-footer overflow-hidden h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4"
+      >
+        <div class="grid grid-cols-4 col-span-2 grid-rows-4 gap-4 h-full">
           <div class="row-span-2 col-span-4">
             <img
               :src="galeria[0].link"
@@ -44,7 +44,7 @@
       </div>
       <!-- card del lote -->
       <div
-        class="col-span-3 h-screen-topBar-footer p-4 rounded-xl border flex flex-col justify-between h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 "
+        class="col-span-3 h-screen-topBar-footer p-4 rounded-xl border flex flex-col justify-between h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
       >
         <div class="">
           <div class="flex items-center justify-between mb-8">
@@ -79,13 +79,13 @@
                 v-if="!like"
                 name="i-heroicons-heart"
                 class="cursor-pointer"
-                @click="like = !like"
+                @click="addFavorite"
               />
               <UIcon
                 v-if="like"
                 class="text-rose-500 cursor-pointer"
                 name="i-heroicons-heart-16-solid"
-                @click="like = !like"
+                @click="deleteFavorite"
               />
               <UIcon
                 class="text-3xl text-gray-500"
@@ -95,7 +95,7 @@
             </div>
           </div>
 
-          <div class="flex flex-col gap-10">
+          <div class="flex flex-col gap-3">
             <h2
               class="font-bold text-base md:text-2xl text-gray-700 line-clamp-2 hover:line-clamp-none transition-all duration-1000"
             >
@@ -112,32 +112,45 @@
           </div>
         </div>
         <UDivider class="" />
-        <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-3">
           <p
-            class="uppercase text-4xl text-gray-700 whitespace-nowrap leading-tight rounded-xl font-bold tracking-wider"
+            class="uppercase text-3xl text-gray-700 whitespace-nowrap leading-tight rounded-xl font-bold tracking-wider"
           >
             {{ lote.precio!.toString().replace(".", ",") }} usd / lb
           </p>
-          <span v-if="lote.pruebaGratis"class="uppercase font-bold text-stone-700 text-2xl"
-            >Puedes solicitar muestra Gratis.</span
+
+          <div v-if="lote.pruebaGratis" class="solicitar-muestra">
+            <span class="uppercase font-bold text-stone-600 text-1xl"
+              >Puedes solicitar muestra Gratis.</span
             >
-            <span v-if="!lote.pruebaGratis"class="uppercase font-bold text-stone-700 text-2xl"
-            >no posee muestra gratis</span>
+
+            <a>SOLICITAR MUESTRA</a>
+          </div>
+          <span
+            v-if="!lote.pruebaGratis"
+            class="uppercase font-bold text-stone-700 text-2xl"
+            >no posee muestra gratis</span
+          >
         </div>
-        <UButton class="text-center py-2 text-4xl mx-auto justify-center w-full"
-          >OFERTAR</UButton
+        <UButton
+          class="text-center py-2 text-4xl mx-auto justify-center w-full btn-addCart"
+          :disabled="exist === true ? true : false"
+          @click="addCart"
+          >LO QUIERO</UButton
         >
       </div>
       <!-- /card del lote -->
 
       <!-- datos del lote  -->
       <div
-        class="col-span-4 h-screen overflow-hidden p-4 border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl "
+        class="col-span-4 h-screen overflow-hidden p-4 border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl"
       >
-      <LotesAcordion :items="item"/>
+        <LotesAcordion :items="item" />
       </div>
       <!-- ubicación -->
-      <div class="col-span-3 h-screen p-4  border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl ">
+      <div
+        class="col-span-3 h-screen p-4 border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl"
+      >
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d16138252.902658958!2d-85.72576594757281!3d-9.06347592792652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c850c05914f5%3A0xf29e011279210648!2zUGVyw7o!5e0!3m2!1ses!2sve!4v1721330794106!5m2!1ses!2sve"
           class="border-none rounded-md w-full h-full"
@@ -152,32 +165,39 @@
 
 <script lang="ts" setup>
 import BotonPrimary from "~/components/Botones/BotonPrimary.vue";
-import type {Lotes} from "~/interfaces/Lotes";
-import { useRouter } from 'vue-router';
-import {toast} from "vue3-toastify";
+import type { Lotes } from "~/interfaces/Lotes";
+import { useRouter } from "vue-router";
+import { toast } from "vue3-toastify";
+import { useCartStore } from "../../stores/cart";
+import { useUserStore } from "../../stores/user";
+import axios from "axios";
+import { useFavoritosStore } from "~/stores/favoritos";
 
 definePageMeta({
   layout: "lote",
-})
-
+});
 
 const router = useRoute();
-
+const exist = ref(false);
 
 const copiarUrl = () => {
   const url = window.location.href;
-  navigator.clipboard.writeText(url)
+  navigator.clipboard
+    .writeText(url)
     .then(() => {
-      toast.success('¡URL copiada al portapapeles!');
+      toast.success("¡URL copiada al portapapeles!");
     })
-    .catch(err => {
-      toast.error('Error al copiar la URL:', err);
+    .catch((err) => {
+      toast.error("Error al copiar la URL:", err);
     });
 };
 const like = ref(false);
 
 const route = useRoute();
+const useCart = useCartStore();
+const useUser = useUserStore();
 const useLotes = useLotesStore();
+const useFavoritos = useFavoritosStore();
 
 const loadingImg = ref(false);
 
@@ -186,7 +206,6 @@ const lotes: Lotes[] = useLotes.lotes.filter(
 );
 const lote = ref(lotes[0]);
 const galeria = ref();
-
 
 if (lote.value.galeria!.length === 0) {
   galeria.value = [
@@ -211,7 +230,7 @@ if (lote.value.galeria!.length === 0) {
   galeria.value = [
     ...lote.value.galeria!,
     ...Array(4 - lote.value.galeria!.length).fill({
-      id: '',
+      id: "",
       img: "i-heroicons-photo",
       enty: true,
     }),
@@ -220,43 +239,178 @@ if (lote.value.galeria!.length === 0) {
   galeria.value = lote.value.galeria;
 }
 
-
-const item = [{
-  id:"1",
-  label: 'DATOS DEL CAFÉ',
-  slot:'datos',
-  contenido:{
-    origen: lote.value.origen,
-    departamento: lote.value.departamento,
-    variedad: lote.value.variedad,
-    proceso: lote.value.proceso,
-    puntaje: lote.value.puntaje,
-    productor: lote.value.productor!.nombre,
-    perfil: lote.value.perfil,
-    'cantidad del lote': lote.value.cantidadLote,
-    pais: lote.value.pais,
+const item = [
+  {
+    id: "1",
+    label: "DATOS DEL CAFÉ",
+    slot: "datos",
+    contenido: {
+      origen: lote.value.origen,
+      departamento: lote.value.departamento,
+      variedad: lote.value.variedad,
+      proceso: lote.value.proceso,
+      puntaje: lote.value.puntaje,
+      productor: lote.value.productor!.nombre,
+      perfil: lote.value.perfil,
+      "cantidad del lote": lote.value.cantidadLote,
+      pais: lote.value.pais,
+    },
+    isActive: true,
   },
-  isActive: true
-},{ 
-  id:"2",
-  label: 'ANÁLISIS SENSORIAL',
-  slot: 'analisis',
-  contenido: {
-    catador: '-',
-    puntaje: '-',
-    'análisis sensorial': '-',
-    'gráfico araña sensorial': '-',
-  },
-  isActive: true
-},/* {
+  {
+    id: "2",
+    label: "ANÁLISIS SENSORIAL",
+    slot: "analisis",
+    contenido: {
+      catador: "-",
+      puntaje: "-",
+      "análisis sensorial": "-",
+      "gráfico araña sensorial": "-",
+    },
+    isActive: true,
+  } /* {
     id:"3",
     label: 'HISTORIA DEL CAFÉ',
     slot: 'historia',
     contenido: lote.value.descripcion,
     isActive: true
-  }, */
-]
+  }, */,
+];
 
+const existItem = () => {
+  const existItemInCart = useCart.cart.filter(
+    (item) => item._id === lote.value._id
+  );
+
+  return existItemInCart;
+};
+
+const existFav = () => {
+  const existItemInFav = useFavoritos.favoritos.filter(
+    (item: any) => item.loteID === lote.value._id
+  );
+
+  return existItemInFav;
+};
+
+const addCart = async () => {
+  const existInCart = existItem();
+
+  if (existInCart.length > 0) {
+    toast.info("Ya cuenta con este lote en su carrito de compras.");
+  } else {
+    useCart.addItemCart(lote.value);
+    exist.value = true;
+  }
+};
+
+const addFavorite = async () => {
+  try {
+    // @ts-ignore
+    await axios({
+      url: `${import.meta.env.VITE_URL_API}/api/content/item/favoritos`,
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+      },
+
+      data: {
+        data: {
+          loteID: lote.value._id,
+          userID: useUser.dataUser._id,
+        },
+      },
+    }).then((res: any) => {
+      //almacenar en store
+
+      useFavoritos.addItemFavorito({
+        loteID: lote.value._id,
+        userID: useUser.dataUser._id,
+      });
+      like.value = true;
+
+      toast.success("Se ha agregado el lote a su lista de favoritos");
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const deleteFavorite = async () => {
+  const existItemInFav = await useFavoritos.favoritos.filter(
+    (item: any) => item.loteID === lote.value._id
+  );
+
+  console.log(existItemInFav);
+
+  await axios
+    .delete(
+      `${import.meta.env.VITE_URL_API}/api/content/item/favoritos/${
+        existItemInFav[0]._id
+      }`,
+      // @ts-ignore
+      {
+        headers: {
+          "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+        },
+      }
+    )
+    .then((res) => {
+      console.log(res.data);
+      useFavoritos.deleteItemFavorito(existItemInFav[0]._id!);
+      like.value = false;
+
+      toast.success("Se ha eliminado el lote de su lista de favoritos");
+    });
+};
+
+onMounted(() => {
+  if (existItem().length > 0) {
+    exist.value = true;
+  }
+
+  if (existFav().length > 0) {
+    like.value = true;
+  }
+});
+
+watch(useCart.cart, () => {
+  console.log("cambio");
+
+  //no se si sea el nuxt, pero en ocaciones aunque detecta el cambio es como si ese cambio no se a terminado de aplicar en useCart.cart, por eso agregue el timeout, hay que probar si con el build funciona sin problemas y se elimina el tiempo de espera.
+  setTimeout(() => {
+    const existItemInCart = useCart.cart.filter(
+      (item) => item._id === lote.value._id
+    );
+
+    console.log(existItemInCart);
+
+    if (existItemInCart.length == 0) {
+      exist.value = false;
+    }
+  }, 5000);
+});
 </script>
 
-<style></style>
+<style scoped>
+.btn-addCart:disabled {
+  background-color: #cecece;
+}
+
+.solicitar-muestra {
+  display: flex;
+  flex-direction: column;
+
+  span {
+  }
+
+  a {
+    font-size: 1em;
+    text-align: left;
+    width: fit-content;
+    margin-bottom: 0.5rem;
+    text-decoration: underline;
+  }
+}
+</style>

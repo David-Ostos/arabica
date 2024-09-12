@@ -1,23 +1,39 @@
 <template>
-	<div v-if="item" class="relative mx-auto w-auto">
-		<NuxtLink :to="`/lote/${item._id}`"
-			class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
-			<div class="shadow p-4 rounded-lg bg-white">
-				<div class="flex justify-center relative rounded-lg overflow-hidden h-52">
-					<div class="transition-transform duration-500 transform ease-in-out hover:scale-110 w-full">
-						<div v-if=" item.galeria && item.galeria.length === 0"
-							class="absolute inset-0 bg-black opacity-10 flex justify-center items-center">
-							<UIcon name="i-heroicons-photo" class="text-white text-[150px]" />
-						</div>
-						<div v-else class="absolute inset-0 ">
-							<USkeleton v-if="loadingImg" class="w-full h-full" :ui="{
-								background: 'bg-secundary'
-							}" />
-							<img :src="item.galeria![0].link" alt="" @load="loadingImg = false"/>
-						</div>
-					</div>
+  <div v-if="item" class="relative mx-auto w-auto">
+    <NuxtLink
+      :to="`/lote/${item._id}`"
+      class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full"
+    >
+      <div class="shadow p-4 rounded-lg bg-white">
+        <div
+          class="flex justify-center relative rounded-lg overflow-hidden h-52"
+        >
+          <div
+            class="transition-transform duration-500 transform ease-in-out hover:scale-110 w-full"
+          >
+            <div
+              v-if="item.galeria && item.galeria.length === 0"
+              class="absolute inset-0 bg-black opacity-10 flex justify-center items-center"
+            >
+              <UIcon name="i-heroicons-photo" class="text-white text-[150px]" />
+            </div>
+            <div v-else class="absolute inset-0">
+              <USkeleton
+                v-if="loadingImg"
+                class="w-full h-full"
+                :ui="{
+                  background: 'bg-secundary',
+                }"
+              />
+              <img
+                :src="item.galeria![0].link"
+                alt=""
+                @load="loadingImg = false"
+              />
+            </div>
+          </div>
 
-					<!-- <div class="absolute flex justify-center bottom-0 mb-3">
+          <!-- <div class="absolute flex justify-center bottom-0 mb-3">
 			<div class="flex bg-white px-4 py-1 space-x-5 rounded-lg overflow-hidden shadow">
 			  <p class="flex items-center font-medium text-gray-800">
 				<svg class="w-5 h-5 fill-current mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M480,226.15V80a48,48,0,0,0-48-48H80A48,48,0,0,0,32,80V226.15C13.74,231,0,246.89,0,266.67V472a8,8,0,0,0,8,8H24a8,8,0,0,0,8-8V416H480v56a8,8,0,0,0,8,8h16a8,8,0,0,0,8-8V266.67C512,246.89,498.26,231,480,226.15ZM64,192a32,32,0,0,1,32-32H208a32,32,0,0,1,32,32v32H64Zm384,32H272V192a32,32,0,0,1,32-32H416a32,32,0,0,1,32,32ZM80,64H432a16,16,0,0,1,16,16v56.9a63.27,63.27,0,0,0-32-8.9H304a63.9,63.9,0,0,0-48,21.71A63.9,63.9,0,0,0,208,128H96a63.27,63.27,0,0,0-32,8.9V80A16,16,0,0,1,80,64ZM32,384V266.67A10.69,10.69,0,0,1,42.67,256H469.33A10.69,10.69,0,0,1,480,266.67V384Z"></path></svg>
@@ -36,104 +52,128 @@
 			</div>
 		  </div> -->
 
-					<span
-						class="absolute top-0 left-0 inline-flex mt-3 ml-3 px-3 py-2 rounded-lg z-10 bg-red-500 text-sm font-medium text-white select-none">
-						Destacado
-					</span>
-				</div>
+          <span
+            class="absolute top-0 left-0 inline-flex mt-3 ml-3 px-3 py-2 rounded-lg z-10 bg-red-500 text-sm font-medium text-white select-none"
+          >
+            Destacado
+          </span>
+        </div>
 
-				<div class="mt-2 mb-1 h-[84px] transition-all duration-1000">
+        <div class="mt-2 mb-1 h-[90px] transition-all duration-1000">
+          <UTooltip
+            :text="item.nombre"
+            :popper="{ placement: 'bottom-end' }"
+            :ui="{
+              background: 'bg-dark',
+              color: 'text-white',
+            }"
+          >
+            <h2
+              class="font-bold text-base md:text-lg text-gray-600 transition-all duration-1000"
+            >
+              {{ item.nombre }}
+            </h2>
+          </UTooltip>
+          <div
+            class="font-medium items-center text-sm truncate text-gray-700 transition-all duration-600"
+          >
+            <div class="flex gap-1">
+              <p class="mb-2">
+                {{ item.productor!.nombre }}
+              </p>
+              <UIcon
+                name="i-heroicons-check-badge-20-solid"
+                class="text-base text-primary-500"
+              />
+            </div>
+          </div>
+          <div>
+            <div
+              v-if="item.pruebaGratis"
+              class="text-primary-600 hover:text-primary-700 items-center w-full flex text-xs"
+            >
+              <UIcon name="i-heroicons-check-20-solid" class="text-lg" />
+              <p class="uppercase">Muestra gratis disponible</p>
+            </div>
+            <div
+              v-else
+              class="text-red-600 hover:text-red-700 font-bold flex items-center text-xs"
+            >
+              <UIcon name="i-heroicons-x-circle-20-solid" class="text-lg" />
+              <p class="uppercase">Muestra gratis no disponible</p>
+            </div>
+          </div>
+        </div>
+        <div v-for="campo in campos" class="border-t pt-2">
+          <div class="pb-4">
+            <p
+              v-for="key in Object.keys(campo)"
+              class="flex justify-between p-2 text-sm text-gray-700 capitalize"
+            >
+              <span class="mt-2 xl:mt-0 font-bold"> {{ key }}: </span>
+              <span>{{ campo[key].nombre }}</span>
+            </p>
+          </div>
+          <div class="grid grid-cols-2 pt-4 border-t">
+            <div class="flex items-center">
+              <div class="relative">
+                <Avatar
+                  :picture="
+                    useUser.dataUser.picture ? useUser.dataUser.picture : ''
+                  "
+                />
+              </div>
+            </div>
 
-					<UTooltip :text="item.nombre" :popper="{ placement: 'bottom-end' }" :ui="{
-						background: 'bg-dark',
-						color: 'text-white'
-					}" >
-						<h2
-							class="font-bold text-base md:text-lg text-gray-700 truncate  transition-all duration-1000">
-							{{ item.nombre }}
-						</h2>
-					</UTooltip>
-					<div class=" font-medium items-center text-sm truncate text-gray-700  transition-all duration-600">
-
-						<div class="flex gap-1 ">
-							<p class="mb-2 ">
-								{{ item.productor!.nombre }} 
-							</p>
-							<UIcon name="i-heroicons-check-badge-20-solid" class="text-base text-primary-500" />
-						</div>
-					
-					</div>
-					<div>
-							<div v-if="item.pruebaGratis" class=" text-primary-600 hover:text-primary-700 items-center  w-full flex text-xs">
-								<UIcon name="i-heroicons-check-20-solid" class="text-lg" />
-								<p class="uppercase">Muestra gratis disponible</p>
-							</div>
-							<div v-else class=" text-red-600 hover:text-red-700 font-bold flex items-center text-xs">
-								<UIcon name="i-heroicons-x-circle-20-solid" class="text-lg" />
-								<p class="uppercase">Muestra gratis no disponible</p>
-							</div>
-						</div>
-				</div>
-				<div v-for="campo in campos" class="border-t pt-2"> 
-					<div class="pb-4">
-						<p v-for="key in Object.keys(campo)" class="flex justify-between p-2 text-sm text-gray-700 capitalize">
-							<span class="mt-2 xl:mt-0 font-bold">
-								{{ key }}:
-							</span>
-							<span >{{ campo[key].nombre }}</span>
-						</p>
-					</div>
-					<div class="grid grid-cols-2 pt-4 border-t">
-						<div class="flex items-center">
-							<div class="relative">
-								<Avatar :picture="useUser.dataUser.picture ? useUser.dataUser.picture : ''"/>
-							</div>
-	
-						</div>
-	
-						<div class="flex justify-end  ">
-							<p class="inline-block font-semibold text-gray-700 whitespace-nowrap leading-tight rounded-xl">
-								<span class="text-xl uppercase"> $ </span>
-								<span class="text-xl">{{ item.precio!.toString().replace('.', ',') }} USD/<b class="text-base">kg</b></span>
-							</p>
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</NuxtLink>
-	</div>
+            <div class="flex justify-end">
+              <p
+                class="inline-block font-semibold text-gray-700 whitespace-nowrap leading-tight rounded-xl"
+              >
+                <span class="text-xl uppercase"> $ </span>
+                <span class="text-xl"
+                  >{{ item.precio!.toString().replace(".", ",") }} USD/<b
+                    class="text-base"
+                    >kg</b
+                  ></span
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </NuxtLink>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import type { Lotes } from "~/interfaces/Lotes";
-const useUser = useUserStore()
+const useUser = useUserStore();
 const props = defineProps<{ item: Lotes }>();
 const campos = ref();
 
-const loadingImg = ref(true)
+const loadingImg = ref(true);
 
 onMounted(() => {
-	campos.value = [
-		{
-			origen: {
-				icon: "",
-				nombre: props.item.origen,
-			},
-			proceso: {
-				icon: "",
-				nombre: props.item.proceso,
-			},
-			puntaje: {
-				icon: "",
-				nombre: props.item.puntaje,
-			},
-			cantidad: {
-				icon: "",
-				nombre: props.item.cantidadLote,
-			},
-		},
-	];
+  campos.value = [
+    {
+      origen: {
+        icon: "",
+        nombre: props.item.origen,
+      },
+      proceso: {
+        icon: "",
+        nombre: props.item.proceso,
+      },
+      puntaje: {
+        icon: "",
+        nombre: props.item.puntaje,
+      },
+      cantidad: {
+        icon: "",
+        nombre: props.item.cantidadLote,
+      },
+    },
+  ];
 });
 </script>
 

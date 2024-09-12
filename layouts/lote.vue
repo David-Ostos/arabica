@@ -1,16 +1,32 @@
 <script lang="ts" setup>
-import {ref} from "vue";
-import {useGlobalStore} from "~/stores/global";
+import { ref } from "vue";
+import { useGlobalStore } from "~/stores/global";
+
 import imgLoginLitgh from "~/public/img/logo_ligth_new.png";
 import BotonSecondary from "~/components/Botones/BotonSecondary.vue";
 import BotonPrimary from "~/components/Botones/BotonPrimary.vue";
+import Cart from "~/components/Cart/Cart.vue";
+import { useCartStore } from "~/stores/cart";
 
 const useGlobal = useGlobalStore();
 const useUser = useUserStore();
+const useCart = useCartStore();
+
+//problema logged en false
+/* console.log(useUser); */
+
+const typeUser = useUser.dataUser.tipoUser;
+const showCart = ref(false);
+const loggedTem = true;
 
 const scrolled = ref(false);
 const nav1 = ref();
 const mobileMenuOpen = ref(false);
+
+const activeCart = () => {
+  //activar modal cart
+  showCart.value = !showCart.value;
+};
 
 const items = [
   {
@@ -68,7 +84,7 @@ function handleScroll() {
 </script>
 
 <template>
-  <div class="mt-16">
+  <div class="mt-20">
     <div class="relative z-50">
       <header
         ref="nav1"
@@ -83,7 +99,7 @@ function handleScroll() {
               <img
                 class="h-14 w-auto"
                 :src="imgLoginLitgh"
-                :class="{hidden: mobileMenuOpen === true}"
+                :class="{ hidden: mobileMenuOpen === true }"
                 alt="Logo Arabica"
               />
             </NuxtLink>
@@ -92,6 +108,28 @@ function handleScroll() {
           <SearchComprador />
 
           <ul class="flex gap-4">
+            <li v-if="!loggedTem">
+              <BotonSecondary link="/auth/login" contenido="Iniciar Sesión" />
+            </li>
+            <li v-if="loggedTem" class="container-options">
+              <BotonSecondary
+                :link="`/dashboard/${useUser.dataUser.tipoUser}`"
+                contenido="Panel de Control"
+              />
+
+              <button
+                v-if="typeUser == 'comprador'"
+                class="button-cart"
+                @click="activeCart"
+              >
+                <span class="count-cart" v-if="useCart.cart.length > 0">{{
+                  useCart.cart.length
+                }}</span>
+                <span class="i-heroicons-shopping-cart"></span>
+              </button>
+            </li>
+          </ul>
+          <!-- <ul class="flex gap-4">
             <li v-if="!useUser.logged">
               <BotonSecondary link="/auth/login" contenido="Iniciar Sesión" />
             </li>
@@ -101,14 +139,55 @@ function handleScroll() {
                 contenido="Panel de Control"
               />
             </li>
-          </ul>
+          </ul> -->
         </div>
       </header>
     </div>
+
+    <Cart v-if="showCart" />
 
     <slot />
     <ProductorFooter />
   </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+.container-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.button-cart {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(74, 222, 128);
+  padding: 0.5rem;
+  border: 3px solid rgb(74, 222, 128);
+  border-radius: 12px;
+  color: white;
+
+  &:hover {
+    background-color: #fff;
+    color: rgb(74, 222, 128);
+  }
+}
+
+.count-cart {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: rgb(125, 240, 167);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+</style>
