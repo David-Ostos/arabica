@@ -42,8 +42,6 @@ import imgLoginLitgh from "~/public/img/logo_ligth_new.png";
 const useGlobal = useGlobalStore();
 const useUser = useUserStore();
 
-console.log(useUser.dataUser);
-
 const nav1 = ref();
 
 const items = [

@@ -6,7 +6,7 @@
     >
       <div class="shadow p-4 rounded-lg bg-white">
         <div
-          class="flex justify-center relative rounded-lg overflow-hidden h-52"
+          class="flex justify-center relative rounded-lg overflow-hidden h-40"
         >
           <div
             class="transition-transform duration-500 transform ease-in-out hover:scale-110 w-full"
@@ -59,7 +59,20 @@
           </span>
         </div>
 
-        <div class="mt-2 mb-1 h-[90px] transition-all duration-1000">
+        <div class="mt-1 mb-1 transition-all duration-1000">
+          <UTooltip
+            :text="item.nombre"
+            :popper="{ placement: 'right-end' }"
+            :ui="{
+              background: 'bg-dark',
+              color: 'text-white',
+            }"
+          >
+            <h2 class="text-gray-600 transition-all duration-1000 title-id">
+              <span class="font-bold text-base text-gray-600">ID: </span>
+              {{ item._id }}
+            </h2>
+          </UTooltip>
           <UTooltip
             :text="item.nombre"
             :popper="{ placement: 'bottom-end' }"
@@ -114,8 +127,8 @@
               <span>{{ campo[key].nombre }}</span>
             </p>
           </div>
-          <div class="grid grid-cols-2 pt-4 border-t">
-            <div class="flex items-center">
+          <div class="grid grid-cols-1 pt-4 border-t">
+            <!-- <div class="flex items-center">
               <div class="relative">
                 <Avatar
                   :picture="
@@ -123,9 +136,9 @@
                   "
                 />
               </div>
-            </div>
+            </div> -->
 
-            <div class="flex justify-end">
+            <div class="flex justify-end wrap-footer">
               <p
                 class="inline-block font-semibold text-gray-700 whitespace-nowrap leading-tight rounded-xl"
               >
@@ -137,6 +150,8 @@
                   ></span
                 >
               </p>
+
+              <p class="block">En origen</p>
             </div>
           </div>
         </div>
@@ -152,6 +167,8 @@ const props = defineProps<{ item: Lotes }>();
 const campos = ref();
 
 const loadingImg = ref(true);
+
+console.log(props.item);
 
 onMounted(() => {
   campos.value = [
@@ -177,4 +194,16 @@ onMounted(() => {
 });
 </script>
 
-<style></style>
+<style>
+.title-id {
+  font-size: 0.8em;
+}
+
+.wrap-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: end;
+  align-items: end;
+}
+</style>

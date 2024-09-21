@@ -342,8 +342,6 @@ const deleteFavorite = async () => {
     (item: any) => item.loteID === lote.value._id
   );
 
-  console.log(existItemInFav);
-
   await axios
     .delete(
       `${import.meta.env.VITE_URL_API}/api/content/item/favoritos/${
@@ -357,7 +355,6 @@ const deleteFavorite = async () => {
       }
     )
     .then((res) => {
-      console.log(res.data);
       useFavoritos.deleteItemFavorito(existItemInFav[0]._id!);
       like.value = false;
 
@@ -376,20 +373,16 @@ onMounted(() => {
 });
 
 watch(useCart.cart, () => {
-  console.log("cambio");
-
   //no se si sea el nuxt, pero en ocaciones aunque detecta el cambio es como si ese cambio no se a terminado de aplicar en useCart.cart, por eso agregue el timeout, hay que probar si con el build funciona sin problemas y se elimina el tiempo de espera.
   setTimeout(() => {
     const existItemInCart = useCart.cart.filter(
       (item) => item._id === lote.value._id
     );
 
-    console.log(existItemInCart);
-
     if (existItemInCart.length == 0) {
       exist.value = false;
     }
-  }, 5000);
+  }, 3000);
 });
 </script>
 

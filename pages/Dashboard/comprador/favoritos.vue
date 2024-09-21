@@ -10,7 +10,6 @@ const useFavoritos = useFavoritosStore();
 const getFavorites = async () => {
   if (favIDs.value.length > 0) {
     for (let i of favIDs.value) {
-      console.log(i);
       await axios
         .get(
           `${import.meta.env.VITE_URL_API}/api/content/item/lotes/${i.loteID}`,
@@ -28,7 +27,6 @@ const getFavorites = async () => {
 };
 
 onMounted(() => {
-  console.log(useFavoritos.favoritos);
   favIDs.value = useFavoritos.favoritos;
 
   if (favIDs.value.length > 0) {

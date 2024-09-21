@@ -17,7 +17,6 @@ export const useFavoritosStore = defineStore("favoritos", () => {
   }
 
   async function getFavoritos(id: string) {
-    console.log(id);
     if (!id) return;
     try {
       await axios
@@ -33,7 +32,6 @@ export const useFavoritosStore = defineStore("favoritos", () => {
         )
         .then(async (res) => {
           favoritos.value = res.data;
-          console.log(favoritos.value);
         });
     } catch (err) {
       console.log(err);

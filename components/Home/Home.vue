@@ -166,7 +166,7 @@ const links = [
     to: "/about",
     popover: false,
   },{
-    label: "Lotes de cadé",
+    label: "Lotes de café",
     to: "/lotes",
     popover: false,
   },

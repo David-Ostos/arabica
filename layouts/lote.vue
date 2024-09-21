@@ -84,7 +84,7 @@ function handleScroll() {
 </script>
 
 <template>
-  <div class="mt-20">
+  <div class="mt-14">
     <div class="relative z-50">
       <header
         ref="nav1"
