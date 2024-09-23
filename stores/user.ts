@@ -1,5 +1,5 @@
-import type {User} from "~/interfaces/Users";
-import {useProductorStore} from "./productor";
+import type { User } from "~/interfaces/Users";
+import { useProductorStore } from "./productor";
 import type { localStoreDataUser } from "~/interfaces/localStore.dataUser";
 import type { LotesProductor } from "~/interfaces/PerfilProductor";
 import type { Lotes } from "~/interfaces/Lotes";
@@ -8,8 +8,8 @@ import { toast } from "vue3-toastify";
 export const useUserStore = defineStore("user", () => {
   const router = useRouter();
   const useProductor = useProductorStore();
-  const useComprador = useCompradorStore()
-  const useLotes = useLotesStore()
+  const useComprador = useCompradorStore();
+  const useLotes = useLotesStore();
 
   const dataUser = ref({} as User);
   const logged = ref(false);
@@ -33,19 +33,21 @@ export const useUserStore = defineStore("user", () => {
               headers: {
                 "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
               },
-            },
+            }
           );
 
-          const dataUserFetch  = (await peticionUser.json())[0];
-          if(!dataUserFetch) {
-            toast.error("Usuario no encontrado",{
-              onClose:() => {
+          const dataUserFetch = (await peticionUser.json())[0];
+          if (!dataUserFetch) {
+            toast.error("Usuario no encontrado", {
+              onClose: () => {
                 localStorage.clear();
-                router.push('/')
+                router.push("/");
               },
             });
           }
-          
+
+          console.log(dataUserFetch);
+
           dataUserSaved = {
             email: dataUserFetch.email,
             logged: true,
@@ -54,18 +56,21 @@ export const useUserStore = defineStore("user", () => {
             verificado: dataUserFetch.verificado,
             perfilBase: dataUserFetch.perfilBase,
             perfilCompleto: dataUserFetch.perfilCompleto,
-          }
+          };
           localStorage.clear();
-          localStorage.setItem('dataUser', JSON.stringify(dataUserSaved))
+          localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
 
           if (dataUserFetch.perfilProductor !== null) {
-
           }
 
           if (dataUserFetch === undefined) {
             return false;
           }
-          if (dataUserFetch?.email !== undefined && dataUserFetch?.PerfilProductor) {
+          if (
+            dataUserFetch?.email !== undefined &&
+            dataUserFetch?.perfilProductor
+          ) {
+            console.log("entro en productor");
             delete dataUserFetch.perfilProductor._state;
             delete dataUserFetch.perfilProductor._modified;
             delete dataUserFetch.perfilProductor._mby;
@@ -75,13 +80,18 @@ export const useUserStore = defineStore("user", () => {
             delete dataUserFetch.perfilProductor.idUsuario;
             logged.value = true;
             console.log(dataUserFetch);
-              useProductor.perfilProductor = {
-                ...dataUserFetch.perfilProductor,
-              };
-              delete dataUserFetch.perfilProductor;
+            useProductor.perfilProductor = {
+              ...dataUserFetch.perfilProductor,
+            };
+
+            console.log(useProductor.perfilProductor);
+            delete dataUserFetch.perfilProductor;
           }
 
-          if (dataUserFetch?.email !== undefined && dataUserFetch?.perfilComprador) {
+          if (
+            dataUserFetch?.email !== undefined &&
+            dataUserFetch?.perfilComprador
+          ) {
             delete dataUserFetch.perfilComprador._state;
             delete dataUserFetch.perfilComprador._modified;
             delete dataUserFetch.perfilComprador._mby;
@@ -91,18 +101,16 @@ export const useUserStore = defineStore("user", () => {
             delete dataUserFetch.perfilComprador.idUsuario;
             logged.value = true;
             console.log(dataUserFetch);
-              useComprador.perfilComprador = {
-                ...dataUserFetch.perfilComprador,
-              };
-              delete dataUserFetch.perfilComprador;
+            useComprador.perfilComprador = {
+              ...dataUserFetch.perfilComprador,
+            };
+            delete dataUserFetch.perfilComprador;
           }
 
-            dataUser.value = {
-              ...dataUserFetch,
-            };
+          dataUser.value = {
+            ...dataUserFetch,
+          };
           console.log(dataUser.value);
-
-
         } catch (error) {
           console.log(error);
         }
@@ -124,20 +132,19 @@ export const useUserStore = defineStore("user", () => {
 
   const logout = () => {
     dataUser.value = {} as User;
-    useProductor.perfilProductor = {}
-    useProductor.lotes = [] as LotesProductor
-    useLotes.lotes = [] as Lotes[]
+    useProductor.perfilProductor = {};
+    useProductor.lotes = [] as LotesProductor;
+    useLotes.lotes = [] as Lotes[];
     localStorage.clear();
     logged.value = false;
-    toast.info('Has cerrado seción', {
+    toast.info("Has cerrado seción", {
       onClose: (event) => {
         router.push("/");
         setTimeout(() => {
-          window.location.reload()
-        },5000);
-          
+          window.location.reload();
+        }, 5000);
       },
-    })
+    });
   };
 
   return {
