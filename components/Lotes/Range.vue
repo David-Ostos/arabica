@@ -22,20 +22,11 @@ const props = defineProps({
 
 const emit = defineEmits(["rangeValue"]);
 
-const fromValue = ref<number>(props.min);
-const toValue = ref<number>(props.max);
+const fromValue = ref<number>(Number(props.value[0]));
+const toValue = ref<number>(Number(props.value[1]));
 
-const dragging = ref(null);
-const showTooltip = ref(false);
 const fromTooltipPosition = ref(0);
 const toTooltipPosition = ref(0);
-
-/* const showFromTooltip = computed(
-  () => showTooltip.value && dragging.value === "from"
-);
-const showToTooltip = computed(
-  () => showTooltip.value && dragging.value === "to"
-); */
 
 watch(fromValue, (newValue) => {
   if (newValue > toValue.value) {
@@ -71,7 +62,7 @@ watch(toValue, (newValue) => {
         :value="fromValue"
         :min="min"
         :max="max"
-        @input="fromValue = parseInt($event.target.value)"
+        @input="fromValue = parseInt($event.target?.value)"
       />
 
       <input
@@ -80,7 +71,7 @@ watch(toValue, (newValue) => {
         :value="toValue"
         :min="min"
         :max="max"
-        @input="toValue = parseInt($event.target.value)"
+        @input="toValue = parseInt($event.target?.value)"
       />
     </div>
   </div>
@@ -168,14 +159,14 @@ input[type="range"] {
 
 .tooltip {
   position: absolute;
-  top: -30px; /* Ajusta según sea necesario para posicionar encima del círculo */
+  top: -30px;
   left: 0;
   background-color: #333;
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 12px;
-  transform: translateX(-50%); /* Centra horizontalmente */
+  transform: translateX(-50%);
 
   transition: opacity 0.2s;
 }

@@ -40,7 +40,7 @@
     <div
       class="relative transition-width ease-in-out duration-700 shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white border-r border-inset border-gray-300 dark:border-gray-700 focus:border-2 focus:border-primary-500 dark:focus:border-primary-400 py-5 px-4"
       :class="[
-        isOpen ? ' w-1/4' : ' w-[5%]',
+        isOpen ? ' w-1/4' : ' w-[6%]',
         useLotes.lotes.length > 0 ? ' w-1/3' : 'w-1/4',
       ]"
     >
@@ -59,6 +59,7 @@
           :filtersSearch="filtersSearch"
           :filterActive="filtersActive"
           @filter-changed="handleFilterChange"
+          @clean="cleanFilter"
         />
       </div>
     </div>
@@ -86,6 +87,16 @@
           >
             <LotesCard :item="item" />
           </div>
+        </div>
+
+        <div
+          v-if="
+            filtersActive == false
+              ? useLotes.lotes.length == 0
+              : lotesFilter.length == 0
+          "
+        >
+          <p>No hay lotes disponibles</p>
         </div>
       </div>
     </div>
@@ -161,6 +172,28 @@ const applyFilter = () => {
       }
     }
 
+    if (filtersSearch.value.process && filtersSearch.value.process.length > 0) {
+      if (lote.proceso! == null) {
+        return;
+      }
+
+      return filtersSearch.value.process
+        .map((processo) => processo.toLowerCase())
+        .includes(lote.proceso!.toLowerCase());
+    }
+    if (
+      filtersSearch.value.certifications &&
+      filtersSearch.value.certifications.length > 0
+    ) {
+      if (lote.certificaciones! == null) {
+        return;
+      }
+
+      return filtersSearch.value.certifications
+        .map((cert) => cert.toLowerCase())
+        .includes(lote.certificaciones!.toLowerCase());
+    }
+
     if (filtersSearch.value.points !== undefined) {
       const numeros = lote.puntaje!.match(/\d+/g);
 
@@ -212,6 +245,19 @@ const handleOriginFilter = (param: string) => {
     filtersActive.value = true;
     applyFilter();
   }
+};
+
+const cleanFilter = () => {
+  filtersSearch.value = {
+    samplesAvailable: undefined,
+    origin: undefined,
+    points: undefined,
+    price: undefined,
+    certifications: undefined,
+    process: undefined,
+  };
+
+  filtersActive.value = false;
 };
 </script>
 

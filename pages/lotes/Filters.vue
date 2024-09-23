@@ -4,6 +4,7 @@ import type { FiltersSearch } from "~/interfaces/FiltersSearch";
 
 const emit = defineEmits<{
   (e: "filter-changed", filters: any): void;
+  (e: "clean"): void;
 }>();
 
 const props = defineProps({
@@ -24,39 +25,26 @@ const props = defineProps({
 
 interface Filters {
   origin: boolean;
-  bags: boolean;
   points: boolean;
   price: boolean;
-  identification: boolean;
   process: boolean;
   certifications: boolean;
-  month: boolean;
-  species: boolean;
-  taste: boolean;
-  acidity: boolean;
 }
 
-watch(
+/* watch(
   () => props.filtersSearch,
   (val, oldVal) => {
     console.log(val);
-    console.log(oldVal);
   },
   { deep: true }
-);
+); */
 
 const filtersShowActive = ref<Filters>({
   origin: false,
-  bags: false,
   points: false,
   price: false,
-  identification: false,
-  month: false,
-  species: false,
-  taste: false,
   process: false,
   certifications: false,
-  acidity: false,
 });
 
 const handleShowFilter = (param: keyof Filters) => {
@@ -72,6 +60,24 @@ const handleFilter = (param: string, value: any = undefined) => {
   }
 
   emit("filter-changed", updatedFilters);
+};
+
+const existProcess = (param: string) => {
+  if (props.filtersSearch.process && props.filtersSearch.process.length > 0) {
+    return props.filtersSearch.process.includes(param);
+  } else {
+    return false;
+  }
+};
+const existCert = (param: string) => {
+  if (
+    props.filtersSearch.certifications &&
+    props.filtersSearch.certifications.length > 0
+  ) {
+    return props.filtersSearch.certifications.includes(param);
+  } else {
+    return false;
+  }
 };
 
 const activeFilters: any = computed(() => {
@@ -95,6 +101,72 @@ const handleRangePoints = (value: any) => {
 const handleRangePrice = (value: any) => {
   handleFilter("price", value);
 };
+
+const handlerCheckProcess = (process: string) => {
+  let value;
+  let processActive = existProcess(process);
+
+  if (props.filtersSearch.process && props.filtersSearch.process.length > 0) {
+    value = [...props.filtersSearch.process];
+  } else {
+    value = [];
+  }
+
+  if (processActive == false) {
+    value.push(process);
+  } else {
+    value = props.filtersSearch.process.filter(
+      (item: string) => item != process
+    );
+  }
+
+  if (value.length == 0) {
+    value = undefined;
+  }
+
+  handleFilter("process", value);
+};
+const handlerCheckCertification = (cert: string) => {
+  let value;
+  let certActive = existCert(cert);
+
+  if (
+    props.filtersSearch.certifications &&
+    props.filtersSearch.certifications.length > 0
+  ) {
+    value = [...props.filtersSearch.certifications];
+  } else {
+    value = [];
+  }
+
+  console.log(certActive);
+  if (certActive == false) {
+    value.push(cert);
+  } else {
+    value = props.filtersSearch.certifications.filter(
+      (item: string) => item != cert
+    );
+    console.log(value);
+  }
+
+  if (value.length == 0) {
+    value = undefined;
+  }
+
+  handleFilter("certifications", value);
+};
+
+const cleanFilters = () => {
+  emit("clean");
+
+  filtersShowActive.value = {
+    origin: false,
+    points: false,
+    price: false,
+    process: false,
+    certifications: false,
+  };
+};
 </script>
 
 <template>
@@ -104,15 +176,31 @@ const handleRangePrice = (value: any) => {
       <div class="border-t"></div>
       <div class="container-filter-actives">
         <h3 class="filter-actives">Filtros activos:</h3>
-        <ul>
-          <li v-for="(value, key) in activeFilters" :key="key">
+        <ul class="container-item-filter">
+          <li
+            v-for="(value, key) in activeFilters"
+            :key="key"
+            class="item-filter-active"
+          >
             <p v-if="String(key) == 'samplesAvailable'">
               {{ "Muestras disponibles:" }}
             </p>
             <p v-if="String(key) == 'origin'">
               {{ "Origen:" }}
             </p>
-            <!-- {{ key }}: -->
+            <p v-if="String(key) == 'points'">
+              {{ "Puntaje:" }}
+            </p>
+            <p v-if="String(key) == 'price'">
+              {{ "Precio:" }}
+            </p>
+            <p v-if="String(key) == 'process'">
+              {{ "Proceso:" }}
+            </p>
+            <p v-if="String(key) == 'certifications'">
+              {{ "Certificaciones:" }}
+            </p>
+
             <span v-if="Array.isArray(value)">
               {{ value.join(", ") }}
             </span>
@@ -125,6 +213,10 @@ const handleRangePrice = (value: any) => {
           </li>
         </ul>
       </div>
+
+      <button @click="cleanFilters" class="clean-filter">
+        Limpiar filtros
+      </button>
     </div>
 
     <div class="border-t"></div>
@@ -144,25 +236,6 @@ const handleRangePrice = (value: any) => {
         <label>Muestras disponibles</label>
       </div>
     </div>
-
-    <!-- <div class="container-check">
-      <input type="checkbox" />
-      <div class="check-box">
-        <label>En envió compartido</label>
-        <span
-          >Para pedidos de menos de 50 bolsas, sugerimos utilizar Envíos
-          compartidos. <a>Mas información</a></span
-        >
-      </div>
-    </div>
-
-    <div class="container-check">
-      <input type="checkbox" />
-
-      <div class="check-box">
-        <label>Spot y a flote</label>
-      </div>
-    </div> -->
 
     <div class="border-t"></div>
 
@@ -193,27 +266,6 @@ const handleRangePrice = (value: any) => {
 
     <div class="border-t"></div>
 
-    <!-- <div class="container-filters-box">
-      <div class="header-filter-title">
-        <h3>BOLSAS REQUERIDAS</h3>
-        <button v-if="filtersShowActive.bags" @click="handleShowFilter('bags')">
-          <span class="i-heroicons-minus"></span>
-        </button>
-        <button v-else @click="handleShowFilter('bags')">
-          <span class="i-heroicons-plus"></span>
-        </button>
-      </div>
-
-      <div v-if="filtersShowActive.bags" class="flex gap-5 bags-required">
-        <button>1-5</button>
-        <button>6-10</button>
-        <button>11-20</button>
-        <button>21-50</button>
-      </div>
-    </div>
-
-    <div class="border-t"></div> -->
-
     <div class="container-filters-box">
       <div class="header-filter-title">
         <h3>PUNTAJE</h3>
@@ -229,7 +281,16 @@ const handleRangePrice = (value: any) => {
       </div>
 
       <div v-if="filtersShowActive.points" class="flex">
-        <Range @rangeValue="handleRangePoints" :min="70" :max="90" />
+        <Range
+          @rangeValue="handleRangePoints"
+          :min="70"
+          :max="90"
+          :value="
+            props.filtersSearch.points == undefined
+              ? [70, 90]
+              : props.filtersSearch.points
+          "
+        />
       </div>
     </div>
     <div class="border-t"></div>
@@ -249,115 +310,19 @@ const handleRangePrice = (value: any) => {
       </div>
 
       <div v-if="filtersShowActive.price" class="flex gap-5 bags-required">
-        <Range :min="0" :max="20" @rangeValue="handleRangePrice" />
+        <Range
+          :min="0"
+          :max="20"
+          :value="
+            props.filtersSearch.price == undefined
+              ? [0, 20]
+              : props.filtersSearch.price
+          "
+          @rangeValue="handleRangePrice"
+        />
       </div>
     </div>
     <div class="border-t"></div>
-
-    <!-- <div class="container-filters-box">
-      <div class="header-filter-title">
-        <h3>IDENTIFICACIÓN DEL LOTE</h3>
-        <button
-          v-if="filtersShowActive.identification"
-          @click="handleShowFilter('identification')"
-        >
-          <span class="i-heroicons-minus"></span>
-        </button>
-        <button v-else @click="handleShowFilter('identification')">
-          <span class="i-heroicons-plus"></span>
-        </button>
-      </div>
-
-      <div v-if="filtersShowActive.identification" class="flex">
-        <input type="text" />
-      </div>
-    </div>
-    <div class="border-t"></div> -->
-
-    <!-- <div class="container-filters-box">
-      <div class="header-filter-title">
-        <h3>MES DE LLEGADA</h3>
-        <button
-          v-if="filtersShowActive.month"
-          @click="handleShowFilter('month')"
-        >
-          <span class="i-heroicons-minus"></span>
-        </button>
-        <button v-else @click="handleShowFilter('month')">
-          <span class="i-heroicons-plus"></span>
-        </button>
-      </div>
-
-      <div v-if="filtersShowActive.month" class="flex">
-        <input type="text" />
-      </div>
-    </div>
-    <div class="border-t"></div> -->
-
-    <!-- <div class="container-filters-box">
-      <div class="header-filter-title">
-        <h3>ESPECIES</h3>
-        <button
-          v-if="filtersShowActive.species"
-          @click="handleShowFilter('species')"
-        >
-          <span class="i-heroicons-minus"></span>
-        </button>
-        <button v-else @click="handleShowFilter('species')">
-          <span class="i-heroicons-plus"></span>
-        </button>
-      </div>
-
-      <div v-if="filtersShowActive.species" class="flex">
-        <div class="container-check">
-          <input type="checkbox" />
-          <div class="check-box">
-            <label>Arabica</label>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="border-t"></div> -->
-
-    <!-- <div class="container-filters-box">
-      <div class="header-filter-title">
-        <h3>SABOR</h3>
-        <button
-          v-if="filtersShowActive.taste"
-          @click="handleShowFilter('taste')"
-        >
-          <span class="i-heroicons-minus"></span>
-        </button>
-        <button v-else @click="handleShowFilter('taste')">
-          <span class="i-heroicons-plus"></span>
-        </button>
-      </div>
-
-      <div v-if="filtersShowActive.taste" class="flex">
-        <div class="container-check">
-          <div>
-            <input type="checkbox" />
-            <div class="check-box">
-              <label>Baya</label>
-            </div>
-          </div>
-          <div>
-            <input type="checkbox" />
-            <div class="check-box">
-              <label>Cítrico</label>
-            </div>
-          </div>
-          <div>
-            <input type="checkbox" />
-            <div class="check-box">
-              <label>Nuez/Chocolate</label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="border-t"></div> -->
 
     <div class="container-filters-box">
       <div class="header-filter-title">
@@ -376,65 +341,115 @@ const handleRangePrice = (value: any) => {
       <div v-if="filtersShowActive.process" class="flex">
         <div class="container-check container-list">
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existProcess('Lavado')"
+              @change="handlerCheckProcess('Lavado')"
+            />
             <div class="check-box">
               <label>Lavado</label>
             </div>
           </div>
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existProcess('Lavado anaeróbico')"
+              @change="handlerCheckProcess('Lavado anaeróbico')"
+            />
             <div class="check-box">
               <label>Lavado anaeróbico</label>
             </div>
           </div>
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existProcess('Lavado oxidación')"
+              @change="handlerCheckProcess('Lavado oxidación')"
+            />
             <div class="check-box">
               <label>Lavado oxidación</label>
             </div>
           </div>
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existProcess('Lavado fermentación láctica')"
+              @change="handlerCheckProcess('Lavado fermentación láctica')"
+            />
             <div class="check-box">
               <label>Lavado fermentación láctica</label>
             </div>
           </div>
 
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existProcess('Yellow honey')"
+              @change="handlerCheckProcess('Yellow honey')"
+            />
             <div class="check-box">
               <label>Yellow honey</label>
             </div>
           </div>
 
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existProcess('Red honey')"
+              @change="handlerCheckProcess('Red honey')"
+            />
             <div class="check-box">
               <label>Red honey</label>
             </div>
           </div>
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existProcess('Back honey')"
+              @change="handlerCheckProcess('Back honey')"
+            />
             <div class="check-box">
               <label>Black honey</label>
             </div>
           </div>
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existProcess('Natural')"
+              @change="handlerCheckProcess('Natural')"
+            />
             <div class="check-box">
               <label>Natural</label>
             </div>
           </div>
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existProcess('Natural anaeróbico')"
+              @change="handlerCheckProcess('Natural anaeróbico')"
+            />
             <div class="check-box">
               <label>Natural anaeróbico</label>
             </div>
           </div>
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existProcess('Experimental')"
+              @change="handlerCheckProcess('Experimental')"
+            />
             <div class="check-box">
               <label>Experimental</label>
+            </div>
+          </div>
+          <div class="item-list">
+            <input
+              type="checkbox"
+              :checked="existProcess('Honey')"
+              @change="handlerCheckProcess('Honey')"
+            />
+            <div class="check-box">
+              <label>Honey</label>
             </div>
           </div>
         </div>
@@ -459,37 +474,61 @@ const handleRangePrice = (value: any) => {
       <div v-if="filtersShowActive.certifications" class="flex">
         <div class="container-check container-list">
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existCert('Organic')"
+              @change="handlerCheckCertification('Organic')"
+            />
             <div class="check-box">
               <label>Organic</label>
             </div>
           </div>
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existCert('Fair Trade')"
+              @change="handlerCheckCertification('Fair Trade')"
+            />
             <div class="check-box">
               <label>Fair Trade</label>
             </div>
           </div>
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existCert('FairTrade Organic')"
+              @change="handlerCheckCertification('FairTrade Organic')"
+            />
             <div class="check-box">
               <label>FairTrade Organic</label>
             </div>
           </div>
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existCert('Rain Forest')"
+              @change="handlerCheckCertification('Rain Forest')"
+            />
             <div class="check-box">
               <label>Rain Forest</label>
             </div>
           </div>
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existCert('IMocert')"
+              @change="handlerCheckCertification('IMocert')"
+            />
             <div class="check-box">
               <label>IMocert</label>
             </div>
           </div>
           <div class="item-list">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="existCert('Jas')"
+              @change="handlerCheckCertification('Jas')"
+            />
             <div class="check-box">
               <label>Jas</label>
             </div>
@@ -498,27 +537,6 @@ const handleRangePrice = (value: any) => {
       </div>
     </div>
     <div class="border-t"></div>
-
-    <!-- <div class="container-filters-box">
-      <div class="header-filter-title">
-        <h3>ACIDEZ</h3>
-        <button
-          v-if="filtersShowActive.acidity"
-          @click="handleShowFilter('acidity')"
-        >
-          <span class="i-heroicons-minus"></span>
-        </button>
-        <button v-else @click="handleShowFilter('acidity')">
-          <span class="i-heroicons-plus"></span>
-        </button>
-      </div>
-
-      <div v-if="filtersShowActive.acidity" class="flex">
-        <button>Bajo</button>
-        <button>Medio</button>
-        <button>Alto</button>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -535,6 +553,33 @@ const handleRangePrice = (value: any) => {
     font-weight: 700;
     color: #515151;
     font-size: 1em;
+  }
+
+  .container-item-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .item-filter-active {
+    display: flex;
+    flex-wrap: wrap;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 20px;
+    align-items: center;
+    gap: 5px;
+    background-color: rgba(74, 222, 128, 0.598);
+    p {
+      font-size: 0.75em;
+      font-weight: 600;
+      color: #515151;
+    }
+
+    span {
+      font-size: 0.75em;
+      color: #797979;
+    }
   }
 }
 
@@ -617,5 +662,14 @@ const handleRangePrice = (value: any) => {
     flex-direction: row;
     gap: 10px;
   }
+}
+
+.clean-filter {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(74, 222, 128);
+  border-radius: 10px;
 }
 </style>

@@ -1,5 +1,16 @@
 <template>
   <div class="my-10">
+    <div class="modal-muestra" v-if="modalMuestra">
+      <div class="container-info-muestra">
+        <div class="flex justify-between">
+          <h1>Solicitar muestras</h1>
+          <button @click="modalMuestra = false">
+            <span class="i-heroicons-x-mark"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="grid grid-cols-7 gap-8 mx-20">
       <!-- Galeria del lote -->
       <div
@@ -124,7 +135,7 @@
               >Puedes solicitar muestra Gratis.</span
             >
 
-            <a>SOLICITAR MUESTRA</a>
+            <button @click="modalMuestra = true">SOLICITAR MUESTRA</button>
           </div>
           <span
             v-if="!lote.pruebaGratis"
@@ -199,6 +210,7 @@ const useUser = useUserStore();
 const useLotes = useLotesStore();
 const useFavoritos = useFavoritosStore();
 
+const modalMuestra = ref(false);
 const loadingImg = ref(false);
 
 const lotes: Lotes[] = useLotes.lotes.filter(
@@ -386,7 +398,7 @@ watch(useCart.cart, () => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .btn-addCart:disabled {
   background-color: #cecece;
 }
@@ -398,12 +410,43 @@ watch(useCart.cart, () => {
   span {
   }
 
-  a {
+  button {
     font-size: 1em;
     text-align: left;
     width: fit-content;
     margin-bottom: 0.5rem;
     text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.modal-muestra {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  margin: 0 auto;
+  z-index: 50;
+  padding-top: 4rem;
+  background-color: rgba(0, 0, 0, 0.25);
+
+  .container-info-muestra {
+    min-width: 60%;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+
+    h1 {
+      font-size: 1.3em;
+      font-weight: 600;
+      color: #515151;
+    }
   }
 }
 </style>

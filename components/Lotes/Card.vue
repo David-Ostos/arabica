@@ -60,7 +60,7 @@
         </div>
 
         <div class="mt-1 mb-1 transition-all duration-1000">
-          <UTooltip
+          <!-- <UTooltip
             :text="item.nombre"
             :popper="{ placement: 'right-end' }"
             :ui="{
@@ -72,7 +72,7 @@
               <span class="font-bold text-base text-gray-600">ID: </span>
               {{ item._id }}
             </h2>
-          </UTooltip>
+          </UTooltip> -->
           <UTooltip
             :text="item.nombre"
             :popper="{ placement: 'bottom-end' }"
