@@ -13,6 +13,8 @@ export const useGlobalStore = defineStore("global",() => {
   const heightNav = ref();
   const isActiveSelectCodePhone = ref(false)
 
+  const perfilComercial = ref()
+
   const codeCountry = [
     {
       code: "+93",
@@ -1236,6 +1238,7 @@ export const useGlobalStore = defineStore("global",() => {
     heightNav,
     isActiveSelectCodePhone,
     codeCountry,
+    perfilComercial,
     years
   };
 });

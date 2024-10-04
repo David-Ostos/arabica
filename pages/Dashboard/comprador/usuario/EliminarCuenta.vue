@@ -47,56 +47,20 @@ definePageMeta({
   middleware: 'comprador'
 })
 const useUser = useUserStore()
-const useProductor = useProductorStore()
-
+const useComprador = useCompradorStore()
 
 const isOpenModal = ref(false)
 const isLoadingModal = ref(false)
 
-console.log(useProductor.perfilProductor._id)
-console.log(useProductor.perfilProductor)
-useProductor.perfilProductor.lotes?.forEach((lote)=>{
-      console.log(lote._id);
-    })
-
 const eliminarCuenta =async ()=>{
   isLoadingModal.value = true
   
-  await Promise.all(
-    useProductor.perfilProductor.lotes!.map(async (lote) => {
-      try {
-        // @ts-ignore
-        const response = await axios(
-            // @ts-ignore
-            {
-              url: `${import.meta.env.VITE_URL_API}/api/content/item/lotes/${
-                lote._id
-              }`,
-              method: "DELETE",
-              mode: "cors",
-              headers: {
-                "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
-              },
-            }
-          );
-        return response.data;
-      } catch (error) {
-
-        toast.info('Problemas de conexión y no se pudo eliminar un lote, vuelva a intentarlo por favor.')
-
-        console.error(`Error al eliminar lote ${lote._id}:`, error);
-        
-        throw error;
-      }
-    })
-  )
-  .then(async(res)=>{
     try {
       // @ts-ignore
       await axios(
           // @ts-ignore
           {
-            url: `${import.meta.env.VITE_URL_API}/api/content/item/productores/${useProductor.perfilProductor._id}`,
+            url: `${import.meta.env.VITE_URL_API}/api/content/item/productores/${useComprador.perfilComprador._id}`,
             method: "DELETE",
             mode: "cors",
             headers: {
@@ -136,16 +100,15 @@ const eliminarCuenta =async ()=>{
           
         })
       })
+      .finally(()=>{
+        isLoadingModal.value = false
+        isOpenModal.value = false
+      })
     } catch (error) {
       console.log(error);
     }
 
-  })
-  .finally(()=>{
-    isLoadingModal.value = false
-    isOpenModal.value = false
-  })
-}
+  }
 
 </script>
 

@@ -70,7 +70,7 @@ const items = [
     // icon: "i-heroicons-megaphone",
     to: `/dashboard/comprador/planificadores`,
   }, */
-  {
+  /* {
     label: "Muestras",
     // icon: "i-heroicons-signal",
     to: `/dashboard/comprador/muestras`,
@@ -79,12 +79,12 @@ const items = [
     label: "Pedidos",
     // icon: "i-heroicons-arrow-left-on-rectangle",
     to: `/dashboard/comprador/pedidos`,
-  } /* ,
+  } */ /* ,
   {
     label: "Facturas",
     // icon: "i-heroicons-arrow-left-on-rectangle",
     to: `/dashboard/comprador/facturas`,
-  } */,
+  } */
 ];
 
 const mobileMenuOpen = ref(false);

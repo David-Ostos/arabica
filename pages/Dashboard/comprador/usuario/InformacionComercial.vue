@@ -114,20 +114,6 @@
             <UFormGroup
               required
               class="col-span-5"
-              label="Correo"
-              name="correo"
-            >
-              <UInput
-                placeholder="ejemplo@gmai.com"
-                icon="i-heroicons-envelope"
-                v-model="state.correo"
-                size="xl"
-              />
-            </UFormGroup>
-
-            <UFormGroup
-              required
-              class="col-span-8"
               label="Dirección de Negocio"
               name="direccion.direccion1"
             >
@@ -187,7 +173,7 @@
             <span class="text-gray-500 font-semibold">Logo del Comercio</span>
 
             <div
-              class="relative flex flex-col justify-center items-center border rounded-xl h-64 w-full shadow-inner bg-gray-100"
+              class="relative flex flex-col justify-center items-center border rounded-xl h-52 w-full shadow-inner bg-gray-100"
             >
               <button type="button" v-if="(state.logo || imgLogo) "
                 @click="clickInputFile"
@@ -227,7 +213,7 @@
               </div>
             </div>
             <span
-              class="text-xs text-gray-500 font-semibold mx-auto w-[max-content] flex"
+              class="text-xs mt-2 text-gray-500 font-semibold mx-auto w-[max-content] flex"
               >Al menos 200 por 200 píxeles. Tamaño máximo 6MB.</span
             >
           </div>
@@ -236,30 +222,7 @@
         </div>
 
         
-        <div class="mt-6">
-          <div class="flex justify-between items-center border-t py-8">
-            <h1 class="text-gray-700 text-sm font-medium ">
-              {{ state.certificaciones!.length }} Certificaciones
-            </h1>
-            <UButton type="button" class="w-fit self-end px-3 h-10 font-bold"
-              @click="state.certificaciones!.push({
-                certificacion: '',
-                picture: '',
-                year: '',
-              })" >
-              <UIcon
-                name="i-ic-baseline-add-circle-outline"
-                class="text-white text-2xl font-bold"
-                dynamic
-              />
-              Agregr certificado
-            </UButton>
-          </div>
-          <CompradorUsuarioInformacionComercioCertificados
-            v-for="item, index in state.certificaciones"
-            :certificaciones="item" :index="index"
-          />
-        </div>
+        
 
         <div>
           <UFormGroup label="Redes Sociales" class="border-t py-8">
@@ -351,7 +314,6 @@ const schema = object({
     bandera: string(),
     numero: string().required("Requerido"),
   }).required("Este campo es requerido"),
-  correo: string().email().required("Este campo es requerido"),
   direccion: object({
     ciudad: string().required("Requerido"),
     codigoPostal: string().required("Requerido"),

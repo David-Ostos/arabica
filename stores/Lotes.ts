@@ -17,6 +17,7 @@ const useUser = useUserStore()
         headers: {
           "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
         },
+        
       })
       .then( async (res) =>{
         lotes.value = res.data;

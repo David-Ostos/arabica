@@ -4,7 +4,7 @@
       <h1 class="text-center text-3xl text-gray-700 font-bold">
         Crea tu Lote de Café
       </h1>
-      <h3 class="text-2xl mb-8 text-gray-600">Agrega las imagenes</h3>
+      <h3 class="text-2xl mb-8 text-gray-600" @click="console.log(pictures)" >Agrega las imagenes</h3>
       <div class="grid grid-cols-2 gap-8">
         <!-- galeria -->
         <div
@@ -26,23 +26,22 @@
             </div>
 
             <div
-              v-show="!loading"
-              class="row-span-2 col-span-4 border rounded-xl p-4 cursor-pointer overflow-hidden hover:brightness-75"
+              v-if="!loading && pictures.length > 0"
+              class="row-span-2 col-span-4 border rounded-xl  cursor-pointer overflow-hidden hover:brightness-75"
               :class="
-                !pictures[0].enty
+                pictures[0]?.link !== 'i-icon-park-outline-add-picture' || !undefined
                   ? 'flex justify-center items-center h-full w-full '
-                  : 'hover:bg-gray-100 '
+                  : 'hover:bg-gray-100 p-4'
               "
-              @click=""
             >
               <img
-                v-if="!pictures[0].enty"
-                :src="pictures[0].img"
+                v-if="pictures[0].link !== 'i-icon-park-outline-add-picture' "
+                :src="pictures[0].link"
                 class="rounded-xl h-full w-full object-cover"
                 alt=""
               />
               <UIcon
-                v-else
+                v-if="pictures[0].link === 'i-icon-park-outline-add-picture'"
                 name="i-icon-park-outline-add-picture"
                 class="h-full w-full opacity-55 hover:scale-105"
                 dynamic
@@ -55,7 +54,7 @@
               <div
                 v-for="img in pictures.slice(1)"
                 class="h-full w-full flex items-center justify-center cursor-pointer overflow-hidden hover:brightness-75 hover:bg-gray-100 rounded-xl hover:scale-105"
-                @click="console.log(img)"
+                @click="console.log(img); console.log(img.link === 'i-icon-park-outline-add-picture')"
               >
                 <div
                   v-if="loading"
@@ -70,21 +69,20 @@
                     color="black"
                   ></l-squircle>
                 </div>
-                <div v-show="!loading" v-if="img.enty === true" class="">
+                <div v-if="img.link === 'i-icon-park-outline-add-picture'"  class="" >
                   <UIcon
-                    :name="img.img"
+                    :name="img.link"
                     class="rounded-xl h-28 w-full object-cover opacity-55 hover:scale-105"
                     alt=""
                     dynamic
                   />
                 </div>
                 <div
-                  v-show="!loading"
-                  v-else
+                  v-show="img.link !== 'i-icon-park-outline-add-picture'"
                   class="rounded-xl hover:brightness-50"
                 >
                   <img
-                    :src="img.img"
+                    :src="img.link"
                     class="rounded-xl h-full w-full object-cover hover:scale-105"
                     alt=""
                   />
@@ -347,7 +345,6 @@ import type {FormSubmitEvent} from "#ui/types";
 import type {Lotes} from "~/interfaces/Lotes";
 import {squircle} from "ldrs";
 import {toast} from "vue3-toastify";
-import type {Lotes as lotesProductor} from "../../../../interfaces/PerfilProductor";
 
 squircle.register();
 
@@ -363,7 +360,11 @@ const useUser = useUserStore();
 const useLotes = useLotesStore();
 const router = useRouter();
 
-const pictures = ref([] as any);
+const pictures = ref([{
+        _id: "1",
+        link: "i-icon-park-outline-add-picture",
+        position: 1,
+      }] as any);
 const loading = ref(false);
 const inputFile = ref();
 const filesSave = ref();
@@ -404,35 +405,37 @@ function crearGaleria(pictures: any) {
   if (pictures.length === 0) {
     return (pictures = [
       {
-        id: "1",
-        img: "i-icon-park-outline-add-picture",
-        enty: true,
+        _id: "1",
+        link: "i-icon-park-outline-add-picture",
+        position: 1,
       },
       {
-        id: "2",
-        img: "i-icon-park-outline-add-picture",
-        enty: true,
+        _id: "2",
+        link: "i-icon-park-outline-add-picture",
+        position: 2,
       },
       {
-        id: "3",
-        img: "i-icon-park-outline-add-picture",
-        enty: true,
+        _id: "3",
+        link: "i-icon-park-outline-add-picture",
+        position: 3,
       },
       {
-        id: "4",
-        img: "i-icon-park-outline-add-picture",
-        enty: true,
+        _id: "4",
+        link: "i-icon-park-outline-add-picture",
+        position: 4,
       },
     ]);
   } else if (pictures.length < 4) {
+    let count = pictures.length
     return (pictures = [
       ...pictures,
       ...Array(4 - pictures.length).fill({
-        img: "i-icon-park-outline-add-picture",
-        enty: true,
+        link: "i-icon-park-outline-add-picture",
+        position: count++,
       }),
     ]);
   }
+  console.log(pictures);
   return pictures;
 }
 
@@ -511,6 +514,7 @@ async function addLoteProductor(newLote: {_id: string; _model: string}[]) {
 
 async function handleFileUpload(event: any) {
   console.log(event);
+  loading.value = true;
 
   filesSave.value = event;
   console.log(filesSave.value);
@@ -548,7 +552,7 @@ async function handleFileUpload(event: any) {
         const imagePromise = new Promise((resolve, reject) => {
           reader.onload = () => {
             const dataURL = reader.result;
-            resolve({id: i, img: dataURL, enty: false});
+            resolve({_id: i, link: dataURL, position: 0});
           };
           reader.onerror = reject;
           reader.readAsDataURL(file);
@@ -572,6 +576,7 @@ async function handleFileUpload(event: any) {
     );
     inputFile.value = "";
   }
+  loading.value = false;
   verificarGaleria();
 }
 

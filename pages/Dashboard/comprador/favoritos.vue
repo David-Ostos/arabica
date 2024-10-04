@@ -1,9 +1,16 @@
 <script lang="ts" setup>
+
+definePageMeta({
+  layout: 'comprador'
+})
+
 import axios from "axios";
 import { ref } from "vue";
 import { useFavoritosStore } from "~/stores/favoritos";
 const favIDs: any = ref([]);
 const fav: any = ref([]);
+
+
 
 const useFavoritos = useFavoritosStore();
 

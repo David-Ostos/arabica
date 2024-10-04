@@ -183,6 +183,12 @@
   import axios from "axios";
   import { toast } from "vue3-toastify";
   
+  definePageMeta({
+  layout: "comprador",
+  middleware: "comprador",
+});
+
+
   const useUser = useUserStore();
   const loading = ref(false);
   const loadingImg = ref(true);

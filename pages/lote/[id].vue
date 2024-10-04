@@ -1,5 +1,5 @@
 <template>
-  <div class="my-10">
+  <div class="my-20">
     <div class="modal-muestra" v-if="modalMuestra">
       <div class="container-info-muestra">
         <div class="flex justify-between">
@@ -112,14 +112,14 @@
             >
               {{ lote.nombre }}
             </h2>
-            <div
-              class="flex items-center text-xl text-primary-600 font-bold gap-1 hover:text-primary"
+            <NuxtLink :to="`/perfil/${lote.productor?._id}`"
+              class="cursor-pointer flex items-center text-xl text-primary-600 font-bold gap-1 hover:text-primary"
             >
               <p class="">
                 {{ lote.productor!.nombre }}
               </p>
               <UIcon class="" name="i-heroicons-check-badge-20-solid" />
-            </div>
+            </NuxtLink>
           </div>
         </div>
         <UDivider class="" />

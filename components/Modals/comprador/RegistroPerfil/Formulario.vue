@@ -474,6 +474,7 @@ const state: PerfilComprador = reactive({
   fechaOrigen: undefined,
   origen: "Perú",
   ruc: undefined,
+  correo: useUser.dataUser.email,
   direccion: {
     ciudad: undefined,
     codigoPostal: undefined,
@@ -551,7 +552,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     const fetchVerificarUser = await fetch(
       `${
         import.meta.env.VITE_URL_API
-      }/api/content/items/productores?fields={"nombre": true,"ruc": true,"razonSocial": true,"correo": true,"numeroTelefonico": true,"_id": false}`,
+      }/api/content/items/compradores?fields={"nombre": true,"ruc": true,"razonSocial": true,"correo": true,"numeroTelefonico": true}`,
       {
         method: "GET",
         headers: {
@@ -612,7 +613,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         {
           url: `${
             import.meta.env.VITE_URL_API
-          }/api/content/item/productores?fields={_state: false,_modified:false,_mby: false,_created: false,_cby: false}`,
+          }/api/content/item/compradores?fields={_state: false,_modified:false,_mby: false,_created: false,_cby: false}`,
           method: "POST",
           mode: "cors",
           headers: {
@@ -632,8 +633,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         data = {
           _id: useUser.dataUser._id,
           perfilBase: true,
-          perfilProductor: {
-            _model: "productores",
+          perfilComprador: {
+            _model: "compradores",
             _id: res.data._id,
           },
         };
@@ -662,7 +663,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
 
         useUser.dataUser.perfilBase = true;
-        useModal.showModalProductorPerfilCompleto = false;
+        toast.success("El perfil de comprador se ha creado.");
+        useModal.showModalCompradorPerfilCompleto= false;
       });
     }
   } catch (error) {

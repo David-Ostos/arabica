@@ -111,11 +111,14 @@ function handleScroll() {
             <li v-if="!loggedTem">
               <BotonSecondary link="/auth/login" contenido="Iniciar Sesión" />
             </li>
-            <li v-if="loggedTem" class="container-options">
+            <li v-if="loggedTem && useUser.logged" class="container-options">
               <BotonSecondary
                 :link="`/dashboard/${useUser.dataUser.tipoUser}`"
                 contenido="Panel de Control"
               />
+              <li v-if="!loggedTem">
+              <BotonSecondary link="/auth/login" contenido="Iniciar Sesión" />
+            </li>
 
               <button
                 v-if="typeUser == 'comprador'"
@@ -127,6 +130,12 @@ function handleScroll() {
                 }}</span>
                 <span class="i-heroicons-shopping-cart"></span>
               </button>
+            </li>
+            <li v-if="loggedTem && !useUser.logged" class="container-options">
+              <BotonSecondary
+                link="/auth/login"
+                contenido="Iniciar Seción"
+              />
             </li>
           </ul>
           <!-- <ul class="flex gap-4">
