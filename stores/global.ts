@@ -10,6 +10,7 @@ export interface TopLevel {
 
 
 export const useGlobalStore = defineStore("global",() => {
+  const route = useRoute()
   const heightNav = ref();
   const isActiveSelectCodePhone = ref(false)
 
@@ -1165,6 +1166,25 @@ export const useGlobalStore = defineStore("global",() => {
     return year;
   }); 
 
+
+
+  const getPerfil =  async ()=>{try {
+    await axios.get(`${import.meta.env.VITE_URL_API}/api/content/item/productores/${route.params.id}?fields={"_state": false,"_modified": false,"_mby": false,"_created": false,"_cby": false,"verificacion": false,}&populate=1`,{
+      headers: {
+        "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+      },
+
+    })
+    .then( async (res) =>{
+      perfilComercial.value = res.data
+      console.log(perfilComercial.value);
+    })
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+  
 /*  const codeCountry1 = Object.entries(codeCountry1).map(([code, { name, dial_code, emoji }]) => ({
     code: dial_code,
     bandera: emoji,
@@ -1239,6 +1259,8 @@ export const useGlobalStore = defineStore("global",() => {
     isActiveSelectCodePhone,
     codeCountry,
     perfilComercial,
-    years
+    years,
+
+    getPerfil
   };
 });
