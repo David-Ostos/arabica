@@ -120,6 +120,9 @@ const props = defineProps<{
 const useProductor = useProductorStore()
 const selectActiveCertificado = ref(false);
 const selectActiveYear = ref(false);
+onMounted(()=>{
+  console.log(props.certificaciones);
+})
 
 useProductor.perfilProductor.certificaciones![props.index]._id = props.index.toString()
 

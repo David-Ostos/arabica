@@ -108,14 +108,14 @@
 
           <div class="flex flex-col gap-3">
             <h2
-              class="font-bold text-base md:text-2xl text-gray-700 line-clamp-2 hover:line-clamp-none transition-all duration-1000"
+              class="font-bold text-base md:text-2xl text-gray-700 line-clamp-2 hover:line-clamp-none transition-all duration-1000 capitalize"
             >
               {{ lote.nombre }}
             </h2>
             <NuxtLink :to="`/perfil/${lote.productor?._id}`"
               class="cursor-pointer flex items-center text-xl text-primary-600 font-bold gap-1 hover:text-primary"
             >
-              <p class="">
+              <p class="capitalize">
                 {{ lote.productor!.nombre }}
               </p>
               <UIcon class="" name="i-heroicons-check-badge-20-solid" />

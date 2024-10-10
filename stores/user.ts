@@ -46,7 +46,6 @@ export const useUserStore = defineStore("user", () => {
             });
           }
 
-          console.log(dataUserFetch);
 
           dataUserSaved = {
             email: dataUserFetch.email,
@@ -70,7 +69,6 @@ export const useUserStore = defineStore("user", () => {
             dataUserFetch?.email !== undefined &&
             dataUserFetch?.perfilProductor
           ) {
-            console.log("entro en productor");
             delete dataUserFetch.perfilProductor._state;
             delete dataUserFetch.perfilProductor._modified;
             delete dataUserFetch.perfilProductor._mby;
@@ -79,12 +77,10 @@ export const useUserStore = defineStore("user", () => {
             delete dataUserFetch.perfilProductor._model;
             delete dataUserFetch.perfilProductor.idUsuario;
             logged.value = true;
-            console.log(dataUserFetch);
             useProductor.perfilProductor = {
               ...dataUserFetch.perfilProductor,
             };
 
-            console.log(useProductor.perfilProductor);
             delete dataUserFetch.perfilProductor;
           }
 
@@ -100,7 +96,6 @@ export const useUserStore = defineStore("user", () => {
             delete dataUserFetch.perfilComprador._model;
             delete dataUserFetch.perfilComprador.idUsuario;
             logged.value = true;
-            console.log(dataUserFetch);
             useComprador.perfilComprador = {
               ...dataUserFetch.perfilComprador,
             };
@@ -110,7 +105,6 @@ export const useUserStore = defineStore("user", () => {
           dataUser.value = {
             ...dataUserFetch,
           };
-          console.log(dataUser.value);
         } catch (error) {
           console.log(error);
         }
@@ -136,15 +130,8 @@ export const useUserStore = defineStore("user", () => {
     useProductor.lotes = [] as LotesProductor;
     useLotes.lotes = [] as Lotes[];
     localStorage.clear();
-    logged.value = false;
-    toast.info("Has cerrado seción", {
-      onClose: (event) => {
-        router.push("/");
-        setTimeout(() => {
-          window.location.reload();
-        }, 5000);
-      },
-    });
+    logged.value = false;    
+    window.location.reload();
   };
 
   return {

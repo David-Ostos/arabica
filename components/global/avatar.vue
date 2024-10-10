@@ -13,7 +13,9 @@
       />
   
       <div else  class="h-14 w-14 rounded-full" :class="clases" >
-        <img :src="useUser.dataUser.picture ? useUser.dataUser.picture : '/img/avatar.png' " 
+        <img v-if="!picture" :src="useUser.dataUser.picture ? useUser.dataUser.picture : '/img/avatar.png' " 
+        @load="loadingImg = true" class=" rounded-full" :class="clases"  alt=""/>
+        <img v-else="picture" :src="picture ? picture : '/img/avatar.png' " 
         @load="loadingImg = true" class=" rounded-full" :class="clases"  alt=""/>
         <div class="flex justify-center items-center h-full bg-gray-300">
           <UIcon v-if="!useUser.dataUser.picture"
@@ -32,6 +34,7 @@ const props = defineProps({
   clases: String,
   clasesIcon:String,
   icon: String,
+  picture: String
 })
 
 
