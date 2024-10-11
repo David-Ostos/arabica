@@ -44,7 +44,7 @@
           <UIcon name="i-ph-pencil-fill" class="text-primary justify-self-stretch text-xl cursor-pointer" dynamic @click="isOpenModalCertificaciones = true"/>
         </div>
         <div class="grid grid-cols-3 gap-2 w-full py-4 overflow-x-hidden h-[144px] overflow-y-auto">
-          <div v-if="certificaciones && certificaciones.length > 0" v-for="(item, index) in certificaciones"
+          <div v-if="state.certificaciones && state.certificaciones.length > 0" v-for="(item, index) in state.certificaciones"
             class="flex  gap-2 col-span-1 py-2 relative w-full">
             <img :src="item.picture" alt="" class="h-10 w-10 rounded-full" />
             <div class="flex flex-col">
@@ -92,22 +92,19 @@
             </div>
           </template>
 
-          <div class="flex justify-between items-center">
-            <h1  v-if="certificaciones!.length = 0" class="text-gray-700 text-sm font-medium ">
+          <div>
+            <div class="flex justify-between items-center">
+            <h1  v-if="certificaciones!.length === 0" class="text-gray-700 text-sm font-medium ">
               No hay certificados
             </h1>
-            <h1  v-else-if="certificaciones!.length = 1" class="text-gray-700 text-sm font-medium ">
-              {{ certificaciones!.length }} Certificado
+            <h1 @click="console.log(certificaciones);"  v-else-if="certificaciones!.length === 1" class="text-gray-700 text-sm font-medium ">
+              1 Certificado
             </h1>
             <h1 v-else class="text-gray-700 text-sm font-medium ">
               {{ certificaciones!.length }} Certificados
             </h1>
             <UButton type="button" class="w-fit self-end px-3 h-10 font-bold"
-              @click="certificaciones!.push({
-                certificacion: '',
-                picture: '',
-                year: '',
-              })" >
+              @click="pushCertificado()">
               <UIcon
                 name="i-ic-baseline-add-circle-outline"
                 class="text-white text-2xl font-bold"
@@ -116,11 +113,21 @@
               Agregr certificado
             </UButton>
           </div>
-          <div >
+            <div >
             <ProductorPerfilModalCertificados
-              v-for="item, index in certificaciones || []"
+              v-for="item, index in certificaciones"
               :certificaciones="item" :index="index"
             />
+          </div>
+          <UButton type="button" class="w-fit self-end px-3 h-10 font-bold"
+              @click="">
+              <UIcon
+                name="i-ic-baseline-add-circle-outline"
+                class="text-white text-2xl font-bold"
+                dynamic
+              />
+              Guardar
+            </UButton>
           </div>
 
         </UCard>
@@ -166,19 +173,33 @@ const isOpenModalEquipo = ref(false)
 const isOpenModalPremios = ref(false)
 const isOpenModalCertificaciones = ref(false)
 
+const certificaciones = ref(JSON.parse(JSON.stringify(toRaw(useProductor.perfilProductor.certificaciones))))
 
-const equipo = useProductor.perfilProductor.equipo;
 
-const premios = useProductor.perfilProductor.premios;
+const equipo = ref([] as any);
 
-const certificaciones = useProductor.perfilProductor.certificaciones;
+const premios = ref([] as any);
 
 onMounted(()=>{
-console.log(certificaciones?.length)
-})
-const stateEquipo = reactive({
 
+  equipo.value = useProductor.perfilProductor.equipo
+  premios.value = useProductor.perfilProductor.premios
 })
+
+const state = reactive({
+  certificaciones: useProductor.perfilProductor.certificaciones
+})
+
+function pushCertificado (){
+  certificaciones.value?.push({
+    certificacion: '',
+    picture: '',
+    year: '',
+  })
+  console.log(certificaciones.value);
+  console.log(useProductor.perfilProductor.certificaciones);
+
+}
 
 </script>
 

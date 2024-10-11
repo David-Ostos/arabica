@@ -308,7 +308,6 @@ const useUser = useUserStore();
 const useProductor = useProductorStore();
 const useGlobal = useGlobalStore();
 
-console.log(useProductor.perfilProductor);
 const openEdit = ref(false);
 const picture = ref();
 const pictureTrue = ref(false);
