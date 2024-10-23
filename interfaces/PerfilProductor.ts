@@ -11,7 +11,7 @@ export interface PerfilProductor {
   idUsuario?: IdUsuario;
   imgPortada?: string;
   descripcion?: string;
-  equipo?: equipo[];
+  equipo?: Equipo[];
   premios?: Premios[];
   certificaciones?: Certificaciones[];
   relaciones?: string[];
@@ -57,10 +57,10 @@ export type Premios = {
   nombre?: string;
 }
 
-export type equipo = {
+export type Equipo = {
   _id?: string;
   nombre?: string;
-  apellido?: string[];
+  apellido?: string;
   rol?: string;
   picture?: string;
 }

@@ -1,7 +1,6 @@
 <template>
   <div class="overflow-hidden rounded-full h-14 w-14" 
     :class="clases"
-    @click="console.log(loadingImg)"
   >
     <USkeleton
         v-if="!loadingImg && useUser.dataUser.picture"
