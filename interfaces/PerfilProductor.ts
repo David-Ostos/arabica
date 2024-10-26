@@ -63,6 +63,7 @@ export type Equipo = {
   apellido?: string;
   rol?: string;
   picture?: string;
+  fileSave?: any
 }
 
 export type IdUsuario = {

@@ -6,7 +6,7 @@ export const useProductorStore = defineStore('productor', () =>{
   const lotes = ref({} as Lotes)
   const perfilProductor = ref({} as PerfilProductor)
   const editPerfil = ref({} as PerfilProductor)
-  const equipoUpdate = ref({} as Equipo)
+  const equipoUpdate = ref([] as Equipo[])
 
   return{
     lotes,

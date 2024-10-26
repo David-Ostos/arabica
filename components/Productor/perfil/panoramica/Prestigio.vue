@@ -10,15 +10,18 @@
             name="i-ph-pencil-fill"
             class="text-primary justify-self-stretch text-xl cursor-pointer"
             dynamic
-            @click="isOpenModalEquipo = true"
+            @click="openEquipo()"
           />
         </div>
         <div
           class="grid grid-cols-3 gap-2 py-4 w-full overflow-x-hidden h-[144px] overflow-y-auto"
         >
           <div
-            v-if="equipo && equipo.length > 0"
-            v-for="(item, index) in equipo"
+            v-if="
+              useProductor.perfilProductor.equipo &&
+              useProductor.perfilProductor.equipo.length > 0
+            "
+            v-for="(item, index) in useProductor.perfilProductor.equipo"
             class="flex gap-2 col-span-1 py-2 relative w-full"
           >
             <img :src="item.picture" alt="" class="h-10 w-10 rounded-full" />
@@ -58,7 +61,8 @@
             prevent-close
             v-model="isOpenModalEquipo"
           >
-            <UCard class="h-[650px] overflow-auto"
+            <UCard
+              class="h-full"
               :ui="{
                 ring: '',
                 divide: 'divide-y divide-gray-100 dark:divide-gray-800',
@@ -67,7 +71,7 @@
             >
               <template #header>
                 <div class="flex items-center justify-between">
-                  <h3 @click="console.log(equipo)"
+                  <h3
                     class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
                   >
                     Agregar Integrantes del Equipo
@@ -83,23 +87,23 @@
                 </div>
               </template>
 
-              <div>
+              <div class="h-full">
                 <div class="flex justify-between items-center">
                   <h1
-                    v-if="equipo!.length === 0"
+                    v-if="useProductor.equipoUpdate!.length === 0"
                     class="text-gray-700 text-sm font-medium"
                   >
                     No hay Integrantes
                   </h1>
                   <h1
                     @click=""
-                    v-else-if="equipo!.length === 1"
+                    v-else-if="useProductor.equipoUpdate!.length === 1"
                     class="text-gray-700 text-sm font-medium"
                   >
                     1 Integrante
                   </h1>
                   <h1 v-else class="text-gray-700 text-sm font-medium">
-                    {{ equipo!.length }} Integrantes
+                    {{ useProductor.equipoUpdate!.length }} Integrantes
                   </h1>
                   <UButton
                     type="button"
@@ -114,21 +118,75 @@
                     Agregar Integrante
                   </UButton>
                 </div>
-                <div v-for="(item, index) in equipo" class="grid grid-cols-12 relative">
-                  <ProductorPerfilModalEquipo
-                    :equipo="item"
-                    :index="index"
-                    class="col-span-11 self-start"
-                  />
-                  <div class="col-span-1 row-span-1 absolute top-24 right-10">
-                    <UIcon
-                      name="i-clarity-remove-line"
-                      class="text-rose-500 text-3xl absolute bottom-2 cursor-pointer"
-                      dynamic
-                      @click="equipo?.splice(index,1)"
+
+                <div class="overflow-auto h-[320px] my-4 pb-8" ref="equipoContainer">
+                  <div
+                    v-for="(item, index) in useProductor.equipoUpdate" :key="index"
+                    class="grid grid-cols-12 relative"
+                    :ref="el => { if (el) equipoRefs[index] = el as HTMLElement}"
+                  >
+                    <ProductorPerfilModalEquipo
+                      :equipo="item"
+                      :index="index"
+                      class="col-span-11 self-start"
                     />
                   </div>
                 </div>
+
+                <div></div>
+                <UButton
+                  type="button"
+                  class="w-full flex justify-center px-3 h-10 font-bold"
+                  @click="onSumitEquipoUpdate()"
+                  :loading="loadindUnpate"
+                >
+                  Actualizar los mienbros del equipo
+                </UButton>
+                <UProgress
+                  :value="porcentaje"
+                  :color="color"
+                  class="col-span-9 mt-2"
+                  :class="{hidden: !progreso}"
+                >
+                  <template #indicator="{percent}">
+                    <div
+                      class="text-right"
+                      :style="{
+                        width: `${
+                          percent < 10 && faseUpload !== 'none'
+                            ? percent + 15
+                            : percent
+                        }%`,
+                      }"
+                    >
+                      <span
+                        v-if="faseUpload === 'none'"
+                        class="text-gray-500 w-fit"
+                        >Esperando...</span
+                      >
+                      <span
+                        v-else-if="faseUpload === 'Subiendo Imagen...'"
+                        class="text-blue-500 w-fit"
+                        >{{ faseUpload }}</span
+                      >
+                      <span
+                        v-else-if="faseUpload === 'Actualizando datos...'"
+                        class="text-orange-500"
+                        >{{ faseUpload }}</span
+                      >
+                      <span
+                        v-else-if="faseUpload === 'Subida Completada'"
+                        class="text-primary-500"
+                        >✔ Subida completada.</span
+                      >
+                      <span
+                        v-else-if="faseUpload === 'error'"
+                        class="text-red-500 font-bold min-w-14"
+                        >X Hubo un error.</span
+                      >
+                    </div>
+                  </template>
+                </UProgress>
               </div>
             </UCard>
           </UModal>
@@ -417,17 +475,18 @@
 </template>
 
 <script lang="ts" setup>
-import { toast } from "vue3-toastify";
+import {toast} from "vue3-toastify";
 import type {
   Certificaciones,
   Equipo,
   Premios,
 } from "~/interfaces/PerfilProductor";
-import type { Schema } from "yup";
+import axios from "axios";
 
 const useProductor = useProductorStore();
 
-const loading = ref(false)
+const loading = ref(false);
+const loadindUnpate = ref(false);
 
 const isOpenModalEquipo = ref(false);
 const isOpenModalPremios = ref(false);
@@ -438,33 +497,64 @@ const certificacionesOriginal = ref([] as Certificaciones[]);
 
 const equipo = ref([] as Equipo[]);
 const equipoOriginal = ref([] as Equipo[]);
-const disableBotonEquipo = ref(false)
+const equipoUpdate = ref([] as Equipo[]);
+const equipoContainer = ref<HTMLElement | null>(null)
+const equipoRefs = ref<HTMLElement[]>([])
+const disableBotonEquipo = ref(false);
+const loadingUpdateEquipo = ref(false);
 
 const premiosOriginal = ref([] as Premios[]);
 const premios = ref([] as Premios[]);
 
+const progreso = ref(false);
+
+const fileSave = ref(),
+  imgIntegrante = ref();
+const faseUpload = ref(
+  "none" as
+    | "none"
+    | "Subiendo Imagen..."
+    | "Actualizando datos..."
+    | "Subida Completada"
+    | "error"
+);
+const color = computed(() => {
+  switch (true) {
+    case faseUpload.value === "none":
+      return "gray";
+    case faseUpload.value === "Subiendo Imagen...":
+      return "blue";
+    case faseUpload.value === "Actualizando datos...":
+      return "orange";
+    case faseUpload.value === "error":
+      return "red";
+    default:
+      return "primary";
+  }
+});
+
+const porcentaje = ref(100);
 
 onMounted(() => {
   cargarDatos();
 });
 
 function cargarDatos() {
-  
   certificaciones.value = useProductor.perfilProductor.certificaciones ?? [];
   certificacionesOriginal.value = JSON.parse(
     JSON.stringify(useProductor.perfilProductor.certificaciones)
   );
 
   equipo.value = useProductor.perfilProductor.equipo ?? [];
+  equipoUpdate.value = useProductor.perfilProductor.equipo ?? [];
   equipoOriginal.value = JSON.parse(
     JSON.stringify(useProductor.perfilProductor.equipo)
   );
 
-  premios.value = useProductor.perfilProductor.premios ?? []
+  premios.value = useProductor.perfilProductor.premios ?? [];
   premiosOriginal.value = JSON.parse(
     JSON.stringify(useProductor.perfilProductor.premios)
   );
-
 }
 
 watch(isOpenModalCertificaciones, (nuevoValor) => {
@@ -495,29 +585,37 @@ function pushCertificado() {
 watch(isOpenModalEquipo, (nuevoValor) => {
   if (nuevoValor) {
     // Al abrir el modal, crear una copia fresca
-    equipo.value = JSON.parse(JSON.stringify(equipoOriginal.value));
+    useProductor.equipoUpdate = JSON.parse(JSON.stringify(equipoOriginal.value));
   }
 });
+
+function openEquipo() {
+  isOpenModalEquipo.value = true;
+  useProductor.equipoUpdate = useProductor.perfilProductor.equipo ?? [];
+}
 
 function cerrarModalEquipo() {
   isOpenModalEquipo.value = false;
   // Restablecer a los datos originales sin afectar el store
-  equipo.value = JSON.parse(JSON.stringify(equipoOriginal.value));
+  useProductor.equipoUpdate = JSON.parse(JSON.stringify(equipoOriginal.value));
 }
 
 function pushEquipo() {
-  const hayObjetosVacios = equipo.value?.some(miembro => 
-    Object.values(miembro).some(valor => 
-      valor === "" || valor === null || valor === undefined
+  const hayObjetosVacios = useProductor.equipoUpdate?.some((miembro) =>
+    Object.values(miembro).some(
+      (valor) => valor === "" || valor === null || valor === undefined
     )
   );
 
   if (hayObjetosVacios) {
     // Si hay objetos con campos vacíos, mostramos un mensaje de error
-    toast.error("Por favor, complete todos los campos del equipo antes de agregar un nuevo miembro.");
+    toast.error(
+      "Por favor, complete todos los campos del equipo antes de agregar un nuevo miembro."
+    );
     return; // Salimos de la función sin agregar un nuevo objeto
   }
-  equipo.value?.push({
+
+  useProductor.equipoUpdate.push({
     _id: "",
     nombre: "",
     apellido: "",
@@ -525,6 +623,109 @@ function pushEquipo() {
     picture: "",
   });
 
+    // Esperar a que Vue actualice el DOM
+    nextTick(() => {
+    // Obtener el índice del nuevo elemento
+    const newIndex = useProductor.equipoUpdate.length - 1;
+    // Obtener el elemento del DOM
+    const newElement = equipoRefs.value[newIndex];
+    
+    if (newElement && equipoContainer.value) {
+      // Calcular la posición de desplazamiento
+      const containerRect = equipoContainer.value.getBoundingClientRect();
+      const elementRect = newElement.getBoundingClientRect();
+      const scrollTo = elementRect.top - containerRect.top + equipoContainer.value.scrollTop;
+      
+      // Desplazar suavemente al nuevo elemento
+      equipoContainer.value.scrollTo({
+        top: scrollTo,
+        behavior: 'smooth'
+      });
+    }
+  });
+  
+}
+
+
+
+function validacionesEquipo() {
+  if (
+    JSON.stringify(equipoOriginal.value) === JSON.stringify(useProductor.equipoUpdate)
+  ) {
+    toast.info("No hay cambios en el equipo");
+    setTimeout(() => {
+      cerrarModalEquipo();
+    }, 1000);
+
+    return false;
+  }
+  const hayObjetosVacios = useProductor.equipoUpdate?.some((miembro) =>
+    Object.values(miembro).some(
+      (valor) => valor === "" || valor === null || valor === undefined
+    )
+  );
+
+  if (hayObjetosVacios) {
+    // Si hay objetos con campos vacíos, mostramos un mensaje de error
+    toast.warn(
+      "Por favor, complete todos los campos de todos los integrantes."
+    );
+    return false; // Salimos de la función sin agregar un nuevo objeto
+  }
+  return true;
+}
+
+async function onSumitEquipoUpdate() {
+  loadingUpdateEquipo.value = true;
+  const validacion = validacionesEquipo();
+  progreso.value = true;
+
+  if (validacion) {
+    try {
+      let statusUpdate = false
+      for (let i = 0; i < useProductor.equipoUpdate.length; i++) {
+        try {
+          if (useProductor.equipoUpdate[i].fileSave) {
+            const resPictureUpdate =  await uploadFiles(useProductor.equipoUpdate[i].fileSave );
+            if (resPictureUpdate?.status) {
+              useProductor.equipoUpdate[i].picture = resPictureUpdate.url;
+              delete useProductor.equipoUpdate[i].fileSave;
+            } else {
+              toast.error("Hubo un problema al subir alguna imagen.");
+              statusUpdate = false
+              break;
+            }
+          }
+          statusUpdate = true
+          // Si ocurre un error, puedes salir del bucle
+        } catch (error) {
+          console.error(`Error procesando el integrante ${i}:`, error);
+          faseUpload.value = 'error'
+          break; // Esto detendrá el bucle
+        }
+      }
+
+      if (statusUpdate) {
+        const resAddPrestigio = await addPrestigio("equipo", useProductor.equipoUpdate)
+        useProductor.perfilProductor.equipo = useProductor.equipoUpdate
+        faseUpload.value = "Subida Completada";
+        cargarDatos()
+        toast.success('Los integrantes del equipo han sido actualizados.', {
+          onClose() {
+            isOpenModalEquipo.value = false
+          },
+        })
+      }
+
+
+    } catch (error) {
+      faseUpload.value = 'error'
+      console.error(error);
+      throw error
+    } finally {
+      loadingUpdateEquipo.value = false;
+    }
+  }
 }
 
 watch(isOpenModalPremios, (nuevoValor) => {
@@ -548,6 +749,80 @@ function pushPremios() {
   });
 }
 
+interface UploadResult {
+  status: boolean;
+  tipo: string;
+  url: string;
+}
+
+async function uploadFiles(file: File): Promise<UploadResult> {
+  if (!file) {
+    return {status: false, tipo: "otros", url: ""};
+  }
+
+  const formData = new FormData();
+  formData.append("files[]", file);
+
+  try {
+    const response = await axios({
+      url: `${import.meta.env.VITE_URL_API}/api/assets/upload`,
+      method: "POST",
+      headers: {
+        "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+      },
+      data: formData,
+      onUploadProgress: (progressEvent) => {
+        faseUpload.value = "Subiendo Imagen...";
+        const progressPercent = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total!
+        );
+        porcentaje.value = progressPercent;
+      },
+    });
+
+    return {
+      status: true,
+      tipo: "success",
+      url: `https://cockpit.arabicagc.com/storage/uploads${response.data.assets[0].path}`,
+    };
+  } catch (error) {
+    console.error("Error al subir el archivo:", error);
+    faseUpload.value = "error";
+    if (axios.isAxiosError(error) && error.code === "ERR_NETWORK") {
+      toast.info("Problemas en la conexión. Intente más tarde.");
+      return {status: false, tipo: "otros", url: ""};
+    }
+    return {status: false, tipo: "error", url: ""};
+  }
+}
+
+type UpdateKey = 'equipo' | 'certificaciones' | 'premios';
+
+type UpdateValue<T extends UpdateKey> = 
+  T extends 'equipo' ? Equipo[] :
+  T extends 'certificaciones' ? Certificaciones[] :
+  T extends 'premios' ? Premios[] :
+  never;
+
+  async function addPrestigio<T extends UpdateKey>(key: T, value: UpdateValue<T>) {
+  try{
+    const response = await axios({
+      url: `${import.meta.env.VITE_URL_API}/api/content/item/productores`,
+      method: "POST",
+      headers: {
+        "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+      },
+      data:{data: {
+        _id: useProductor.perfilProductor._id,
+        [key]: value
+      }}
+    })
+    return response.data;
+  } catch (error) {
+    console.error(`Error al actualizar ${key}:`, error);
+    throw error; // Re-lanzamos el error para que pueda ser manejado por el llamador si es necesario
+  }
+}
 
 </script>
 
