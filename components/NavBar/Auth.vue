@@ -188,7 +188,6 @@
               />
             </div>
 
-            <Placeholder class="h-8" />
           </template>
 
           <UVerticalNavigation
@@ -220,10 +219,8 @@
             @click="mobileMenuOpen = !mobileMenuOpen"
             link="/auth/login"
           />
-          <Placeholder class="h-full" />
 
           <template #body>
-            <Placeholder class="h-8" />
           </template>
         </UCard>
       </USlideover>

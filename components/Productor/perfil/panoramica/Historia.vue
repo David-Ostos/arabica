@@ -13,7 +13,7 @@
       </div>
       <UIcon
         name="i-ph-pencil-fill"
-        class="cursor-pointer text-primary self-stretch text-xl p-1 box-content"
+        class="cursor-pointer text-primary self-stretch  text-xl p-1 box-content"
         dynamic
         @click="isOpen = true"
       />
@@ -21,7 +21,7 @@
     <div class="">
       <UTextarea
         :ui="{
-          base: 'disabled:cursor-text h-[333px]',
+          base: 'disabled:cursor-text h-[333px] overflow-auto',
         }"
         class="shadow-md"
         size="sm"
@@ -136,6 +136,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   } else {
     try {
       let productorExistente = false;
+      let id ;
 
       try {
         const resGet = await axios.get(
@@ -150,9 +151,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             },
           }
         );
-        console.log(resGet.data);
         if (resGet.data) {
           productorExistente = true;
+          id = resGet.data
         }
       } catch (error) {
         {
@@ -164,7 +165,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         }
       }
 
-      if (productorExistente) {
+      if (productorExistente && id._id !== useProductor.perfilProductor._id ) {
         toast.error("El nombre del productor ya está en uso.");
         isLoading.value = false;
         return false;

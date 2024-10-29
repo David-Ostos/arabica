@@ -37,8 +37,7 @@
               <li
                 v-for="item in filterCertificados()"
                 class="mb-2 p-1 ring-primary hover:ring rounded-md cursor-pointer"
-                @click="useProductor.perfilProductor.certificaciones![index!].certificacion = item;
-                selectActiveCertificado = false; console.log(useProductor.perfilProductor.certificaciones);"
+                @click="actualizarImagenCertificado(item as Certificados)"
                 
               >
                 {{ item }}
@@ -84,7 +83,7 @@
             <ul class="m-4 text-gray-800">
               <li
                 v-for="item in filterYear()"
-                @click="useProductor.perfilProductor.certificaciones![index!].year = item;
+                @click="useProductor.certificacionesUpdate[index!].year = item;
                 selectActiveYear = false"
                 class="mb-2 p-1 ring-primary hover:ring rounded-md cursor-pointer"
               >
@@ -102,7 +101,7 @@
         </div>
 
         <div class="col-span-1">
-          <UIcon name="i-clarity-remove-line" class="text-rose-500 text-3xl absolute bottom-2 cursor-pointer" dynamic @click="useProductor.perfilProductor.certificaciones?.splice(index,1)" />
+          <UIcon name="i-clarity-remove-line" class="text-rose-500 text-3xl absolute bottom-2 cursor-pointer" dynamic @click="useProductor.certificacionesUpdate?.splice(index,1)" />
         </div>
 
       </div>
@@ -122,14 +121,29 @@ const selectActiveCertificado = ref(false);
 const selectActiveYear = ref(false);
 const certificacionesModal = ref([] as any)
 
+type Certificados = 
+""|
+"Bird Friendly"|
+"C.A.F.E practices"|
+"4C"|
+"Q Certified"|
+"UTZ Certified"|
+"FairTrade"|
+"B Corp"|
+"Organic Bio Suisse"|
+"Global G.A.P."|
+"IWCA"|
+"SCA Member"|
+"Organic"|
+"US Organic"|
+"Organic Demeter"|
+"e"
+
+
 onMounted(()=>{
   certificacionesModal.value = props.certificaciones;
   certificacionesModal.value._id = props.index.toString()
 })
-
-
-
-
 
 const years = computed(() => {
   const year = [];
@@ -141,6 +155,32 @@ const years = computed(() => {
 
 const searchQueryCertificacion = ref("");
 const searchQueryYear = ref("");
+const imagenCertificado:Ref<Certificados> = ref('')
+const certificadosImagenes: any = {
+  "Bird Friendly": "https://cockpit.arabicagc.com/assets/link/eff84e6e3163324839000121",
+  "C.A.F.E practices": "https://cockpit.arabicagc.com/assets/link/eff85482386464ca1200000f",
+  "4C": "https://cockpit.arabicagc.com/assets/link/eff86ca5353533bbde000184",
+  "Q Certified": "https://cockpit.arabicagc.com/assets/link/eff88c0c3337633e7300024c",
+  "UTZ Certified": "https://cockpit.arabicagc.com/assets/link/eff89f903661618dcc000142",
+  "FairTrade": "https://cockpit.arabicagc.com/assets/link/eff86c723031375f5300031b",
+  "B Corp": "https://cockpit.arabicagc.com/assets/link/eff84b73313932786800000b",
+  "Organic Bio Suisse": "https://cockpit.arabicagc.com/assets/link/eff84c576330395e6700007c",
+  "Global G.A.P.": "https://cockpit.arabicagc.com/assets/link/eff871b0623438422200026b",
+  "IWCA": "https://cockpit.arabicagc.com/assets/link/eff876b735336608c60001c2",
+  "SCA Member": "https://cockpit.arabicagc.com/assets/link/eff894e16261364b6f0002a0",
+  "Organic": "https://cockpit.arabicagc.com/assets/link/eff87d24623264674800038a",
+  "US Organic": "https://cockpit.arabicagc.com/assets/link/eff89a423464354da700032ep",
+  "Organic Demeter": "https://cockpit.arabicagc.com/assets/link/eff855156533338db40001b7",
+  "Rainforest Alliance": "https://cockpit.arabicagc.com/assets/link/eff88cd06337318c2e000284"
+};
+const actualizarImagenCertificado = (certificado: Certificados) => {
+  if(certificado){
+    imagenCertificado.value = certificadosImagenes[certificado];
+    useProductor.certificacionesUpdate![props.index].certificacion = certificado;
+    useProductor.certificacionesUpdate![props.index].picture = imagenCertificado.value;
+    selectActiveCertificado.value = false;
+  }
+};
 
 const certificados = [
   "Bird Friendly",
@@ -159,6 +199,8 @@ const certificados = [
   "Organic Demeter",
   "Rainforest Alliance",
 ];
+
+
 
 const filterYear = () => {
   if (!searchQueryYear.value) return years.value;

@@ -5,7 +5,6 @@
       @click="ShowModalsStore.showModalTipoGoogle = false"
     ></div>
     <div class="fixed z-[60] translate-x-1/2">
-      <!-- <Placeholder class="h-48" /> -->
       <!-- component -->
       <div class="flex flex-col justify-center h-screen">
         <div

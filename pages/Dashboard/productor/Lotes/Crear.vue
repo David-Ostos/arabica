@@ -29,7 +29,7 @@
               v-if="!loading && pictures.length > 0"
               class="row-span-2 col-span-4 border rounded-xl  cursor-pointer overflow-hidden hover:brightness-75"
               :class="
-                pictures[0]?.link !== 'i-icon-park-outline-add-picture' || !undefined
+                pictures[0]?.link !== 'i-icon-park-outline-add-picture' || undefined
                   ? 'flex justify-center items-center h-full w-full '
                   : 'hover:bg-gray-100 p-4'
               "

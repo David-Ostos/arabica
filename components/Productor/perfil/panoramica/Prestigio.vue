@@ -213,8 +213,8 @@
           class="grid grid-cols-3 gap-2 w-full py-4 overflow-x-hidden h-[144px] overflow-y-auto"
         >
           <div
-            v-if="certificaciones && certificaciones.length > 0"
-            v-for="(item, index) in certificaciones"
+            v-if="useProductor.perfilProductor.certificaciones && useProductor.perfilProductor.certificaciones.length > 0"
+            v-for="(item, index) in useProductor.perfilProductor.certificaciones"
             class="flex gap-2 col-span-1 py-2 relative w-full"
           >
             <img :src="item.picture" alt="" class="h-10 w-10 rounded-full" />
@@ -280,20 +280,20 @@
               <div>
                 <div class="flex justify-between items-center">
                   <h1
-                    v-if="certificaciones!.length === 0"
+                    v-if="useProductor.certificacionesUpdate!.length === 0"
                     class="text-gray-700 text-sm font-medium"
                   >
                     No hay certificados
                   </h1>
                   <h1
                     @click=""
-                    v-else-if="certificaciones!.length === 1"
+                    v-else-if="useProductor.certificacionesUpdate!.length === 1"
                     class="text-gray-700 text-sm font-medium"
                   >
                     1 Certificado
                   </h1>
                   <h1 v-else class="text-gray-700 text-sm font-medium">
-                    {{ certificaciones!.length }} Certificados
+                    {{ useProductor.certificacionesUpdate!.length }} Certificados
                   </h1>
                   <UButton
                     type="button"
@@ -310,22 +310,23 @@
                 </div>
                 <div>
                   <ProductorPerfilModalCertificados
-                    v-for="(item, index) in certificaciones"
+                    v-for="(item, index) in useProductor.certificacionesUpdate"
                     :certificaciones="item"
                     :index="index"
                   />
                 </div>
                 <UButton
                   type="button"
-                  class="w-fit self-end px-3 h-10 font-bold"
-                  @click=""
+                  :loading="loadingCertificadoUpdate"
+                  class="w-full mt-8 flex justify-center self-end px-3 h-10 font-bold"
+                  @click="onSumitCertificadosUpdate"
                 >
                   <UIcon
                     name="i-ic-baseline-add-circle-outline"
                     class="text-white text-2xl font-bold"
                     dynamic
                   />
-                  Guardar
+                  Actualizar los certificados
                 </UButton>
               </div>
             </UCard>
@@ -351,8 +352,8 @@
           class="grid grid-cols-3 gap-2 w-full overflow-x-hidden py-4 h-[144px] overflow-y-auto"
         >
           <div
-            v-if="premios && premios.length > 0"
-            v-for="(item, index) in premios"
+            v-if="useProductor.perfilProductor.premios && useProductor.perfilProductor.premios.length > 0"
+            v-for="(item, index) in useProductor.perfilProductor.premios"
             class="flex gap-2 col-span-1 py-2 relative w-full"
           >
             <div class="flex flex-col">
@@ -418,20 +419,20 @@
               <div>
                 <div class="flex justify-between items-center">
                   <h1
-                    v-if="premios!.length === 0"
+                    v-if="useProductor.premiosUpdate!.length === 0"
                     class="text-gray-700 text-sm font-medium"
                   >
                     No hay premios
                   </h1>
                   <h1
                     @click=""
-                    v-else-if="premios!.length === 1"
+                    v-else-if="useProductor.premiosUpdate!.length === 1"
                     class="text-gray-700 text-sm font-medium"
                   >
                     1 Premio
                   </h1>
                   <h1 v-else class="text-gray-700 text-sm font-medium">
-                    {{ premios!.length }} Premios
+                    {{ useProductor.premiosUpdate!.length }} Premios
                   </h1>
                   <UButton
                     type="button"
@@ -448,22 +449,23 @@
                 </div>
                 <div>
                   <ProductorPerfilModalPremios
-                    v-for="(item, index) in premios"
-                    :certificaciones="item"
+                    v-for="(item, index) in useProductor.premiosUpdate"
+                    :premio="item"
                     :index="index"
                   />
                 </div>
                 <UButton
                   type="button"
+                  :loading="loadingPremios"
                   class="w-fit self-end px-3 h-10 font-bold"
-                  @click=""
+                  @click="onSumitPremios"
                 >
                   <UIcon
                     name="i-ic-baseline-add-circle-outline"
                     class="text-white text-2xl font-bold"
                     dynamic
                   />
-                  Guardar
+                  Actualizar los premios
                 </UButton>
               </div>
             </UCard>
@@ -541,6 +543,7 @@ onMounted(() => {
 
 function cargarDatos() {
   certificaciones.value = useProductor.perfilProductor.certificaciones ?? [];
+  useProductor.certificacionesUpdate = useProductor.perfilProductor.certificaciones ?? [] ;
   certificacionesOriginal.value = JSON.parse(
     JSON.stringify(useProductor.perfilProductor.certificaciones)
   );
@@ -557,10 +560,40 @@ function cargarDatos() {
   );
 }
 
+type TipoPrestigio = Equipo| Certificaciones| Premios
+
+function validacionesArray<T extends TipoPrestigio>(
+  arrayOriginal: T[],
+  arrayActualizado: T[],
+  cerrarModal: () => void,
+): boolean {
+  console.log({arrayOriginal, arrayActualizado});
+  // Validación 1: Comprobar si hay cambios
+  if (JSON.stringify(arrayOriginal) === JSON.stringify(arrayActualizado)) {
+    toast.info("No hay cambios");
+    setTimeout(() => {
+      cerrarModal();
+    }, 1000);
+    return false;
+  }
+  const hayObjetosVacios = arrayActualizado.some((item) =>
+    Object.values(item).some(
+      (valor) => valor === "" || valor === null || valor === undefined
+    )
+  );
+
+  if (hayObjetosVacios) {
+    toast.warn("Por favor, complete todos los campos.");
+    return false;
+  }
+
+  return true;
+}
+
 watch(isOpenModalCertificaciones, (nuevoValor) => {
   if (nuevoValor) {
     // Al abrir el modal, crear una copia fresca
-    certificaciones.value = JSON.parse(
+    useProductor.perfilProductor.certificaciones = JSON.parse(
       JSON.stringify(certificacionesOriginal.value)
     );
   }
@@ -569,16 +602,20 @@ watch(isOpenModalCertificaciones, (nuevoValor) => {
 function cerrarModalCertificaciones() {
   isOpenModalCertificaciones.value = false;
   // Restablecer a los datos originales sin afectar el store
-  certificaciones.value = JSON.parse(
+  useProductor.perfilProductor.certificaciones = JSON.parse(
     JSON.stringify(certificacionesOriginal.value)
   );
 }
 
 function pushCertificado() {
-  certificaciones.value?.push({
+  if(!useProductor.certificacionesUpdate){
+    useProductor.certificacionesUpdate = []
+  }
+  useProductor.certificacionesUpdate.push({
     certificacion: "",
     picture: "",
     year: "",
+    _id: ""
   });
 }
 
@@ -588,6 +625,25 @@ watch(isOpenModalEquipo, (nuevoValor) => {
     useProductor.equipoUpdate = JSON.parse(JSON.stringify(equipoOriginal.value));
   }
 });
+
+const loadingCertificadoUpdate = ref(false)
+
+async function onSumitCertificadosUpdate(){
+  loadingCertificadoUpdate.value = true
+  const validacion = validacionesArray(certificacionesOriginal.value, useProductor.certificacionesUpdate, cerrarModalCertificaciones);
+
+  if(validacion){
+    const resAddPrestigio = await addPrestigio("certificaciones", useProductor.certificacionesUpdate)
+        useProductor.perfilProductor.certificaciones = useProductor.certificacionesUpdate
+        cargarDatos()
+        toast.success('Los certificados han sido actualizados.', {
+          onClose() {
+            isOpenModalCertificaciones.value = false
+            loadingCertificadoUpdate.value = false
+          },
+        })
+  }
+}
 
 function openEquipo() {
   isOpenModalEquipo.value = true;
@@ -646,38 +702,9 @@ function pushEquipo() {
   
 }
 
-
-
-function validacionesEquipo() {
-  if (
-    JSON.stringify(equipoOriginal.value) === JSON.stringify(useProductor.equipoUpdate)
-  ) {
-    toast.info("No hay cambios en el equipo");
-    setTimeout(() => {
-      cerrarModalEquipo();
-    }, 1000);
-
-    return false;
-  }
-  const hayObjetosVacios = useProductor.equipoUpdate?.some((miembro) =>
-    Object.values(miembro).some(
-      (valor) => valor === "" || valor === null || valor === undefined
-    )
-  );
-
-  if (hayObjetosVacios) {
-    // Si hay objetos con campos vacíos, mostramos un mensaje de error
-    toast.warn(
-      "Por favor, complete todos los campos de todos los integrantes."
-    );
-    return false; // Salimos de la función sin agregar un nuevo objeto
-  }
-  return true;
-}
-
 async function onSumitEquipoUpdate() {
   loadingUpdateEquipo.value = true;
-  const validacion = validacionesEquipo();
+  const validacion = validacionesArray(equipoOriginal.value, useProductor.equipoUpdate, cerrarModalEquipo);
   progreso.value = true;
 
   if (validacion) {
@@ -726,6 +753,7 @@ async function onSumitEquipoUpdate() {
       loadingUpdateEquipo.value = false;
     }
   }
+  progreso.value = false;
 }
 
 watch(isOpenModalPremios, (nuevoValor) => {
@@ -742,11 +770,30 @@ function cerrarModalPremios() {
 }
 
 function pushPremios() {
-  premios.value?.push({
+  useProductor.premiosUpdate?.push({
     _id: "",
     nombre: "",
     year: "",
   });
+}
+
+const loadingPremios = ref(false)
+
+async function onSumitPremios(){
+  loadingPremios.value = true
+  const validacion = validacionesArray(premiosOriginal.value, useProductor.premiosUpdate, cerrarModalPremios);
+
+  if(validacion){
+    const resAddPrestigio = await addPrestigio("premios", useProductor.premiosUpdate)
+    useProductor.perfilProductor.premios = useProductor.premiosUpdate
+    cargarDatos()
+    toast.success('Los premios han sido actualizados.', {
+      onClose() {
+        isOpenModalPremios.value = false
+        loadingPremios.value = false
+      },
+    })
+  }
 }
 
 interface UploadResult {
@@ -797,6 +844,8 @@ async function uploadFiles(file: File): Promise<UploadResult> {
 }
 
 type UpdateKey = 'equipo' | 'certificaciones' | 'premios';
+
+
 
 type UpdateValue<T extends UpdateKey> = 
   T extends 'equipo' ? Equipo[] :

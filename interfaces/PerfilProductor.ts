@@ -17,7 +17,14 @@ export interface PerfilProductor {
   relaciones?: string[];
   lotes?: LotesProductor[];
   logo?: string;
-  redes?: Redes[]
+  redes?: Redes[];
+  imgDestacadas?: ImgDestacadas[];
+}
+
+export type ImgDestacadas = {
+  _id?: string;
+  link?: string;
+  position?: number;
 }
 
 export type Redes = {

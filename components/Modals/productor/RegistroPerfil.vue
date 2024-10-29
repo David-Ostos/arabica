@@ -14,7 +14,6 @@
             </h3>
           </div>
         </template> -->
-        <Placeholder class="h-96" />
         <div>
           <ModalsProductorRegistroPerfilBanner/>
           <ModalsProductorRegistroPerfilBeneficios/>

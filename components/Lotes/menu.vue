@@ -19,7 +19,6 @@ const isOpen = ref(false)
           @click="isOpen = false"
         />
 
-        <Placeholder class="h-full" />
       </div>
     </USlideover>
   </div>

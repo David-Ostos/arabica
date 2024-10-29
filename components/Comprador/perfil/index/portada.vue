@@ -54,7 +54,6 @@
           class="max-h-[600px] object-contain rounded-3xl shadow-xl"
           alt=""
         />
-        <Placeholder class="h-48" />
       </div>
     </UModal>
   </div>
