@@ -30,6 +30,7 @@ export const useUserStore = defineStore("user", () => {
             }'}&populate=1&fields={"_state": false,"_modified": false,"_mby": false,"_created": false,"_cby": false,"verificacion": false,}`,
             {
               cache: "no-cache",
+              mode:'cors',
               headers: {
                 "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
               },
