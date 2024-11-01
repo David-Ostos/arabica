@@ -6,21 +6,30 @@
         <h3 class="capitalize font-medium text-xl ">Imagenes Destacadas</h3>
       </div>
       <div class="flex items-center justify-center gap-4">
-        <div v-for="img in imgDestacadas" class="border p-4 h-[186px] w-full flex  justify-center items-center">
-          <img v-if="img !== ''" :src="img" alt="" class="border  w-auto object-cover" />
-          <UIcon v-if="img === ''" name="i-heroicons-photo" class="text-4xl text-secundary" dynamic />
+        <div>
+          <UCarousel v-if="profile.imgDestacadas && profile.imgDestacadas.length > 0" v-slot="{ item }" :items="profile.imgDestacadas"
+          :ui="{ container: 'h-[186px] w-full min-w-[120px] gap-4 ' }">
+          <img @click="useShowModals.productorMuestraImg = true" :src="item.link" class="border rounded-md h-full object-cover cursor-pointer" draggable="true" />
+
+          </UCarousel>
+          <!-- Modal de muestra -->
+          <ProductorPerfilModalImgMuestraImg :image="profile.imgDestacadas"/>
+          <!-- /Modal de muestra -->
         </div>
+
+        
+
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const imgDestacadas = [
-  '',
-  '',
-  '',
-]
+import { useProfile } from '~/composables/useProfile'
+
+const useShowModals = useShowModalsStore()
+
+const { profile } = useProfile()
 </script>
 
 <style></style>

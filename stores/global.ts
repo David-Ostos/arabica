@@ -1168,8 +1168,9 @@ export const useGlobalStore = defineStore("global",() => {
 
 
 
-  const getPerfil =  async ()=>{try {
-    await axios.get(`${import.meta.env.VITE_URL_API}/api/content/item/productores/${route.params.id}?fields={"_state": false,"_modified": false,"_mby": false,"_created": false,"_cby": false,"verificacion": false,}&populate=1`,{
+  const getPerfil =  async (id: string)=>{try {
+    console.log(id);
+    await axios.get(`${import.meta.env.VITE_URL_API}/api/content/item/productores/${id}?fields={"_state": false,"_modified": false,"_mby": false,"_created": false,"_cby": false,"verificacion": false,}&populate=1`,{
       headers: {
         "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
       },

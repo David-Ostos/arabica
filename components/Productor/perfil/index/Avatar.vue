@@ -379,8 +379,8 @@ const state: any = reactive({
 });
 
 onMounted(() => {
-  if (useUser.dataUser.picture) {
-    picture.value = useUser.dataUser.picture;
+  if (useProductor.perfilProductor.logo) {
+    picture.value = useProductor.perfilProductor.logo;
     pictureTrue.value = true;
   } else {
     picture.value = "/img/avatar.png";

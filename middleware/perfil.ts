@@ -1,15 +1,7 @@
-export default defineNuxtRouteMiddleware(async(to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
+  const { fetchProfile } = useProfile()
 
-  const global = useGlobalStore()
-
-  if(!global.perfilComercial){
-    global.getPerfil()
-    console.log(global.perfilComercial);
-  }else{
-    console.log('si tá');
+  if (to.params.id) {
+    await fetchProfile(to.params.id as string)
   }
-
-  return
-  
-
 })
