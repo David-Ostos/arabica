@@ -1,5 +1,5 @@
 <template>
-  <div v-if="useUser.logged" class=" flex flex-col justify-between ">
+  <div v-if="!useUser.logged" class=" flex flex-col justify-between ">
     <div>
       <div v-for="container, index in linksMobile " :key="index" class="mb-2 border-b pb-2  ">
 
