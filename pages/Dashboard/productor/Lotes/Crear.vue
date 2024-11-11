@@ -1,10 +1,10 @@
 <template>
   <div class="my-20 mx-20">
     <div class="overflow-auto">
-      <h1 class="text-center text-3xl text-gray-700 font-bold">
+            <h1 class="text-center text-3xl text-gray-700 font-bold" @click="console.log(state.muestra)" >
         Crea tu Lote de Café
       </h1>
-      <h3 class="text-2xl mb-8 text-gray-600" @click="console.log(pictures)" >Agrega las imagenes</h3>
+      <h3 class="text-2xl mb-8 text-gray-600">Agrega las imagenes</h3>
       <div class="grid grid-cols-2 gap-8">
         <!-- galeria -->
         <div
@@ -69,7 +69,7 @@
                     color="black"
                   ></l-squircle>
                 </div>
-                <div v-if="img.link === 'i-icon-park-outline-add-picture'"  class="" >
+                <div v-if="!loading && img.link === 'i-icon-park-outline-add-picture'"  class="" >
                   <UIcon
                     :name="img.link"
                     class="rounded-xl h-28 w-full object-cover opacity-55 hover:scale-105"
@@ -78,7 +78,7 @@
                   />
                 </div>
                 <div
-                  v-show="img.link !== 'i-icon-park-outline-add-picture'"
+                  v-show="!loading && img.link !== 'i-icon-park-outline-add-picture'"
                   class="rounded-xl hover:brightness-50"
                 >
                   <img
@@ -131,13 +131,13 @@
 
         <!-- formulartio -->
         <div
-          class="flex flex-col w-full p-4 rounded-xl border justify-between h-ful shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
+          class="flex flex-col w-full h-[510px] overflow-auto p-4 rounded-xl border justify-between h-ful shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
         >
           <UForm
             :schema="schema"
             :state="state"
             @submit="onSubmit"
-            class="grid grid-cols-6 gap-4"
+            class="grid grid-cols-6 gap-4 "
           >
             <UFormGroup
               label="Sube tus imagenes"
@@ -156,10 +156,14 @@
               />
             </UFormGroup>
             <UFormGroup label="Nombre" name="nombre" class="col-span-3">
-              <UInput v-model="state.nombre" />
+              <UInput v-model="state.nombre" placeholder="Ingresa tu nombre" />
             </UFormGroup>
             <UFormGroup label="Precio" name="precio" class="col-span-3">
-              <UInput v-model="state.precio" />
+              <UInput v-model="state.precio" type="number" placeholder="5"> 
+                <template #leading>
+                  <span class="text-gray-500 dark:text-gray-400">$</span>
+                </template>
+              </UInput>
             </UFormGroup>
 
             <UFormGroup label="Origen" name="origen" class="col-span-3">
@@ -309,16 +313,50 @@
             </UFormGroup>
 
             <UFormGroup
-              label="¿Este lote Tiene pruebas gratís? "
-              name="pruebaGratis"
+              label="¿Este lote Tiene muestra? "
+              name="muestra.muestra"
               class="col-span-3"
-            >
+              >
               <UToggle
-                v-model="state.pruebaGratis"
-                on-icon="i-heroicons-check-20-solid"
-                off-icon="i-heroicons-x-mark-20-solid"
+              v-model="muestra"
+              on-icon="i-heroicons-check-20-solid"
+              off-icon="i-heroicons-x-mark-20-solid"
               />
             </UFormGroup>
+
+            <div v-if="state.muestra?.muestra" class="col-span-6 grid grid-cols-6 gap-4"> 
+
+
+              <UFormGroup
+              label="¿Este lote Tiene muestra gratis? "
+              name="muestra.muestraGratis"
+              class="col-span-2"
+              >
+              <UToggle
+              v-model="muestraGratis"
+              on-icon="i-heroicons-check-20-solid"
+              off-icon="i-heroicons-x-mark-20-solid"
+              />
+            </UFormGroup>
+
+            <UFormGroup v-if="!state.muestra.muestraGratis" label="Precio" name="muestra.precio" class="col-span-2">
+              <UInput v-model="state.muestra.precio" type="number" placeholder="5"> 
+                <template #leading>
+                  <span class="text-gray-500 dark:text-gray-400">$</span>
+                </template>
+              </UInput>
+            </UFormGroup>
+
+            <UFormGroup label="Cantidad" name="muestra.precio" class="col-span-2">
+              <UInput v-model="state.muestra.cantidad" type="number" placeholder="1"> 
+                <template #leading>
+                  <span class="text-gray-500 dark:text-gray-400">lb/</span>
+                </template>
+              </UInput>
+            </UFormGroup>
+
+            </div>
+
             <UButton
               size="xl"
               :padded="true"
@@ -461,8 +499,24 @@ const state: Lotes = reactive({
     nombre: useProductor.perfilProductor.nombre,
     picture: useUser.dataUser.picture,
   },
-  pruebaGratis: false,
+  muestra: {
+    muestra: false,
+    muestraGratis: false,
+    precio: undefined,
+    cantidad: undefined,
+  },
   ocultar: false,
+});
+
+const muestra = ref(state.muestra?.muestra)
+const muestraGratis = ref(state.muestra?.muestraGratis)
+
+watch(muestraGratis, (nuevoValor) => {
+  state.muestra!.muestraGratis = nuevoValor
+});
+
+watch(muestra, (nuevoValor) => {
+  state.muestra!.muestra = nuevoValor
 });
 
 const schema = object({
@@ -695,7 +749,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           state.cantidadLote = undefined;
           state.precio = undefined;
           state.galeria = [];
-          state.pruebaGratis = false;
+          state.muestra = {
+            muestra: false,
+            muestraGratis: false,
+            cantidad: undefined,
+            precio: undefined
+          };
           state.certificaciones = undefined;
           state.descripcion = undefined;
           pictures.value = [];

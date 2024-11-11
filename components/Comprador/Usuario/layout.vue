@@ -12,8 +12,8 @@
             <NuxtLink 
               :to="item.to" 
               activeClass="border-l-2 !border-slate-700 text-slate-700 font-semibold"
-              class="p-4 text-slate-500 border-l-2 border-transparent hover:border-primary-600 transition-all duration-500 ease-in-out text-sm"
-              >
+              :class="[ 'p-4 text-slate-500 border-l-2 border-transparent hover:border-primary-600 transition-all duration-500 ease-in-out text-sm', { 'cursor-not-allowed hover:cursor-not-allowed  opacity-50 pointer-events-none': !item.disable } ]" 
+              :aria-disabled="item.disable">
               {{ item.label }}
             </NuxtLink>
             <UIcon :name="item.icon" class="text-slate-700 " />
@@ -27,14 +27,16 @@
 <script lang="ts" setup>
 const useUser = useUserStore()
 
-
+console.log(useUser.dataUser.perfilBase);
 const links = [
   [{
     label: 'Informacion Basica',
     icon:'',
+    disable:true,
     to: '/dashboard/comprador/usuario'
   }, {
     label: 'Informacion Comercial',
+    disable: useUser.dataUser.perfilBase,
     icon:'',
     // icon: 'i-heroicons-home',
     to: '/dashboard/comprador/usuario/informacionComercial'
@@ -46,6 +48,7 @@ const links = [
   }, */ {
     label: 'Elimanar Cuenta',
     icon:'',
+    disable:true,
     // icon: 'i-heroicons-command-line',
     to: '/dashboard/comprador/usuario/eliminarCuenta'
   }]/* , [{

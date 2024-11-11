@@ -18,9 +18,16 @@ export interface Lotes{
     nombre?: string,
     picture?: string 
   };
-  pruebaGratis?: boolean,
+  muestra?: Muestra,
   ocultar?: boolean
 }
+
+export type Muestra = {
+  muestra?: boolean,
+  muestraGratis?: boolean,
+  precio?: number,
+  cantidad?: number
+} 
 
 export type Certificaciones = 'organic' | 'fair trade' | 'rain fores' | 'imocert o jas' /* {
   tipo: 'organic' | 'fair trade' | 'rain fores' | 'imocert o jas',

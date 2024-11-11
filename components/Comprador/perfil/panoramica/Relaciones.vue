@@ -5,8 +5,8 @@
         <h3 class="capitalize font-medium text-xl ">Relaciones</h3>
       </div>
       <div class="border bg-white  h-56 rounded-md p-4">
-        <p v-if="!props.relaciones" class="text-sm text-gray-400">Todavia no has proporcionado las relaciones...</p>
-        <p v-else class="text-sm " v-for="item in props.relaciones">{{ item }}</p>
+        <p v-if="relaciones && relaciones.length === 0  " class="text-sm text-gray-400">Todavia no has proporcionado las relaciones...</p>
+        <p v-else class="text-sm " v-for="item in relaciones">{{ item }}</p>
       </div>
     </div>
   </div>
@@ -20,6 +20,10 @@
       required: true,
       default: () => []
     } 
+  })
+
+  onMounted(()=>{
+    console.log(props.relaciones);
   })
 
 </script>

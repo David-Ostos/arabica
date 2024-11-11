@@ -19,7 +19,11 @@
 
         <SearchComprador class="hidden sm:block" />
 
-        <DropdownsNavBarAvatarComprador />
+        <div class="flex justify-center items-center gap-2">
+          <BotonesBotonSecondary contenido="Completar Registro" :link="`/dashboard/${useUser.dataUser.tipoUser}`" @click="useModal.showModalCompradorPerfilCompleto = true" />
+          <DropdownsNavBarAvatarComprador />
+        </div>
+
       </div>
 
       <SearchComprador class="sm:hidden mt-4" />
@@ -35,11 +39,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-
-import { useGlobalStore } from "~/stores/global";
 import imgLoginLitgh from "~/public/img/logo_ligth_new.png";
+import { toast } from "vue3-toastify";
 
-const useGlobal = useGlobalStore();
+const useModal = useShowModalsStore()
 const useUser = useUserStore();
 
 const nav1 = ref();
@@ -57,6 +60,11 @@ const items = [
   {
     label: "Lotes favoritos",
     to: "/dashboard/comprador/favoritos",
+    disabled: !useUser.dataUser.perfilBase,
+    labelClass: 'cursor-not-allowed hover:cursor-not-allowed  opacity-50 pointer-events-none',
+    click: ()=> {
+      if(!useUser.dataUser.perfilBase) {toast.info('Para poder acceder a favoritos, necesitas completar tu perfil.')}
+    }
   },
 
   /* 

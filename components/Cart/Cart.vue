@@ -16,7 +16,7 @@ const useCart = useCartStore();
           </div>
           <div class="container-info">
             <p class="item-name">{{ item.nombre }}</p>
-            <p v-if="item.productor" class="item-productor">
+            <p v-if="item.productor" class="item-productor capitalize text-primary-600">
               {{ item.productor?.nombre }}
             </p>
             <p class="item-price">{{ item.precio }} USD / LB</p>
@@ -47,10 +47,9 @@ const useCart = useCartStore();
   position: fixed;
   right: 10px;
   background-color: #fff;
-  height: 85vh;
+  height: 100vh;
   padding: 0.5rem;
   z-index: 5;
-  border-radius: 12px;
 }
 
 .title-cart {
@@ -108,7 +107,6 @@ const useCart = useCartStore();
       }
 
       .item-productor {
-        color: rgb(74, 222, 128);
         font-size: 0.9em;
         margin-bottom: 0.3rem;
         font-weight: 700;

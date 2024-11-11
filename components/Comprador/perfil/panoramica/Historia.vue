@@ -21,7 +21,7 @@
             disabled
             color="gray"
             variant="outline"
-            placeholder="Todavia no haz proporcionado tu descripción..."
+            placeholder="Todavia no se ha proporcionado la descripción..."
             :model-value="info"
           />
         </div>

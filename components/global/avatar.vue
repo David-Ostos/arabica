@@ -1,6 +1,6 @@
 <template>
-  <div class="overflow-hidden rounded-full h-14 w-14" 
-    :class="clases"
+  <div class="overflow-hidden rounded-full" 
+    :class="[clases, size ? size : 'h-14 w-14']"
   >
     <USkeleton
         v-if="!loadingImg && useUser.dataUser.picture"
@@ -11,7 +11,7 @@
         }"
       />
   
-      <div else  class="h-14 w-14 rounded-full" :class="clases" >
+      <div else  class=" rounded-full" :class="[clases, size ? size : 'h-14 w-14']" >
         <img v-if="!picture" :src="useUser.dataUser.picture ? useUser.dataUser.picture : '/img/avatar.png' " 
         @load="loadingImg = true" class=" rounded-full" :class="clases"  alt=""/>
         <img v-else="picture" :src="picture ? picture : '/img/avatar.png' " 
@@ -33,7 +33,8 @@ const props = defineProps({
   clases: String,
   clasesIcon:String,
   icon: String,
-  picture: String
+  picture: String,
+  size: String
 })
 
 

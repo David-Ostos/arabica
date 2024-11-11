@@ -55,7 +55,7 @@ const handleFilter = (param: string, value: any = undefined) => {
   console.log(param, value);
   const updatedFilters: any = {};
   updatedFilters[param] = value;
-  if (param == "samplesAvailable" && value == false) {
+  if (param === "samplesAvailable" && value === false) {
     updatedFilters[param] = undefined;
   }
 
@@ -112,7 +112,7 @@ const handlerCheckProcess = (process: string) => {
     value = [];
   }
 
-  if (processActive == false) {
+  if (processActive === false) {
     value.push(process);
   } else {
     value = props.filtersSearch.process.filter(
@@ -120,7 +120,7 @@ const handlerCheckProcess = (process: string) => {
     );
   }
 
-  if (value.length == 0) {
+  if (value.length === 0) {
     value = undefined;
   }
 
@@ -140,7 +140,7 @@ const handlerCheckCertification = (cert: string) => {
   }
 
   console.log(certActive);
-  if (certActive == false) {
+  if (certActive === false) {
     value.push(cert);
   } else {
     value = props.filtersSearch.certifications.filter(
@@ -149,7 +149,7 @@ const handlerCheckCertification = (cert: string) => {
     console.log(value);
   }
 
-  if (value.length == 0) {
+  if (value.length === 0) {
     value = undefined;
   }
 
@@ -182,22 +182,22 @@ const cleanFilters = () => {
             :key="key"
             class="item-filter-active"
           >
-            <p v-if="String(key) == 'samplesAvailable'">
+            <p v-if="String(key) === 'samplesAvailable'">
               {{ "Muestras disponibles:" }}
             </p>
-            <p v-if="String(key) == 'origin'">
+            <p v-if="String(key) === 'origin'">
               {{ "Origen:" }}
             </p>
-            <p v-if="String(key) == 'points'">
+            <p v-if="String(key) === 'points'">
               {{ "Puntaje:" }}
             </p>
-            <p v-if="String(key) == 'price'">
+            <p v-if="String(key) === 'price'">
               {{ "Precio:" }}
             </p>
-            <p v-if="String(key) == 'process'">
+            <p v-if="String(key) === 'process'">
               {{ "Proceso:" }}
             </p>
-            <p v-if="String(key) == 'certifications'">
+            <p v-if="String(key) === 'certifications'">
               {{ "Certificaciones:" }}
             </p>
 
@@ -205,7 +205,7 @@ const cleanFilters = () => {
               {{ value.join(", ") }}
             </span>
             <span v-else>
-              <p v-if="value == true">Si</p>
+              <p v-if="value === true">Si</p>
               <p v-else>
                 {{ value }}
               </p>
@@ -256,7 +256,7 @@ const cleanFilters = () => {
       <div v-if="filtersShowActive.origin">
         <button class="origin-button" @click="props.handleOrigin()">
           {{
-            props.filtersSearch.origin == undefined
+            props.filtersSearch.origin === undefined
               ? "Seleccionar orígenes"
               : props.filtersSearch.origin[0]
           }}
@@ -286,7 +286,7 @@ const cleanFilters = () => {
           :min="70"
           :max="90"
           :value="
-            props.filtersSearch.points == undefined
+            props.filtersSearch.points === undefined
               ? [70, 90]
               : props.filtersSearch.points
           "
@@ -314,7 +314,7 @@ const cleanFilters = () => {
           :min="0"
           :max="20"
           :value="
-            props.filtersSearch.price == undefined
+            props.filtersSearch.price === undefined
               ? [0, 20]
               : props.filtersSearch.price
           "
@@ -450,6 +450,16 @@ const cleanFilters = () => {
             />
             <div class="check-box">
               <label>Honey</label>
+            </div>
+          </div>
+          <div class="item-list">
+            <input
+              type="checkbox"
+              :checked="existProcess('Moche')"
+              @change="handlerCheckProcess('Moche')"
+            />
+            <div class="check-box">
+              <label>Moche</label>
             </div>
           </div>
         </div>
@@ -667,8 +677,10 @@ const cleanFilters = () => {
 .clean-filter {
   width: 90%;
   display: flex;
+  color:white;
   justify-content: center;
   align-items: center;
+  padding: 0.5rem;
   background-color: rgb(74, 222, 128);
   border-radius: 10px;
 }

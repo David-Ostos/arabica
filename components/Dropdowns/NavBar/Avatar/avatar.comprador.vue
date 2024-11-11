@@ -16,49 +16,50 @@ const items = [
       icon: "i-material-symbols-team-dashboard-outline",
       link: `/dashboard/comprador`,
       badge: {value : false, number: 1}
-    }/* ,
-    {
-      label: "Solicitudes",
-      name: "solicitudes",
-      link: `/dashboard/${useUser.dataUser.tipoUser}/solicitudes`,
-      icon: "i-heroicons-book-open",
-      badge: {value : true, number: 3}
-    }, 
-    {
-      label: "Planificadores",
-      name: "planificadores",
-      icon: "i-heroicons-presentation-chart-line",
-      link: `/dashboard/${useUser.dataUser.tipoUser}/planificadores`,
-      badge: {value : true, number: 1}
-    } */ ,
-    {
-      label: "Muestras",
-      name: "muestras",
-      icon: "i-hugeicons-coffee-beans",
-      link: `/dashboard/comprador/muestras`,
-      badge: {value : false, number: 1}
     },
-    {
-      label: "Pedidos",
-      name: "pedidos",
-      icon: "i-heroicons-truck",
-      link: `/dashboard/comprador/pedidos`,
-      badge: {value : true, number: 10}
-    },
-    /* {
-      label: "Facturas",
-      name: "facturas",
-      icon: "i-heroicons-clipboard-document-list",
-      link: `/dashboard/${useUser.dataUser.tipoUser}/facturas`,
-      badge: {value : true, number: 25}
-    } */
+    // {
+    //   label: "Solicitudes",
+    //   name: "solicitudes",
+    //   link: `/dashboard/${useUser.dataUser.tipoUser}/solicitudes`,
+    //   icon: "i-heroicons-book-open",
+    //   badge: {value : true, number: 3}
+    // }, 
+    // {
+    //   label: "Planificadores",
+    //   name: "planificadores",
+    //   icon: "i-heroicons-presentation-chart-line",
+    //   link: `/dashboard/${useUser.dataUser.tipoUser}/planificadores`,
+    //   badge: {value : true, number: 1}
+    // } ,
+    // {
+    //   label: "Muestras",
+    //   name: "muestras",
+    //   icon: "i-hugeicons-coffee-beans",
+    //   link: `/dashboard/comprador/muestras`,
+    //   disabled: ,
+    //   badge: {value : false, number: 1}
+    // },
+    // {
+    //   label: "Pedidos",
+    //   name: "pedidos",
+    //   icon: "i-heroicons-truck",
+    //   link: `/dashboard/comprador/pedidos`,
+    //   badge: {value : true, number: 10}
+    // },
+    //  {
+    //   label: "Facturas",
+    //   name: "facturas",
+    //   icon: "i-heroicons-clipboard-document-list",
+    //   link: `/dashboard/${useUser.dataUser.tipoUser}/facturas`,
+    //   badge: {value : true, number: 25}
+    // }
   ],
   [
-    {
-      label: "Perfil",
-      icon: "i-tabler-user-circle",
-      to: `/dashboard/comprador/perfil`,
-    },
+    // {
+    //   label: "Perfil",
+    //   icon: "i-tabler-user-circle",
+    //   to: `/dashboard/comprador/perfil`,
+    // },
     {
       label: "Ajustes de Cuenta",
       icon: "i-tabler-settings",

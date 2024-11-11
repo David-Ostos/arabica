@@ -1676,6 +1676,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     const verificarRuc = responseVerificacion.some(
       (productor: any) => productor.ruc === state.ruc
     );
+    console.log(responseVerificacion);
     const verificarRazonSocial = responseVerificacion.some(
       (productor: any) =>
         productor.razonSocial.toLowerCase() === state.razonSocial!.toLowerCase()
@@ -1686,7 +1687,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     );
     const verificarNumeroTelefonico = responseVerificacion.some(
       (productor: any) =>
-        productor.numeroTelefonico.numero === state.numeroTelefonico!.numero
+        productor.numeroTelefonico.numero === state.numeroTelefonico!.numero && productor.numeroTelefonico.code === state.numeroTelefonico!.code
     );
 
     if (verificarNombre) {

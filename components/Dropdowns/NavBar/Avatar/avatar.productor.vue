@@ -10,7 +10,7 @@ const items = [
     {
       label: "ben@example.com",
       slot: "account",
-      disabled: true,
+      disabled: false,
     },
   ],
   [

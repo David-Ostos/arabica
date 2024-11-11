@@ -15,14 +15,14 @@ const useCart = useCartStore();
 //problema logged en false
 /* console.log(useUser); */
 
-const typeUser = useUser.dataUser.tipoUser;
-const showCart = ref(false);
+const typeUser = ref();
 const loggedTem = true;
 
 const scrolled = ref(false);
 const nav1 = ref();
 const mobileMenuOpen = ref(false);
 
+const showCart = ref(false);
 const activeCart = () => {
   //activar modal cart
   showCart.value = !showCart.value;
@@ -69,11 +69,11 @@ const items = [
 
 onMounted(() => {
   useGlobal.heightNav = nav1.value.clientHeight;
+  window.addEventListener("scroll", handleScroll);
+  typeUser.value = useUser.dataUser.tipoUser
+  console.log({"logged":useUser.logged});
 });
 
-onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
-});
 onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
 });
@@ -107,34 +107,24 @@ function handleScroll() {
 
           <SearchComprador />
 
-          <ul class="flex gap-4">
-            <li v-if="!loggedTem">
-              <BotonSecondary link="/auth/login" contenido="Iniciar Sesión" />
+          <ul class="flex items-center gap-4">
+            <li>
+              <UChip :text="useCart.cart.length" size="2xl">
+                <div class="p-2 rounded-lg  bg-primary flex justify-center items-center cursor-pointer" @click="activeCart">
+                  <UIcon class="text-white text-xl font-bold" name="i-material-symbols-shopping-cart" dynamic />
+                </div>
+              </UChip>
             </li>
-            <li v-if="loggedTem && useUser.logged" class="container-options">
-              <BotonSecondary
-                :link="`/dashboard/${useUser.dataUser.tipoUser}`"
-                contenido="Panel de Control"
-              />
-              <li v-if="!loggedTem">
-              <BotonSecondary link="/auth/login" contenido="Iniciar Sesión" />
-            </li>
-
-              <button
-                v-if="typeUser == 'comprador'"
-                class="button-cart"
-                @click="activeCart"
-              >
-                <span class="count-cart" v-if="useCart.cart.length > 0">{{
-                  useCart.cart.length
-                }}</span>
-                <span class="i-heroicons-shopping-cart"></span>
-              </button>
-            </li>
-            <li v-if="loggedTem && !useUser.logged" class="container-options">
+            <li v-if="!useUser.logged" class="container-options">
               <BotonSecondary
                 link="/auth/login"
                 contenido="Iniciar Seción"
+              />
+            </li>
+            <li v-if="useUser.logged" class="container-options">
+              <BotonSecondary
+                :link="`/dashboard/${typeUser}`"
+                contenido="Panel de Control"
               />
             </li>
           </ul>
@@ -150,10 +140,10 @@ function handleScroll() {
             </li>
           </ul> -->
         </div>
+        <Cart v-if="showCart" />
       </header>
     </div>
 
-    <Cart v-if="showCart" />
 
     <slot />
     <ProductorFooter />

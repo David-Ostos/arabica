@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showOrigins == true" class="show-origins">
+  <div v-if="showOrigins === true" class="show-origins">
     <div class="container-origins">
       <div class="flex justify-between">
         <h1>Selecciona tus orígenes</h1>
@@ -13,7 +13,7 @@
           <button
             class="btn-all"
             @click="handleOriginFilter('all')"
-            :class="{ active: selectedorigin == 'all' }"
+            :class="{ active: selectedorigin === 'all' }"
           >
             Todos los orígenes
           </button>
@@ -22,8 +22,8 @@
         <div class="btns-country">
           <button
             class="btn-country"
-            @click="handleOriginFilter('perú')"
-            :class="{ active: selectedorigin == 'peru' }"
+            @click="handleOriginFilter('perú')  "
+            :class="{ active: selectedorigin === 'perú' }"
           >
             <img :src="iconPeru" />
             Perú
@@ -54,8 +54,8 @@
       </div>
       <div class="h-full">
         <Filters
-          :handleOrigin="handleShowOrigin"
           v-if="isOpen"
+          :handleOrigin="handleShowOrigin"
           :filtersSearch="filtersSearch"
           :filterActive="filtersActive"
           @filter-changed="handleFilterChange"
@@ -74,13 +74,13 @@
           class="font-bold text-base md:text-lg text-gray-800 line-clamp-2 hover:line-clamp-none transition-all duration-1000 mb-4"
         >
           {{
-            filtersActive == false ? useLotes.lotes.length : lotesFilter.length
+            filtersActive === false ? useLotes.lotes.length : lotesFilter.length
           }}
           Lotes disponibles
         </h1>
         <div class="flex flex-wrap gap-4 justify-start mr-4 mb-10">
           <div
-            v-for="item in filtersActive == false
+            v-for="item in filtersActive === false
               ? useLotes.lotes
               : lotesFilter"
             class="w-[30%] min-w-64 mb-4 relative"
@@ -91,9 +91,9 @@
 
         <div
           v-if="
-            filtersActive == false
-              ? useLotes.lotes.length == 0
-              : lotesFilter.length == 0
+            filtersActive === false
+              ? useLotes.lotes.length === 0
+              : lotesFilter.length === 0
           "
         >
           <p>No hay lotes disponibles</p>
@@ -157,7 +157,7 @@ const applyFilter = () => {
   const filteredLotes = useLotes.lotes.filter((lote) => {
     if (
       filtersSearch.value.samplesAvailable !== undefined &&
-      lote.pruebaGratis !== filtersSearch.value.samplesAvailable
+      lote.muestra?.muestra !== filtersSearch.value.samplesAvailable
     ) {
       return false;
     }
@@ -173,7 +173,7 @@ const applyFilter = () => {
     }
 
     if (filtersSearch.value.process && filtersSearch.value.process.length > 0) {
-      if (lote.proceso! == null) {
+      if (lote.proceso! === null) {
         return;
       }
 
@@ -185,7 +185,7 @@ const applyFilter = () => {
       filtersSearch.value.certifications &&
       filtersSearch.value.certifications.length > 0
     ) {
-      if (lote.certificaciones! == null) {
+      if (lote.certificaciones! === null) {
         return;
       }
 
@@ -225,19 +225,19 @@ const applyFilter = () => {
 };
 
 const handleOriginFilter = (param: string) => {
-  if (param == "all") {
+  if (param === "all") {
     selectedorigin.value = "all";
   } else {
     selectedorigin.value = "perú";
   }
 
-  if (filtersSearch.value.origin == undefined) {
+  if (filtersSearch.value.origin === undefined) {
     filtersSearch.value.origin = [];
   }
 
   if (
     filtersSearch?.value.origin &&
-    filtersSearch?.value?.origin[0] == undefined
+    filtersSearch?.value?.origin[0] === undefined
   ) {
     filtersSearch.value.origin = ["perú"];
 

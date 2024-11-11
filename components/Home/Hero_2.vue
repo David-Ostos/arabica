@@ -1,7 +1,7 @@
 <template>
   <div class="relative ">
-    <div class=" mt-4 bg-reverse bg-[url(/img/buen_dia.webp)] bg-cover bg-[center_bottom_-50px]   -scale-x-100 brightness-50">
-      <img src="" class="h-[80vh] w-full object-cover object-[center_bottom_1rem]" alt="">
+    <div class=" mt-4 bg-reverse  bg-cover bg-[center_bottom_-50px]   -scale-x-100 brightness-50">
+      <img src="/img/buen_dia.webp" class="h-full md:h-[80vh] w-full object-cover object-[center_bottom_1rem]" alt="">
     </div>
     <div class="absolute top-10 left-10 max-w-2xl flex flex-col justify-center items-center text-white mx-8 sm:mx-0">
   

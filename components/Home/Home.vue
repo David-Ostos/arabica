@@ -1,9 +1,9 @@
 <template>
-<div>
-  <div :class="[!scrolled && $route.path === '/' ? 'bg-transparent !text-white' :'border-b rounded-3xl shadow-sm' ,{
+<div class="">
+  <div :class="[!scrolled && $route.path === '/' ? 'bg-white !text-dark md:bg-transparent md:!text-white' :'border-b rounded-3xl shadow-sm' ,{
       ' !text-dark bg-white dark:bg-dark rounded-xl shadow-md ': scrolled,
     },{ 'opacity-100': navShow }]"
-    class="fixed w-screen top-0 z-50 transition-all duration-300 opacity-0"
+    class="fixed w-screen top-0 z-50 transition-all duration-300 opacity-0 "
   >
     <header ref="nav1">
       <nav
@@ -14,8 +14,13 @@
           <NuxtLink to="/" class="-m-1.5 p-1.5">
             <span class="sr-only">Arabica</span>
             <img
-              class="h-14 w-auto"
+              class="hidden md:block h-14 w-auto"
               :src="!scrolled && $route.path === '/' ? imgLogo : imgLogoLitgh"
+              alt=""
+            />
+            <img
+              class="md:hidden h-14 w-auto"
+              :src="imgLogoLitgh"
               alt=""
             />
           </NuxtLink>
@@ -113,7 +118,28 @@
       </nav>
     </header>
   </div>
+
+  <div>
+    <div>
+
+    <USlideover side="left" v-model="mobileMenuOpen" :ui="{width: 'w-[80%] max-w-[80%]'}">
+      <UCard class="flex flex-col flex-1" :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+        <template #header>
+          <div class="flex items-center justify-between">
+            <img class="h-14 w-auto" :src="imgLogoLitgh" alt=""/>
+            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="mobileMenuOpen = false" />
+          </div>
+        </template>
+
+        <LazyMobileNavigationVerticalNavigation/>
+
+      </UCard>
+    </USlideover>
+  </div>
+  </div>
+
 </div>
+
 </template>
 
 <script setup lang="ts">
@@ -226,7 +252,38 @@ const links = [
     ],
   },
 ];
+
+const linksMobile = [
+  [{
+    label: 'Profile',
+    avatar: {
+      src: 'https://avatars.githubusercontent.com/u/739984?v=4'
+    },
+    badge: 100
+  }, {
+    label: 'Installation',
+    icon: 'i-heroicons-home',
+    to: '/getting-started/installation'
+  }, {
+    label: 'Vertical Navigation',
+    icon: 'i-heroicons-chart-bar',
+    to: '/components/vertical-navigation'
+  }, {
+    label: 'Command Palette',
+    icon: 'i-heroicons-command-line',
+    to: '/components/command-palette'
+  }], [{
+    label: 'Examples',
+    icon: 'i-heroicons-light-bulb'
+  }, {
+    label: 'Help',
+    icon: 'i-heroicons-question-mark-circle'
+  }]
+]
+
 </script>
 <style>
 
 </style>
+
+

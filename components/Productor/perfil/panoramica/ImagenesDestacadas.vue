@@ -117,6 +117,7 @@ const displayedImages = computed(() => {
 onMounted(() => {
   // Asumiendo que las imágenes destacadas se cargan desde el store del productor
   imgDestacadas.value = useProductor.perfilProductor.imgDestacadas || [];
+  console.log(imgDestacadas.value);
   if (imgDestacadas.value.length === 0) {
     imgRelleno.value = crearGaleria();
   }

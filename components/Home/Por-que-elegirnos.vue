@@ -36,7 +36,7 @@
         </ul>
       </div>
         <div class="md:relative md:basis-1/2 mx-8 sm:mx-0 ">
-          <div class="md:absolute mb-10 md:mb-0 -right-4 top-28 ring-white ring-8 ring-offset-4 rounded-full shadow-md  ">
+          <div class="hidden sm:block md:absolute mb-10 md:mb-0 -right-4 top-28 ring-white ring-8 ring-offset-4 rounded-full shadow-md  ">
             <img :src="elegirnos_1"  class="rounded-full  h-[450px] w-[450px]" />
           </div>
           

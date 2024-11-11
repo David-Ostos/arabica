@@ -102,18 +102,25 @@
           </div>
           <div>
             <div
-              v-if="item.pruebaGratis"
+              v-if="item.muestra?.muestra && item.muestra.muestraGratis"
               class="text-primary-600 hover:text-primary-700 items-center w-full flex text-xs"
             >
               <UIcon name="i-heroicons-check-20-solid" class="text-lg" />
               <p class="uppercase">Muestra gratis disponible</p>
             </div>
             <div
-              v-else
+              v-else-if="item.muestra?.muestra && !item.muestra.muestraGratis"
+              class="text-stone-600 hover:text-stone-700 font-bold flex items-center text-xs"
+            >
+              <UIcon name="i-heroicons-check-20-solid" class="text-lg" />
+              <p class="uppercase">Muestra disponible en {{ item.muestra.precio }}$ por {{ item.muestra.cantidad }}/LB</p>
+            </div>
+            <div
+              v-else-if="!item.muestra?.muestra"
               class="text-red-600 hover:text-red-700 font-bold flex items-center text-xs"
             >
               <UIcon name="i-heroicons-x-circle-20-solid" class="text-lg" />
-              <p class="uppercase">Muestra gratis no disponible</p>
+              <p class="uppercase">Muestra no disponible</p>
             </div>
           </div>
         </div>
@@ -151,7 +158,7 @@
                 >
               </p>
 
-              <p class="block">En origen</p>
+              <p class="block capitalize">origen de {{ item.departamento}}</p>
             </div>
           </div>
         </div>
@@ -168,7 +175,6 @@ const campos = ref();
 
 const loadingImg = ref(true);
 
-console.log(props.item);
 
 onMounted(() => {
   campos.value = [

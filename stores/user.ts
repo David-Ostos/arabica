@@ -38,6 +38,8 @@ export const useUserStore = defineStore("user", () => {
           );
 
           const dataUserFetch = (await peticionUser.json())[0];
+          // const copia = JSON.parse(JSON.stringify(dataUserFetch))
+
           if (!dataUserFetch) {
             toast.error("Usuario no encontrado", {
               onClose: () => {
@@ -46,7 +48,6 @@ export const useUserStore = defineStore("user", () => {
               },
             });
           }
-
 
           dataUserSaved = {
             email: dataUserFetch.email,
@@ -106,19 +107,14 @@ export const useUserStore = defineStore("user", () => {
           dataUser.value = {
             ...dataUserFetch,
           };
+          logged.value = true;
+
         } catch (error) {
+          toast.info('Hubo un error en la conexion vuelva a intentar mas tarde.')
           console.log(error);
         }
       } else {
         console.log("hola");
-        /**
-         *
-         * // todo:
-         * aqui se puede agrergar logica si se quiere mostrar una informacion cuando el usuario inicie en la app
-         *
-         */
-
-        // console.log('nay');
       }
     } else {
       return;

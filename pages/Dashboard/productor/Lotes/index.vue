@@ -1,4 +1,12 @@
 <template>
+
+  <ModalsNotificacion v-if="openModalNotificacion" @close="closeModal" titulo="Registro del usuario incompleto" 
+    contenido-one="Debes registrarte e introducir todos los datos requeridos para agregar algun lote." 
+    contenido-two="" icon="info"  
+    texto-boton="Terminar el registro"
+    :to="`/dashboard/${useUser.dataUser.tipoUser}`"
+  />
+
   <div class="flex gap-8 z-0 justify-between relative flex-grow mr-8">
     <!-- Menu desplegable -->
     <div
@@ -224,12 +232,12 @@
           abajo.
         </p>
         <div>
-          <div
+          <Button
             class="text-3xl border bg-white items-center rounded-xl p-2 ease-in-out duration-700 truncate flex gap-1 relative hover:cursor-pointer hover:bg-gray-100 transition-all hover:border-gray-600 text-black ring-2 ring-offset-2 ring-primary ring-offset-black"
-            @click="router.push('/dashboard/productor/lotes/crear')"
+            @click="crearLote()"
           >
             <UIcon name="i-heroicons-plus-circle" class="font-bold" />
-          </div>
+          </Button>
         </div>
       </div>
     </div>
@@ -267,10 +275,10 @@
 <script lang="ts" setup>
 import {toast} from "vue3-toastify";
 import {useLotesStore} from "~/stores/Lotes";
-import crearLote from "/img/crear_lote.webp";
 import axios from "axios";
-import type {Lotes} from "~/interfaces/PerfilProductor";
+import type {Lotes} from "~/interfaces/Lotes";
 import type {MyAxiosRequestConfig} from "~/interfaces/axios";
+import { useUserStore } from '../../../../stores/user';
 
 definePageMeta({
   middleware: "productor",
@@ -279,6 +287,7 @@ definePageMeta({
 const useLotes = useLotesStore();
 const router = useRouter();
 const useProductor = useProductorStore();
+const useUser = useUserStore()
 
 const isOpen = ref(false);
 const isEdit = ref(false);
@@ -299,6 +308,20 @@ const lotes = reactive(
   )
 );
 
+const openModalNotificacion = ref(false) 
+
+const closeModal = (close: boolean)=>{
+  openModalNotificacion.value = close
+}
+
+const crearLote = ()=>{
+  if(!useUser.dataUser.perfilBase){
+    openModalNotificacion.value = true
+    return
+  }
+  router.push('/dashboard/productor/lotes/crear')
+}
+
 function verificarLotes() {
   lotes.forEach((lote) => {
     if (lote.ocultar) {
@@ -316,12 +339,13 @@ onMounted(() => {
 const links = ref([
   {
     label: "agregar",
-    disable: false,
+    disable: !useUser.dataUser.perfilBase,
     icon: "i-heroicons-plus-circle",
     color: "text-primary-600 border-primary-600 ",
     isActive: false,
     accion: () => {
-      router.push("/dashboard/productor/lotes/crear");
+      if(useUser.dataUser.perfilBase) return router.push("/dashboard/productor/lotes/crear") 
+      else return openModalNotificacion.value = true 
     },
   },
   {

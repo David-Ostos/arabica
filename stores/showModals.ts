@@ -6,11 +6,15 @@ export const useShowModalsStore = defineStore('showModals', () => {
   const showModalProductorPerfilCompleto = ref(false)
   const showModalCompradorPerfilCompleto = ref(false)
   const productorMuestraImg = ref(false)
+  const openModalNotificacion = ref(false)
+  const textoModalNotidicaciones = ref('')
 
   return {
     showModalTipoGoogle,
     showModalProductorPerfilCompleto,
     showModalCompradorPerfilCompleto,
-    productorMuestraImg
+    productorMuestraImg,
+    openModalNotificacion,
+    textoModalNotidicaciones 
   }
 })

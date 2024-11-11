@@ -6,10 +6,10 @@
       <h1
         class="font-bold text-base md:text-lg text-gray-800 line-clamp-2 hover:line-clamp-none transition-all duration-1000 mb-4"
       >
-        {{ useLotes.lotes.length }} Lotes disponibles
+        {{ lotes!.length }} Lotes disponibles
       </h1>
       <div class="flex flex-wrap gap-4 justify-between mr-4 ">
-        <div v-for="item in useLotes.lotes" class=" w-[30%] mb-4 relative ">
+        <div v-for="item in lotes" class=" w-[30%] mb-4 relative ">
           <LotesCard :item="item" />
         </div>
       </div>
@@ -24,6 +24,10 @@ definePageMeta({
   layout: "productor",
 });
 const useLotes = useLotesStore()
+const useProductor = useProductorStore()
+
+const lotes = useLotes.lotes.filter((lote: any) => useProductor.perfilProductor.lotes?.some(idLote => idLote._id === lote._id))
+console.log(lotes);
 </script>
 
 <style scoped >
