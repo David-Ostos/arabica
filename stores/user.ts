@@ -1,9 +1,10 @@
 import type { User } from "~/interfaces/Users";
 import { useProductorStore } from "./productor";
 import type { localStoreDataUser } from "~/interfaces/localStore.dataUser";
-import type { LotesProductor } from "~/interfaces/PerfilProductor";
+import type { LotesProductor, PerfilProductor, Redes } from "~/interfaces/PerfilProductor";
 import type { Lotes } from "~/interfaces/Lotes";
 import { toast } from "vue3-toastify";
+import axios from "axios";
 
 export const useUserStore = defineStore("user", () => {
   const router = useRouter();
@@ -15,6 +16,8 @@ export const useUserStore = defineStore("user", () => {
   const logged = ref(false);
 
   const fetchDataUser = async () => {
+
+    // const copia = JSON.parse(JSON.stringify(dataUserFetch))
     if (typeof window !== "undefined" && window.localStorage) {
       // código que usa localStorage
       if (localStorage.getItem("dataUser") !== null) {

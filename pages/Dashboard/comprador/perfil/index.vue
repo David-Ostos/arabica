@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 
 definePageMeta({
-  middleware: 'comprador',
+  middleware: ()=>{
+    return navigateTo('/')
+  },
   layout: 'comprador'
 })
 

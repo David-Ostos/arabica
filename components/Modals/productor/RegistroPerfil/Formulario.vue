@@ -1602,19 +1602,22 @@ const state: PerfilProductor = reactive({
   relaciones: [],
   redes: [
     {
+      tipoRed:"facebook",
       linkbase: "facebook.com/",
       linkUsuario: "",
       icon: "i-mdi-facebook",
     },
     {
+      tipoRed:"instagram",
       linkbase: "instagram.com/",
       linkUsuario: "",
       icon: "i-mdi-instagram",
     },
     {
-      linkbase: "youtube.com/",
+      tipoRed:"web",
+      linkbase: "",
       linkUsuario: "",
-      icon: "i-mdi-youtube",
+      icon: "i-mdi-web",
     },
   ],
 });

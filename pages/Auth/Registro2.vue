@@ -2,7 +2,7 @@
   <!-- source: https://gist.github.com/nraloux/bce10c4148380061781b928cdab9b193 -->
   <!-- I have added support for dark mode and improved UI -->
 
-  <div class="sm:pt-24 bg-white dark:bg-dark">
+  <div class="sm:pt-24 bg-white dark:white">
     <!-- Container -->
     <div class="mx-auto">
       <div class="flex justify-center sm:px-6 sm:py-12 ">
@@ -10,19 +10,19 @@
         <div class="w-full xl:w-3/4 lg:w-11/12 flex sm:border sm:rounded-lg border-gray-400 dark:border-gray-700">
           <!-- Col -->
           <div
-            class="w-full h-auto bg-gray-400 dark:bg-dark hidden lg:block lg:w-5/12 bg-cover rounded-l-lg"
+            class="w-full h-auto bg-gray-400 dark:bg-white hidden lg:block lg:w-5/12 bg-cover rounded-l-lg"
             style="background-image: url('../img/registro.jpg')"
           ></div>
           <!-- Col -->
 
           <UForm
-          class="w-full lg:w-7/12 bg-white dark:bg-dark p-5 rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pt-6 pb-8 mb-4 "
+          class="w-full lg:w-7/12 bg-white dark:bg-white p-5 rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pt-6 pb-8 mb-4 "
           :schema="schema"
           :state="state"
           @submit="onSubmit"
           >
 
-          <h3 class="py-4 text-2xl text-center text-dark dark:text-white">
+          <h3 class="py-4 text-2xl text-center text-dar dark:-text-dar">
             ¡Registratre en <b class="text-primary">{{ nombreWeb }}</b
             >!
           </h3>
@@ -103,7 +103,7 @@
               <hr class="mb-6 border-t" />
               <div class="text-center">
                 <NuxtLink
-                  class="inline-block text-sm text-dark dark:text-primary align-baseline dark:hover:text-primary-300 hover:text-primary-500"
+                  class="inline-block text-sm text-dar dark:text-primary align-baseline dark:hover:text-primary-300 hover:text-primary-500"
                   to="/auth/forget"
                 >
                   ¿Olvidaste la contraseña?

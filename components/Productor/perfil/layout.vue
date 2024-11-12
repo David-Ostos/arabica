@@ -5,7 +5,7 @@
       class="rounded-b-3xl shadow-lg"
     >
     <ProductorPerfilIndexPortada />
-    <div class="mx-20">
+    <div class="mx-8 md:mx-20">
       <ProductorPerfilIndexAvatar />
       <ProductorPerfilHorizontalNavigation />
     </div>

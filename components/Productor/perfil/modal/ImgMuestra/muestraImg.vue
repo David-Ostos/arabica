@@ -5,7 +5,7 @@
       <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800', width: 'sm:max-w-2xl' }">
         <template #header>
           <div class="flex items-center justify-between">
-            <h3 @click="console.log(image)" class="text-base font-semibold text-gray-900 dark:text-white">
+            <h3 @click="console.log(image)" class="text-base font-semibold text-gray-900 dark:-text-dar">
               Estas son las Imagenes Destacadas
             </h3>
             <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1 " @click="closeModal" />

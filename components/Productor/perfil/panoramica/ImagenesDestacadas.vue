@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-md px-5 py-5 h-[287px]">
+      class="shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-md px-5 py-5 h-[287px]">
       <div class="flex justify-between mb-4">
         <h3 class="capitalize font-medium text-xl">Imagenes Destacadas</h3>
         <UIcon @click="openModal" name="i-ph-pencil-fill"
@@ -12,14 +12,51 @@
           <img :src="img.link" alt="" class="border rounded-md h-full object-cover" />
         </div> -->
 
-        <UCarousel v-if="imgDestacadas.length > 0" v-slot="{ item }" :items="imgDestacadas"
-          :ui="{ container: 'h-[186px] w-full min-w-[120px] gap-4 ' }">
-          <img @click="useShowModals.productorMuestraImg = true" :src="item.link" class="border rounded-md h-full object-cover cursor-pointer" draggable="true" />
+        <UCarousel v-if="imgDestacadas.length > 0" 
+          ref="carouselRef"
+          v-slot="{ item }" :items="imgDestacadas" 
+          :ui="{ item: 'basis-full h-[144px] md:basis-1/2 lg:basis-1/3', container: ' h-[200px]' }" 
+          class="rounded-lg  overflow-hidden" 
+          arrows
+          indicators 
+          :prev-button="{
+            color: 'gray',
+            icon: 'i-heroicons-arrow-left-20-solid',
+            class: 'start-12 top-[90%]'
+          }" 
+          :next-button="{
+            color: 'gray',
+            icon: 'i-heroicons-arrow-right-20-solid',
+            class: 'end-12 top-[90%]'
+          }" 
+        >
+          <img @click="useShowModals.productorMuestraImg = true" :src="item.link"
+            class="border rounded-md h-full object-cover cursor-pointer" draggable="true" 
+          />
 
         </UCarousel>
         <!-- Modal de muestra -->
-        <ProductorPerfilModalImgMuestraImg :image="imgDestacadas"/>
+        <ProductorPerfilModalImgMuestraImg :image="imgDestacadas" />
         <!-- /Modal de muestra -->
+
+        <!--         <UCarousel v-if="imgDestacadas.length === 0" v-slot="{ item }" :items="imgRelleno"
+          :ui="{ container: 'h-[186px] w-full min-w-[120px] gap-4 ' }" arrows 
+          :prev-button="{
+          color: 'gray',
+          icon: 'i-heroicons-arrow-left-20-solid',
+          class: 'start-12 top-full '
+          }"
+          :next-button="{
+            color: 'gray',
+            icon: 'i-heroicons-arrow-right-20-solid',
+            class: 'end-12 top-full'
+          }" >
+          <div class="border p-4 h-[186px] w-full min-w-[120px]  flex justify-center items-center bo" draggable="true">
+            <UIcon :name="item.link!" class="text-4xl text-secundary" dynamic />
+
+          </div>
+
+        </UCarousel> -->
 
         <div v-if="imgDestacadas.length === 0" v-for="img in imgRelleno" :key="img._id"
           class="border p-4 h-[186px] w-full min-w-[120px] flex justify-center items-center">
@@ -40,7 +77,7 @@
             <h3 @click="
               console.log(imgDestacadas);
             console.log(uploadedFiles);
-            " class="text-base font-semibold text-gray-900 dark:text-white">
+            " class="text-base font-semibold text-gray-900 dark:-text-dar">
               Agregar Imagenes destacadas
             </h3>
             <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
@@ -67,11 +104,13 @@
                 <UIcon @click="removeImage(index)"
                   class="absolute top-2 right-2 text-red-500 bg-white p-1 text-2xl rounded-full cursor-pointer"
                   name="i-clarity-remove-line" dynamic />
-                <img :src="item.link" class="w-full object-cover h-48 rounded-md cursor-pointer" draggable="false" @click="openImageModal(item.link!)" />
+                <img :src="item.link" class="w-full object-cover h-48 rounded-md cursor-pointer" draggable="false"
+                  @click="openImageModal(item.link!)" />
               </div>
 
               <!-- Modal de muestra -->
-                <LazyProductorPerfilModalImgMuestraMuestrasImgs :image="selectedImage" :open="isImageModalOpen" @close="closeImageModal" />
+              <LazyProductorPerfilModalImgMuestraMuestrasImgs :image="selectedImage" :open="isImageModalOpen"
+                @close="closeImageModal" />
               <!-- /Modal de muestra -->
 
             </div>
@@ -106,13 +145,25 @@ const inputImg = ref();
 const openModalMuestra = ref(false);
 
 const backupImages = ref<ImgDestacadas[]>([]);
-
+const carouselRef = ref()
 const { uploadedFiles, handleFileUpload, removeFile, filesArray, uploadFiles } =
   useFileUpload();
 
 const displayedImages = computed(() => {
   return [...imgDestacadas.value, ...uploadedFiles.value];
 });
+
+onMounted(() => {
+  setInterval(() => {
+    if (!carouselRef.value) return
+
+    if (carouselRef.value.page === carouselRef.value.pages) {
+      return carouselRef.value.select(0)
+    }
+
+    carouselRef.value.next()
+  }, 3000)
+})
 
 onMounted(() => {
   // Asumiendo que las imágenes destacadas se cargan desde el store del productor

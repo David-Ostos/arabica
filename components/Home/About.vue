@@ -1,5 +1,5 @@
 <template>
-  <div class=" py-4 md:py-20 ">
+  <div class=" bg-white text-drak py-4 md:py-20 ">
     <div class="flex flex-col-reverse md:flex-row gap-4 md:gap-0 md:justify-between mx-4 md:mx-40">
       <div class="basis-1/2 pr-4 mx-8 sm:mx-0">
         <span class="text-primary uppercase"> Quiénes Somos </span>

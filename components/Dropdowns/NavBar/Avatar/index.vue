@@ -68,9 +68,9 @@ const items = [
       />
     </div>
     <template #account="{item}" class="[&_button]:!opacity-100">
-      <div class="text-left !text-dark">
+      <div class="text-left !text-dar">
          <p class="flex items-center gap-1"> <UIcon name="i-heroicons-user-circle"/> {{ capitalizeFirstLetter(useUser.dataUser.nombre!) }}</p>
-        <p class="truncate  font-medium text-gray-900 dark:text-white flex items-center gap-1">
+        <p class="truncate  font-medium text-gray-900 dark:-text-dar flex items-center gap-1">
           <UIcon name="i-heroicons-envelope"/> {{ useUser.dataUser.email }}
         </p>
       </div>

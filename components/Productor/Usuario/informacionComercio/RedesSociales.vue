@@ -6,7 +6,7 @@
       }" > 
         <div class=" w-full grid grid-cols-12">
           <div class="col-span-3  w-full border rounded-l-md shadow-sm 
-          bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white ">
+          bg-gray-100 dark:bg-gray-900 text-gray-900 dark:-text-dar ">
           <div class=" flex items-center gap-2 h-full mx-8 w-fit">
             <UIcon :name="item.icon!" dynamic @click="console.log(useProductor.perfilProductor.redes)" />
             <span>{{ item.linkbase }}</span>

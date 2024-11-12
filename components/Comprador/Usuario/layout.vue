@@ -3,7 +3,7 @@
       :class="useUser.dataUser.verificado ? 'mt-[65px]' : ''" 
       class="rounded-b-3xl ml-16 mb-1 bg-gray-100 h-usuario "
     >
-    <h1 class="text-dark text-2xl pt-8 font-medium " >Configuración de la cuenta</h1>
+    <h1 class="text-dar text-2xl pt-8 font-medium " >Configuración de la cuenta</h1>
     <div class="w-full  flex gap-8 my-8 justify-between ">
 
       <div class="flex flex-col justify-between ">

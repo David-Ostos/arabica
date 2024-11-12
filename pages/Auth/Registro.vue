@@ -1,19 +1,19 @@
 <template>
   <section
-    class="bg-gray-100 dark:bg-dark min-h-screen flex box-border justify-center items-center py-6"
+    class="bg-white dark:bg-white shadow-md text-dar min-h-screen flex box-border justify-center items-center py-6"
   >
     <div
-      class="border bg-white dark:bg-stone-800 rounded-2xl flex max-w-4xl p-5 items-center"
+      class="border bg-white dark:bg-white rounded-2xl flex max-w-4xl p-4 md:p-5 items-center"
     >
-      <div class="md:w-1/2 px-8">
+      <div class="md:w-1/2 md:px-8">
         <UForm
-          class="w-full px-5 rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pb-4 mb-4"
+          class="w-full  rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pb-4 mb-4"
           :schema="schema"
           :state="state"
           @submit="onSubmit"
           :validate="validations"
         >
-          <h2 class="font-bold text-3xl text-dark text-center mb-4">
+          <h2 class="font-bold text-3xl text-dar text-center mb-4">
             Regístrate en <B class="text-primary">{{ nombreWeb }}</B>
           </h2>
           <div
@@ -46,7 +46,7 @@
                 size="xl"
                 :required="true"
                 icon="i-heroicons-user"
-                class="[&_input]:dark:bg-stone-800"
+                class="[&_input]:dark:bg-white"
               />
             </UFormGroup>
 
@@ -57,7 +57,7 @@
                 size="xl"
                 icon="i-heroicons-user"
                 :required="true"
-                class="[&_input]:dark:bg-stone-800"
+                class="[&_input]:dark:bg-white"
               />
             </UFormGroup>
           </div>
@@ -71,7 +71,7 @@
                 placeholder="Email"
                 size="xl"
                 icon="i-heroicons-envelope"
-                class="[&_input]:dark:bg-stone-800"
+                class="[&_input]:dark:bg-white"
               />
             </UFormGroup>
           </div>
@@ -86,7 +86,7 @@
                 placeholder="***************"
                 size="xl"
                 icon="i-heroicons-lock-closed"
-                class="[&_input]:dark:bg-stone-800"
+                class="[&_input]:dark:bg-white"
               />
             </UFormGroup>
 
@@ -96,7 +96,7 @@
                 :type="selected ? 'text' : 'password'"
                 placeholder="***************"
                 size="xl"
-                class="[&_input]:dark:bg-stone-800 line-clamp-1"
+                class="[&_input]:dark:bg-white line-clamp-1"
                 icon="i-heroicons-lock-closed"
               />
             </UFormGroup>
@@ -109,6 +109,9 @@
               v-model="selected"
               name="mostrar"
               label="Mostrar"
+              :ui="{
+                background: 'dark:bg-white'
+              }"
               @click="selected = !selected"
             />
           </div>
@@ -116,8 +119,9 @@
           <!-- boton registro -->
           <div class="text-center text-white pt-4">
             <UButton
+              size="xl"
               :loading="loading"
-              class="hvr-ripple-out hover:!bg-primary px-4 py-2 text-base font-bold bg-primary dark:bg-primary-600 text-center rounded-lg before:dark:border-primary-600 before:border-primary before:border-4 before:border-solid text-white lg:px-7 cursor-pointer"
+              class="hvr-ripple-out "
               type="submit"
               >Registrar Cuenta
             </UButton>
@@ -172,13 +176,8 @@ import BotonGoogle from "~/components/Botones/BotonGoogle.vue";
 import {toast} from "vue3-toastify";
 import axios from "axios";
 
-definePageMeta({
-  layout: "auth",
-});
-
 const useUser = useUserStore();
 const router = useRouter();
-const ShowModalsStore = useShowModalsStore();
 
 const loading = ref(false);
 

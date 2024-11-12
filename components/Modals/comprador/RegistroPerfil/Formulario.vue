@@ -237,7 +237,7 @@
               >
                 <div class="w-full grid grid-cols-12">
                   <div v-if="item.linkbase !== 'web'"
-                    class="col-span-3 w-full border rounded-l-md shadow-sm bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white"
+                    class="col-span-3 w-full border rounded-l-md shadow-sm bg-gray-100 dark:bg-gray-900 text-gray-900 dark:-text-dar"
                   >
                     <div class="flex items-center h-full mx-auto w-fit" >
                       <UIcon

@@ -3,14 +3,14 @@
 
   <div>
     <h3
-      class="pb-4 text-xl sm:text-2xl text-center text-gray-800 dark:text-white"
+      class="pb-4 text-xl sm:text-2xl text-center text-gray-800 dark:-text-dar"
     >
       Elija su tipo de cuenta <b class="text-red-500 text-base absolute">*</b>
     </h3>
     <div class="flex justify-around items-center mb-8 ">
       <div
         v-for="item in items"
-        class=" transition-all duration-500 w-[90px] sm:w-[190px] h-[130px] sm:h-[180px] flex flex-col justify-start bg-gray-100 hover:bg-white shadow items-center p-4 border dark:text-white  hover:text-primary hover:border-primary dark:border-white rounded-md hover:dark:border-primary hover:dark:text-primary cursor-pointer"
+        class=" transition-all duration-500 w-[90px] sm:w-[190px] h-[130px] sm:h-[180px] flex flex-col justify-start bg-gray-100 hover:bg-white shadow items-center p-4 border dark:-text-dar  hover:text-primary hover:border-primary dark:border-white rounded-md hover:dark:border-primary hover:dark:text-primary cursor-pointer"
         :class="tipo === item.show ? 'text-primary border-primary' : ''"
         @click="tipo = item.show , $emit('tipoProductor', item.tipo)"
       >

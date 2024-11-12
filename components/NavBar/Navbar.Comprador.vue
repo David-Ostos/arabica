@@ -1,7 +1,7 @@
 <template>
   <header
     ref="nav1"
-    class="fixed w-screen top-0 z-50 transition-all text-dark bg-white dark:bg-dark border-b-2 rounded-lg shadow-sm"
+    class="fixed w-screen top-0 z-50 transition-all text-dar bg-white dark:bg-white border-b-2 rounded-lg shadow-sm"
   >
     <div class="container pt-1 sm:px-12 px-8 mx-auto">
       <div class="flex justify-between sm:justify-between items-center">

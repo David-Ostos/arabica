@@ -13,7 +13,7 @@
 
     <!-- <button
       :disabled="!isReady" @click="() => login()"
-      class="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300 dark:text-dark hover:bg-[#60a8bc4f] font-medium"
+      class="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300 dark:text-dar hover:bg-[#60a8bc4f] font-medium"
     >
       <svg
         class="mr-3"

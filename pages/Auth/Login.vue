@@ -1,19 +1,19 @@
 <template>
-  <div class="h-screen w-full py-8 dark:bg-dark">
+  <div class="bg-white dark:text-dar h-screen w-full py-8 dark:bg-white">
     <div
       class="flex rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl sm:pt-10"
     >
       <div
         class="hidden lg:block lg:w-1/2 bg-cover bg-[url('/../img/login.jpeg')]"
       ></div>
-      <div class="w-full p-8 lg:w-1/2 bg-white">
+      <div class="w-full p-4 md:p-8 lg:w-1/2 bg-white">
         <h2 class="text-2xl font-semibold text-gray-700 text-center">
           Bienvenido
         </h2>
         <p class="text-xl text-gray-600 text-center">Inicia Sesión!</p>
 
         <UForm
-          class="w-full p-5 rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pt-6 pb-8 mb-4"
+          class="w-full  rounded-lg lg:rounded-l-none sm:px-8 space-y-4 pt-6 pb-8 mb-4"
           :schema="schema"
           :state="state"
           :validations="validations"
@@ -47,7 +47,7 @@
                 placeholder="Email"
                 size="xl"
                 icon="i-heroicons-envelope"
-                class="[&_input]:dark:bg-stone-800"
+                class="[&_input]:dark:bg-white"
               />
             </UFormGroup>
           </div>
@@ -71,7 +71,7 @@
                 placeholder="***************"
                 size="xl"
                 icon="i-heroicons-lock-closed"
-                class="[&_input]:dark:bg-stone-800"
+                class="[&_input]:dark:bg-white"
               />
             </UFormGroup>
 
@@ -87,7 +87,8 @@
             <UButton
               :loading="loading"
               type="submit"
-              class="bg-primary text-white font-bold py-2 px-[5.5rem] w-full rounded hover:bg-primary-600"
+              class=""
+              size="xl"
               label="Inicia Sesión"
             >
             </UButton>
@@ -139,9 +140,7 @@ import { toast } from 'vue3-toastify';
 const useUser = useUserStore();
 const router = useRouter();
 const loading = ref(false)
-definePageMeta({
-  layout: "auth",
-});
+
 
 const noMatche = ref(false);
 
@@ -167,18 +166,20 @@ const validations = (stat: any): FormError[] => {
 
 type Schema = InferType<typeof schema>;
 
-const state = reactive({
+const state: {email?: string, password?: string} = reactive({
   email: undefined,
   password: undefined,
-});
+})
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with event.data
+  state.email = state!.email?.toLowerCase()
+  state.password = state.password?.toLowerCase()
   loading.value = true
   try {
     const response = await fetch(
       `${import.meta.env.VITE_URL_API}/api/content/item/usuarios?filter={email:'${
-        event.data.email}'}&fields={_state: false, _modified: false, _mby: false, _created: false, _cby: false}`,
+        event.data.email.toLowerCase()}'}&fields={_state: false, _modified: false, _mby: false, _created: false, _cby: false}`,
       {
         cache: "no-cache",
         headers: {

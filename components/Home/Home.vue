@@ -1,7 +1,7 @@
 <template>
 <div class="">
-  <div :class="[!scrolled && $route.path === '/' ? 'bg-white !text-dark md:bg-transparent md:!text-white' :'border-b rounded-3xl shadow-sm' ,{
-      ' !text-dark bg-white dark:bg-dark rounded-xl shadow-md ': scrolled,
+  <div :class="[!scrolled && $route.path === '/' ? 'bg-white !text-dar md:bg-transparent md:!text-white' :'bg-white border-b text-dar  shadow-sm' ,{
+      ' !text-dar bg-white dark:bg-white rounded-b-xl shadow-md ': scrolled,
     },{ 'opacity-100': navShow }]"
     class="fixed w-screen top-0 z-50 transition-all duration-300 opacity-0 "
   >
@@ -30,7 +30,6 @@
             type="button"
             class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 backdrop-blur-lg"
             @click="mobileMenuOpen = true"
-            :class="{hidden: mobileMenuOpen, 'inline-flex': !mobileMenuOpen}"
           >
             <span class="sr-only">Abrir menu</span>
             <Bars3Icon class="h-6 w-6" aria-hidden="true" />
@@ -64,7 +63,7 @@
                   
                 >
                   <PopoverPanel
-                    class="absolute -left-8 top-full mt-4 shadow-sm  w-80 overflow-hidden rounded-3xl bg-white dark:bg-dark ring-gray-900/5"
+                    class="absolute -left-8 top-full mt-4 shadow-sm  w-80 overflow-hidden rounded-3xl bg-white dark:bg-white ring-gray-900/5"
                     :class="scrolled ? ' ring-0' : ' ring-1 shadow-lg '"
                   >
                     <div class="p-4">
@@ -74,11 +73,11 @@
                         class="group relative flex items-center py-2 gap-x-6 rounded-lg px-1 leading-6 hover:bg-gray-50 dark:hover:bg-gray-800"
                       >
                         <div
-                          class="flex p-2 flex-none items-center justify-center rounded-lg group-hover:!text-primary bg-gray-50 group-hover:bg-white dark:group-hover:bg-dark dark:bg-dark dark:text-white"
+                          class="flex p-2 flex-none items-center justify-center rounded-lg group-hover:!text-primary bg-gray-50 group-hover:bg-white dark:group-hover:bg-dark dark:bg-white dark:-text-dar"
                         >
                           <UIcon
                             :name="subItem.icon"
-                            class="text-lg text-gray-800 dark:text-white group-hover:text-primary dark:hover:text-primary"
+                            class="text-lg text-gray-800 dark:-text-dar group-hover:text-primary dark:hover:text-primary"
                             aria-hidden="true"
                             dynamic
                           />
@@ -86,7 +85,7 @@
                         <div class="flex-auto">
                           <NuxtLink
                             :to="subItem.to"
-                            class="block font-semibold text-gray-900 dark:text-white dark:hover:bg-gray-800 group-hover:text-primary"
+                            class="block font-semibold text-gray-900 dark:-text-dar dark:hover:bg-gray-800 group-hover:text-primary"
                           >
                             {{ subItem.label }}
                             <span class="absolute inset-0" />
@@ -122,8 +121,9 @@
   <div>
     <div>
 
-    <USlideover side="left" v-model="mobileMenuOpen" :ui="{width: 'w-[80%] max-w-[80%]'}">
-      <UCard class="flex flex-col flex-1" :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+    <USlideover class="" side="left" v-model="mobileMenuOpen" 
+    :ui="{background: 'bg-white dark:bg-white' , width: 'w-[80%] max-w-[80%]'}">
+      <UCard class="flex flex-col flex-1" :ui="{background: 'dark:bg-white', body: { base: 'flex-1' }, ring: '', divide: '' }">
         <template #header>
           <div class="flex items-center justify-between">
             <img class="h-14 w-auto" :src="imgLogoLitgh" alt=""/>
@@ -131,7 +131,7 @@
           </div>
         </template>
 
-        <LazyMobileNavigationVerticalNavigation/>
+        <LazyMobileNavigationVerticalNavigation @close="closeSlider"/>
 
       </UCard>
     </USlideover>
@@ -183,6 +183,10 @@ function handleScroll() {
 
   }
   lastScrollTop.value = st;
+}
+
+const closeSlider = (boolean: boolean)=>{
+  mobileMenuOpen.value = boolean
 }
 
 const links = [

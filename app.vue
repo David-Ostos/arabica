@@ -29,7 +29,7 @@ await useLotes.getDataLotes()
 
 <template>
   <TipoUserModal/>
-  <div class="font-roboto dark:bg-dark">
+  <div class="font-roboto dark:bg-white bg-white text-dar dark:text-dar">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
@@ -60,5 +60,19 @@ await useLotes.getDataLotes()
   opacity: 0;
   filter: blur(1rem);
 }
+
+:root {
+  --background-color: #ffffff; /* Color de fondo claro */
+}
+
+body {
+  background-color: var(--background-color);
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #ffffff; /* Color de fondo claro */
+  }
+}
+
 
 </style>

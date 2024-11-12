@@ -15,8 +15,11 @@ export default {
         height: "height",
       },
       colors: {
-        dark: {
+        dar: {
           DEFAULT: "#232933",
+        },
+        dark: {
+          DEFAULT: "#ffffff",
         },
         prim: "#02AC66",
         secundary: "#707a89",

@@ -38,7 +38,7 @@
             <TipoUser @tipo-user="tipoU" />
 
             <BotonSecondary
-              class="text-center text-dark"
+              class="text-center text-dar"
               contenido="Regitrar"
               :loading="loading"
               @click="registrar"

@@ -28,6 +28,7 @@ export type ImgDestacadas = {
 }
 
 export type Redes = {
+  tipoRed?: string
   linkbase?: string
   linkUsuario?: string
   icon?:string

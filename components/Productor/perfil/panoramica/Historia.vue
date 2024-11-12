@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-8">
     <div
-      class="flex gap-1 items-center justify-between shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-full py-2 px-3"
+      class="flex gap-1 items-center justify-between shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-full py-2 px-3"
     >
       <div>
         <p>
@@ -49,7 +49,7 @@
           <template #header>
             <div class="flex items-center justify-between">
               <h3
-                class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
+                class="text-base font-semibold leading-6 text-gray-900 dark:-text-dar"
               >
                 Editar Historia
               </h3>

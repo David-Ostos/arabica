@@ -28,7 +28,7 @@
           <template #header>
             <div class="flex items-center justify-between">
               <h3
-                class="text-xl font-semibold leading-6 text-gray-800 dark:text-white"
+                class="text-xl font-semibold leading-6 text-gray-800 dark:-text-dar"
               >
                 Solicitud de Muestras
               </h3>
@@ -72,7 +72,7 @@
               <!-- datos de muestra -->
 
               <div
-                class=" h-full pb-4 text-gray-800 dark:text-white rounded-xl"
+                class=" h-full pb-4 text-gray-800 dark:-text-dar rounded-xl"
               >
                 <LotesAcordionMuestra :items="itemMuestra" />
               </div>
@@ -103,7 +103,7 @@
     <div class="grid grid-cols-7 gap-8 mx-20">
       <!-- Galeria del lote -->
       <div
-        class="col-span-4 h-screen-topBar-footer overflow-hidden h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4"
+        class="col-span-4 h-screen-topBar-footer overflow-hidden h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4"
       >
         <div class="grid grid-cols-4 col-span-2 grid-rows-4 gap-4 h-full">
           <div class="row-span-2 col-span-4">
@@ -146,7 +146,7 @@
 
       <!-- card del lote -->
       <div
-        class="col-span-3 h-screen-topBar-footer p-8 rounded-xl border flex flex-col justify-between py-8 shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
+        class="col-span-3 h-screen-topBar-footer p-8 rounded-xl border flex flex-col justify-between py-8 shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
       >
         <div class="">
           <div class="flex items-center justify-between mb-8">
@@ -271,13 +271,13 @@
 
       <!-- datos del lote  -->
       <div
-        class="col-span-4 h-screen overflow-hidden p-4 border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl"
+        class="col-span-4 h-screen overflow-hidden p-4 border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl"
       >
         <LotesAcordion :items="item" />
       </div>
       <!-- ubicación -->
       <div
-        class="col-span-3 h-screen p-4 border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl"
+        class="col-span-3 h-screen p-4 border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl"
       >
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d16138252.902658958!2d-85.72576594757281!3d-9.06347592792652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c850c05914f5%3A0xf29e011279210648!2zUGVyw7o!5e0!3m2!1ses!2sve!4v1721330794106!5m2!1ses!2sve"

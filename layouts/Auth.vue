@@ -5,7 +5,7 @@ import Footer from '../components/Footer/Default.vue'
 </script>
 
 <template>
-  <div class="bg-white dark:bg-dark">
+  <div class="bg-white dark:bg-white">
     <NavBarAuth/>
     <slot />
     <Footer/>

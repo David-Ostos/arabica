@@ -1,5 +1,5 @@
 <template>
-  <footer class=" px-20 rounded-t-xl shadow-[0_-4px_6px_rgba(0,0,0,0.1)] ">
+  <footer class=" hidden sm:block px-8 md:px-20 rounded-t-xl shadow-[0_-4px_6px_rgba(0,0,0,0.1)] ">
     <UHorizontalNavigation
       :links="links"
       :ui="{

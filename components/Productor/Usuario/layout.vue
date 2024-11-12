@@ -11,7 +11,7 @@
       :to="`/dashboard/${useUser.dataUser.tipoUser}`"
     />
 
-    <h1 class="text-dark text-2xl pt-8 font-medium " >Configuración de la cuenta</h1>
+    <h1 class="text-dar text-2xl pt-8 font-medium " >Configuración de la cuenta</h1>
     <div class="w-full  flex gap-8 my-8 justify-between ">
 
       <div class="flex flex-col justify-between ">

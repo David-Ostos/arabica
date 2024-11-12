@@ -3,13 +3,13 @@
 
   <div>
     <h3
-      class="pb-4 text-2xl text-center text-gray-800 dark:text-white"
+      class="pb-4 text-2xl text-center text-gray-800 dark:-text-dar"
     >
       Elija su tipo de cuenta
     </h3>
     <div class="flex justify-around items-center mb-8">
       <button
-        class="flex flex-col justify-center items-center p-4 border-2 dark:text-white hover:text-gray-700 hover:text-primary hover:border-primary dark:border-white rounded-md hover:dark:border-primary hover:dark:text-primary"
+        class="flex flex-col justify-center items-center p-4 border-2 dark:-text-dar hover:text-gray-700 hover:text-primary hover:border-primary dark:border-white rounded-md hover:dark:border-primary hover:dark:text-primary"
         :class="tipo === true ? 'text-primary border-primary' : ''"
         @click="tipo = true , $emit('tipoUser', 'productor')"
       >
@@ -18,7 +18,7 @@
       </button>
 
       <button
-        class="flex flex-col justify-center items-center p-4 border-2 dark:text-white hover:text-gray-700 hover:text-primary hover:border-primary dark:border-white rounded-md hover:dark:border-primary hover:dark:text-primary"
+        class="flex flex-col justify-center items-center p-4 border-2 dark:-text-dar hover:text-gray-700 hover:text-primary hover:border-primary dark:border-white rounded-md hover:dark:border-primary hover:dark:text-primary"
         :class="tipo === false ? 'text-primary border-primary' : ''"
         @click="tipo = false , $emit('tipoUser', 'comprador')"
 

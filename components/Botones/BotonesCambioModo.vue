@@ -15,7 +15,7 @@ if(colorMode.preference === 'dark'){
     :value="$colorMode.preference"
     @click="$colorMode.preference === 'dark' ? $colorMode.preference = 'light' : $colorMode.preference = 'dark', enabled = !enabled, console.log(!enabled)"
     v-model="enabled"
-    :class="enabled ? 'bg-gray-600 text-white' : 'bg-gray-100 border-2 border-primary text-dark'"
+    :class="enabled ? 'bg-gray-600 text-white' : 'bg-gray-100 border-2 border-primary text-dar'"
 
     class="relative inline-flex h-6 w-11 items-center rounded-full"
     >

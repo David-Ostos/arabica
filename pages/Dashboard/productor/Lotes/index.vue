@@ -10,7 +10,7 @@
   <div class="flex gap-8 z-0 justify-between relative flex-grow mr-8">
     <!-- Menu desplegable -->
     <div
-      class="relative transition-width ease-in-out duration-700 shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white border-r border-inset border-gray-300 dark:border-gray-700 focus:border-2 focus:border-primary-500 dark:focus:border-primary-400 py-5 px-4"
+      class="relative transition-width ease-in-out duration-700 shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar border-r border-inset border-gray-300 dark:border-gray-700 focus:border-2 focus:border-primary-500 dark:focus:border-primary-400 py-5 px-4"
       :class="[
         isOpen ? ' w-[16%]' : ' w-[5%]',
         lotes.length > 0 ? ' w-1/3' : 'w-1/4',
@@ -51,7 +51,7 @@
               dynamic
             />
             <span
-              class="ml-7 transition duration-500 ease-in-out text-dark capitalize"
+              class="ml-7 transition duration-500 ease-in-out text-dar capitalize"
               :class="isOpen ? 'opacity-100' : 'opacity-0 '"
               >{{ item.label }}</span
             >

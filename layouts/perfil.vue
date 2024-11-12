@@ -88,7 +88,7 @@ function handleScroll() {
     <div class="relative z-50">
       <header
         ref="nav1"
-        class="fixed w-screen top-0 z-50 transition-all text-dark bg-white dark:bg-dark border-b-2 rounded-xl shadow-md"
+        class="fixed w-screen top-0 z-50 transition-all text-dar bg-white dark:bg-white border-b-2 rounded-xl shadow-md"
       >
         <div
           class="container mx-auto py-1 px-12 flex justify-between items-center"
