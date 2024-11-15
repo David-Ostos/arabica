@@ -68,7 +68,7 @@ const items = [
 ];
 
 onMounted(() => {
-  useGlobal.heightNav = nav1.value.clientHeight;
+  useGlobal.heightNavLote = nav1.value.clientHeight;
   window.addEventListener("scroll", handleScroll);
   typeUser.value = useUser.dataUser.tipoUser
   console.log({"logged":useUser.logged});

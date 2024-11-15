@@ -7,11 +7,11 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="grid grid-cols-2 gap-12 mx-20 my-8">
-    <div class="col-span-1"><ProductorPerfilPanoramicaHistoria /></div>
-    <div class="col-span-1"><ProductorPerfilPanoramicaPrestigio /></div>
-    <div class="col-span-1"><ProductorPerfilPanoramicaRelaciones /></div>
-    <div class="col-span-1"><ProductorPerfilPanoramicaMaps /></div>
+  <div class="grid grid-cols-2 gap-12 mx-4 md:mx-20 my-8">
+    <div class="col-span-2 md:col-span-1"><ProductorPerfilPanoramicaHistoria /></div>
+    <div class="col-span-2 md:col-span-1"><ProductorPerfilPanoramicaPrestigio /></div>
+    <div class="col-span-2 md:col-span-1"><ProductorPerfilPanoramicaRelaciones /></div>
+    <div class="col-span-2 md:col-span-1"><ProductorPerfilPanoramicaMaps /></div>
   </div>
 </template>
 

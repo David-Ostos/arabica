@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-8 z-0 justify-between relative flex-grow mx-20 overflow-auto contenedor">
+  <div class="flex gap-8 z-0 justify-between relative flex-grow mx-8 md:mx-20 md:scrollbar-show scrollbar-hide md:overflow-auto contenedor">
     <div
       class="mt-5 pb-10 transition-width ease-in-out duration-700 mx-auto flex-grow h-screen-topBar-footer "
     >
@@ -9,7 +9,7 @@
         {{ lotes!.length }} Lotes disponibles
       </h1>
       <div class="flex flex-wrap gap-4 justify-between mr-4 ">
-        <div v-for="item in lotes" class=" w-[30%] mb-4 relative ">
+        <div v-for="item in lotes" class=" md:w-[30%] mb-4 relative ">
           <LotesCard :item="item" />
         </div>
       </div>
@@ -31,4 +31,25 @@ console.log(lotes);
 </script>
 
 <style scoped >
+/* Ocultar barras de desplazamiento en navegadores modernos */ 
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none; 
+} 
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE y Edge */ 
+  scrollbar-width: none; /* Firefox */ 
+}
+@media (min-width: 768px) {
+  .scrollbar-hide::-webkit-scrollbar{
+  display: block; 
+
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: auto; /* IE y Edge */ 
+  scrollbar-width: auto; /* Firefox */ 
+}
+}
+
 </style>

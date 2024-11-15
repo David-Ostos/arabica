@@ -1,16 +1,18 @@
 <template>
+  <div>
+
     <div 
-      v-if="$route.path.includes('perfil')"
-      :class="useUser.dataUser.verificado ? 'mt-[65px]' : ''" 
-      class="rounded-b-3xl shadow-lg"
+    v-if="$route.path.includes('perfil')"
+    class="rounded-b-3xl shadow-lg"
     >
     <ProductorPerfilIndexPortada />
     <div class="mx-8 md:mx-20">
       <ProductorPerfilIndexAvatar />
       <ProductorPerfilHorizontalNavigation />
     </div>
-    <ProductorPerfilIndexCompletarPerfil />
   </div>
+  <ProductorPerfilIndexCompletarPerfil />
+</div>
 </template>
 
 <script lang="ts" setup>

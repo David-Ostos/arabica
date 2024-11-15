@@ -7,7 +7,7 @@
         <UIcon @click="openModal" name="i-ph-pencil-fill"
           class="text-primary justify-self-stretch text-xl cursor-pointer" dynamic />
       </div>
-      <div class="flex items-center overflow-auto gap-4">
+      <div class="flex justify-center items-center overflow-auto "> <!-- gap-4 -->
         <!-- <div v-if="imgDestacadas.length > 0" v-for="img in imgDestacadas" :key="img._id" class="rounded-md h-[186px] w-full min-w-[120px] flex justify-center items-center">
           <img :src="img.link" alt="" class="border rounded-md h-full object-cover" />
         </div> -->
@@ -31,7 +31,7 @@
           }" 
         >
           <img @click="useShowModals.productorMuestraImg = true" :src="item.link"
-            class="border rounded-md h-full object-cover cursor-pointer" draggable="true" 
+            class="border rounded-md w-full h-full object-cover cursor-pointer" draggable="true" 
           />
 
         </UCarousel>

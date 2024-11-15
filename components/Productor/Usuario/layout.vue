@@ -1,7 +1,8 @@
 <template>
   <div v-if="$route.path.includes('usuario')"
   :class="useUser.dataUser.verificado ? 'mt-[65px]' : ''" 
-  class="rounded-b-3xl ml-16 mb-1 bg-gray-100 h-usuario "
+  class="rounded-b-3xl ml-16 mb-1 bg-gray-100  "
+  :style="containerStyles"
   >
   
   <ModalsNotificacion v-if="useModals.openModalNotificacion" @close="closeModal" titulo="Registro del usuario incompleto" 
@@ -39,12 +40,19 @@
 const useUser = useUserStore()
 const useModals = useShowModalsStore()
 
+const useGlobal = useGlobalStore()
+
+const containerStyles = computed(() => ({
+  'min-height': `calc(100vh - ${useGlobal.heightNavProductor}px * 2 )`,
+}))
+console.log(containerStyles.value)
+
 const closeModal = (close: boolean)=>{
   useModals.openModalNotificacion = close
 }
 
 function onClickComercial (){
-  return useModals.openModalNotificacion = true
+  if(!useUser.dataUser.perfilBase) return useModals.openModalNotificacion = true
 }
 
 const links = [
@@ -88,7 +96,5 @@ const links = [
 </script>
 
 <style scope>
-.h-usuario{
-  height: calc(100vh - 165px);
-}
+
 </style>

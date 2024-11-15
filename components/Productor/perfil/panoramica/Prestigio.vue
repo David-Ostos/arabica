@@ -43,9 +43,9 @@
           </div>
           <div
             v-else
-            class="col-span-3 col-start-2 flex items-center justify-center"
+            class="col-span-3 w-full flex items-center justify-center"
           >
-            <span class="w-full text-gray-600">Ningún equipo añadido</span>
+            <span class="w-fit text-gray-600">Ningún equipo añadido</span>
           </div>
         </div>
       </div>
@@ -235,9 +235,9 @@
           </div>
           <div
             v-else
-            class="col-span-3 col-start-2 flex items-center justify-center"
+            class="col-span-3 w-full flex items-center justify-center"
           >
-            <span class="w-full text-gray-600"
+            <span class="w-fit text-gray-600"
               >No se han añadido certificados</span
             >
           </div>
@@ -373,9 +373,9 @@
           </div>
           <div
             v-else
-            class="col-span-3 col-start-2 flex items-center justify-center"
+            class="col-span-3 w-full flex items-center justify-center"
           >
-            <span class="w-full text-gray-600"
+            <span class="w-fit text-gray-600"
               >No se han añadido certificados</span
             >
           </div>

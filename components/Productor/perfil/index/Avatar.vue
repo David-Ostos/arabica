@@ -99,9 +99,9 @@
               }"
             >
               <div class="grid grid-cols-3 gap-4">
-                <div v-for="item in state.redes" class="col-span-3 md:col-span-1 ">
+                <div v-for="item in state.redes as Redes[]" class="col-span-3 md:col-span-1 ">
                   <UFormGroup
-                    :label="item.name"
+                    :label="verificarPerfil(item.tipoRed as PerfilTipo).name"
                     :ui="{
                       label: { base: 'capitalize' },
                     }"
@@ -115,7 +115,7 @@
                             :name="item.icon!"
                             dynamic
                             class="text-2xl"
-                            @click="console.log(state.redes)"
+                            @click="console.log(item.tipoRed)"
                           />
                         </div>
                       </div>
@@ -124,19 +124,9 @@
                         :class="{ 'col-span-12': item.linkbase === 'web' }"
                       >
                         <UInput
-                          v-if="item.linkbase !== 'web'"
                           v-model="item.linkUsuario"
                           size="xl"
-                          :ui="{
-                            rounded: 'rounded-l-none',
-                          }"
-                          placeholder="usuario"
-                        />
-                        <UInput
-                          v-else
-                          v-model="item.linkUsuario"
-                          size="xl"
-                          placeholder="usuario"
+                          :placeholder="verificarPerfil(item.tipoRed as PerfilTipo).msj"
                         />
                       </div>
                     </div>
@@ -306,6 +296,9 @@
             </UFormGroup>
           </div>
         </div>
+
+        <UButton block :loading="loading" type="submit" class="mt-4" color="primary" size="xl">Actualizar Datos</UButton>
+
       </UForm>
       </UCard>
 
@@ -314,12 +307,12 @@
 
   <!-- !modal edit datos basicos pc-->
   <UModal :ui="{
-    width: 'sm:max-w-xl'
+    width: 'sm:max-w-3xl'
   }" v-if="!isScreenSmall" v-model="openEdit" >
     
     <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
-          <div class="flex items-center justify-between ">
+          <div class="flex items-center justify-between  ">
             <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
               Editar información
             </h3>
@@ -363,9 +356,9 @@
               }"
             >
               <div class="grid grid-cols-3 p-4 rounded-t-md bg-gray-100  gap-4">
-                <div v-for="item in state.redes" class="col-span-3 md:col-span-1 ">
+                <div v-for="item in state.redes as Redes[]" class="col-span-3 md:col-span-1 ">
                   <UFormGroup
-                    :label="item.name"
+                    :label="verificarPerfil(item.tipoRed as PerfilTipo).name"
                     :ui="{
                       label: { base: 'capitalize' },
                     }"
@@ -388,19 +381,9 @@
                         :class="{ 'col-span-12': item.linkbase === 'web' }"
                       >
                         <UInput
-                          v-if="item.linkbase !== 'web'"
                           v-model="item.linkUsuario"
                           size="xl"
-                          :ui="{
-                            rounded: 'rounded-l-none',
-                          }"
-                          placeholder="usuario"
-                        />
-                        <UInput
-                          v-else
-                          v-model="item.linkUsuario"
-                          size="xl"
-                          placeholder="usuario"
+                          :placeholder="verificarPerfil(item.tipoRed as PerfilTipo).msj"
                         />
                       </div>
                     </div>
@@ -571,7 +554,7 @@
           </div>
         </div>
 
-        <UButton type="submit" block size="xl" >
+        <UButton block :loading="loading" type="submit" class="mt-4" color="primary" size="xl">
           Actualizar datos
         </UButton>
 
@@ -598,7 +581,7 @@
             </h3> 
             <div class="flex gap-2 items-center">
               <UTooltip text="Editar foto del perfil" :shortcuts="['⌘', 'O']">
-                <UIcon name="i-ph-pencil-fill" class="-my-1" @click="" dynamic />
+                <UIcon name="i-ph-pencil-fill" class="-my-1" @click="onSubmitImg" dynamic />
               </UTooltip>
   
               <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpenModalAvatar = false" />
@@ -620,10 +603,13 @@
 </template>
 
 <script lang="ts" setup>
-import { object, string, type InferType } from "yup";
+import { boolean, object, string, type InferType } from "yup";
 import { useGlobalComposable } from '../../../../composables/useGlobal'
 import { useGlobalStore } from "../../../../stores/global";
 import type { FormError, FormSubmitEvent } from '#ui/types'
+import type { PerfilProductor, Redes } from "~/interfaces/PerfilProductor";
+import axios from "axios";
+import { toast } from "vue3-toastify";
 const useUser = useUserStore();
 const useProductor = useProductorStore();
 const useGlobal = useGlobalStore();
@@ -661,49 +647,16 @@ const schema = object({
 const searchQuery = ref("");
 type Schema = InferType<typeof schema>;
 
-const state: any = reactive({
+let state: PerfilProductor = reactive({
+  _id: useProductor.perfilProductor._id,
   nombre: useProductor.perfilProductor.nombre,
-  numeroTelefonico: {
-    code: useProductor.perfilProductor.numeroTelefonico?.code,
-    bandera: useProductor.perfilProductor.numeroTelefonico?.bandera,
-    numero: useProductor.perfilProductor.numeroTelefonico?.numero,
-  },
-  redes: [
-    {
-      name: "perfil de facebook",
-      linkbase: "facebook.com/",
-      linkUsuario: useProductor.perfilProductor?.redes
-        ? useProductor.perfilProductor?.redes[0]?.linkUsuario
-        : "",
-      icon: "i-mdi-facebook",
-    },
-    {
-      name: "perfil de instagram",
-      linkbase: "instagram.com/",
-      linkUsuario: useProductor.perfilProductor?.redes
-        ? useProductor.perfilProductor?.redes[1]?.linkUsuario
-        : "",
-      icon: "i-mdi-instagram",
-    },
-    {
-      name: "URL de pagina ",
-      linkbase: "web",
-      linkUsuario: useProductor.perfilProductor?.redes
-        ? useProductor.perfilProductor?.redes[2]?.linkUsuario
-        : "",
-      icon: "i-mdi-web",
-    },
-  ],
-  direccion: {
-    ciudad: useProductor.perfilProductor?.direccion?.ciudad,
-    codigoPostal: useProductor.perfilProductor?.direccion?.codigoPostal,
-    direccion1: useProductor.perfilProductor?.direccion?.direccion1,
-    direccion2: useProductor.perfilProductor?.direccion?.direccion2,
-  },
+  numeroTelefonico: useProductor.perfilProductor.numeroTelefonico,
+  redes: useProductor.perfilProductor.redes,
+  direccion: useProductor.perfilProductor?.direccion,
 });
-console.log(useProductor.perfilProductor._id)
-
+const copiaState = ref()
 onMounted(() => {
+  copiaState.value = JSON.parse(JSON.stringify(state))
   if (useProductor.perfilProductor.logo) {
     picture.value = useProductor.perfilProductor.logo;
     pictureTrue.value = true;
@@ -723,15 +676,48 @@ const filterCodeTelefono = () => {
   });
 };
 
+type PerfilTipo = 'instagram' | 'facebook' | 'web'; 
+const verificarPerfil = (tipo: PerfilTipo): {name:string, msj: string} => {
+  if (tipo === 'instagram') return {name: 'perfil de instagram', msj:'Usuario'};
+  if (tipo === 'facebook') return {name: 'perfil de facebook', msj:'Usuario'}; 
+  if (tipo === 'web') return {name: 'URL de página web', msj:'URL de su pagina'};
+  return {name: '', msj:''}
+};
+
 const loading = ref(false)
 
-const onSubmitDatos = (event: FormSubmitEvent<any>) => {
+
+const onSubmitDatos = async (event: FormSubmitEvent<any>) => {
+  if(JSON.stringify(state) === JSON.stringify(copiaState.value)) return toast.info('No has proporcionado ningún cambio.')
   loading.value = true
+  state = convertirAminusculas(state);
+  try {
+    // @ts-ignore
+    await axios({
+      url: `${import.meta.env.VITE_URL_API}/api/content/item/productores?fields={_state: false,_modified:false,_mby: false,_created: false,_cby: false}`,
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
+      },
+      data: {data: state}
+    }).then(res =>{
+      console.log(res.data)
 
+      useProductor.perfilProductor.nombre = state.nombre
+      useProductor.perfilProductor.numeroTelefonico = state.numeroTelefonico
+      useProductor.perfilProductor.redes = state.redes
+      useProductor.perfilProductor.direccion = state.direccion
 
-
-
-  loading.value = false
+    })
+  } catch (error) {
+    toast.error('Hubo un error en la conexión, por favor vuelvalo a intentar mas tarde.')
+    console.log(error)
+    throw error
+  }finally{
+    loading.value = false
+    openEdit.value = false
+  }
 };
 
 const onSubmitImg = (event: FormSubmitEvent<any>) => {

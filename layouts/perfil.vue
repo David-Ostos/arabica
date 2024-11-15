@@ -68,7 +68,7 @@ const items = [
 ];
 
 onMounted(() => {
-  useGlobal.heightNav = nav1.value.clientHeight;
+  useGlobal.heightNavPerfil = nav1.value.clientHeight;
 });
 
 onMounted(() => {

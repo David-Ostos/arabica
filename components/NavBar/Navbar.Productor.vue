@@ -4,14 +4,14 @@
     titulo="Registro del usuario incompleto" :contenido-one="useModals.textoModalNotidicaciones" contenido-two=""
     icon="info" texto-boton="Terminar el registro" :to="`/dashboard/${useUser.dataUser.tipoUser}`" />
 
-    <div :class="[!scrolled ? 'bg-white !text-dar md:bg-transparent md:!text-white' :'bg-white border-b text-dar  shadow-sm' ,{
+    <div @click="console.log(useGlobal.heightNavProductor)" ref="navRef" :class="[!scrolled ? 'bg-white !text-dar md:bg-transparent md:!text-white' :'bg-white border-b text-dar  shadow-sm' ,{
       ' !text-dar bg-white dark:bg-white rounded-b-xl shadow-md ': scrolled,
     },navShow ? 'opacity-100': 'opacity-0' ]"
     class="fixed w-screen top-0 z-50 transition-all duration-300 opacity-0 "
   >
   <div class=" bg-white dark:bg-white">
     <div class="relative z-50">
-      <header ref="nav1"
+      <header 
         class="w-screen top-0 z-50 transition-all text-dar bg-white dark:bg-white border-b-2 rounded-xl shadow-md">
         <div class="container mx-auto py-1  px-12 flex justify-between items-center">
           <div class="flex ">
@@ -37,14 +37,14 @@
             <DropdownsNavBarAvatarProductor />
           </div>
 
-          <div class="flex gap-4 lg:hidden">
-            <UChip :text="useCart.cart.length" size="2xl">
-              <div class="p-2 rounded-lg  bg-primary flex justify-center items-center cursor-pointer"
+          <div class="flex gap-4 md:hidden">
+            <UChip :text="useCart.cart.length" size="xl">
+              <div class="p-2  rounded-lg  bg-primary flex justify-center items-center cursor-pointer"
                 @click="activeCart">
-                <UIcon class="text-white text-xl font-bold" name="i-material-symbols-shopping-cart" dynamic />
+                <UIcon class="text-white text-base md:text-xl  font-bold" name="i-material-symbols-shopping-cart" dynamic />
               </div>
             </UChip>
-            <button type="button" class="-m-2.5 inline-flex items-center justify-center" @click="mobileMenuOpen = true">
+            <button type="button" class="p-1 border rounded-md inline-flex items-center justify-center" @click="mobileMenuOpen = true">
               <span class="sr-only">Abrir menu</span>
               <Bars3Icon class="h-6 w-6" aria-hidden="true" />
             </button>
@@ -56,9 +56,9 @@
 
       </header>
 
-      <div :class="[!useUser.dataUser.verificado ? 'mt-[65px]' : 'mt-[65px]', 'hidden md:block']">
+      <div v-if="validarRuta()" :class="[!useUser.dataUser.verificado ? 'mt-[65px]' : 'mt-[65px]', 'hidden md:block']">
         <!-- <ProductorHorizontalPerfil class=""/> -->
-        <UHorizontalNavigation v-if="!$route.path.includes('perfil')" :links="items"
+        <UHorizontalNavigation :links="items"
           class=" flex  !justify-center border-b border-gray-200  dark:border-gray-800 shadow-md rounded-b-xl"
           :ui="{}" />
 
@@ -95,6 +95,7 @@ import { Bars3Icon } from "@heroicons/vue/24/outline";
 
 // import imgLogo from "/img/Arabica-Green-coffee.png";
 import imgLogoLitgh from "/img/logo_ligth_new.png";
+import { useRoute } from "vue-router";
 
 const useGlobal = useGlobalStore();
 const useUser = useUserStore()
@@ -102,11 +103,66 @@ const useModal = useShowModalsStore()
 const useModals = useShowModalsStore()
 const useCart = useCartStore()
 
-const nav1 = ref();
+const route = useRoute()
+
+
+
+const navRef = ref()
+
+const updateHeight = () => {
+  if (navRef.value) {
+    useGlobal.heightNavProductor = navRef.value.offsetHeight
+  }
+}
+onMounted(() => {
+  if (navRef.value) {
+    // Configurar ResizeObserver
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === navRef.value) {
+          updateHeight()
+        }
+      }
+    })
+
+    resizeObserver.observe(navRef.value)
+
+    // Configurar Intersection Observer para detectar cuando el componente entra en el viewport
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          updateHeight()
+        }
+      })
+    })
+
+    intersectionObserver.observe(navRef.value)
+
+    // Limpiar observadores cuando el componente se desmonte
+    onUnmounted(() => {
+      resizeObserver.disconnect()
+      intersectionObserver.disconnect()
+    })
+  }
+
+  // Actualizar altura inicial
+  updateHeight()
+})
+
 const mobileMenuOpen = ref(false);
 
 const closeSlide = (data: boolean) => {
   mobileMenuOpen.value = data
+}
+
+const validarRuta= () =>{
+  if(route.path.includes('usuario')){
+    return false
+  }
+  if(route.path.includes('perfil')){
+    return false    
+  }
+  return true
 }
 
 const showCart = ref(false);
@@ -167,7 +223,7 @@ const items = [{
 ]
 
 onMounted(() => {
-  useGlobal.heightNav = nav1.value.clientHeight;
+  useGlobal.heightNavProductor = navRef.value.clientHeight;
 });
 
 

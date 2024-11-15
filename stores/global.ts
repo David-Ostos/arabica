@@ -11,7 +11,10 @@ export interface TopLevel {
 
 export const useGlobalStore = defineStore("global",() => {
   const route = useRoute()
-  const heightNav = ref();
+  const heightNavProductor = ref();
+  const heightNavLote = ref();
+  const heightNavPerfil = ref();
+  const heightNavComprador = ref();
   const isActiveSelectCodePhone = ref(false)
 
   const perfilComercial = ref()
@@ -1256,7 +1259,10 @@ export const useGlobalStore = defineStore("global",() => {
   // }
 
   return {
-    heightNav,
+    heightNavProductor ,
+    heightNavLote ,
+    heightNavPerfil ,
+    heightNavComprador ,
     isActiveSelectCodePhone,
     codeCountry,
     perfilComercial,
