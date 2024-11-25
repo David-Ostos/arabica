@@ -11,7 +11,6 @@
       <ProductorPerfilHorizontalNavigation />
     </div>
   </div>
-  <ProductorPerfilIndexCompletarPerfil />
 </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$route.path.includes('usuario')"
+  <div v-if="$route.path.includes('usuario') && !isScreenSmall"
   :class="useUser.dataUser.verificado ? 'mt-[65px]' : ''" 
   class="rounded-b-3xl ml-16 mb-1 bg-gray-100  "
   :style="containerStyles"
@@ -34,6 +34,28 @@
       </div>
     </div>
   </div>
+ <!--  <div class="mt-12 py-4" v-else>
+    <ul v-for="(item, groupIndex) in linkMobile" :key="groupIndex" 
+      class="flex items-center gap-4 mx-4 mb-4">
+      <li v-for="(link, linkIndex) in item" :key="linkIndex" 
+        class="w-1/3 flex flex-col justify-center truncate">
+        <NuxtLink 
+          :to="link.to" 
+          @click="link.click"
+          :class="[
+            isActiveRoute(link.to!) ? 'text-green-500' : 'text-secundary',
+            link.label === 'Eliminar Cuenta' ? 'text-rose-500' : '',
+          ]"
+        >
+        <p class="truncate">{{ link.label }}</p>
+      </NuxtLink>
+      <div 
+        v-if="isActiveRoute(link.to!)"
+        class="h-0.5 w-full bg-green-500 mt-1"
+      ></div>
+      </li>
+    </ul>
+  </div> -->
 </template>
 
 <script lang="ts" setup>
@@ -41,6 +63,11 @@ const useUser = useUserStore()
 const useModals = useShowModalsStore()
 
 const useGlobal = useGlobalStore()
+const route = useRoute()
+
+
+const {isScreenSmall} = useGlobalComposable()
+
 
 const containerStyles = computed(() => ({
   'min-height': `calc(100vh - ${useGlobal.heightNavProductor}px * 2 )`,
@@ -52,10 +79,20 @@ const closeModal = (close: boolean)=>{
 }
 
 function onClickComercial (){
-  if(!useUser.dataUser.perfilBase) return useModals.openModalNotificacion = true
+  if(!useUser.dataUser.perfilBase) {
+    useModals.openModalNotificacion = true
+    return true
+  }
 }
 
-const links = [
+interface Link { 
+  label: string;
+  icon: string;
+  to?: string;
+  click?: () => any;
+  disabled: boolean; 
+}
+const links: Link[][] = [
   [{
     label: 'Informacion Basica',
     icon:'',
@@ -92,6 +129,48 @@ const links = [
     to: ''
   }] */
 ]
+
+const linkMobile: Link[][] = [
+  [{
+    label: 'Info Basica',
+    icon:'',
+    to: '/dashboard/productor/usuario',
+    click: () =>{ return true},
+    disabled: false
+  }, {
+    label: 'Info Comercial',
+    icon:'',
+    disabled: !useUser.dataUser.perfilBase,
+    click: () => onClickComercial(),
+    // icon: 'i-heroicons-home',
+    to: '/dashboard/productor/usuario/informacionComercial'
+  },/*  {
+    label: 'Notificaciones',
+    icon:'',
+    // icon: 'i-heroicons-chart-bar',
+    to: `/dashboard/productor/usuario/notificaciones`
+  }, */ {
+    label: 'Elimanar Cuenta',
+    icon:'',
+    // icon: 'i-heroicons-command-line',
+    to: '/dashboard/productor/usuario/eliminarCuenta',
+    click: () =>{ return true},
+    disabled: false
+
+  }]/* , [{
+    label: 'Examples',
+    icon: 'i-heroicons-light-bulb',
+    to: ''
+  }, {
+    label: 'Help',
+    icon: 'i-heroicons-question-mark-circle',
+    to: ''
+  }] */
+]
+
+const isActiveRoute = (path: string) => {
+  return route.path === path
+}
 
 </script>
 

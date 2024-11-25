@@ -1,88 +1,66 @@
 <template>
-  <div class="my-20 mx-20">
+
+  <UModal v-model="isOpenModalPicture" :ui="{ container: 'items-center' }" prevent-close>
+
+    <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+      <template #header>
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:-text-dar capitalize">
+            Vista de imagen
+          </h3>
+          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="closeModalPicture" />
+        </div>
+      </template>
+
+      <div>
+        <img :src="pictureModal" class="w-full h-full" />
+      </div>
+
+    </UCard>
+
+  </UModal>
+
+  <div class="mx-4 my-8 md:m-20">
     <div class="overflow-auto">
-      <h1 class="text-center text-3xl text-gray-700 font-bold">
+      <h1 class="text-center text-3xl text-gray-700 font-bold pt-4">
         Edite su Lote de Café
       </h1>
-      <h3 class="text-2xl mb-8 text-gray-600">Agrega las imagenes</h3>
-      <div class="grid grid-cols-2 gap-8">
+      <h3 class="text-2xl mb-8 text-gray-600 text-center md:text-start">Agrega las imagenes</h3>
+      <div class="md:grid grid-cols-2 gap-8">
         <!-- Galerria -->
         <div
-          class="col-span-1 grid-area-1 h-[510px] h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4"
-        >
+          class="col-span-1 grid-area-1 h-[510px] h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4">
           <div class="grid grid-cols-4 col-span-2 grid-rows-4 gap-4 h-full">
-            <div
-              v-if="loading"
-              class="row-span-2 col-span-4 flex justify-center items-center border rounded-xl cursor-pointer overflow-hidden brightness-75 bg-gray-100 opacity-55"
-            >
-              <l-squircle
-                size="37"
-                stroke="5"
-                stroke-length="0.15"
-                bg-opacity="0.1"
-                speed="0.9"
-                color="black"
-              ></l-squircle>
+            <div v-if="loading"
+              class="row-span-2 col-span-4 flex justify-center items-center border rounded-xl cursor-pointer overflow-hidden brightness-75 bg-gray-100 opacity-55">
+              <l-squircle size="37" stroke="5" stroke-length="0.15" bg-opacity="0.1" speed="0.9"
+                color="black"></l-squircle>
             </div>
 
-            <div
-              v-show="!loading"
-              class="row-span-2 col-span-4 rounded-xl cursor-pointer overflow-hidden hover:brightness-75"
-              :class="
-                !pictures[0].enty
+            <div v-show="!loading"
+              class="row-span-2 col-span-4 rounded-xl cursor-pointer overflow-hidden hover:brightness-75" :class="!pictures[0].enty
                   ? 'flex justify-center items-center h-full w-full '
                   : 'hover:bg-gray-100 border'
-              "
-              @click=""
-            >
-              <img
-                v-if="!pictures[0].enty"
-                :src="pictures[0].link"
-                class="rounded-xl h-full w-full object-cover"
-                alt=""
-              />
-              <UIcon
-                v-else
-                name="i-icon-park-outline-add-picture"
-                class="h-full w-full opacity-55 hover:scale-105"
-                dynamic
-              />
+                " @click="">
+              <img v-if="!pictures[0].enty" @click="openModalPicture(pictures[0].link)" :src="pictures[0].link" class="rounded-xl h-full w-full object-cover"
+                alt="" />
+              <UIcon v-else name="i-icon-park-outline-add-picture" class="h-full w-full opacity-55 hover:scale-105"
+                dynamic />
             </div>
 
-            <div
-              class="flex justify-around items-center row-span-2 gap-4 col-span-4 h-full w-full"
-            >
-              <div
-                v-for="img in pictures.slice(1)"
-                class="h-full w-full flex items-center justify-center cursor-pointer overflow-hidden hover:brightness-75 hover:bg-gray-100 rounded-xl"
-              >
-                <div
-                  v-if="loading"
-                  class="flex justify-center items-center border rounded-xl w-full h-full brightness-75 bg-gray-100 opacity-55"
-                >
-                  <l-squircle
-                    size="37"
-                    stroke="5"
-                    stroke-length="0.15"
-                    bg-opacity="0.1"
-                    speed="0.9"
-                    color="black"
-                  ></l-squircle>
+            <div class="flex justify-around items-center row-span-2 gap-4 col-span-4 h-full w-full">
+              <div v-for="img in pictures.slice(1) "
+                class="h-full w-full flex items-center justify-center cursor-pointer overflow-hidden hover:brightness-75 hover:bg-gray-100 rounded-xl">
+                <div v-if="loading"
+                  class="flex justify-center items-center border rounded-xl w-full h-full brightness-75 bg-gray-100 opacity-55">
+                  <l-squircle size="37" stroke="5" stroke-length="0.15" bg-opacity="0.1" speed="0.9"
+                    color="black"></l-squircle>
                 </div>
                 <div v-show="!loading" v-if="img.enty === true" class="">
-                  <UIcon
-                    :name="img.link"
-                    class="rounded-xl h-28 w-full object-cover opacity-55"
-                    alt=""
-                    dynamic
-                  />
+                  <UIcon :name="img.link" class="rounded-xl h-28 w-full object-cover opacity-55" alt="" dynamic />
                 </div>
                 <div v-show="!loading" v-else class="rounded-xl">
-                  <img
-                    :src="img.link"
-                    class="rounded-xl h-72 w-full object-cover"
-                    alt=""
-                  />
+                  <img @click="openModalPicture(img.link)" :src="img.link" class="rounded-xl h-72 w-full object-cover" alt="" />
                 </div>
               </div>
 
@@ -90,34 +68,17 @@
             <!-- barrar de carga -->
 
             <UProgress :value="porcentaje" :color="color" class="col-span-4 animate-pulse">
-              <template #indicator="{percent}">
-                <div class="text-right" :style="{width: `${percent}%`}">
-                  <span
-                    v-if="faseUpload === 'none'"
-                    class="text-gray-500 w-fit"
-                    >Esperando...</span
-                  >
-                  <span
-                    v-else-if="faseUpload === 'Subiendo Imagenes...'"
-                    class="text-blue-500 w-fit"
-                    >{{ faseUpload }}</span
-                  >
-                  <span
-                    v-else-if="faseUpload === 'Actualizando el lote...'"
-                    class="text-amber-500 w-fit"
-                    >{{ faseUpload }}</span
-                  >
+              <template #indicator="{ percent }">
+                <div class="text-right" :style="{ width: `${percent}%` }">
+                  <span v-if="faseUpload === 'none'" class="text-gray-500 w-fit">Esperando...</span>
+                  <span v-else-if="faseUpload === 'Subiendo Imagenes...'" class="text-blue-500 w-fit">{{ faseUpload
+                    }}</span>
+                  <span v-else-if="faseUpload === 'Actualizando el lote...'" class="text-amber-500 w-fit">{{ faseUpload
+                    }}</span>
 
-                  <span
-                    v-else-if="faseUpload === 'Subida Completada'"
-                    class="text-primary-500"
-                    >✔ Subida completada.</span
-                  >
-                  <span
-                    v-else-if="faseUpload === 'error'"
-                    class="text-red-500 font-bold"
-                    >X Hubo un error.</span
-                  >
+                  <span v-else-if="faseUpload === 'Subida Completada'" class="text-primary-500">✔ Subida
+                    completada.</span>
+                  <span v-else-if="faseUpload === 'error'" class="text-red-500 font-bold">X Hubo un error.</span>
                 </div>
               </template>
             </UProgress>
@@ -128,61 +89,31 @@
 
         <!-- Formulario -->
         <div
-          class="flex flex-col w-full p-4 rounded-xl border justify-between h-ful shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
-        >
-          <UForm
-            :schema="schema"
-            :state="state"
-            @submit="onSubmit"
-            class="grid grid-cols-6 gap-4"
-          >
-            <UFormGroup
-              label="Sube tus imagenes"
-              name="galeria"
-              class="col-span-3"
-            >
-              <!-- @ts-ignore -->
-              <UInput
-                type="file"
-                icon="i-heroicons-folder"
-                multiple
-                accept="image/*"
-                max="4"
-                v-model="inputFile"
-                @change="handleFileUpload"
-              />
-            </UFormGroup>
-            <UFormGroup label="Nombre" name="nombre" class="col-span-3">
+          class="flex flex-col w-full p-4 rounded-xl border justify-between h-ful shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400">
+          <UForm :schema="schema" :state="state" @submit="onSubmit" class="grid grid-cols-6 gap-4">
+            <UFormGroup label="Nombre" name="nombre" class="col-span-6 md:col-span-3">
               <UInput v-model="state.nombre" />
             </UFormGroup>
+
+            <UFormGroup label="Sube tus imagenes" name="galeria" class="col-span-3">
+              <!-- @ts-ignore -->
+              <UInput type="file" icon="i-heroicons-folder" multiple accept="image/*" max="4" v-model="inputFile"
+                @change="handleFileUpload" />
+            </UFormGroup>
+            
             <UFormGroup label="Precio" name="precio" class="col-span-3">
               <UInput v-model="state.precio" />
             </UFormGroup>
 
             <UFormGroup label="Origen" name="origen" class="col-span-3">
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar origen..."
-                class="w-full capitalize"
-                placeholder="Selecciona el origen"
-                :options="['chavin', 'moche', 'nasca']"
-                v-model="state.origen"
-              />
+              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar origen..."
+                class="w-full capitalize" placeholder="Selecciona el origen" :options="['chavin', 'moche', 'nasca']"
+                v-model="state.origen" />
             </UFormGroup>
 
-            <UFormGroup
-              label="Departamento"
-              name="departamento"
-              class="col-span-3"
-            >
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar departamento..."
-                class="w-full capitalize"
-                placeholder="Selecciona el departamento"
-                :options="[
+            <UFormGroup label="Departamento" name="departamento" class="col-span-3">
+              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar departamento..."
+                class="w-full capitalize" placeholder="Selecciona el departamento" :options="[
                   'piura',
                   'amazonas',
                   'cajamarca',
@@ -193,19 +124,37 @@
                   'ayacucho',
                   'cusco',
                   'puno',
-                ]"
-                v-model="state.departamento"
-              />
+                ]" v-model="state.departamento" />
+            </UFormGroup>
+
+
+
+            <UFormGroup label="Proceso" name="proceso" class="col-span-6 md:col-span-3">
+              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar proceso..."
+                class="w-full capitalize" placeholder="Selecciona el proceso" :options="[
+                  'sueves washing',
+                  'anaerobic washing',
+                  'honey',
+                  'prolonged fermentation',
+                  'natural',
+                  'natural anaerobic',
+                  'experimental',
+                ]" v-model="state.proceso" />
+            </UFormGroup>
+
+            <UFormGroup label="Cantidad del lote" name="cantidadLote" class="col-span-6 md:col-span-3">
+              <USelectMenu :ui="{ select: 'capitalize' }" searchable
+                searchable-placeholder="Buscar la cantidad del lote...." class="w-full capitalize"
+                placeholder="Selecciona la cantidad del lote" :options="[
+                  'lotes completos',
+                  'micro lote (5pp - 20qq)',
+                  'nano lote',
+                ]" v-model="state.cantidadLote" />
             </UFormGroup>
 
             <UFormGroup label="Variedad" name="variedad" class="col-span-3">
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar variedad..."
-                class="w-full capitalize"
-                placeholder="Selecciona el variedad"
-                :options="[
+              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar variedad..."
+                class="w-full capitalize" placeholder="Selecciona el variedad" :options="[
                   'geisha',
                   'typical',
                   'bourbon',
@@ -219,48 +168,18 @@
                   'castilla',
                   'catimor',
                   'otros',
-                ]"
-                v-model="state.variedad"
-              />
+                ]" v-model="state.variedad" />
             </UFormGroup>
-            <UFormGroup label="Proceso" name="proceso" class="col-span-3">
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar proceso..."
-                class="w-full capitalize"
-                placeholder="Selecciona el proceso"
-                :options="[
-                  'sueves washing',
-                  'anaerobic washing',
-                  'honey',
-                  'prolonged fermentation',
-                  'natural',
-                  'natural anaerobic',
-                  'experimental',
-                ]"
-                v-model="state.proceso"
-              />
-            </UFormGroup>
+
             <UFormGroup label="Puntaje" name="puntaje" class="col-span-3">
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar puntaje..."
-                class="w-full capitalize"
-                placeholder="Selecciona el puntaje"
-                :options="['80-90+', '70-80+', '60-70+']"
-                v-model="state.puntaje"
-              />
+              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar puntaje..."
+                class="w-full capitalize" placeholder="Selecciona el puntaje" :options="['80-90+', '70-80+', '60-70+']"
+                v-model="state.puntaje" />
             </UFormGroup>
+
             <UFormGroup label="Perfil" name="perfil" class="col-span-3">
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar perfil..."
-                class="w-full capitalize"
-                placeholder="Selecciona el perfil"
-                :options="[
+              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar perfil..."
+                class="w-full capitalize" placeholder="Selecciona el perfil" :options="[
                   'floral',
                   'fruit tree',
                   'vegetable',
@@ -269,65 +188,64 @@
                   'dried fruit',
                   'pecan / chocolate',
                   'clean cup',
-                ]"
-                v-model="state.perfil"
-              />
+                ]" v-model="state.perfil" />
             </UFormGroup>
 
-            <UFormGroup
-              label="Cantidad del lote"
-              name="cantidadLote"
-              class="col-span-3"
-            >
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar la cantidad del lote...."
-                class="w-full capitalize"
-                placeholder="Selecciona la cantidad del lote"
-                :options="[
-                  'lotes completos',
-                  'micro lote (5pp - 20qq)',
-                  'nano lote',
-                ]"
-                v-model="state.cantidadLote"
-              />
-            </UFormGroup>
+
+
             <UFormGroup label="País" name="pais" class="col-span-3">
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar País..."
-                class="w-full capitalize"
-                placeholder="Selecciona el País"
-                :options="['peru']"
-                v-model="state.pais"
-              />
+              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar País..."
+                class="w-full capitalize" placeholder="Selecciona el País" :options="['peru']" v-model="state.pais" />
             </UFormGroup>
 
             <UFormGroup
-              label="¿Este lote Tiene pruebas gratís? "
-              name="pruebaGratis"
-              class="col-span-3"
-            >
+              label="¿Este lote Tiene muestra? "
+              name="muestra.muestra"
+              class="md:col-span-3 col-span-6"
+              >
               <UToggle
-                v-model="state.pruebaGratis"
-                on-icon="i-heroicons-check-20-solid"
-                off-icon="i-heroicons-x-mark-20-solid"
+              v-model="muestra"
+              on-icon="i-heroicons-check-20-solid"
+              off-icon="i-heroicons-x-mark-20-solid"
               />
             </UFormGroup>
-            <UButton
-              size="xl"
-              :padded="true"
-              type="submit"
-              :loading="loading"
-              :ui="{
-                inline: 'inline-block flex item-center justify-center',
-              }"
-              class="col-start-2 text-center col-span-4"
-            >
-              Editar Lote</UButton
-            >
+
+            <div v-if="state.muestra?.muestra" class="col-span-6 grid grid-cols-6 gap-4"> 
+
+
+              <UFormGroup
+              label="¿Este lote Tiene muestra gratis? "
+              name="muestra.muestraGratis"
+              class="col-span-6 md:col-span-2"
+              >
+              <UToggle
+              v-model="muestraGratis"
+              on-icon="i-heroicons-check-20-solid"
+              off-icon="i-heroicons-x-mark-20-solid"
+              />
+            </UFormGroup>
+
+            <UFormGroup v-if="!state.muestra.muestraGratis" label="Precio" name="muestra.precio" class="col-span-3 md:col-span-2">
+              <UInput v-model="state.muestra.precio" type="number" placeholder="5"> 
+                <template #leading>
+                  <span class="text-gray-500 dark:text-gray-400">$</span>
+                </template>
+              </UInput>
+            </UFormGroup>
+
+            <UFormGroup label="Cantidad" name="muestra.precio" class="col-span-3 md:col-span-2">
+              <UInput v-model="state.muestra.cantidad" type="number" placeholder="1"> 
+                <template #leading>
+                  <span class="text-gray-500 dark:text-gray-400">lb/</span>
+                </template>
+              </UInput>
+            </UFormGroup>
+
+            </div>
+            <UButton size="xl" :padded="true" type="submit" :loading="loading" :ui="{
+              inline: 'inline-block flex item-center justify-center',
+            }" class="col-start-2 text-center col-span-4">
+              Editar Lote</UButton>
           </UForm>
         </div>
       </div>
@@ -337,11 +255,11 @@
 
 <script lang="ts" setup>
 import axios from "axios";
-import {boolean, object, string, number, type InferType} from "yup";
-import type {FormSubmitEvent} from "#ui/types";
-import type {Lotes} from "~/interfaces/Lotes";
-import {squircle} from "ldrs";
-import {toast} from "vue3-toastify";
+import { boolean, object, string, number, type InferType } from "yup";
+import type { FormSubmitEvent } from "#ui/types";
+import type { Galeria, Lotes } from "~/interfaces/Lotes";
+import { squircle } from "ldrs";
+import { toast } from "vue3-toastify";
 
 type Schema = InferType<typeof schema>;
 
@@ -357,8 +275,22 @@ const useProductor = useProductorStore();
 const useLotes = useLotesStore();
 const route = useRoute();
 
+
 const lote = useLotes.lotes.filter((lote) => lote._id === route.params.id)[0];
 
+const isOpenModalPicture = ref(false)
+const pictureModal = ref('')
+
+const openModalPicture = (picture: string ) => {
+  console.log(picture);
+  pictureModal.value  = picture
+  isOpenModalPicture.value = true
+}
+const closeModalPicture = ()=>{
+  pictureModal.value = ''
+  isOpenModalPicture.value = false
+
+}
 
 const state: Lotes = reactive({
   nombre: lote.nombre,
@@ -375,7 +307,18 @@ const state: Lotes = reactive({
   descripcion: lote.descripcion,
   galeria: lote.galeria,
   productor: lote.productor,
-  pruebaGratis: lote.pruebaGratis,
+  muestra: lote.muestra
+});
+
+const muestra = ref(state.muestra?.muestra)
+const muestraGratis = ref(state.muestra?.muestraGratis)
+
+watch(muestraGratis, (nuevoValor) => {
+  state.muestra!.muestraGratis = nuevoValor
+});
+
+watch(muestra, (nuevoValor) => {
+  state.muestra!.muestra = nuevoValor
 });
 
 const pictures = ref(state.galeria as any);
@@ -389,11 +332,11 @@ const porcentaje = ref(0);
 
 const faseUpload = ref(
   "none" as
-    | "none"
-    | "Subiendo Imagenes..."
-    | "Actualizando el lote..."
-    | "Subida Completada"
-    | "error"
+  | "none"
+  | "Subiendo Imagenes..."
+  | "Actualizando el lote..."
+  | "Subida Completada"
+  | "error"
 );
 
 const color = computed(() => {
@@ -502,7 +445,7 @@ async function handleFileUpload(event: any) {
         const imagePromise = new Promise((resolve, reject) => {
           reader.onload = () => {
             const dataURL = reader.result;
-            resolve({id: i, link: dataURL, enty: false});
+            resolve({ id: i, link: dataURL, enty: false });
           };
           reader.onerror = reject;
           reader.readAsDataURL(file);
@@ -573,24 +516,24 @@ async function UploadFiles(files: any) {
             });
             return ++count;
           });
-          return {status: true, tipo: "success"};
+          return { status: true, tipo: "success" };
         })
         .catch((e) => {
           console.log(e);
           if (e.code === "ERR_NETWORK") {
             toast.info("Problemas en la conexion intente mas tarde.");
-            return {status: false, tipo: "otros"};
+            return { status: false, tipo: "otros" };
           }
-          return {status: false, tipo: "error"};
+          return { status: false, tipo: "error" };
         });
-      return {status: true};
+      return { status: true };
     } catch (e) {
       console.log(e);
-      return {status: false, tipo: "error"};
+      return { status: false, tipo: "error" };
     }
   } else {
     toast.error("No hay imagenes para subir.");
-    return {status: false, tipo: "otros"};
+    return { status: false, tipo: "otros" };
   }
 }
 
@@ -602,7 +545,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   if (state.galeria !== lote.galeria) {
     uploadImg = await UploadFiles(filesSave.value);
   } else {
-    uploadImg = {status: true};
+    uploadImg = { status: true };
   }
   if (uploadImg.status) {
     try {
@@ -611,9 +554,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       await axios(
         // @ts-ignore
         {
-          url: `${
-            import.meta.env.VITE_URL_API
-          }/api/content/item/lotes?fields={"_mby": false, "_modified": false }`,
+          url: `${import.meta.env.VITE_URL_API
+            }/api/content/item/lotes?fields={"_mby": false, "_modified": false }`,
           method: "POST",
           mode: "cors",
           headers: {
@@ -644,12 +586,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           );
 
           if (updateLoteIndice !== -1) {
-            useLotes.lotes[updateLoteIndice] = {...res.data};
+            useLotes.lotes[updateLoteIndice] = { ...res.data };
           }
           toast.success("Se ha editado el lote satisfactoriamente");
         })
         .catch((error) => {
-    faseUpload.value = "error";
+          faseUpload.value = "error";
 
           console.log(error);
           if (error.code === "ERR_NETWORK") {
@@ -661,11 +603,11 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           }
           loading.value = false;
         })
-        .finally(()=>{
+        .finally(() => {
           faseUpload.value = "Subida Completada";
         });
     } catch (error) {
-    faseUpload.value = "error";
+      faseUpload.value = "error";
 
       console.log(error);
       loading.value = false;

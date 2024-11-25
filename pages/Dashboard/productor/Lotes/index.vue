@@ -7,102 +7,74 @@
     :to="`/dashboard/${useUser.dataUser.tipoUser}`"
   />
 
-  <div class="flex gap-8 z-0 justify-between relative flex-grow mr-8">
-    <!-- Menu desplegable -->
-    <div
-      class="relative transition-width ease-in-out duration-700 shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar border-r border-inset border-gray-300 dark:border-gray-700 focus:border-2 focus:border-primary-500 dark:focus:border-primary-400 py-5 px-4"
-      :class="[
-        isOpen ? ' w-[16%]' : ' w-[5%]',
-        lotes.length > 0 ? ' w-1/3' : 'w-1/4',
-      ]"
-    >
-      <div class="absolute right-4">
-        <div
-          class="mb-4 text-xl border rounded-md p-2 flex justify-center items-center cursor-pointer"
-          @click="isOpen = !isOpen"
-        >
-          <UIcon name="i-ic-round-menu" class="" dynamic />
-        </div>
-      </div>
-      <div class="h-full">
-        <div class="flex flex-col justify-center gap-10 h-full">
-          <button
-            v-for="item in links"
-            @click="item.accion"
-            class="group text-xl border bg-white items-center rounded-md py-1 px-2 mb-4 ease-in-out duration-700 truncate flex gap-1 relative hover:cursor-pointer hover:bg-gray-100 transition-all hover:border-gray-600"
-            :class="[
-              {
-                ' w-48': isOpen,
-                'w-[38px]': !isOpen,
-                ' !text-gray-500 !border-gray-500 hover:cursor-not-allowed hover:!text-gray-500 !bg-gray-200 ':
-                  lotes.length === 0 && item.disable,
-                '!bg-gray-300 border-gray-600': item.isActive,
-              },
-              item.color,
-            ]"
-          >
-            <UIcon
-              :name="item.icon"
-              class="absolute left-[6px] mr-2 text-2xl transition-all duration-700 group-hover:text-gray-600"
-              :class="{
-                'text-white': item.isActive,
-                'group-hover:text-gray-500': lotes.length === 0 && item.disable,
-              }"
-              dynamic
-            />
-            <span
-              class="ml-7 transition duration-500 ease-in-out text-dar capitalize"
-              :class="isOpen ? 'opacity-100' : 'opacity-0 '"
-              >{{ item.label }}</span
-            >
-          </button>
-        </div>
-      </div>
-    </div>
-    <!-- /Menu desplegable -->
+  <ModalsNotificacion v-if="openModalNotificacionLoad" @close="closeModal" titulo="Actualizando..." 
+    :contenido-one="mensajeNotificacionLoad" 
+    contenido-two="" 
+    :loading="true"
+    icon="loading"  
+    texto-boton=""
+    />
+
+  <div class="flex gap-8 z-0 justify-between relative flex-grow mr-8 mx-8 md:mx-0">
+
+    <ProductorLotesMenuDeskot :isOpen="isOpen" :links="links" @chage-menu="changeMenu" :lotes="lotes"/>
 
     <!-- muestra los lotes del productor -->
     <div
       v-if="lotes.length > 0"
-      class="pt-5 pb-10 transition-width ease-in-out duration-700 w-1 mx-auto flex-grow h-screen-topBar-footer overflow-auto"
+      :class="['md:pt-5 md:pb-10 transition-width ease-in-out duration-700 w-1 mx-auto flex-grow h-screen-topBar-footer overflow-auto ', {'scrollbar-hide': isScreenSmall}]"
+
     >
       <!-- estos son los lotes visibles-->
 
       <div class="">
-        <div
-          class="flex gap-1 items-center mb-8 py-4 cursor-pointer text-gray-800 hover:!text-primary-600 transition-all duration-100 w-fit"
-          @click="hiddenVisibles = !hiddenVisibles"
-        >
-          <h1 v-if="lotesVisibles.length > 1" class="font-bold text-base md:text-lg" @click="">
-            {{ lotesVisibles.length }} Lotes Activos
-          </h1>
-          <h1 v-if="lotesVisibles.length === 1" class="font-bold text-base md:text-lg" @click="">
-            {{ lotesVisibles.length }} Lote Activo
-          </h1>
-
-          <div>
+          <div
+            class="flex justify-between gap-1  my-4 md:mb-8 md:py-4 cursor-pointer  transition-all duration-100 w-full"
+          >
+          <div class="flex items-center text-gray-800  hover:!text-primary-600"
+            @click="hiddenVisibles = !hiddenVisibles">
+            <h1 v-if="lotesVisibles.length > 1" class="font-bold text-base md:text-lg" @click="">
+              {{ lotesVisibles.length }} Lotes Activos
+            </h1>
+            <h1 v-if="lotesVisibles.length === 1" class="font-bold text-base md:text-lg" @click="">
+              {{ lotesVisibles.length }} Lote Activo
+            </h1>
+  
+            <div>
+              <UIcon
+                v-if="lotesVisibles.length !== 0"
+                :class="hiddenVisibles ? 'rotate-180' : ''"
+                name="i-material-symbols-keyboard-arrow-up-rounded"
+                class="text-xl"
+                dynamic
+              />
+              <UIcon
+                v-if="lotesVisibles.length === 0"
+                name="i-openmoji-hyphen-minus"
+                dynamic
+              />
+          </div>
+            </div>
+  
+             <div v-if="isScreenSmall" class="text-xl border-primary-600 border text-primary-600 border-gray-800 hover:border-primary-600 hover:!text-primary-600 flex justify-center items-center bg-white  rounded-md py-1 px-2"
+             @click="links[0].accion">
             <UIcon
-              v-if="lotesVisibles.length !== 0"
-              :class="hiddenVisibles ? '' : 'rotate-180'"
-              name="i-material-symbols-keyboard-arrow-up-rounded"
-              class="text-xl"
+              
+              name="i-heroicons-plus-circle"
+              class=" text-2xl "
               dynamic
             />
           </div>
 
-          <UIcon
-            v-if="lotesVisibles.length === 0"
-            name="i-openmoji-hyphen-minus"
-            dynamic
-          />
-        </div>
+          </div>
+
         <div
-          :class="[hiddenVisibles ? 'opacity-0 hidden ' : 'opacity-100']"
-          class="grid grid-cols-3 gap-8 justify-between mr-4 transition-all ease-in-out duration-500 overflow-x-hidden"
+          :class="[hiddenVisibles ? 'opacity-0 sm:hidden lg:hidden md:hidden hidden ' : 'opacity-100']"
+          class="sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-between mr-4 transition-all ease-in-out duration-500 overflow-x-hidden "
         >
           <div
             v-for="item in lotesVisibles"
-            class="col-span-1 mb-4 relative group"
+            class="col-span-1 mb-4 relative group "
           >
             <div
               class="absolute top-7 right-7 z-50 bg-white rounded-full flex text-3xl justify-center items-center transition-all ease-in-out duration-300 transform group-hover:-translate-y-2"
@@ -110,7 +82,11 @@
               <UIcon
                 v-if="isEdit"
                 name="i-material-symbols-light-build-circle-outline"
-                @click="$router.push(`lotes/edit/${item._id}`)"
+                @click="toast.info(`Se va a editar el lote ${item.nombre}`, {
+                  onClose(props) {
+                      $router.push(`lotes/edit/${item._id}`)
+                  },
+                })"
                 class="text-cyan-500 cursor-pointer hover:bg-white hover:scale-110 rounded-full"
                 dynamic
               />
@@ -143,7 +119,7 @@
 
       <div class="border-t">
         <div
-          class="flex gap-1 items-center mt-6 mb-8 py-4 cursor-pointer text-gray-800 hover:!text-primary-600 transition-all duration-100 w-fit"
+          class="flex gap-1 items-center mt-6 mb-4 md:mb-8 md:py-4 cursor-pointer text-gray-800 hover:!text-primary-600 transition-all duration-100 w-fit"
           @click="hiddenOcultos = !hiddenOcultos"
         >
           <h1 v-if="lotesVisibles.length > 1" class="font-bold text-base md:text-lg" @click="">
@@ -155,22 +131,22 @@
           <div>
             <UIcon
               v-if="lotesOcultos.length !== 0"
-              :class="hiddenOcultos ? '' : 'rotate-180'"
+              :class="hiddenOcultos ? 'rotate-180' : ''"
               name="i-material-symbols-keyboard-arrow-up-rounded"
               class="text-xl"
               dynamic
             />
+            <UIcon
+              v-if="lotesOcultos.length === 0"
+              name="i-openmoji-hyphen-minus"
+              dynamic
+            />
           </div>
 
-          <UIcon
-            v-if="lotesOcultos.length === 0"
-            name="i-openmoji-hyphen-minus"
-            dynamic
-          />
         </div>
         <div
-          :class="hiddenOcultos ? 'opacity-0 hidden ' : 'opacity-100'"
-          class="grid grid-cols-3 gap-8 justify-between transition-all ease-in-out duration-500"
+          :class="hiddenOcultos ? 'opacity-0 sm:hidden lg:hidden md:hidden hidden  ' : 'opacity-100'"
+          class="sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-between transition-all ease-in-out duration-500"
         >
           <div
             v-for="item in lotesOcultos"
@@ -182,7 +158,12 @@
               <UIcon
                 v-if="isEdit"
                 name="i-material-symbols-light-build-circle-outline"
-                @click="$router.push(`lotes/edit/${item._id}`)"
+                @click="
+                toast.info(`Se va a editar el lote ${item.nombre}`, {
+                  onClose(props) {
+                      $router.push(`lotes/edit/${item._id}`)
+                  },
+                })"
                 class="text-cyan-500 cursor-pointer hover:bg-white hover:scale-110 rounded-full"
                 dynamic
               />
@@ -200,9 +181,9 @@
 
               <UIcon
                 v-if="isShow"
-                name="i-mdi-eye-outline"
+                name="i-hugeicons-plus-sign-circle"
                 @click="ocultarLote(item._id!, item.ocultar!, item.nombre!)"
-                class="text-primary p-1 cursor-pointer hover:bg-white hover:scale-110 rounded-full"
+                class="text-primary cursor-pointer hover:bg-white hover:scale-110 rounded-full"
                 dynamic
               />
             </div>
@@ -216,10 +197,10 @@
     <!-- cuado no hay lotes creados -->
     <div
       v-else
-      class="flex w-full mt-5 pb-10 transition-width ease-in-out duration-700 mx-auto flex-grow h-screen-topBar-footer overflow-auto"
+      class="flex w-full md:mt-5 md:pb-10 transition-width ease-in-out duration-700 mx-auto flex-grow h-screen-topBar-footer overflow-auto"
     >
       <div
-        class="bg-[url('/img/crear_lote.webp')] w-full flex flex-col justify-center items-center text-center my-10 px-4 rounded-2xl shadow-xl bg-top gap-4 bg-cover"
+        class="bg-[url('/img/crear_lote.webp')] w-full flex flex-col justify-center items-center text-center md:my-10 px-4 rounded-2xl shadow-xl bg-top gap-4 bg-cover"
         :class="`bg-[url(${crearLote})]`"
       >
         <h1
@@ -246,19 +227,18 @@
 
   <!-- Modal de eliminar lote -->
   <div>
-    <UModal v-model="isOpenModal">
-      <div class="p-8">
+    <UModal :ui="{container: 'items-center'}" v-model="isOpenModal">
+      <div class="p-4 md:p-8">
         <div class="flex flex-col gap-4 items-center text-center">
           <UIcon name="i-heroicons-x-circle" class="text-rose-500 text-6xl" />
           <div>
-            <h1 class="text-2xl font-semibold">
+            <h1 class="md:text-2xl font-semibold">
               Desea eliminar el Lote con el nombre
-              <b class="text-rose-500 font-semibold">{{
-                dataDeleteModal.nombre
-              }}</b
+              <b class="text-rose-500 font-semibold">
+                {{dataDeleteModal.nombre}}</b
               >.
             </h1>
-            <p>Al eliminarlo ya no podra recuperarlo.</p>
+            <p class="mt-4 md:mt-0">Al eliminarlo ya no podra recuperarlo.</p>
           </div>
           <UButton
             @click="deleteLote(dataDeleteModal.id, dataDeleteModal.nombre)"
@@ -271,6 +251,8 @@
       </div>
     </UModal>
   </div>
+
+
 </template>
 <script lang="ts" setup>
 import {toast} from "vue3-toastify";
@@ -289,6 +271,8 @@ const router = useRouter();
 const useProductor = useProductorStore();
 const useUser = useUserStore()
 
+const {isScreenSmall} = useGlobalComposable()
+
 const isOpen = ref(false);
 const isEdit = ref(false);
 const isRemove = ref(false);
@@ -302,16 +286,21 @@ const hiddenOcultos = ref(false);
 const isOpenModal = ref(false);
 const dataDeleteModal = ref({} as {id: string; nombre: string});
 const isLoadingModal = ref(false)
-const lotes = reactive(
+const lotes:Lotes[] = reactive(
   useLotes.lotes.filter(
     (lote) => lote.productor!._id === useProductor.perfilProductor._id
   )
 );
 
 const openModalNotificacion = ref(false) 
+const openModalNotificacionLoad = ref(false) 
+const mensajeNotificacionLoad = ref('')
 
 const closeModal = (close: boolean)=>{
   openModalNotificacion.value = close
+}
+const changeMenu = ()=>{
+  isOpen.value = !isOpen.value
 }
 
 const crearLote = ()=>{
@@ -334,9 +323,24 @@ function verificarLotes() {
 
 onMounted(() => {
   verificarLotes();
+  if(isScreenSmall.value){
+  isEdit.value = true;
+  isRemove.value = true;
+  isShow.value = true;
+  }
 });
 
-const links = ref([
+export interface Link { 
+  label: string;
+  disable: boolean;
+  icon: string;
+  color: string;
+  isActive: boolean;
+  accion: () => void;
+
+}
+
+const links:Ref<Link[]> = ref([
   {
     label: "agregar",
     disable: !useUser.dataUser.perfilBase,
@@ -344,8 +348,15 @@ const links = ref([
     color: "text-primary-600 border-primary-600 ",
     isActive: false,
     accion: () => {
-      if(useUser.dataUser.perfilBase) return router.push("/dashboard/productor/lotes/crear") 
-      else return openModalNotificacion.value = true 
+      if(useUser.dataUser.perfilBase) {
+        router.push("/dashboard/productor/lotes/crear")
+        return 
+      } 
+      else{ 
+        openModalNotificacion.value = true
+        return 
+
+      } 
     },
   },
   {
@@ -494,6 +505,13 @@ async function deleteLote(id: string, nombre: string) {
 }
 
 async function ocultarLote(id: string, ocultar: boolean, nombre: string) {
+
+  openModalNotificacionLoad.value = true
+  if(ocultar){
+    mensajeNotificacionLoad.value = 'Se esta cambiando el estado del lote de oculto a visible, por favor espere'
+  }  else{
+    mensajeNotificacionLoad.value = 'Se esta cambiando el estado del lote de visible a oculto, por favor espere'
+  }
   ocultar = !ocultar;
   await axios
     .post(
@@ -538,8 +556,33 @@ async function ocultarLote(id: string, ocultar: boolean, nombre: string) {
         );
       }
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err))
+    .finally(()=>{
+      openModalNotificacionLoad.value = false
+      mensajeNotificacionLoad.value = ''
+    });
 }
 </script>
 
-<style></style>
+<style scoped>
+/* Ocultar barras de desplazamiento en navegadores modernos */ 
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none; 
+} 
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE y Edge */ 
+  scrollbar-width: none; /* Firefox */ 
+}
+@media (min-width: 768px) {
+  .scrollbar-show::-webkit-scrollbar{
+  display: block; 
+
+}
+
+.scrollbar-show {
+  -ms-overflow-style: auto; /* IE y Edge */ 
+  scrollbar-width: auto; /* Firefox */ 
+}
+}
+</style>

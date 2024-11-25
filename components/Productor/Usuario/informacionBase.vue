@@ -1,88 +1,40 @@
 <template>
-<div class="h-full my-auto mt-14">
-    <div
-      class=" rounded-xl shadow w-fit h-fit mx-auto  bg-white  overflow-auto font-raleway"
-    >
-      <h1 class="px-8 pt-4 uppercase text-gray-500 text-xs font-bold">
+  <div class="h-full my-auto md:mt-14 w-full max-w-screen-xl mx-auto  md:px-0">
+    <div class="rounded-xl shadow bg-white overflow-hidden font-raleway">
+      <h1 class="px-4 md:px-8 mb-4 py-4 border-b uppercase text-gray-500 text-xs font-bold">
         INFORMACIÓN BÁSICA
       </h1>
       <UForm
         :schema="schema"
         :state="state"
         @submit="onSubmit"
-        class="flex flex-col p-8"
+        class="flex flex-col w-full p-4 md:p-8"
       >
-        <div class="grid grid-cols-5 gap-8">
-          <div class="grid grid-cols-2 col-span-3 gap-8 h-fit capitalize">
-            <UFormGroup
-              required
-              class="col-span-1 h-fit"
-              label="Nombre"
-              name="nombre"
-            >
-              <UInput
-                placeholder="Nombre"
-                size="xl"
-                icon=""
-                class="capitalize"
-                :ui="{}"
-                v-model="state.nombre"
-              />
+        <div class="md:grid md:grid-cols-5 gap-4 md:gap-8">
+          <div class="md:col-span-3 space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-8 h-fit capitalize">
+            <UFormGroup required class="md:col-span-1 h-fit" label="Nombre" name="nombre">
+              <UInput placeholder="Nombre" size="xl" icon="" class="capitalize" v-model="state.nombre" />
             </UFormGroup>
-            <UFormGroup
-              required
-              label="Apellido"
-              name="apellido"
-              class="col-span-1"
-            >
-              <UInput
-                placeholder="Apellido"
-                icon=""
-                v-model="state.apellido"
-                size="xl"
-              />
+            <UFormGroup required label="Apellido" name="apellido" class="md:col-span-1">
+              <UInput placeholder="Apellido" icon="" v-model="state.apellido" size="xl" />
             </UFormGroup>
-            <UFormGroup required class="col-span-2" label="Correo" name="email">
-              <UInput
-                placeholder="ejemplo@gmai.com"
-                icon="i-heroicons-envelope"
-                v-model="state.email"
-                size="xl"
-              />
+            <UFormGroup required class="md:col-span-2" label="Correo" name="email">
+              <UInput placeholder="ejemplo@gmail.com" icon="i-heroicons-envelope" v-model="state.email" size="xl" />
             </UFormGroup>
-  
-            <UFormGroup
-              class="col-span-2"
-              label="Contraseña"
-              name="contraseña"
-              :help="state.password ? '' : 'Puedes agregar tu contraseña aqui'"
-            >
-              <UInput
-                placeholder="*************"
-                icon=""
-                v-model="state.password"
-                type="password"
-                size="xl"
-              />
+            <UFormGroup class="md:col-span-2" label="Contraseña" name="contraseña" :help="state.password ? '' : 'Puedes agregar tu contraseña aquí'">
+              <UInput placeholder="*************" icon="" v-model="state.password" type="password" size="xl" />
             </UFormGroup>
           </div>
 
           <!-- logo  -->
-          <div class="p-4 col-span-2">
-            <span class="text-gray-500 font-semibold">Logo del Comercio</span>
-
-            <div
-              class="relative flex flex-col justify-center items-center border rounded-xl h-64 w-full shadow-inner bg-gray-100"
-            >
-              <button type="button" v-if="(state.picture || imgUser) "
+          <div class="md:col-span-2 mt-4 md:mt-0">
+            <span class="text-gray-500 font-semibold">Foto del usuario</span>
+            <div class="relative flex flex-col justify-center items-center border rounded-xl h-64 w-full shadow-inner bg-gray-100 mt-2">
+              <button type="button" v-if="(state.picture || imgUser)"
                 @click="clickInputFile"
                 class="absolute top-4 right-4 p-2 rounded-full flex justify-center items-center border bg-white shadow hover:brightness-95 cursor-pointer"
               >
-                <UIcon
-                  name="i-heroicons-camera"
-                  class="text-primary-600 h-9 w-9"
-                  
-                />
+                <UIcon name="i-heroicons-camera" class="text-primary-600 h-9 w-9" />
               </button>
               <div class="w-full flex justify-center items-center">
                 <USkeleton
@@ -93,17 +45,16 @@
                 <div v-show="loadingImg">
                   <div
                     v-show="!state.picture && !imgUser"
-                    class="py-8 rounded-xl w-full  flex flex-col justify-center items-center text-gray-700 px-12"
+                    class="py-8 rounded-xl w-full flex flex-col justify-center items-center text-gray-700 px-4 md:px-12"
                   >
-                    <UIcon name="i-heroicons-photo" class="text-8xl" dynamic />
-                    <UButton type="button" @click="clickInputFile" class="font-semibold"
-                      >Subir una nueva imagen</UButton>
+                    <UIcon name="i-heroicons-photo" class="text-6xl md:text-8xl" dynamic />
+                    <UButton type="button" @click="clickInputFile" class="font-semibold mt-2">Subir una nueva imagen</UButton>
                     <input ref="inputImgUser" type="file" @change="handleFileUpload" class="hidden" />
                   </div>
                   <img v-show="imgUser" :src="imgUser" class="rounded-full h-48 w-48 shadow" />
                   <img
                     v-show="state.picture && !imgUser"
-                    onload="loadingImg = false"
+                    @load="loadingImg = true"
                     :src="state.picture"
                     class="rounded-full h-48 w-48 shadow"
                     alt=""
@@ -111,17 +62,16 @@
                 </div>
               </div>
             </div>
-            <span
-              class="text-xs text-gray-500 font-semibold mx-auto w-[max-content] flex"
-              >Al menos 200 por 200 píxeles. Tamaño máximo 6MB.</span
-            >
+            <span class="text-xs text-gray-500 font-semibold mt-2 block text-center">
+              Al menos 200 por 200 píxeles. Tamaño máximo 6MB.
+            </span>
           </div>
           <!-- /logo  -->
-
         </div>
-        <div class="flex flex-col " >
+        
+        <div class="flex flex-col mt-6">
           <UButton
-            class="w-fit self-end px-3 py-[10px] font-bold"
+            class="w-full md:w-fit md:self-end px-3 py-[10px] font-bold"
             :ui="{
               variant: {
                 solid: 'bg-{color}-600',
@@ -133,42 +83,20 @@
           >
             Guardar cambios
           </UButton>
-          <UProgress :value="porcentaje" :color="color" class="col-span-4">
-              <template #indicator="{percent}">
-                <div
-                  class="text-right"
-                  :style="{width: `${percent < 10 && faseUpload !== 'none' ? percent + 15: percent}%`}"
-                >
-                  <span v-if="faseUpload === 'none'" class="text-gray-500 w-fit"
-                    >Esperando...</span
-                  >
-                  <span
-                    v-else-if="faseUpload === 'Subiendo Imagenes...'"
-                    class="text-blue-500 w-fit"
-                    >{{ faseUpload }}</span
-                  >
-                  <span
-                    v-else-if="faseUpload === 'Subiendo Lote...'"
-                    class="text-amber-500 w-fit"
-                    >{{ faseUpload }}</span
-                  >
-                  <span
-                    v-else-if="faseUpload === 'Actualizando datos del usuario...'"
-                    class="text-orange-500"
-                    >{{ faseUpload }}</span
-                  >
-                  <span
-                    v-else-if="faseUpload === 'Subida Completada'"
-                    class="text-primary-500 "
-                    >✔ Subida completada.</span
-                  >
-                  <span
-                    v-else-if="faseUpload === 'error'"
-                    class="text-red-500 font-bold min-w-14"
-                    >X Hubo un error.</span
-                  >
-                </div>
-              </template>
+          <UProgress :value="porcentaje" :color="color" class="mt-4">
+            <template #indicator="{percent}">
+              <div
+                class="text-right"
+                :style="{width: `${percent < 10 && faseUpload !== 'none' ? percent + 15: percent}%`}"
+              >
+                <span v-if="faseUpload === 'none'" class="text-gray-500 w-fit">Esperando...</span>
+                <span v-else-if="faseUpload === 'Subiendo Imagenes...'" class="text-blue-500 w-fit">{{ faseUpload }}</span>
+                <span v-else-if="faseUpload === 'Subiendo Lote...'" class="text-amber-500 w-fit">{{ faseUpload }}</span>
+                <span v-else-if="faseUpload === 'Actualizando datos del usuario...'" class="text-orange-500">{{ faseUpload }}</span>
+                <span v-else-if="faseUpload === 'Subida Completada'" class="text-primary-500">✔ Subida completada.</span>
+                <span v-else-if="faseUpload === 'error'" class="text-red-500 font-bold min-w-14">X Hubo un error.</span>
+              </div>
+            </template>
           </UProgress>
         </div>
       </UForm>

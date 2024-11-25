@@ -1,12 +1,11 @@
 <template>
   <div
-    @touchstart="selectActive = !selectActive"
-    class="h-full lg:w-[930px] mx-auto my-14"
+    class="h-full lg:w-[930px] mx-auto md:my-14"
   >
     <div
       class="rounded-xl shadow w-full h-fit mx-auto bg-white overflow-auto font-raleway"
     >
-      <h1 class="px-8 pt-4 uppercase text-gray-500 text-xs font-bold">
+      <h1 class="px-8 pt-4 uppercase pb-4 border-b text-gray-500 text-xs font-bold">
         información comercial
       </h1>
       <UForm
@@ -14,15 +13,15 @@
         :state="state"
         :validate="validate"
         @submit="onSubmit"
-        class="flex flex-col p-8 w-full"
+        class="flex flex-col p-4 md:p-8 w-full md:mt-4"
       >
-        <div class="grid grid-cols-5 gap-8 relative w-full mb-4">
-          <div
-            class="grid grid-cols-8 col-span-5 w-full gap-8 h-fit capitalize"
+        <div class=" gap-8 md:grid grid-cols-5  flex flex-col-reverse justify-center w-full border-b pb-4">
+
+          <div class="grid grid-cols-8 col-span-3 w-full gap-8 h-fit capitalize"
           >
             <UFormGroup
               required
-              class="col-span-5 h-fit"
+              class="col-span-8 h-fit"
               label="Nombre del negocio"
               name="nombre"
             >
@@ -40,12 +39,12 @@
               required
               label="Numero de teléfono"
               name="numeroTelefonico"
-              class="col-span-5"
+              class="col-span-8"
             >
               <div
                 class="grid grid-cols-12 w-full focus-visible:ring-2 ring-primary group rounded-md"
               >
-                <div class="col-span-2 cursor-pointer relative">
+                <div class="col-span-4 md:col-span-2 cursor-pointer relative">
                   <div
                     @click="selectActive = !selectActive"
                     class="grid grid-cols-3 gap-1 justify-center items-center w-full h-full border rounded-md border-[#d1d5db] shadow cursor-pointer"
@@ -102,7 +101,7 @@
                   </div>
                 </div>
                 <UInput
-                  class="col-span-10"
+                  class="col-span-8 md:col-span-10"
                   placeholder="1234567..."
                   icon=""
                   v-model="state.numeroTelefonico!.numero"
@@ -113,7 +112,7 @@
 
             <UFormGroup
               required
-              class="col-span-5"
+              class="col-span-8"
               label="Correo"
               name="correo"
             >
@@ -125,7 +124,64 @@
               />
             </UFormGroup>
 
-            <UFormGroup
+          </div>
+
+          <!-- logo  -->
+          <div class=" col-span-2 pt-0 pb-4 ">
+            <span class="text-gray-500 font-semibold ">Logo del Comercio</span>
+
+            <div
+              class="relative mt-4 flex flex-col justify-center items-center border rounded-xl h-64 w-full shadow-inner bg-gray-100"
+            >
+              <button type="button" v-if="(state.logo || imgLogo) "
+                @click="clickInputFile"
+                class="absolute top-4 right-4 p-2 rounded-full flex justify-center items-center border bg-white shadow hover:brightness-95 cursor-pointer"
+              >
+                <UIcon
+                  name="i-heroicons-camera"
+                  class="text-primary-600 h-9 w-9"
+                  
+                />
+              </button>
+              <div class="w-full flex justify-center items-center">
+                <USkeleton
+                  class="h-48 w-48 bg-dark"
+                  :ui="{rounded: 'rounded-full'}"
+                  v-show="!loadingImg"
+                />
+                <div v-show="loadingImg">
+                  <div
+                    v-show="!state.logo && !imgLogo"
+                    class="py-8 rounded-xl w-full flex flex-col justify-center items-center text-gray-700 px-12"
+                  >
+                    <UIcon name="i-heroicons-photo" class="text-8xl" dynamic />
+                    <UButton type="button" @click="clickInputFile" class="font-semibold"
+                      >Subir una nueva imagen</UButton>
+                    <input ref="inputImgLogo" type="file" @change="handleFileUpload" class="hidden" />
+                  </div>
+                  <img v-show="imgLogo" :src="imgLogo" class="rounded-full h-48 w-48 shadow" />
+                  <img
+                    v-show="state.logo"
+                    onload="loadingImg = false"
+                    :src="state.logo"
+                    class="rounded-full h-48 w-48 shadow"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+            <span
+              class="text-xs text-gray-500 font-semibold mx-auto w-[max-content] flex"
+              >Al menos 200 por 200 píxeles. Tamaño máximo 6MB.</span
+            >
+          </div>
+          <!-- /logo  -->
+
+        </div>
+
+        <div class="gap-8 flex flex-col md:grid grid-cols-5 mt-12">
+                      
+          <UFormGroup
               required
               class="col-span-8"
               label="Dirección de Negocio"
@@ -180,59 +236,6 @@
                 size="xl"
               />
             </UFormGroup>
-          </div>
-
-          <!-- logo  -->
-          <div class="p-4 absolute right-0 top-0">
-            <span class="text-gray-500 font-semibold">Logo del Comercio</span>
-
-            <div
-              class="relative flex flex-col justify-center items-center border rounded-xl h-64 w-full shadow-inner bg-gray-100"
-            >
-              <button type="button" v-if="(state.logo || imgLogo) "
-                @click="clickInputFile"
-                class="absolute top-4 right-4 p-2 rounded-full flex justify-center items-center border bg-white shadow hover:brightness-95 cursor-pointer"
-              >
-                <UIcon
-                  name="i-heroicons-camera"
-                  class="text-primary-600 h-9 w-9"
-                  
-                />
-              </button>
-              <div class="w-full flex justify-center items-center">
-                <USkeleton
-                  class="h-48 w-48 bg-dark"
-                  :ui="{rounded: 'rounded-full'}"
-                  v-show="!loadingImg"
-                />
-                <div v-show="loadingImg">
-                  <div
-                    v-show="!state.logo && !imgLogo"
-                    class="py-8 rounded-xl w-full flex flex-col justify-center items-center text-gray-700 px-12"
-                  >
-                    <UIcon name="i-heroicons-photo" class="text-8xl" dynamic />
-                    <UButton type="button" @click="clickInputFile" class="font-semibold"
-                      >Subir una nueva imagen</UButton>
-                    <input ref="inputImgLogo" type="file" @change="handleFileUpload" class="hidden" />
-                  </div>
-                  <img v-show="imgLogo" :src="imgLogo" class="rounded-full h-48 w-48 shadow" />
-                  <img
-                    v-show="state.logo"
-                    onload="loadingImg = false"
-                    :src="state.logo"
-                    class="rounded-full h-48 w-48 shadow"
-                    alt=""
-                  />
-                </div>
-              </div>
-            </div>
-            <span
-              class="text-xs text-gray-500 font-semibold mx-auto w-[max-content] flex"
-              >Al menos 200 por 200 píxeles. Tamaño máximo 6MB.</span
-            >
-          </div>
-          <!-- /logo  -->
-
         </div>
 
         
@@ -260,6 +263,8 @@
             :certificaciones="item" :index="index"
           />
         </div>
+
+
 
         <div>
           <UFormGroup label="Redes Sociales" class="border-t py-8">
@@ -334,6 +339,7 @@ import type {FormError, FormSubmitEvent} from "#ui/types";
 import type {PerfilProductor} from "~/interfaces/PerfilProductor";
 import { toast } from "vue3-toastify";
 import axios from "axios";
+
 
 const useProductor = useProductorStore();
 const useGlobal = useGlobalStore();

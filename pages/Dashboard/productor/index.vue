@@ -4,10 +4,12 @@ definePageMeta({
   middleware: 'productor',
   layout: 'productor'
 })
+
+
 </script>
 
 <template>
-  <div class="mx-8 md:mx-20 font-roboto mt-20 md:mt-0 mb-10">
+  <div  class="mx-8 md:mx-20 font-roboto mt-8 md:mt-0 mb-10">
     <ProductorDashboardDatosUser/>
     <ProductorDashboardVerifiquese v-if="!useUser.dataUser.verificado"/>
     <ProductorDashboardVerificado v-if="useUser.dataUser.verificado"/>

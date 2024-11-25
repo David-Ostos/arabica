@@ -4,70 +4,69 @@
     titulo="Registro del usuario incompleto" :contenido-one="useModals.textoModalNotidicaciones" contenido-two=""
     icon="info" texto-boton="Terminar el registro" :to="`/dashboard/${useUser.dataUser.tipoUser}`" />
 
-    <div @click="console.log(useGlobal.heightNavProductor)" ref="navRef" :class="[!scrolled ? 'bg-white !text-dar md:bg-transparent md:!text-white' :'bg-white border-b text-dar  shadow-sm' ,{
-      ' !text-dar bg-white dark:bg-white rounded-b-xl shadow-md ': scrolled,
-    },navShow ? 'opacity-100': 'opacity-0' ]"
-    class="fixed w-screen top-0 z-50 transition-all duration-300 opacity-0 "
-  >
-  <div class=" bg-white dark:bg-white">
-    <div class="relative z-50">
-      <header 
-        class="w-screen top-0 z-50 transition-all text-dar bg-white dark:bg-white border-b-2 rounded-xl shadow-md">
-        <div class="container mx-auto py-1  px-12 flex justify-between items-center">
-          <div class="flex ">
-            <NuxtLink to="/" class="-m-1.5 p-1.5">
-              <span class="sr-only">Arabica</span>
-              <img class="h-14 w-auto" :src="imgLoginLitgh"
-                alt="Logo Arabica" />
-            </NuxtLink>
+  <div ref="navRef" :class="[!scrolled ? 'bg-white !text-dar md:bg-transparent md:!text-white' : 'bg-white border-b text-dar  shadow-sm', {
+    ' !text-dar bg-white dark:bg-white rounded-b-xl shadow-md ': scrolled,
+  }, navShow ? 'opacity-100' : 'opacity-0']" class="fixed w-screen top-0 z-50 transition-all duration-300 opacity-0 ">
+    <div class=" bg-white dark:bg-white">
+      <div class="relative z-50">
+        <header
+          class="w-screen top-0 z-50 transition-all text-dar bg-white dark:bg-white border-b-2 rounded-xl shadow-md">
+          <div class="container mx-auto py-1  px-12 flex justify-between items-center">
+            <div class="flex ">
+              <NuxtLink to="/" class="-m-1.5 p-1.5">
+                <span class="sr-only">Arabica</span>
+                <img class="h-14 w-auto" :src="imgLoginLitgh" alt="Logo Arabica" />
+              </NuxtLink>
+            </div>
+
+            <SearchComprador class="hidden md:block" />
+
+            <div class=" hidden md:flex justify-center items-center gap-2">
+              <BotonesBotonSecondary v-if="!useUser.dataUser.perfilBase" contenido="Completar Registro"
+                :link="`/dashboard/${useUser.dataUser.tipoUser}`"
+                @click="useModal.showModalCompradorPerfilCompleto = true" />
+              <UChip :text="useCart.cart.length" size="2xl">
+                <div class="p-2 rounded-lg  bg-primary flex justify-center items-center cursor-pointer"
+                  @click="activeCart">
+                  <UIcon class="text-white text-xl font-bold" name="i-material-symbols-shopping-cart" dynamic />
+                </div>
+              </UChip>
+              <DropdownsNavBarAvatarProductor />
+            </div>
+
+            <div class="flex gap-4 md:hidden">
+              <UChip :text="useCart.cart.length" size="xl">
+                <div class="p-2  rounded-lg  bg-primary flex justify-center items-center cursor-pointer"
+                  @click="activeCart">
+                  <UIcon class="text-white text-base md:text-xl  font-bold" name="i-material-symbols-shopping-cart"
+                    dynamic />
+                </div>
+              </UChip>
+              <button type="button" class="p-1 border rounded-md inline-flex items-center justify-center"
+                @click="mobileMenuOpen = true">
+                <span class="sr-only">Abrir menu</span>
+                <Bars3Icon class="h-6 w-6" aria-hidden="true" />
+              </button>
+            </div>
+
+
           </div>
 
-          <SearchComprador class="hidden md:block" />
 
-          <div class=" hidden md:flex justify-center items-center gap-2">
-            <BotonesBotonSecondary v-if="!useUser.dataUser.perfilBase" contenido="Completar Registro"
-              :link="`/dashboard/${useUser.dataUser.tipoUser}`"
-              @click="useModal.showModalCompradorPerfilCompleto = true" />
-            <UChip :text="useCart.cart.length" size="2xl">
-              <div class="p-2 rounded-lg  bg-primary flex justify-center items-center cursor-pointer"
-                @click="activeCart">
-                <UIcon class="text-white text-xl font-bold" name="i-material-symbols-shopping-cart" dynamic />
-              </div>
-            </UChip>
-            <DropdownsNavBarAvatarProductor />
-          </div>
+        </header>
 
-          <div class="flex gap-4 md:hidden">
-            <UChip :text="useCart.cart.length" size="xl">
-              <div class="p-2  rounded-lg  bg-primary flex justify-center items-center cursor-pointer"
-                @click="activeCart">
-                <UIcon class="text-white text-base md:text-xl  font-bold" name="i-material-symbols-shopping-cart" dynamic />
-              </div>
-            </UChip>
-            <button type="button" class="p-1 border rounded-md inline-flex items-center justify-center" @click="mobileMenuOpen = true">
-              <span class="sr-only">Abrir menu</span>
-              <Bars3Icon class="h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-
+        <div v-if="validarRuta()" :class="['hidden md:block']">
+          <!-- <ProductorHorizontalPerfil class=""/> -->
+          <UHorizontalNavigation :links="items"
+            class=" flex  !justify-center border-b border-gray-200  dark:border-gray-800 shadow-md rounded-b-xl"
+            :ui="{}" />
 
         </div>
-
-
-      </header>
-
-      <div v-if="validarRuta()" :class="[!useUser.dataUser.verificado ? 'mt-[65px]' : 'mt-[65px]', 'hidden md:block']">
-        <!-- <ProductorHorizontalPerfil class=""/> -->
-        <UHorizontalNavigation :links="items"
-          class=" flex  !justify-center border-b border-gray-200  dark:border-gray-800 shadow-md rounded-b-xl"
-          :ui="{}" />
-
       </div>
-    </div>
-    <Cart v-if="showCart" />
-  </div>
+      <Cart v-if="showCart" />
     </div>
 
+  </div>
   <USlideover side="left" v-model="mobileMenuOpen" :ui="{ width: 'w-[80%] max-w-[80%]' }">
     <UCard class="flex flex-col flex-1"
       :ui="{ backgound: 'dark:bg-white', body: { base: 'flex-1' }, ring: '', divide: '' }">
@@ -155,12 +154,12 @@ const closeSlide = (data: boolean) => {
   mobileMenuOpen.value = data
 }
 
-const validarRuta= () =>{
-  if(route.path.includes('usuario')){
+const validarRuta = () => {
+  if (route.path.includes('usuario')) {
     return false
   }
-  if(route.path.includes('perfil')){
-    return false    
+  if (route.path.includes('perfil')) {
+    return false
   }
   return true
 }
@@ -175,8 +174,8 @@ const closeModal = (close: boolean) => {
   useModals.openModalNotificacion = close
 }
 
-const closeSlider = (boolean: boolean)=>{
-mobileMenuOpen.value = boolean
+const closeSlider = (boolean: boolean) => {
+  mobileMenuOpen.value = boolean
 }
 
 const items = [{

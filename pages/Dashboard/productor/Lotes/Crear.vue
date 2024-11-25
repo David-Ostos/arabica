@@ -1,13 +1,22 @@
 <template>
-  <div class="my-20 mx-20">
-    <div class="overflow-auto">
-            <h1 class="text-center text-3xl text-gray-700 font-bold" @click="console.log(state.muestra)" >
+  <div class="m-8 mt-20 sm:m-20">
+    <div class="sm:overflow-auto">
+      <div>
+        <h1 class="text-center text-xl sm:text-3xl text-gray-700 font-bold" @click="console.log(state.muestra)" >
         Crea tu Lote de Café
-      </h1>
-      <h3 class="text-2xl mb-8 text-gray-600">Agrega las imagenes</h3>
-      <div class="grid grid-cols-2 gap-8">
+        </h1>
+        <h3 class="sm:text-2xl text-center sm:text-inherit text-xl mb-8 text-gray-600">Agrega las imagenes</h3>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-8">
+
+        <!-- <div>
+          <AddImg @update:imagenes="prueba" :max-imagenes="4"/>
+        </div> -->
+
         <!-- galeria -->
         <div
+          @click="clickInputFile"
           class="col-span-1 grid-area-1 h-[510px] h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4"
         >
           <div class="grid grid-cols-4 col-span-2 grid-rows-4 gap-4 h-full">
@@ -128,24 +137,30 @@
             <!-- /barra de carga -->
           </div>
         </div>
+        <!-- !galeria -->
 
         <!-- formulartio -->
         <div
-          class="flex flex-col w-full h-[510px] overflow-auto p-4 rounded-xl border justify-between h-ful shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
+        ref="componentRef"
+          :class="['flex flex-col w-full  p-4 rounded-xl border justify-between h-ful shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400', 
+          isScreenSmall ? 'scrollbar-hide ' : 'h-[510px] overflow-auto']"
         >
           <UForm
             :schema="schema"
             :state="state"
             @submit="onSubmit"
-            class="grid grid-cols-6 gap-4 "
-          >
-            <UFormGroup
+            class="grid grid-col-3 sm:grid-cols-6 gap-4 "
+            >
+            <input class="hidden" type="file" ref="inputSmFile" @change="handleFileUpload" multiple/>
+            <UFormGroup 
+             v-if="!isScreenSmall"
               label="Sube tus imagenes"
               name="galeria"
               class="col-span-3"
             >
               <!-- @ts-ignore -->
               <UInput
+                class="hidden sm:block"
                 type="file"
                 icon="i-heroicons-folder"
                 multiple
@@ -324,13 +339,13 @@
               />
             </UFormGroup>
 
-            <div v-if="state.muestra?.muestra" class="col-span-6 grid grid-cols-6 gap-4"> 
+            <div v-if="state.muestra?.muestra" class=" col-span-3 sm:col-span-6 grid grid-cols-6 gap-4"> 
 
 
               <UFormGroup
               label="¿Este lote Tiene muestra gratis? "
               name="muestra.muestraGratis"
-              class="col-span-2"
+              class="col-span-6 sm:col-span-2"
               >
               <UToggle
               v-model="muestraGratis"
@@ -339,7 +354,7 @@
               />
             </UFormGroup>
 
-            <UFormGroup v-if="!state.muestra.muestraGratis" label="Precio" name="muestra.precio" class="col-span-2">
+            <UFormGroup v-if="!state.muestra.muestraGratis" label="Precio" name="muestra.precio" class="col-span-3 sm:col-span-2">
               <UInput v-model="state.muestra.precio" type="number" placeholder="5"> 
                 <template #leading>
                   <span class="text-gray-500 dark:text-gray-400">$</span>
@@ -347,7 +362,7 @@
               </UInput>
             </UFormGroup>
 
-            <UFormGroup label="Cantidad" name="muestra.precio" class="col-span-2">
+            <UFormGroup label="Cantidad" name="muestra.precio" class="col-span-3 sm:col-span-2">
               <UInput v-model="state.muestra.cantidad" type="number" placeholder="1"> 
                 <template #leading>
                   <span class="text-gray-500 dark:text-gray-400">lb/</span>
@@ -384,6 +399,9 @@ import type {Lotes} from "~/interfaces/Lotes";
 import {squircle} from "ldrs";
 import {toast} from "vue3-toastify";
 
+const {isScreenSmall} = useGlobalComposable()
+
+
 squircle.register();
 
 // Default values shown
@@ -393,6 +411,36 @@ definePageMeta({
   layout: "productor",
 });
 
+const componentRef = ref<HTMLElement>();
+  const createObserver = (element: HTMLElement) => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }, {
+    threshold: 0.5, // Activar cuando el 50% del elemento es visible
+    rootMargin: '-50% 0px -50% 0px' // Considerar el 50% central del viewport
+  });
+
+  observer.observe(element);
+  return observer;
+};
+
+let observer: IntersectionObserver | null = null;
+
+onMounted(() => {
+  if (componentRef.value) {
+    observer = createObserver(componentRef.value);
+  }
+});
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect();
+  }
+});
 const useProductor = useProductorStore();
 const useUser = useUserStore();
 const useLotes = useLotesStore();
@@ -409,6 +457,17 @@ const filesSave = ref();
 const lotes = useProductor.lotes;
 verificarGaleria();
 const porcentaje = ref(0);
+
+const inputSmFile = ref()
+
+const clickInputFile = ()=>{
+  inputSmFile.value.click()
+}
+
+const prueba = (imagen: any)=>{
+  console.log(pictures.value);
+  console.log(imagen);
+}
 
 const faseUpload = ref(
   "none" as
@@ -573,7 +632,14 @@ async function handleFileUpload(event: any) {
   filesSave.value = event;
   console.log(filesSave.value);
 
-  const files = [...event];
+  let files;
+
+  if(isScreenSmall.value){
+    files = [...event.target.files];
+  }else{
+    files = [...event];
+  }
+
 
   pictures.value = [];
 
@@ -810,4 +876,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 }
 </script>
 
-<style></style>
+<style scoped>
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none; 
+} 
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE y Edge */ 
+  scrollbar-width: none; /* Firefox */ 
+}
+</style>

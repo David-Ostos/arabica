@@ -211,7 +211,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       // });
     } else if (response.status === 200) {
       const dataUserFetch = await response.json();
-      console.log(dataUserFetch);
 
       
       if (!dataUserFetch.tipoLogin.includes("backend")) {

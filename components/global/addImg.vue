@@ -48,39 +48,48 @@
   </div>
 </template>
 
-<script setup>
-import {ref, defineEmits} from "vue";
-import {XIcon, PlusIcon} from "lucide-vue-next";
+<script setup lang="ts">
+import { ref, defineEmits, defineProps } from "vue";
+import { XIcon, PlusIcon } from "lucide-vue-next";
 
-const props = defineProps({
-  maxImagenes: {
-    type: Number,
-    default: 4,
-  },
-});
+interface Imagen {
+  id: string;
+  src: string;
+  alt: string;
+  file: File;
+}
+
+const props = defineProps<{
+  maxImagenes: number;
+}>();
 
 const emit = defineEmits(["update:imagenes"]);
 
-const imagenes = ref([]);
-const inputArchivo = ref(null);
-const indiceArrastrando = ref(null);
+const imagenes = ref<Imagen[]>([]);
+const inputArchivo = ref<HTMLInputElement | null>(null);
+const indiceArrastrando = ref<number | null>(null);
 
-const activarInputArchivo = () => {
-  inputArchivo.value.click();
+const activarInputArchivo = (): void => {
+  if (inputArchivo.value) {
+    inputArchivo.value.click();
+  }
 };
 
-const alSeleccionarArchivo = (evento) => {
-  const archivos = evento.target.files;
-  agregarImagenes(archivos);
+const alSeleccionarArchivo = (evento: Event): void => {
+  const target = evento.target as HTMLInputElement;
+  if (target.files) {
+    agregarImagenes(target.files);
+  }
 };
 
-const alSoltarArchivo = (evento) => {
+const alSoltarArchivo = (evento: DragEvent): void => {
   evento.preventDefault();
-  const archivos = evento.dataTransfer.files;
-  agregarImagenes(archivos);
+  if (evento.dataTransfer?.files) {
+    agregarImagenes(evento.dataTransfer.files);
+  }
 };
 
-const agregarImagenes = (archivos) => {
+const agregarImagenes = (archivos: FileList): void => {
   for (
     let i = 0;
     i < archivos.length && imagenes.value.length < props.maxImagenes;
@@ -89,42 +98,74 @@ const agregarImagenes = (archivos) => {
     const archivo = archivos[i];
     if (archivo.type.startsWith("image/")) {
       const lector = new FileReader();
-      lector.onload = (e) => {
-        imagenes.value.push({
-          id: Date.now() + i,
-          src: e.target.result,
-          alt: archivo.name,
-        });
-        emitirActualizacion();
+      lector.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result) {
+          imagenes.value.push({
+            id: Date.now() + i.toString(),
+            src: e.target.result as string,
+            alt: archivo.name,
+            file: archivo  // Guardamos el archivo original
+          });
+          emitirActualizacion();
+        }
       };
       lector.readAsDataURL(archivo);
     }
   }
 };
 
-const eliminarImagen = (indice) => {
+
+const eliminarImagen = (indice: number): void => {
   imagenes.value.splice(indice, 1);
   emitirActualizacion();
 };
 
-const iniciarArrastre = (evento, indice) => {
+const iniciarArrastre = (evento: DragEvent, indice: number): void => {
   indiceArrastrando.value = indice;
-  evento.dataTransfer.effectAllowed = "move";
-  evento.dataTransfer.setData("text/plain", indice);
+  evento.dataTransfer!.effectAllowed = "move";
+  evento.dataTransfer!.setData("text/plain", indice.toString());
 };
 
-const alSoltar = (evento, indice) => {
-  const desdeIndice = evento.dataTransfer.getData("text/plain");
+const alSoltar = (evento: DragEvent, indice: number): void => {
+  const desdeIndice = parseInt(evento.dataTransfer!.getData("text/plain"), 10);
   const hacia = indice;
-  const desde = imagenes.value.splice(desdeIndice, 1)[0];
+  const [desde] = imagenes.value.splice(desdeIndice, 1);
   imagenes.value.splice(hacia, 0, desde);
   indiceArrastrando.value = null;
   emitirActualizacion();
 };
 
-const emitirActualizacion = () => {
+const emitirActualizacion = (): void => {
   emit("update:imagenes", imagenes.value);
+  console.log(imagenes.value);
 };
+
+const enviarImagenesAlBackend = async () => {
+  const formData = new FormData();
+  
+  imagenes.value.forEach((imagen, index) => {
+    formData.append(`imagen${index}`, imagen.file, imagen.alt);
+  });
+
+  try {
+    const response = await fetch('/api/imagenes', {
+      method: 'POST',
+      body: formData
+    });
+    
+    if (response.ok) {
+      console.log('Imágenes enviadas con éxito');
+      // Aquí puedes manejar la respuesta exitosa
+    } else {
+      console.error('Error al enviar las imágenes');
+      // Aquí puedes manejar el error
+    }
+  } catch (error) {
+    console.error('Error de red:', error);
+    // Aquí puedes manejar errores de red
+  }
+};
+defineExpose({ enviarImagenesAlBackend });
 </script>
 
 <style scoped>
