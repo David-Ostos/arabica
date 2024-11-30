@@ -170,8 +170,8 @@ const cleanFilters = () => {
 </script>
 
 <template>
-  <div class="flex flex-col mt-2 gap-6 h-full">
-    <h3 class="title">Filtros</h3>
+  <div class="flex flex-col sm:mt-2 gap-6 h-full">
+    <h3  class="hidden sm:block title">Filtros</h3>
     <div v-if="props.filterActive">
       <div class="border-t"></div>
       <div class="container-filter-actives">

@@ -1,79 +1,46 @@
 <template>
-  <ModalsNotificacion
-    v-if="openModal"
-    @close="closeModal"
-    titulo="Registro del usuario incompleto"
+  <ModalsNotificacion v-if="openModal" @close="closeModal" titulo="Registro del usuario incompleto"
     contenido-one="Debes registrarte e introducir todos los datos requeridos para poder pedir alguna muestra o agregar algun producto al carrito."
-    contenido-two=""
-    icon="info"
-    texto-boton="Terminar el registro"
-    :to="`/dashboard/${useUser.dataUser.tipoUser}`"
-  />
+    contenido-two="" icon="info" texto-boton="Terminar el registro" :to="`/dashboard/${useUser.dataUser.tipoUser}`" />
   <div class="my-20">
     <!-- modal muestra -->
     <div>
-      <UModal
-        v-model="modalMuestra"
-        prevent-close
-        :ui="{
-          width: 'sm:max-w-[550px]',
-        }"
-      >
-        <UCard
-          :ui="{
-            ring: '',
-            divide: 'divide-y divide-gray-100 dark:divide-gray-800',
-          }"
-        >
+      <UModal v-model="modalMuestra" prevent-close :ui="{
+        width: 'sm:max-w-[550px]',
+      }">
+        <UCard :ui="{
+          ring: '',
+          divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+        }">
           <template #header>
             <div class="flex items-center justify-between">
-              <h3
-                class="text-xl font-semibold leading-6 text-gray-800 dark:-text-dar"
-              >
+              <h3 class="text-xl font-semibold leading-6 text-gray-800 dark:-text-dar">
                 Solicitud de Muestras
               </h3>
-              <UButton
-                color="gray"
-                variant="ghost"
-                icon="i-heroicons-x-mark-20-solid"
-                class="-my-1"
-                @click="modalMuestra = false"
-              />
+              <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+                @click="modalMuestra = false" />
             </div>
           </template>
 
-          <div class="mx-8">
+          <div class="mx-4 sm:mx-8">
             <div class=" ">
-              <UCarousel
-                v-slot="{item}"
-                :items="galeria"
-                :ui="{ item: ['basis-full md:basis-1/2 lg:basis-1/3 cursor-grab',{}] }"
-                indicators 
-                class="rounded-lg"
-                arrows
-              >
-                <div v-if="item.link" class="" >
-                  <img  :src="item.link" class=" rounded-xl object-cover w-full h-full" draggable="false" />
+              <UCarousel v-slot="{ item }" :items="galeria"
+                :ui="{ item: 'basis-full md:basis-1/2 lg:basis-1/3 cursor-grab' }" indicators class=""
+                arrows>
+                <div v-if="item.link" class="">
+                  <img :src="item.link" class="  object-cover w-full h-full" draggable="false" />
                 </div>
 
-                <div v-else
-                class="border  w-full h-full rounded-xl flex items-center"
-              >
-                <UIcon
-                  :name="item.img"
-                  class="rounded-xl h-28 w-full object-cover opacity-55"
-                  alt=""
-                />
-              </div>
+                <div v-else class="border  w-full h-full rounded-xl flex items-center">
+                  <UIcon :name="item.img" class="rounded-xl h-28 w-full object-cover opacity-55" alt="" />
+                </div>
               </UCarousel>
             </div>
 
             <div class="">
               <!-- datos de muestra -->
 
-              <div
-                class=" h-full pb-4 text-gray-800 dark:-text-dar rounded-xl"
-              >
+              <div class=" h-full pb-4 text-gray-800 dark:-text-dar rounded-xl">
                 <LotesAcordionMuestra :items="itemMuestra" />
               </div>
             </div>
@@ -82,15 +49,19 @@
               <!--  precio y boton  -->
 
               <div v-if="lote.muestra?.muestra" class=" text-gray-800 ">
-                <p v-if="lote.muestra?.muestraGratis" class="capitalize flex items-center gap-2 justify-between">
-                  <span class="font-bold text-lg ">Precio de muestra:</span> <span class="font-medium text-primary-600 text-lg">muestra gratis</span>
-                </p>
+                <div v-if="lote.muestra?.muestraGratis" class="capitalize flex items-center gap-2 justify-between">
+                  <span class="font-bold sm:text-lg w-fit">Precio de muestra:</span> 
+                  <span class="font-medium text-primary-600 w-fit sm:text-lg ">muestra gratis</span>
+                </div>
                 <p v-else class="capitalize flex items-center gap-2 justify-between">
-                  <span class="font-bold text-lg">Precio de muestra:</span> <span class="font-medium text-lg">{{ lote.precio }} UDS / LB</span>
+                  <span class="font-bold text-lg">Precio de muestra:</span> 
+                  <span class="font-medium text-lg">{{
+                    lote.precio }}
+                    UDS / LB</span>
                 </p>
               </div>
               <div class="mt-8 text-center text-xl font-bold">
-                <UButton  size="xl" >SOLICITAR MUESTRA</UButton>
+                <UButton size="xl">SOLICITAR MUESTRA</UButton>
               </div>
 
             </div>
@@ -100,43 +71,23 @@
     </div>
     <!-- /modal muestra -->
 
-    <div class="grid grid-cols-7 gap-8 mx-20">
+    <div class="flex flex-col sm:grid grid-cols-7 gap-8 mx-4 sm:mx-20">
       <!-- Galeria del lote -->
-      <div
-        class="col-span-4 h-screen-topBar-footer overflow-hidden h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4"
-      >
+      <div v-if="!isScreenSmall"
+        class="col-span-4 h-screen-topBar-footer overflow-hidden h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4">
         <div class="grid grid-cols-4 col-span-2 grid-rows-4 gap-4 h-full">
           <div class="row-span-2 col-span-4">
-            <img
-              :src="galeria[0].link"
-              class="rounded-xl h-full w-full object-cover"
-              alt=""
-            />
+            <img :src="galeria[0].link" class="rounded-xl h-full w-full object-cover" alt="" />
           </div>
 
-          <div
-            class="flex justify-around items-center row-span-2 gap-4 col-span-4 h-full w-full"
-          >
-            <div
-              v-for="img in galeria.slice(1)"
-              class="h-full w-full flex items-center justify-between overflow-hidden rounded-xl"
-            >
-              <div
-                v-if="img.enty === true"
-                class="border px-4 h-56 w-56 rounded-xl flex items-center"
-              >
-                <UIcon
-                  :name="img.img"
-                  class="rounded-xl h-28 w-full object-cover opacity-55"
-                  alt=""
-                />
+          <div class="flex justify-around items-center row-span-2 gap-4 col-span-4 h-full w-full">
+            <div v-for="img in galeria.slice(1)"
+              class="h-full w-full flex items-center justify-between overflow-hidden rounded-xl">
+              <div v-if="img.enty === true" class="border px-4 h-56 w-56 rounded-xl flex items-center">
+                <UIcon :name="img.img" class="rounded-xl h-28 w-full object-cover opacity-55" alt="" />
               </div>
               <div v-else class="rounded-xl">
-                <img
-                  :src="img.link"
-                  class="rounded-xl h-72 w-56 object-cover"
-                  alt=""
-                />
+                <img :src="img.link" class="rounded-xl h-72 w-56 object-cover" alt="" />
               </div>
             </div>
           </div>
@@ -146,67 +97,39 @@
 
       <!-- card del lote -->
       <div
-        class="col-span-3 h-screen-topBar-footer p-8 rounded-xl border flex flex-col justify-between py-8 shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
-      >
+        class="col-span-3 h-screen-topBar-footer p-8 rounded-xl border flex flex-col justify-between py-8 shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400">
         <div class="">
           <div class="flex items-center justify-between mb-8">
             <div class="overflow-hidden rounded-xl h-24 w-24">
-              <USkeleton
-                v-if="!loadingImg"
-                class="h-24 w-24 rounded-xl"
-                :ui="{
-                  background: 'bg-secundary',
-                }"
-              />
+              <USkeleton v-if="!loadingImg" class="h-24 w-24 rounded-xl" :ui="{
+                background: 'bg-secundary',
+              }" />
 
               <div class="h-24 w-24 rounded-xl">
-                <img
-                  v-if="lote.productor!.picture"
-                  :src="lote.productor!.picture"
-                  @load="loadingImg = true"
-                  class="rounded-xl"
-                  alt=""
-                />
-                <div
-                  v-else
-                  class="flex justify-center items-center h-24 bg-gray-300"
-                >
+                <img v-if="lote.productor!.picture" :src="lote.productor!.picture" @load="loadingImg = true"
+                  class="rounded-xl" alt="" />
+                <div v-else class="flex justify-center items-center h-24 bg-gray-300">
                   <UIcon name="i-heroicons-photo" class="rounded-xl" />
                 </div>
               </div>
             </div>
 
             <div class="text-4xl flex gap-4 items-center cursor-pointer">
-              <UIcon
-                v-if="!like && useUser.dataUser.perfilBase"
-                name="i-heroicons-heart"
-                class="cursor-pointer"
-                @click="addFavorite"
-              />
-              <UIcon
-                v-if="like && useUser.dataUser.perfilBase"
-                class="text-rose-500 cursor-pointer"
-                name="i-heroicons-heart-16-solid"
-                @click="deleteFavorite"
-              />
-              <UIcon
-                class="text-3xl text-gray-500"
-                name="i-heroicons-arrow-up-tray"
-                @click="copiarUrl"
-              />
+              <UIcon v-if="!like && useUser.dataUser.perfilBase" name="i-heroicons-heart" class="cursor-pointer"
+                @click="addFavorite" />
+              <UIcon v-if="like && useUser.dataUser.perfilBase" class="text-rose-500 cursor-pointer"
+                name="i-heroicons-heart-16-solid" @click="deleteFavorite" />
+              <UIcon class="text-3xl text-gray-500" name="i-heroicons-arrow-up-tray" @click="copiarUrl" />
             </div>
           </div>
 
           <div class="flex flex-col gap-3">
             <h2
-              class="font-bold text-base md:text-2xl text-gray-700 line-clamp-2 hover:line-clamp-none transition-all duration-1000 capitalize"
-            >
+              class="font-bold text-base md:text-2xl text-gray-700 line-clamp-2 hover:line-clamp-none transition-all duration-1000 capitalize">
               {{ lote.nombre }}
             </h2>
-            <NuxtLink
-              :to="`/perfil/${lote.productor?._id}`"
-              class="cursor-pointer flex items-center text-xl text-primary-600 font-bold gap-1 hover:text-primary"
-            >
+            <NuxtLink :to="`/perfil/${lote.productor?._id}`"
+              class="cursor-pointer flex items-center text-xl text-primary-600 font-bold gap-1 hover:text-primary">
               <p class="capitalize">
                 <!-- <span class="text-gray-700" >Producido por :</span> -->
                 {{ lote.productor!.nombre }}
@@ -218,86 +141,82 @@
         <UDivider class="" />
         <div v-if="lote.muestra?.muestra" class="flex flex-col gap-3 text-center">
           <div v-if="lote.muestra?.muestraGratis" class="solicitar-muestra">
-            <span class="uppercase font-bold text-stone-600 text-1xl"
-              >Puedes solicitar muestra Gratis.</span
-            >
+            <span class="uppercase font-bold text-stone-600 text-1xl">Puedes solicitar muestra Gratis.</span>
 
-            <BotonSecondary
-              class="mx-auto mt-4"
-              @click="onClickMuestra"
-              contenido="SOLICITAR MUESTRA"
-            />
+            <BotonSecondary class="mx-auto mt-4" @click="onClickMuestra" contenido="SOLICITAR MUESTRA" />
           </div>
           <div v-else class="solicitar-muestra">
-            <span
-            
-            class="uppercase font-bold text-stone-700 text-1xl"
-            >Puedes solicitar tu muestra</span>
+            <span class="uppercase font-bold text-stone-700 text-1xl">Puedes solicitar tu muestra</span>
 
-            <BotonSecondary
-              class="mx-auto mt-4"
-              @click="onClickMuestra"
-              contenido="SOLICITAR MUESTRA"
-            />
+            <BotonSecondary class="mx-auto mt-4" @click="onClickMuestra" contenido="SOLICITAR MUESTRA" />
           </div>
         </div>
         <div class="flex flex-col gap-3 text-center" v-else>
-          <span class="uppercase font-bold text-stone-600 text-1xl"
-              >Este lote no posee muestra</span
-            >
+          <span class="uppercase font-bold text-stone-600 text-1xl">Este lote no posee muestra</span>
         </div>
         <UDivider class="" />
 
         <p
-          class="text-center uppercase mb-4 text-3xl text-gray-700 whitespace-nowrap leading-tight rounded-xl font-bold tracking-wider"
-        >
+          class="text-center uppercase mb-4 text-3xl text-gray-700 whitespace-nowrap leading-tight rounded-xl font-bold tracking-wider">
           {{ lote.precio!.toString().replace(".", ",") }} usd / lb
         </p>
 
-        <UButton v-if="!exist"
-          class="text-center py-2 text-4xl mx-auto justify-center w-full uppercase btn-addCart"
-          @click="addCart"
-          >lo quiero
-      </UButton>
-        <UButton v-else
-          class="text-center py-2 text-4xl mx-auto justify-center w-full capitalize"
-          @click="useCart.deleteItemCart(lote._id!)"
-          color="red"
-          >Eliminar del Carrito
-        </UButton
-        >
+        <UButton v-if="!exist" class="text-center py-2 text-4xl mx-auto justify-center w-full uppercase btn-addCart"
+          @click="addCart">lo quiero
+        </UButton>
+        <UButton v-else class="text-center py-2 text-4xl mx-auto justify-center w-full capitalize"
+          @click="useCart.deleteItemCart(lote._id!)" color="red">Eliminar del Carrito
+        </UButton>
       </div>
       <!-- /card del lote -->
 
+      <!-- Galeria del lote mobile -->
+      <div v-if="isScreenSmall"
+        class="col-span-4 h-screen-topBar-footer overflow-hidden h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4">
+        <div class="grid grid-cols-4 col-span-2 grid-rows-4 gap-4 h-full">
+          <div class="row-span-2 col-span-4">
+            <img :src="galeria[0].link" class="rounded-xl h-full w-full object-cover" alt="" />
+          </div>
+
+          <div class="flex justify-around items-center row-span-2 gap-4 col-span-4 h-full w-full">
+            <div v-for="img in galeria.slice(1)"
+              class="h-full w-full flex items-center justify-between overflow-hidden rounded-xl">
+              <div v-if="img.enty === true" class="border px-4 h-56 w-56 rounded-xl flex items-center">
+                <UIcon :name="img.img" class="rounded-xl h-28 w-full object-cover opacity-55" alt="" />
+              </div>
+              <div v-else class="rounded-xl">
+                <img :src="img.link" class="rounded-xl h-72 w-56 object-cover" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /Galeria del lote mobile -->
+
       <!-- datos del lote  -->
       <div
-        class="col-span-4 h-screen overflow-hidden p-4 border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl"
-      >
+        class="col-span-4 h-screen overflow-hidden p-4 border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl">
         <LotesAcordion :items="item" />
       </div>
       <!-- ubicación -->
       <div
-        class="col-span-3 h-screen p-4 border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl"
-      >
+        class="col-span-3 h-screen p-4 border h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d16138252.902658958!2d-85.72576594757281!3d-9.06347592792652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c850c05914f5%3A0xf29e011279210648!2zUGVyw7o!5e0!3m2!1ses!2sve!4v1721330794106!5m2!1ses!2sve"
-          class="border-none rounded-md w-full h-full"
-          allowfullscreen
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
+          class="border-none rounded-md w-full h-full" allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import type {Lotes} from "~/interfaces/Lotes";
-import {toast} from "vue3-toastify";
-import {useCartStore} from "../../stores/cart";
-import {useUserStore} from "../../stores/user";
+import type { Lotes } from "~/interfaces/Lotes";
+import { toast } from "vue3-toastify";
+import { useCartStore } from "../../stores/cart";
+import { useUserStore } from "../../stores/user";
 import axios from "axios";
-import {useFavoritosStore} from "~/stores/favoritos";
+import { useFavoritosStore } from "~/stores/favoritos";
 import BotonSecondary from "~/components/Botones/BotonSecondary.vue";
 
 definePageMeta({
@@ -306,6 +225,8 @@ definePageMeta({
 
 const router = useRoute();
 const exist = ref(false);
+
+const { isScreenSmall } = useGlobalComposable()
 
 const copiarUrl = () => {
   const url = window.location.href;
@@ -517,8 +438,7 @@ const deleteFavorite = async () => {
 
   await axios
     .delete(
-      `${import.meta.env.VITE_URL_API}/api/content/item/favoritos/${
-        existItemInFav[0]._id
+      `${import.meta.env.VITE_URL_API}/api/content/item/favoritos/${existItemInFav[0]._id
       }`,
       // @ts-ignore
       {
@@ -585,8 +505,7 @@ watch(useCart.cart, () => {
   display: flex;
   flex-direction: column;
 
-  span {
-  }
+  span {}
 
   button {
     font-size: 1em;

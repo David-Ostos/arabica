@@ -1,6 +1,6 @@
 <template>
   <div
-    class="font-roboto lg:pt-10 bg-gray-100 rounded-xl shadow border relative"
+    class="font-roboto lg:pt-10 sm:bg-gray-100 rounded-xl sm:shadow sm:border relative"
     @click=""
   >
     <div class="flex justify-center">
@@ -10,7 +10,6 @@
       </h3>
     </div>
     <UForm
-      @click="console.log(isActiveCodePhone)"
       :schema="schema"
       :state="state"
       class="space-y-4 lg:border rounded-xl shadow-inner py-8 md:mx-20 my-8 bg-white"
@@ -23,12 +22,12 @@
         @click="isActiveCodePhone = !isActiveCodePhone"
       ></div>
 
-      <div class="grid grid-cols-2 md:mx-8 gap-4">
+      <div class="sm:grid m-4 sm:m-0 sm:grid-cols-2 md:mx-8 gap-4">
         <UFormGroup
           label="¿Cómo se llama tu negocio?"
           size="xl"
           name="nombre"
-          class="col-span-1"
+          class="col-span-1 w-full"
           required
         >
           <UInput
@@ -56,7 +55,7 @@
           name="fechaOrigen"
           class="col-span-1"
         >
-          <div class="col-span-5 relative">
+          <div class=" relative">
             <button
               type="button"
               class="relative z-0 flex justify-between items-center px-4 h-11 w-full border shadow rounded-md"
@@ -227,7 +226,7 @@
             help: 'text-sm ',
           }"
         >
-          <div class="grid grid-cols-3 gap-4">
+          <div class="sm:grid grid-cols-3 gap-4">
             <div v-for="item in state.redes" class="col-span-1">
               <UFormGroup
                 :label="item.name"
@@ -236,7 +235,7 @@
                 }"
               >
                 <div class="w-full grid grid-cols-12">
-                  <div v-if="item.linkbase !== 'web'"
+                  <div 
                     class="col-span-3 w-full border rounded-l-md shadow-sm bg-gray-100 dark:bg-gray-900 text-gray-900 dark:-text-dar"
                   >
                     <div class="flex items-center h-full mx-auto w-fit" >
@@ -244,24 +243,17 @@
                         :name="item.icon!"
                         dynamic
                         class="text-2xl"
-                        @click="console.log(state.redes)"
                       />
                     </div>
                   </div>
-                  <div class="col-span-9" :class="{'col-span-12': item.linkbase === 'web'}">
+                  <div class="col-span-9">
                     <UInput
-                      v-if="item.linkbase !== 'web'"
+                      
                       v-model="item.linkUsuario"
                       size="xl"
                       :ui="{
                         rounded: 'rounded-l-none',
                       }"
-                      placeholder="usuario"
-                    />
-                    <UInput
-                      v-else
-                      v-model="item.linkUsuario"
-                      size="xl"
                       placeholder="usuario"
                     />
                   </div>
@@ -282,7 +274,7 @@
           <div
             class="relative z-50 grid grid-cols-12 w-full focus-visible:ring-2 ring-primary group rounded-md"
           >
-            <div class="cursor-pointer relative col-span-3">
+            <div class="cursor-pointer relative col-span-4 sm:col-span-3">
               <div
                 @click="
                   isActiveCodePhone = !isActiveCodePhone;
@@ -350,7 +342,7 @@
               </div>
             </div>
             <UInput
-              class="col-span-9"
+              class="col-span-8 sm:col-span-9"
               placeholder="1234567..."
               icon=""
               :ui="{
@@ -508,7 +500,7 @@ const state: PerfilComprador = reactive({
       name:"URL de pagina ",
       linkbase: "web",
       linkUsuario: "",
-      icon: "",
+      icon: "i-mdi-web",
     },
   ],
 });

@@ -174,10 +174,6 @@ const closeModal = (close: boolean) => {
   useModals.openModalNotificacion = close
 }
 
-const closeSlider = (boolean: boolean) => {
-  mobileMenuOpen.value = boolean
-}
-
 const items = [{
   label: 'Panel de control',
   // icon: 'i-heroicons-cog-8-tooth',

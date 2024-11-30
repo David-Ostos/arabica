@@ -1,43 +1,48 @@
 <template>
-  <div v-if="showOrigins === true" class="show-origins">
-    <div class="container-origins">
-      <div class="flex justify-between">
-        <h1>Selecciona tus orígenes</h1>
-        <button @click="showOrigins = false">
-          <span class="i-heroicons-x-mark"></span>
-        </button>
-      </div>
-
-      <div class="container-buttons">
-        <div>
-          <button
-            class="btn-all"
-            @click="handleOriginFilter('all')"
-            :class="{ active: selectedorigin === 'all' }"
-          >
-            Todos los orígenes
+  <UModal v-model="showOrigins">
+    <div v-if="showOrigins === true" class="show-origins z-50">
+      <div class="container-origins">
+        <div class="flex justify-between items-center">
+          <h1>Selecciona tus orígenes</h1>
+          <button @click="showOrigins = false">
+            <span class="i-heroicons-x-mark"></span>
           </button>
         </div>
-
-        <div class="btns-country">
-          <button
-            class="btn-country"
-            @click="handleOriginFilter('perú')  "
-            :class="{ active: selectedorigin === 'perú' }"
-          >
-            <img :src="iconPeru" />
-            Perú
-          </button>
+  
+        <div class="container-buttons">
+          <div>
+            <button
+              class="btn-all"
+              @click="handleOriginFilter('all')"
+              :class="{ active: selectedorigin === 'all' }"
+            >
+              Todos los orígenes
+            </button>
+          </div>
+  
+          <div class="btns-country">
+            <button
+              class="btn-country"
+              @click="handleOriginFilter('perú')  "
+              :class="{ active: selectedorigin === 'perú' }"
+            >
+              <img :src="iconPeru" />
+              Perú
+            </button>
+          </div>
         </div>
-      </div>
-
-      <div class="show-results">
-        <button @click="showOrigins = false">Ver resultados</button>
+  
+        <div class="show-results">
+          <button @click="showOrigins = false">Ver resultados</button>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="flex gap-8 z-0 justify-between relative flex-grow mr-8">
-    <div
+  </UModal>
+  <div class="flex flex-col sm:flex-row gap-8 z-0 justify-between relative flex-grow sm:mr-8">
+    
+    
+    <!-- Menu de filtros pc -->
+    <div v-if="!isScreenSmall" 
       class="relative transition-width ease-in-out duration-700 shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar border-r border-inset border-gray-300 dark:border-gray-700 focus:border-2 focus:border-primary-500 dark:focus:border-primary-400 py-5 px-4"
       :class="[
         isOpen ? ' w-1/4' : ' w-[6%]',
@@ -52,7 +57,7 @@
           <UIcon name="i-ic-round-menu" class="" dynamic />
         </div>
       </div>
-      <div class="h-full">
+      <div  class="h-full">
         <Filters
           v-if="isOpen"
           :handleOrigin="handleShowOrigin"
@@ -63,9 +68,80 @@
         />
       </div>
     </div>
+    <!-- /Menu de filtros pc -->
 
+       
+    <!-- menu mobile -->
+    <div v-if="isScreenSmall">
+      <div class="fixed flex justify-center gap-4 items-center border-b shadow-sm pt-6 py-4 bg-white z-50 w-full">
+        <button @click="mobileFiltroMenu = true" class="focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed disabled:opacity-75 flex-shrink-0 font-medium rounded-md text-sm gap-x-1.5 px-2.5 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 text-gray-900 dark:text-white bg-white hover:bg-gray-50 disabled:bg-white dark:bg-gray-900 dark:hover:bg-gray-800/50 dark:disabled:bg-gray-900 focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 inline-flex items-center"><UIcon name="i-material-symbols-filter-alt-outline" dynamic /> Filtros</button>
+        
+        <LotesMenuOrdenar/>
+      </div>
+
+    </div>
+    
+    <!-- Menu filtro -->
+   <!--  <USlideover side="left" v-model="mobileFiltroMenu" :ui="{ width: 'w-[80%] max-w-[80%]' }">
+    <UCard class="flex flex-col flex-1"
+      :ui="{ backgound: 'dark:bg-white', body: { base: 'flex-1' }, ring: '', divide: '' }">
+      <template #header>
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:-text-dar capitalize">
+            Filtros
+          </h3>
+          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="mobileFiltroMenu = false" />
+        </div>
+      </template>
+
+      
+      
+    </UCard>
+  </USlideover> -->
+    <!-- /Menu filtro -->
+
+    <!-- Menu Ordenar -->
+
+    <USlideover side="left" v-model="mobileFiltroMenu" :ui="{ width: 'w-[80%] max-w-[80%]' }">
+    <UCard class="flex flex-col flex-1"
+      :ui="{ backgound: 'dark:bg-white', body: { base: 'flex-1' }, ring: '', divide: '' }">
+      <template #header>
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:-text-dar capitalize">
+            Filtros
+          </h3>
+          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="mobileFiltroMenu = false" />
+        </div>
+      </template>
+
+      <Filters
+          :handleOrigin="handleShowOrigin"
+          :filtersSearch="filtersSearch"
+          :filterActive="filtersActive"
+          @filter-changed="handleFilterChange"
+          @clean="cleanFilter"
+        />
+      
+    </UCard>
+  </USlideover>
+    <!-- <LotesMenuFiltros 
+      
+      :items="{
+        lotes:lotesFilter,
+        isOpen:mobileFiltroMenu
+      }"
+      @close="closeMenuFiltro" /> -->
+    <!-- /Menu Ordenar -->
+    
+    <!-- /menu mobile -->
+
+
+
+
+    <!-- show card lote -->
     <div
-      class="flex gap-8 z-0 justify-between relative flex-grow overflow-auto w-3/4"
+      class="flex gap-8 mx-4 mt-12 z-0 justify-between relative flex-grow sm:overflow-auto sm:w-3/4"
+      :class="isScreenSmall ? 'scrollbar-hide':''"
     >
       <div
         class="mt-5 pb-10 transition-width ease-in-out duration-700 mx-auto flex-grow h-lotes"
@@ -78,12 +154,12 @@
           }}
           Lotes disponibles
         </h1>
-        <div class="flex flex-wrap gap-4 justify-start mr-4 mb-10">
+        <div class="grid sm:grid-cols-3 grid-cols-1 gap-4 justify-center sm:justify-start sm:mr-4 mb-10">
           <div
             v-for="item in filtersActive === false
               ? useLotes.lotes
               : lotesFilter"
-            class="w-[30%] min-w-64 mb-4 relative"
+            class="col-span-1  min-w-64 mb-4 relative"
           >
             <LotesCard :item="item" />
           </div>
@@ -100,6 +176,10 @@
         </div>
       </div>
     </div>
+    <!-- /show card lote -->
+
+
+
   </div>
 </template>
 <script lang="ts" setup>
@@ -118,6 +198,9 @@ const useLotes = useLotesStore();
 const filtersActive = ref(false);
 const lotesFilter = ref<any>([]);
 
+const mobileFiltroMenu = ref(false)
+const mobileOrdenarMenu = ref(false)
+const {isScreenSmall} = useGlobalComposable()
 const filtersSearch = ref<FiltersSearch>({
   samplesAvailable: undefined,
   origin: undefined,
@@ -126,6 +209,33 @@ const filtersSearch = ref<FiltersSearch>({
   certifications: undefined,
   process: undefined,
 });
+
+const options = [{
+  value: 'disponibilidad',
+  label: 'Disponibilidad'
+}, {
+  value: 'precioMenor',
+  label: 'precio: de menor a mayor'
+}, {
+  value: 'precioMayor',
+  label: 'precio: de mayor a menor'
+}, {
+  value: 'puntuacionMayor',
+  label: 'puntuacion: de menor a mayor'
+}, {
+  value: 'puntuacionMenor',
+  label: 'puntuacion: de mayor a menor'
+}, {
+  value: 'masReciente',
+  label: 'cosecha mas reciente'
+}]
+
+const selected = ref('disponibilidad')
+
+
+const closeMenuFiltro = () =>{
+  mobileFiltroMenu.value = false
+}
 
 const handleShowOrigin = () => {
   showOrigins.value = !showOrigins.value;

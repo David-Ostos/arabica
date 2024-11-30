@@ -1,9 +1,10 @@
 <template>
   <div
-    class="bg-[url('/img/registro_comprador.webp')] h-96 bg-contain bg-no-repeat bg-[#05090C] flex flex-col justify-center items-end text-center rounded-2xl shadow-xl"
+    class="bg-[url('/img/registro_comprador.webp')] h-96 bg-contain bg-no-repeat  flex flex-col justify-center items-end text-center rounded-2xl shadow-xl"
+    :class="isScreenSmall ? 'bg-bottom bg-black' : ' bg-[#05090C]'"
   >
     <div
-      class="rounded-xl  p-2  flex flex-col justify-center items-center text-center w-96  h-full box-content "
+      class="rounded-xl  p-2  flex flex-col justify-center items-center text-center sm:w-96  h-full box-content "
     >
       
       <h2 class="text-white text-2xl md:text-3xl font-bold w-fit mb-4">
@@ -19,7 +20,10 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const {isScreenSmall} = useGlobalComposable()
+
+</script>
 
 <style>
 .gradient_contenedor{

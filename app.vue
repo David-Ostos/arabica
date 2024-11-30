@@ -74,5 +74,14 @@ body {
   }
 }
 
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none; 
+} 
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE y Edge */ 
+  scrollbar-width: none; /* Firefox */ 
+}
+
 
 </style>

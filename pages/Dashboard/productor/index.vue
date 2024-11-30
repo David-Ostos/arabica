@@ -5,7 +5,9 @@ definePageMeta({
   layout: 'productor'
 })
 
+const favoritos = useFavoritosStore();
 
+favoritos.getFavoritos(useUser.dataUser._id!);
 </script>
 
 <template>

@@ -16,12 +16,12 @@
         leave-from-class="transform scale-100 opacity-100"
         leave-to-class="transform scale-95 opacity-0"
       >
-        <div v-show="item.isActive" class=" flex justify-between border-b mx-2 py-2 text-sm  text-gray-600 capitalize">
+        <div v-show="item.isActive" class=" flex gap-1 justify-between border-b mx-2 py-2 text-sm  text-gray-600 capitalize overflow-hidden">
           <UTooltip :text="key">
-            <p  class="text-gray-800 max-h-5"> {{ key }}:</p>
+            <p  class="text-gray-800 max-h-5 truncate"> {{ key }}:</p>
           </UTooltip>
           <UTooltip :text="item.contenido[key]">
-            <p class=" max-h-5"> {{ item.contenido[key] }}</p>
+            <p class=" max-h-5 truncate "> {{ item.contenido[key] }}</p>
           </UTooltip>
 
         </div>

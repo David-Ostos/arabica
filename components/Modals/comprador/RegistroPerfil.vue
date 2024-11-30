@@ -1,6 +1,7 @@
 <template>
   <div class="">
-    <UModal v-model="useModal.showModalCompradorPerfilCompleto" :ui="{
+    <UModal v-model="useModal.showModalCompradorPerfilCompleto" :fullscreen="isScreenSmall" :ui="{
+      inner: isScreenSmall ? 'scrollbar-hide' : 'fixed inset-0 overflow-y-auto',
       width: ' sm:max-w-screen-lg',
       
     }">
@@ -15,7 +16,7 @@
           </div>
         </template>
         
-        <div>
+        <div class="">
           <ModalsCompradorRegistroPerfilBanner/>
           <ModalsCompradorRegistroPerfilBeneficios/>
           <ModalsCompradorRegistroPerfilFormulario/>
@@ -28,6 +29,9 @@
 <script lang="ts" setup>
 const useModal = useShowModalsStore()
 const useUser = useUserStore()
+
+const { isScreenSmall } = useGlobalComposable()
+
 console.log(useUser.dataUser);
 onMounted(()=>{
   if(!useUser.dataUser.perfilBase)

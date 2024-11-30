@@ -233,6 +233,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
         localStorage.clear();
         localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
+        useUser.logged = true
         useUser.dataUser = dataUserFetch;
         router.push(`/dashboard/${dataUserFetch.tipoUser}`);
       }

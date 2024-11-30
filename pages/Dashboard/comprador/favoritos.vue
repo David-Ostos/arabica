@@ -47,15 +47,15 @@ onMounted(() => {
   <div class="min-h-screen">
     <div v-if="fav.length > 0">
       <h2 class="main-title">Tus lotes favoritos</h2>
-      <div class="flex flex-wrap gap-4 justify-center mr-4 mb-10">
-        <div v-for="item in fav" class="w-[30%] mb-4 relative">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mx-4 mb-10">
+        <div v-for="item in fav" class="col-span-1 mb-4 relative">
           <LotesCard :item="item" />
         </div>
       </div>
     </div>
 
-    <div v-else class="not-fav">
-      <h3>No has añadido favoritos a tu lista</h3>
+    <div v-else class="flex justify-center items-center min-h-screen ">
+      <h3 class="text-4xl text-gray-300 w-fit mx-8 text-center sm:text-start" >No has añadido favoritos a tu lista</h3>
     </div>
   </div>
 </template>

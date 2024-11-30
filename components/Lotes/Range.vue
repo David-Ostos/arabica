@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
-
 const props = defineProps({
   min: {
     type: Number,
