@@ -6,6 +6,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const useModals = useShowModalsStore()
 
 
+
   if (localStorage.getItem('dataUser') !== null) {
     const dataUserSaved: localStoreDataUser = await JSON.parse(localStorage.getItem('dataUser') ?? '{}')
 
@@ -13,8 +14,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       return navigateTo('/')
     }
 
-    console.log(to.fullPath === '/dashboard/productor/usuario/informacionComercial');
-    console.log(dataUserSaved.tipoUser);
 
     if(!dataUserSaved.perfilBase && to.fullPath === '/dashboard/productor/usuario/informacionComercial'){
         useModals.textoModalNotidicaciones = 'Debes registrarte e introducir todos los datos requeridos para poder acceder a "Información Comercial".'

@@ -10,9 +10,9 @@
       <img
         @click="isOpen = true"
         :src="
-          !useProductor.perfilProductor.imgPortada
+          !profile.imgPortada
             ? portada
-            : useProductor.perfilProductor.imgPortada
+            : profile.imgPortada
         "
         alt="Imagen portada"
         height="400"
@@ -25,7 +25,7 @@
   <!-- modal de visualizacion de imagen de portada -->
   <div>
     <UModal
-      v-if="useProductor.perfilProductor.imgPortada"
+      v-if="profile.imgPortada"
       v-model="isOpen"
       :ui="{
         width: 'sm:max-w-fit',
@@ -48,8 +48,8 @@
         />
         <img
           :src="
-            useProductor.perfilProductor.imgPortada ? portada
-              : useProductor.perfilProductor.imgPortada
+            profile.imgPortada ? portada
+              : profile.imgPortada
           "
           class="max-h-[600px] object-contain rounded-3xl shadow-xl"
           alt=""
@@ -62,7 +62,8 @@
 <script lang="ts" setup>
 import portada from "../../../../public/img/portada.jpg";
 const useUser = useUserStore();
-const useProductor = useProductorStore()
+const { profile } = useProfile()
+
 const isOpen = ref(false);
 const loadingImg = ref(true);
 </script>

@@ -76,11 +76,9 @@ const registrar = async () => {
   if(tipoUser.value === 'productor')  useUser.dataUser.perfilProductor = { _model: 'productores', _id: '' }
   if(tipoUser.value === 'comprador')  useUser.dataUser.perfilComprador = { _model: 'compradores', _id: '' }
   
-  console.log(useUser.dataUser);
 
   localStorage.clear();
   localStorage.setItem("dataUser", JSON.stringify(useUser.dataUser));
-  console.log(useUser.dataUser);
 
   try {
           // @ts-ignore
@@ -97,7 +95,6 @@ const registrar = async () => {
           }
         ).then(async (res) => {
           if (res.status === 412) {
-            console.log(res);
             loading.value = false;
             toast.error("Hubo un problema, intente nuevamente");
 

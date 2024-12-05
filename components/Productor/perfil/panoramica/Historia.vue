@@ -190,7 +190,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           }
         )
           .then((res) => {
-            console.log(res.data);
             useProductor.perfilProductor.nombre = nombre;
             useProductor.perfilProductor.descripcion = descripcionSinEspacio;
             isLoading.value = false;

@@ -384,7 +384,6 @@ const existFav = () => {
 };
 
 const addCart = async () => {
-  console.log(useCart.cart);
   const existInCart = existItem();
   const validate = validatePerfilBase();
 

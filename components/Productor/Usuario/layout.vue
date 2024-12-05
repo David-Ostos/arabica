@@ -21,8 +21,6 @@
             <NuxtLink 
               :to="item.to" 
               activeClass="border-l-2 !border-slate-700 text-slate-700 font-semibold"
-
-
               :class="[ 'p-4 text-slate-500 border-l-2 border-transparent hover:border-primary-600 transition-all duration-500 ease-in-out text-sm', { 'cursor-not-allowed hover:cursor-not-allowed  opacity-50 ': item.disabled } ]" 
               @click="item.click"
               >
@@ -34,28 +32,7 @@
       </div>
     </div>
   </div>
- <!--  <div class="mt-12 py-4" v-else>
-    <ul v-for="(item, groupIndex) in linkMobile" :key="groupIndex" 
-      class="flex items-center gap-4 mx-4 mb-4">
-      <li v-for="(link, linkIndex) in item" :key="linkIndex" 
-        class="w-1/3 flex flex-col justify-center truncate">
-        <NuxtLink 
-          :to="link.to" 
-          @click="link.click"
-          :class="[
-            isActiveRoute(link.to!) ? 'text-green-500' : 'text-secundary',
-            link.label === 'Eliminar Cuenta' ? 'text-rose-500' : '',
-          ]"
-        >
-        <p class="truncate">{{ link.label }}</p>
-      </NuxtLink>
-      <div 
-        v-if="isActiveRoute(link.to!)"
-        class="h-0.5 w-full bg-green-500 mt-1"
-      ></div>
-      </li>
-    </ul>
-  </div> -->
+
 </template>
 
 <script lang="ts" setup>
@@ -72,7 +49,6 @@ const {isScreenSmall} = useGlobalComposable()
 const containerStyles = computed(() => ({
   'min-height': `calc(100vh - ${useGlobal.heightNavProductor}px * 2 )`,
 }))
-console.log(containerStyles.value)
 
 const closeModal = (close: boolean)=>{
   useModals.openModalNotificacion = close

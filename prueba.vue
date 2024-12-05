@@ -30,7 +30,6 @@
               <div
                 v-for="field in Object.keys(item)"
                 :key="field"
-                @click="console.log(field)"
                 class="w-32"
               >
                 <h3 v-if="field === 'nombre'" class="capitalize truncate">
@@ -60,7 +59,6 @@ const prestigio: any = [
   // ... tu definición de datos
 ];
 
-console.log(prestigio);
 </script>
 
 <style></style>

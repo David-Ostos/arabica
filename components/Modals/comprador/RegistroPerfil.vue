@@ -32,7 +32,6 @@ const useUser = useUserStore()
 
 const { isScreenSmall } = useGlobalComposable()
 
-console.log(useUser.dataUser);
 onMounted(()=>{
   if(!useUser.dataUser.perfilBase)
   useModal.showModalCompradorPerfilCompleto = true

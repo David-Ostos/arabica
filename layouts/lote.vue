@@ -6,7 +6,6 @@ import imgLogoLitgh from "/img/logo_ligth_new.png";
 
 import imgLoginLitgh from "~/public/img/logo_ligth_new.png";
 import BotonSecondary from "~/components/Botones/BotonSecondary.vue";
-import BotonPrimary from "~/components/Botones/BotonPrimary.vue";
 import Cart from "~/components/Cart/Cart.vue";
 import { useCartStore } from "~/stores/cart";
 
@@ -15,10 +14,8 @@ const useUser = useUserStore();
 const useCart = useCartStore();
 
 //problema logged en false
-/* console.log(useUser); */
 
 const typeUser = ref();
-const loggedTem = true;
 
 const scrolled = ref(false);
 const nav1 = ref();
@@ -79,7 +76,6 @@ onMounted(() => {
   useGlobal.heightNavLote = nav1.value.clientHeight;
   window.addEventListener("scroll", handleScroll);
   typeUser.value = useUser.dataUser.tipoUser
-  console.log({"logged":useUser.logged});
 });
 
 onUnmounted(() => {
@@ -168,7 +164,7 @@ function handleScroll() {
 
 
     <slot />
-    <ProductorFooter />
+    <LotesFooter />
   </div>
 
   <USlideover side="left" v-model="mobileMenuOpen" :ui="{ width: 'w-[80%] max-w-[80%]' }">

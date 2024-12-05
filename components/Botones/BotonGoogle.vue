@@ -108,7 +108,6 @@ async function verificarEmail(data: any) {
         verificado: dataUserFetch.verificado,
         perfilBase: dataUserFetch.perfilBase,
       };
-      // console.log(dataUserSaved);
   
       localStorage.clear();
       localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));

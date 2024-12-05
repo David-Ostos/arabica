@@ -38,7 +38,7 @@
                 v-for="item in filterCertificados()"
                 class="mb-2 p-1 ring-primary hover:ring rounded-md cursor-pointer"
                 @click="useProductor.perfilProductor.certificaciones![index!].certificacion = item;
-                selectActiveCertificado = false; console.log(useProductor.perfilProductor.certificaciones);"
+                selectActiveCertificado = false"
                 
               >
                 {{ item }}

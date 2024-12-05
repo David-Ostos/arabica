@@ -282,7 +282,6 @@ const isOpenModalPicture = ref(false)
 const pictureModal = ref('')
 
 const openModalPicture = (picture: string ) => {
-  console.log(picture);
   pictureModal.value  = picture
   isOpenModalPicture.value = true
 }

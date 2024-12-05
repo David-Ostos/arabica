@@ -4,12 +4,7 @@
       <h1 class="px-4 md:px-8 mb-4 py-4 border-b uppercase text-gray-500 text-xs font-bold">
         INFORMACIÓN BÁSICA
       </h1>
-      <UForm
-        :schema="schema"
-        :state="state"
-        @submit="onSubmit"
-        class="flex flex-col w-full p-4 md:p-8"
-      >
+      <UForm :schema="schema" :state="state" @submit="onSubmit" class="flex flex-col w-full p-4 md:p-8">
         <div class="md:grid md:grid-cols-5 gap-4 md:gap-8">
           <div class="md:col-span-3 space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-8 h-fit capitalize">
             <UFormGroup required class="md:col-span-1 h-fit" label="Nombre" name="nombre">
@@ -21,7 +16,8 @@
             <UFormGroup required class="md:col-span-2" label="Correo" name="email">
               <UInput placeholder="ejemplo@gmail.com" icon="i-heroicons-envelope" v-model="state.email" size="xl" />
             </UFormGroup>
-            <UFormGroup class="md:col-span-2" label="Contraseña" name="contraseña" :help="state.password ? '' : 'Puedes agregar tu contraseña aquí'">
+            <UFormGroup class="md:col-span-2" label="Contraseña" name="contraseña"
+              :help="state.password ? '' : 'Puedes agregar tu contraseña aquí'">
               <UInput placeholder="*************" icon="" v-model="state.password" type="password" size="xl" />
             </UFormGroup>
           </div>
@@ -29,36 +25,25 @@
           <!-- logo  -->
           <div class="md:col-span-2 mt-4 md:mt-0">
             <span class="text-gray-500 font-semibold">Foto del usuario</span>
-            <div class="relative flex flex-col justify-center items-center border rounded-xl h-64 w-full shadow-inner bg-gray-100 mt-2">
-              <button type="button" v-if="(state.picture || imgUser)"
-                @click="clickInputFile"
-                class="absolute top-4 right-4 p-2 rounded-full flex justify-center items-center border bg-white shadow hover:brightness-95 cursor-pointer"
-              >
+            <div
+              class="relative flex flex-col justify-center items-center border rounded-xl h-64 w-full shadow-inner bg-gray-100 mt-2">
+              <button type="button" v-if="(state.picture || imgUser)" @click="clickInputFile"
+                class="absolute top-4 right-4 p-2 rounded-full flex justify-center items-center border bg-white shadow hover:brightness-95 cursor-pointer">
                 <UIcon name="i-heroicons-camera" class="text-primary-600 h-9 w-9" />
               </button>
               <div class="w-full flex justify-center items-center">
-                <USkeleton
-                  class="h-48 w-48 bg-dark"
-                  :ui="{rounded: 'rounded-full'}"
-                  v-show="!loadingImg"
-                />
+                <USkeleton class="h-48 w-48 bg-dark" :ui="{ rounded: 'rounded-full' }" v-show="!loadingImg" />
                 <div v-show="loadingImg">
-                  <div
-                    v-show="!state.picture && !imgUser"
-                    class="py-8 rounded-xl w-full flex flex-col justify-center items-center text-gray-700 px-4 md:px-12"
-                  >
+                  <div v-show="!state.picture && !imgUser"
+                    class="py-8 rounded-xl w-full flex flex-col justify-center items-center text-gray-700 px-4 md:px-12">
                     <UIcon name="i-heroicons-photo" class="text-6xl md:text-8xl" dynamic />
-                    <UButton type="button" @click="clickInputFile" class="font-semibold mt-2">Subir una nueva imagen</UButton>
+                    <UButton type="button" @click="clickInputFile" class="font-semibold mt-2">Subir una nueva imagen
+                    </UButton>
                     <input ref="inputImgUser" type="file" @change="handleFileUpload" class="hidden" />
                   </div>
                   <img v-show="imgUser" :src="imgUser" class="rounded-full h-48 w-48 shadow" />
-                  <img
-                    v-show="state.picture && !imgUser"
-                    @load="loadingImg = true"
-                    :src="state.picture"
-                    class="rounded-full h-48 w-48 shadow"
-                    alt=""
-                  />
+                  <img v-show="state.picture && !imgUser" @load="loadingImg = true" :src="state.picture"
+                    class="rounded-full h-48 w-48 shadow" alt="" />
                 </div>
               </div>
             </div>
@@ -68,32 +53,27 @@
           </div>
           <!-- /logo  -->
         </div>
-        
+
         <div class="flex flex-col mt-6">
-          <UButton
-            class="w-full md:w-fit md:self-end px-3 py-[10px] font-bold"
-            :ui="{
-              variant: {
-                solid: 'bg-{color}-600',
-              },
-            }"
-            type="submit"
-            :loading="loading"
-            @click="onSubmit"
-          >
+          <UButton class="w-full md:w-fit md:self-end px-3 py-[10px] font-bold" :ui="{
+            variant: {
+              solid: 'bg-{color}-600',
+            },
+          }" type="submit" :loading="loading" @click="onSubmit">
             Guardar cambios
           </UButton>
           <UProgress :value="porcentaje" :color="color" class="mt-4">
-            <template #indicator="{percent}">
-              <div
-                class="text-right"
-                :style="{width: `${percent < 10 && faseUpload !== 'none' ? percent + 15: percent}%`}"
-              >
+            <template #indicator="{ percent }">
+              <div class="text-right"
+                :style="{ width: `${percent < 10 && faseUpload !== 'none' ? percent + 15 : percent}%` }">
                 <span v-if="faseUpload === 'none'" class="text-gray-500 w-fit">Esperando...</span>
-                <span v-else-if="faseUpload === 'Subiendo Imagenes...'" class="text-blue-500 w-fit">{{ faseUpload }}</span>
+                <span v-else-if="faseUpload === 'Subiendo Imagenes...'" class="text-blue-500 w-fit">{{ faseUpload
+                  }}</span>
                 <span v-else-if="faseUpload === 'Subiendo Lote...'" class="text-amber-500 w-fit">{{ faseUpload }}</span>
-                <span v-else-if="faseUpload === 'Actualizando datos del usuario...'" class="text-orange-500">{{ faseUpload }}</span>
-                <span v-else-if="faseUpload === 'Subida Completada'" class="text-primary-500">✔ Subida completada.</span>
+                <span v-else-if="faseUpload === 'Actualizando datos del usuario...'" class="text-orange-500">{{
+                  faseUpload }}</span>
+                <span v-else-if="faseUpload === 'Subida Completada'" class="text-primary-500">✔ Subida
+                  completada.</span>
                 <span v-else-if="faseUpload === 'error'" class="text-red-500 font-bold min-w-14">X Hubo un error.</span>
               </div>
             </template>
@@ -105,9 +85,9 @@
 </template>
 
 <script lang="ts" setup>
-import {object, string, type InferType} from "yup";
-import type {FormSubmitEvent} from "#ui/types";
-import type {User} from "~/interfaces/Users";
+import { object, string, type InferType } from "yup";
+import type { FormSubmitEvent } from "#ui/types";
+import type { User } from "~/interfaces/Users";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 
@@ -135,15 +115,15 @@ const state: User = reactive({
   picture: useUser.dataUser.picture,
 });
 
-const filesSave = ref() ;
+const filesSave = ref();
 const faseUpload = ref(
   "none" as
-    | "none"
-    | "Subiendo Imagenes..."
-    | "Subiendo Lote..."
-    | "Actualizando datos del usuario..."
-    | "Subida Completada"
-    | "error"
+  | "none"
+  | "Subiendo Imagenes..."
+  | "Subiendo Lote..."
+  | "Actualizando datos del usuario..."
+  | "Subida Completada"
+  | "error"
 );
 const color = computed(() => {
   switch (true) {
@@ -166,8 +146,7 @@ const porcentaje = ref(0);
 const inputImgUser = ref()
 
 
-const clickInputFile = (event:any)=>{
-  console.log(inputImgUser.value);
+const clickInputFile = (event: any) => {
   inputImgUser.value.click();
 }
 
@@ -191,12 +170,10 @@ async function handleFileUpload(event: any) {
     "image/*",
   ];
 
-  console.log(files);
   const cumpleConTipos = verificar.every((file: any) => {
     return archivosPermitidos.includes(file.type);
   });
 
-  console.log(cumpleConTipos);
 
   if (cumpleConTipos) {
     if (files.length > 0 && files.length <= 4) {
@@ -233,12 +210,11 @@ async function handleFileUpload(event: any) {
 }
 
 async function uploadFiles(files: any) {
-  console.log(files);
   let status;
   if (files) {
     const formData = new FormData();
     formData.append("files[]", files[0]);
-    
+
 
     try {
       // @ts-ignore
@@ -253,7 +229,6 @@ async function uploadFiles(files: any) {
           },
           data: formData,
           onUploadProgress: (progressEvent) => {
-            console.log(progressEvent);
             faseUpload.value = "Subiendo Imagenes...";
             const progressPercent = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total!
@@ -264,29 +239,28 @@ async function uploadFiles(files: any) {
         }
       )
         .then((res) => {
-          console.log(res.data);
           state.picture = `https://cockpit.arabicagc.com/storage/uploads${res.data.assets[0].path}`
-          return (status = {status: true, tipo: "success"});
+          return (status = { status: true, tipo: "success" });
         })
         .catch((e) => {
           console.log(e);
           faseUpload.value = "error";
           if (e.code === "ERR_NETWORK") {
             toast.info("Problemas en la conexion intente mas tarde.");
-            return (status = {status: false, tipo: "otros"});
+            return (status = { status: false, tipo: "otros" });
           } else {
-            return (status = {status: false, tipo: "error"});
+            return (status = { status: false, tipo: "error" });
           }
         });
     } catch (e) {
       console.log(e);
       faseUpload.value = "error";
 
-      return (status = {status: false, tipo: "error"});
+      return (status = { status: false, tipo: "error" });
     }
   } else {
     toast.error("No hay imagenes para subir.");
-    return (status = {status: false, tipo: "otros"});
+    return (status = { status: false, tipo: "otros" });
   }
   return status;
 }
@@ -294,17 +268,15 @@ async function uploadFiles(files: any) {
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with event.data
   loading.value = true
-  console.log(state);
   let uploadImgStatus;
-  if(imgUser.value){
+  if (imgUser.value) {
     uploadImgStatus = await uploadFiles(filesSave.value)
-  }else{
-    uploadImgStatus = {status: true}
+  } else {
+    uploadImgStatus = { status: true }
   }
-  console.log(event.data);
-  if(uploadImgStatus!.status){
+  if (uploadImgStatus!.status) {
     try {
-        // @ts-ignore
+      // @ts-ignore
       await axios(
         // @ts-ignore
         {
@@ -314,9 +286,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           headers: {
             "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
           },
-          data: {data: state},
+          data: { data: state },
           onUploadProgress: (progressEvent) => {
-            console.log(progressEvent);
             faseUpload.value = "Actualizando datos del usuario...";
             const progressPercent = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total!
@@ -326,13 +297,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           },
         }
       )
-      .then((res) =>{
-        toast.success("Se han actualizado los datos del usuario satisfactoriamente.")
-        useUser.dataUser.picture = state.picture
-        faseUpload.value = 'Subida Completada' 
-        imgUser.value = ''
-        loading.value = false
-      })
+        .then((res) => {
+          toast.success("Se han actualizado los datos del usuario satisfactoriamente.")
+          useUser.dataUser.picture = state.picture
+          faseUpload.value = 'Subida Completada'
+          imgUser.value = ''
+          loading.value = false
+        })
     } catch (error) {
       console.log(error);
     }

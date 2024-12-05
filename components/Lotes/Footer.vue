@@ -16,8 +16,8 @@ const useGlobal = useGlobalStore()
 const footer = ref()
 
 onMounted(()=>{
-  useGlobal.heightFooterProductor = footer.value.clientHeight
-  console.log(useGlobal.heightFooterProductor);
+  useGlobal.heightFooterLote = footer.value.clientHeight
+  console.log(useGlobal.heightFooterLote);
 })
 
 const dynamicStyles = computed(() => ({

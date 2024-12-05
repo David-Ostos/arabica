@@ -2,7 +2,7 @@
   <div class="m-8 mt-20 sm:m-20">
     <div class="sm:overflow-auto">
       <div>
-        <h1 class="text-center text-xl sm:text-3xl text-gray-700 font-bold" @click="console.log(state.muestra)" >
+        <h1 class="text-center text-xl sm:text-3xl text-gray-700 font-bold">
         Crea tu Lote de Café
         </h1>
         <h3 class="sm:text-2xl text-center sm:text-inherit text-xl mb-8 text-gray-600">Agrega las imagenes</h3>
@@ -63,7 +63,6 @@
               <div
                 v-for="img in pictures.slice(1)"
                 class="h-full w-full flex items-center justify-center cursor-pointer overflow-hidden hover:brightness-75 hover:bg-gray-100 rounded-xl hover:scale-105"
-                @click="console.log(img); console.log(img.link === 'i-icon-park-outline-add-picture')"
               >
                 <div
                   v-if="loading"
@@ -465,8 +464,7 @@ const clickInputFile = ()=>{
 }
 
 const prueba = (imagen: any)=>{
-  console.log(pictures.value);
-  console.log(imagen);
+
 }
 
 const faseUpload = ref(
@@ -532,7 +530,6 @@ function crearGaleria(pictures: any) {
       }),
     ]);
   }
-  console.log(pictures);
   return pictures;
 }
 
@@ -604,7 +601,6 @@ async function addLoteProductor(newLote: {_id: string; _model: string}[]) {
         "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
       },
       onUploadProgress: (progressEvent) => {
-        console.log(progressEvent);
         faseUpload.value = "Actualizando Lotes locales...";
         const progressPercent = Math.round(
           (progressEvent.loaded * 100) / progressEvent.total!
@@ -618,7 +614,6 @@ async function addLoteProductor(newLote: {_id: string; _model: string}[]) {
         },
       },
     }).then((res) => {
-      console.log(res.data);
     });
   } catch (e) {
     console.log(e);
@@ -626,11 +621,9 @@ async function addLoteProductor(newLote: {_id: string; _model: string}[]) {
 }
 
 async function handleFileUpload(event: any) {
-  console.log(event);
   loading.value = true;
 
   filesSave.value = event;
-  console.log(filesSave.value);
 
   let files;
 
@@ -655,12 +648,10 @@ async function handleFileUpload(event: any) {
     "image/*",
   ];
 
-  console.log(files);
   const cumpleConTipos = verificar.every((file: any) => {
     return archivosPermitidos.includes(file.type);
   });
 
-  console.log(cumpleConTipos);
 
   if (cumpleConTipos) {
     if (files.length > 0 && files.length <= 4) {
@@ -701,7 +692,6 @@ async function handleFileUpload(event: any) {
 }
 
 async function UploadFiles(files: any) {
-  console.log(files);
   let status;
   if (files) {
     const formData = new FormData();
@@ -724,7 +714,6 @@ async function UploadFiles(files: any) {
           },
           data: formData,
           onUploadProgress: (progressEvent) => {
-            console.log(progressEvent);
             faseUpload.value = "Subiendo Imagenes...";
             const progressPercent = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total!
@@ -774,7 +763,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   loading.value = true;
   state.precio = +state.precio!;
   const uploadImg = await UploadFiles(filesSave.value);
-  console.log(uploadImg);
   if (uploadImg!.status) {
     try {
       // @ts-ignore
@@ -790,7 +778,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
           },
           onUploadProgress: (progressEvent: any) => {
-            console.log(progressEvent);
             faseUpload.value = "Subiendo Lote...";
             const progressPercent = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total!
@@ -801,7 +788,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         }
       )
         .then(async (res) => {
-          console.log(res);
 
           useLotes.lotes.push(res.data);
 

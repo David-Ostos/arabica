@@ -74,10 +74,7 @@
       }">
         <template #header>
           <div class="flex items-center justify-between">
-            <h3 @click="
-              console.log(imgDestacadas);
-            console.log(uploadedFiles);
-            " class="text-base font-semibold text-gray-900 dark:-text-dar">
+            <h3 @click="" class="text-base font-semibold text-gray-900 dark:-text-dar">
               Agregar Imagenes destacadas
             </h3>
             <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
@@ -168,7 +165,6 @@ onMounted(() => {
 onMounted(() => {
   // Asumiendo que las imágenes destacadas se cargan desde el store del productor
   imgDestacadas.value = useProductor.perfilProductor.imgDestacadas || [];
-  console.log(imgDestacadas.value);
   if (imgDestacadas.value.length === 0) {
     imgRelleno.value = crearGaleria();
   }
@@ -250,13 +246,11 @@ async function UpServerImg(imgs: ImgDestacadas[]): Promise<any> {
       }
     );
 
-    console.log(response.data);
     return response.data;
   } catch (e) {
     console.log(e);
   }
 }
-console.log(useProductor.perfilProductor._id);
 async function onSubmit() {
   loading.value = true;
   try {
@@ -273,7 +267,6 @@ async function onSubmit() {
 
     // Actualizar el store con las imágenes actualizadas
     const responseUpdateImgServer = await UpServerImg(imgDestacadas.value);
-    console.log(responseUpdateImgServer);
     useProductor.imgDestacadaUpdate = imgDestacadas.value;
     useProductor.perfilProductor.imgDestacadas = imgDestacadas.value;
     backupImages.value = JSON.parse(JSON.stringify(imgDestacadas.value));

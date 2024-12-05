@@ -7,7 +7,6 @@ const useUser = useUserStore();
 export default async function verificarEmail(data: any) {
   //AQUI HACES UN FETCH PARA VERIFICAR EL EMAIL
 
-  console.log(`${import.meta.env.VITE_URL_API}/api/content/items/usuarios?filter={email:'${data.email}'}`);
 
   try {
     const correoVerificado = await fetch(
@@ -22,14 +21,12 @@ export default async function verificarEmail(data: any) {
 
     const dataUserFetch: User = await correoVerificado.json();
 
-    console.log(dataUserFetch);
 
     if (dataUserFetch?.email != undefined) {
       const dataUserSaved = {
         email: dataUserFetch?.email,
         picture: data.picture,
       };
-      console.log(dataUserSaved);
 
       localStorage.clear();
       localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));

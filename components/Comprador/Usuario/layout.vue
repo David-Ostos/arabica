@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$route.path.includes('usuario')"
+  <div v-if="$route.path.includes('usuario') && !isScreenSmall"
       :class="useUser.dataUser.verificado ? 'mt-[65px]' : ''" 
       class="rounded-b-3xl ml-16 mb-1 bg-gray-100 h-usuario "
     >
@@ -27,7 +27,8 @@
 <script lang="ts" setup>
 const useUser = useUserStore()
 
-console.log(useUser.dataUser.perfilBase);
+const {isScreenSmall} = useGlobalComposable()
+
 const links = [
   [{
     label: 'Informacion Basica',

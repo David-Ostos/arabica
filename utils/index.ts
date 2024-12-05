@@ -2,7 +2,6 @@ export const capitalizeFirstLetter = (string:string) => {
   return string.replace(/\b\w/g, char => char.toUpperCase());
 }
 export function convertirAminusculas(objeto: any) {
-  console.log(objeto);
 // Función recursiva para recorrer el objeto y convertir a minúsculas
 function recorrerObjeto(obj: any) {
   for (const key in obj) {

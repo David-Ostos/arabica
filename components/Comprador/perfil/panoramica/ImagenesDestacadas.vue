@@ -42,9 +42,7 @@ const handleMouseDown = () => { isClicked.value = true; };
 
 const handleMouseUp = () => { isClicked.value = false;}
 
-onMounted(()=>{
-  console.log(profile.value.imgDestacadas);
-})
+
 
 </script>
 

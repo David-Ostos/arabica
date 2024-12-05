@@ -12,9 +12,9 @@ export interface PerfilComprador {
 }
 
 export type Redes = {
-  name: string
-  linkbase: string
-  linkUsuario: string
+  tipoRed?: string
+  linkbase?: string
+  linkUsuario?: string
   icon?:string
 }
 

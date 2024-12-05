@@ -17,7 +17,6 @@ export function usePerfilProductor() {
         },
       })
       perfil.value = response.data
-      console.log(perfil.value )
     } catch (e) {
       error.value = e as Error
     } finally {

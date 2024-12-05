@@ -11,25 +11,13 @@
 </template>
 <script setup lang="ts">
 import 'ldrs/hourglass'
-// import type { PerfilProductor } from '~/interfaces/PerfilProductor';
 import { useProfile } from '~/composables/useProfile'
 definePageMeta({
   layout: "perfil",
   middleware: "perfil"
 })
-  // const route = useRoute()
-  // const useGlobal = useGlobalStore()
-  const { profile, isLoading } = useProfile()
-  // const perfil:Ref<PerfilProductor | undefined> = ref()
+const { profile, isLoading } = useProfile()
 
-// async function getDatosPerfil(){
-//   perfil.value = useGlobal.perfilComercial
-// }
-// // Default values shown  
-
-// onMounted(()=>{
-//   getDatosPerfil()
-// })
 
 
 </script>

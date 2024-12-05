@@ -45,8 +45,7 @@ const props = defineProps<{items:AccordionItem [] }>()
 
 const accordionItems = ref(props.items as AccordionItem[])
 
-const toggleItem = (index: number) => {+
-  console.log(index);
+const toggleItem = (index: number) => {
   accordionItems.value = accordionItems.value.map((item, i) => ({
     ...item,
     isActive: i === index ? !item.isActive : item.isActive

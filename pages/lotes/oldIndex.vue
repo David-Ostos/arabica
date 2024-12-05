@@ -8,75 +8,81 @@
             <span class="i-heroicons-x-mark"></span>
           </button>
         </div>
-
+  
         <div class="container-buttons">
           <div>
-            <button class="btn-all" @click="handleOriginFilter('all')" :class="{ active: selectedorigin === 'all' }">
+            <button
+              class="btn-all"
+              @click="handleOriginFilter('all')"
+              :class="{ active: selectedorigin === 'all' }"
+            >
               Todos los orígenes
             </button>
           </div>
-
+  
           <div class="btns-country">
-            <button class="btn-country" @click="handleOriginFilter('perú')"
-              :class="{ active: selectedorigin === 'perú' }">
+            <button
+              class="btn-country"
+              @click="handleOriginFilter('perú')  "
+              :class="{ active: selectedorigin === 'perú' }"
+            >
               <img :src="iconPeru" />
               Perú
             </button>
           </div>
         </div>
-
+  
         <div class="show-results">
           <button @click="showOrigins = false">Ver resultados</button>
         </div>
       </div>
     </div>
   </UModal>
-  <div class="flex flex-col sm:flex-row gap-8  mt-16 z-0 justify-between relative flex-grow sm:mr-8"
-    :style="containerStyles">
-
-
+  <div class="flex flex-col sm:flex-row gap-8 z-0 justify-between relative flex-grow sm:mr-8">
+    
+    
     <!-- Menu de filtros pc -->
-    <div v-if="!isScreenSmall" :style="containerStyles"
-      class="relative -z-10 overflow-x-hidden max-h-screen transition-width ease-in-out duration-700   dark:bg-gray-800 text-gray-900 dark:-text-dar border-r border-inset border-gray-300 dark:border-gray-700 focus:border-2 focus:border-primary-500 dark:focus:border-primary-400 pb-8 px-4"
-        :class="[
-        isOpen ? ' w-1/4 overflow-y-auto ' : ' w-[74px] overflow-y-hidden',
+    <div v-if="!isScreenSmall" 
+      class="relative transition-width ease-in-out duration-700 shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar border-r border-inset border-gray-300 dark:border-gray-700 focus:border-2 focus:border-primary-500 dark:focus:border-primary-400 py-5 px-4"
+      :class="[
+        isOpen ? ' w-1/4' : ' w-[6%]',
         useLotes.lotes.length > 0 ? ' w-1/3' : 'w-1/4',
-      ]">
-      <div class="sticky w-full top-0 flex justify-between items-center bg-white z-[60]  py-4" :class="isOpen ? 'px-4' : ''">
-        <h1 class="font-semibold text-xl text-thirdary overflow-hidden transition-width duration-700 ease-in-out" :class="!isOpen ? 'w-0 opacity-0' : 'opacity-100'">Filtros</h1>
-        <div class=" text-xl border rounded-md p-2 flex justify-center items-center cursor-pointer" @click="isOpen = !isOpen">
+      ]"
+    >
+      <div class="absolute right-4">
+        <div
+          class="mb-4 text-xl border rounded-md p-2 flex justify-center items-center"
+          @click="isOpen = !isOpen"
+        >
           <UIcon name="i-ic-round-menu" class="" dynamic />
         </div>
       </div>
-      <div :class="isOpen ? '  opacity-100' : 'opacity-0'"
-        class="  overflow-auto transition-all ease-in-out duration-700 mt-4 truncate">
-        <LotesMenuFiltros 
-          @filtro-muestra="filtrarMuestra"
-          @close="closeMenuFiltro"
-          @filtros-select="filtrarSelect"
-          @filtro-pais="filtrarPais"
-          @filtro-origen="filtrarOrigen"
+      <div  class="h-full">
+        <Filters
+          v-if="isOpen"
+          :handleOrigin="handleShowOrigin"
+          :filtersSearch="filtersSearch"
+          :filterActive="filtersActive"
+          @filter-changed="handleFilterChange"
+          @clean="cleanFilter"
         />
       </div>
     </div>
     <!-- /Menu de filtros pc -->
 
-
+       
     <!-- menu mobile -->
     <div v-if="isScreenSmall">
       <div class="fixed flex justify-center gap-4 items-center border-b shadow-sm pt-6 py-4 bg-white z-50 w-full">
-        <button @click="mobileFiltroMenu = true"
-          class="focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed disabled:opacity-75 flex-shrink-0 font-medium rounded-md text-sm gap-x-1.5 px-2.5 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 text-gray-900 dark:text-white bg-white hover:bg-gray-50 disabled:bg-white dark:bg-gray-900 dark:hover:bg-gray-800/50 dark:disabled:bg-gray-900 focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 inline-flex items-center">
-          <UIcon name="i-material-symbols-filter-alt-outline" dynamic /> Filtros
-        </button>
-
-        <LotesMenuOrdenar />
+        <button @click="mobileFiltroMenu = true" class="focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed disabled:opacity-75 flex-shrink-0 font-medium rounded-md text-sm gap-x-1.5 px-2.5 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 text-gray-900 dark:text-white bg-white hover:bg-gray-50 disabled:bg-white dark:bg-gray-900 dark:hover:bg-gray-800/50 dark:disabled:bg-gray-900 focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 inline-flex items-center"><UIcon name="i-material-symbols-filter-alt-outline" dynamic /> Filtros</button>
+        
+        <LotesMenuOrdenar/>
       </div>
 
     </div>
-
+    
     <!-- Menu filtro -->
-    <!--  <USlideover side="left" v-model="mobileFiltroMenu" :ui="{ width: 'w-[80%] max-w-[80%]' }">
+   <!--  <USlideover side="left" v-model="mobileFiltroMenu" :ui="{ width: 'w-[80%] max-w-[80%]' }">
     <UCard class="flex flex-col flex-1"
       :ui="{ backgound: 'dark:bg-white', body: { base: 'flex-1' }, ring: '', divide: '' }">
       <template #header>
@@ -88,42 +94,36 @@
         </div>
       </template>
 
-
-
-</UCard>
-</USlideover> -->
-    <USlideover side="left" v-model="mobileFiltroMenu" :ui="{ width: 'w-[80%] max-w-[80%]' }">
-      <UCard class="flex flex-col flex-1"
-        :ui="{ backgound: 'dark:bg-white', body: { base: 'flex-1' }, ring: '', divide: '' }">
-        <template #header>
-          <div class="flex items-center justify-between">
-            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:-text-dar capitalize">
-              Filtros
-            </h3>
-            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
-              @click="mobileFiltroMenu = false" />
-          </div>
-        </template>
-
-        <div class="overflow-auto h-screen">
-        <LotesMenuFiltros 
-          @filtro-muestra="filtrarMuestra"
-          @close="closeMenuFiltro"
-          @filtros-select="filtrarSelect"
-          @filtro-pais="filtrarPais"
-          @filtro-origen="filtrarOrigen"
-        />
-        </div>
-
-
-      </UCard>
-    </USlideover>
-
-<!-- /Menu filtro -->
+      
+      
+    </UCard>
+  </USlideover> -->
+    <!-- /Menu filtro -->
 
     <!-- Menu Ordenar -->
 
-    
+    <USlideover side="left" v-model="mobileFiltroMenu" :ui="{ width: 'w-[80%] max-w-[80%]' }">
+    <UCard class="flex flex-col flex-1"
+      :ui="{ backgound: 'dark:bg-white', body: { base: 'flex-1' }, ring: '', divide: '' }">
+      <template #header>
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:-text-dar capitalize">
+            Filtros
+          </h3>
+          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="mobileFiltroMenu = false" />
+        </div>
+      </template>
+
+      <Filters
+          :handleOrigin="handleShowOrigin"
+          :filtersSearch="filtersSearch"
+          :filterActive="filtersActive"
+          @filter-changed="handleFilterChange"
+          @clean="cleanFilter"
+        />
+      
+    </UCard>
+  </USlideover>
     <!-- <LotesMenuFiltros 
       
       :items="{
@@ -132,36 +132,46 @@
       }"
       @close="closeMenuFiltro" /> -->
     <!-- /Menu Ordenar -->
-
+    
     <!-- /menu mobile -->
 
 
 
 
     <!-- show card lote -->
-    <div class="flex gap-8 mx-4  z-0 justify-between relative flex-grow sm:overflow-auto sm:w-3/4"
-      :class="isScreenSmall ? 'scrollbar-hide' : ''">
-      <div class="mt-5 pb-10 transition-width ease-in-out duration-700 mx-auto flex-grow ">
+    <div
+      class="flex gap-8 mx-4 mt-12 z-0 justify-between relative flex-grow sm:overflow-auto sm:w-3/4"
+      :class="isScreenSmall ? 'scrollbar-hide':''"
+    >
+      <div
+        class="mt-5 pb-10 transition-width ease-in-out duration-700 mx-auto flex-grow h-lotes"
+      >
         <h1
-          class="font-bold text-base md:text-lg text-gray-800 line-clamp-2 hover:line-clamp-none transition-all duration-1000 mb-4">
+          class="font-bold text-base md:text-lg text-gray-800 line-clamp-2 hover:line-clamp-none transition-all duration-1000 mb-4"
+        >
           {{
             filtersActive === false ? useLotes.lotes.length : lotesFilter.length
           }}
           Lotes disponibles
         </h1>
         <div class="grid sm:grid-cols-3 grid-cols-1 gap-4 justify-center sm:justify-start sm:mr-4 mb-10">
-          <div v-for="item in filtersActive === false
-            ? useLotes.lotes
-            : lotesFilter" class="col-span-1  min-w-64 mb-4 relative">
+          <div
+            v-for="item in filtersActive === false
+              ? useLotes.lotes
+              : lotesFilter"
+            class="col-span-1  min-w-64 mb-4 relative"
+          >
             <LotesCard :item="item" />
           </div>
         </div>
 
-        <div v-if="
-          filtersActive === false
-            ? useLotes.lotes.length === 0
-            : lotesFilter.length === 0
-        ">
+        <div
+          v-if="
+            filtersActive === false
+              ? useLotes.lotes.length === 0
+              : lotesFilter.length === 0
+          "
+        >
           <p>No hay lotes disponibles</p>
         </div>
       </div>
@@ -181,10 +191,6 @@ definePageMeta({
   layout: "lote",
 });
 
-const { isScreenSmall } = useGlobalComposable()
-const useGlobal = useGlobalStore()
-
-
 const isOpen = ref(false);
 const showOrigins = ref(false);
 const selectedorigin = ref("");
@@ -192,13 +198,9 @@ const useLotes = useLotesStore();
 const filtersActive = ref(false);
 const lotesFilter = ref<any>([]);
 
-const containerStyles = computed(() => ({
-  'max-height': `calc(100vh - (${useGlobal.heightNavLote}px + ${useGlobal.heightFooterLote}px) )`,
-}))
-
 const mobileFiltroMenu = ref(false)
 const mobileOrdenarMenu = ref(false)
-
+const {isScreenSmall} = useGlobalComposable()
 const filtersSearch = ref<FiltersSearch>({
   samplesAvailable: undefined,
   origin: undefined,
@@ -231,80 +233,7 @@ const options = [{
 const selected = ref('disponibilidad')
 
 
-/* filtros */
-
-  /* muestra */
-  const filtroMuestra = ref(false)
-  const filtrarMuestra = (value: boolean) =>{
-    console.log(value);
-    filtroMuestra.value = value
-  }
-  /* /muestra */
-
-  /* pais */
-  const filtroPais:Ref<string[]> = ref([])
-  const filtrarPais = (pais: string[]) => {
-    filtroPais.value = pais
-    console.log({pais});
-  }
-  /* /pais */
-  /* origen  */
-  const filtroOrigen= ref([] as string[]) 
-  const filtrarOrigen = (origen: string[]) =>{
-    filtroOrigen.value = origen
-    console.log(origen);
-  } 
-  /* /origen  */
-
-  /* filtros select */
-  const filtroProductores = ref([])
-  const filtroVariedades = ref([])
-  const filtroProcesos = ref([])
-  const filtroPerfil = ref([])
-  const filtroCertificaciones = ref([])
-
-  const filtrarSelect = (tipo: string, value: string) => {
-    let targetArray: string[];
-    switch (tipo) {
-      case 'filtroCertificaciones':
-        targetArray = filtroCertificaciones.value;
-        break;
-      case 'filtroPerfil':
-        targetArray = filtroPerfil.value;
-        break;
-      case 'filtroProcesos':
-        targetArray = filtroProcesos.value;
-        break;
-      case 'filtroVariedades':
-        targetArray = filtroVariedades.value;
-        break;
-      case 'filtroProductores':
-        targetArray = filtroProductores.value;
-        break;
-      default:
-        console.error('Tipo de filtro no reconocido:', tipo);
-        return;
-    }
-
-    const index = targetArray.indexOf(value);
-    if (index > -1) {
-      // Si el valor ya está en el array, lo quitamos
-      targetArray.splice(index, 1);
-    } else {
-      // Si el valor no está en el array, lo añadimos
-      targetArray.push(value);
-    }
-
-    console.log(`${tipo}:`, targetArray);
-  }
-  /* /filtros select */
-
-
-/* /filtros */
-
-
-
-const closeMenuFiltro = () => {
+const closeMenuFiltro = () =>{
   mobileFiltroMenu.value = false
 }
 
@@ -500,7 +429,6 @@ const cleanFilter = () => {
       .btns-country {
         margin-top: 0.5rem;
       }
-
       .btn-country {
         padding: 0.5rem;
         border: 1px solid #515151;

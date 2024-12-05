@@ -52,7 +52,7 @@
           </NuxtLink>
 
           <div v-if="item.slot && item.slot.isOpen">
-            <div class=" mx-8 pt-2 border-t">
+            <div class=" mx-12 pt-2 border-t">
               <NuxtLink @click="closeSlider()" v-for="slot, index in item.slot.items" :key="index"  :to="slot.to">
               <div
                 :class="['flex justify-between rounded-xl  p-1 px-2', slot.to === $route.fullPath ? 'text-primary bg-gray-100' : 'text-gray-500']">
@@ -67,7 +67,16 @@
 
         </div>
 
+        
+
       </div>
+
+      <BotonesBotonSecondary v-if="!useUser.dataUser.perfilBase" 
+      class="text-end"
+      contenido="Completar Registro" 
+      :link="`/dashboard/${useUser.dataUser.tipoUser}`" 
+      @click="useModal.showModalProductorPerfilCompleto = true" />
+
     </div>
   </div>
 
@@ -91,7 +100,7 @@
           </NuxtLink>
 
           <div v-if="item.slot && item.slot.isOpen">
-            <div class=" mx-8 pt-2 border-t">
+            <div class=" mx-12 pt-2 border-t">
               <NuxtLink @click="closeSlider()" v-for="slot, index in item.slot.items" :key="index"  :to="slot.to">
               <div
                 :class="['flex justify-between rounded-xl  p-1 px-2', slot.to === $route.fullPath ? 'text-primary bg-gray-100' : 'text-gray-500']">
@@ -108,12 +117,12 @@
 
       </div>
 
-<!--       <BotonesBotonSecondary v-if="useUser.dataUser.perfilBase" 
+      <BotonesBotonSecondary v-if="!useUser.dataUser.perfilBase" 
       class="text-end"
       contenido="Completar Registro" 
       :link="`/dashboard/${useUser.dataUser.tipoUser}`" 
       @click="useModal.showModalCompradorPerfilCompleto = true" />
- -->
+
 
     </div>
   </div>
@@ -180,7 +189,7 @@ const linksMobileProductor: LinksMobile[][]= reactive([
     {
       label: "Panel de control",
       icon: "i-tabler-layout-dashboard",
-      to: `/dashboard/comprador`,
+      to: `/dashboard/productor`,
     },
     {
       label: "Lotes de Café",
@@ -192,7 +201,7 @@ const linksMobileProductor: LinksMobile[][]= reactive([
     {
       label: "Perfil",
       icon: "i-tabler-user-circle",
-      to: `/dashboard/comprador/perfil`,
+      to: `/dashboard/productor/perfil`,
     },
     {
       label: "Ajustes de Cuenta",
@@ -207,13 +216,13 @@ const linksMobileProductor: LinksMobile[][]= reactive([
         items:[
         {
             label:'Información Basica',
-            to:'/dashboard/comprador/usuario',
+            to:'/dashboard/productor/usuario',
           },{
             label:'Información Comercial',
-            to:'/dashboard/comprador/usuario/informacionComercial',
+            to:'/dashboard/productor/usuario/informacionComercial',
           },{
             label:'Eliminar Cuenta',
-            to:'/dashboard/comprador/usuario/eliminarCuenta',
+            to:'/dashboard/productor/usuario/eliminarCuenta',
           },
         ]
       }
@@ -313,7 +322,6 @@ const clickLink = (item: LinksMobile) =>{
   }
 
   if(item.slot){
-    console.log({item});
     item.slot.isOpen = !item.slot.isOpen
     return 
   }

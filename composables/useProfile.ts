@@ -4,7 +4,6 @@ import { useGlobalStore } from '~/stores/global'
 
 export function useProfile() {
   const globalStore = useGlobalStore()
-  const route = useRoute()
 
   const profile= computed(() => globalStore.perfilComercial as PerfilProductor )
   const isLoading = ref(false)

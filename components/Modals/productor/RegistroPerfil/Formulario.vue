@@ -1,6 +1,6 @@
 <template>
   <div
-    class="font-roboto lg:pt-10 bg-gray-100 rounded-xl shadow border relative"
+    class="font-roboto lg:pt-10 sm:bg-gray-100 rounded-xl sm:shadow sm:border relative"
     @click=""
   >
     <div class="flex justify-center">
@@ -10,7 +10,6 @@
       </h3>
     </div>
     <UForm
-      @click="console.log(isActiveCodePhone)"
       :schema="schema"
       :state="state"
       class="space-y-4 lg:border rounded-xl shadow-inner py-8 md:mx-20 my-8 bg-white"
@@ -41,7 +40,7 @@
         />
       </UFormGroup>
 
-      <div class="grid grid-cols-2 md:mx-8 gap-4">
+      <div class="sm:grid flex flex-col m-4 sm:m-0 sm:grid-cols-2 md:mx-8 gap-4">
         <UFormGroup
           label="Nombre del Perfil"
           size="xl"
@@ -83,7 +82,7 @@
         </UFormGroup>
 
         <UFormGroup
-          label="R.U.C"
+          label="R.U.C / D.N.I"
           size="xl"
           name="ruc"
           class="col-span-1"
@@ -110,14 +109,14 @@
           <span
             class="text-red-500 text-sm text-center ml-[20px]"
             v-if="rucValidado"
-            >EL R.U.C ya esta registrado</span
+            >EL R.U.C o D.N.I ya esta registrado</span
           >
         </UFormGroup>
 
         <UFormGroup
           required
           size="xl"
-          label="Razón Social"
+          label="Razón social / Nombre completo"
           name="razonSocial"
           class="col-span-1"
         >
@@ -136,14 +135,14 @@
           <span
             class="text-red-500 text-sm text-center ml-[20px]"
             v-if="razonSocialValidado"
-            >La Razón Social ya esta registrada</span
+            >La razón social o nombre ya esta registrada</span
           >
         </UFormGroup>
 
-        <div class="col-span-2 my-4" name="direccion">
-          <h1 class="mb-2 font-medium text-gray-700 mx-4">Dirección:</h1>
+        <div class="col-span-2 my-4 " name="direccion">
+          <h1 class="hidden sm:block mb-2 font-medium text-gray-700 mx-4">Dirección:</h1>
           <div
-            class="col-span-2 gap-4 grid grid-cols-3 shadow border bg-gray-100 p-8 rounded-xl"
+            class="col-span-2 gap-4 grid grid-cols-3 sm:shadow sm:border sm:bg-gray-100 sm:p-8 rounded-xl"
           >
             <UFormGroup
               label="Dirección del negocio"
@@ -171,7 +170,7 @@
               />
             </UFormGroup>
 
-            <div class="col-span-1 relative">
+            <div class="hidden sm:block col-span-1 relative">
               <div
                 class="bg-white shadow-inner w-10 h-10 rounded-full border-2 absolute bottom-0 left-0"
               ></div>
@@ -213,11 +212,10 @@
           <div
             class="relative z-50 grid grid-cols-12 w-full focus-visible:ring-2 ring-primary group rounded-md"
           >
-            <div class="cursor-pointer relative col-span-3">
+            <div class="cursor-pointer relative col-span-4 sm:col-span-3">
               <div
                 @click="
                   isActiveCodePhone = !isActiveCodePhone;
-                  console.log(isActiveCodePhone);
                 "
                 class="grid grid-cols-3 gap-1 justify-center items-center w-full h-full border rounded-md border-[#d1d5db] shadow cursor-pointer"
               >
@@ -281,7 +279,7 @@
               </div>
             </div>
             <UInput
-              class="col-span-9"
+              class="col-span-8 sm:col-span-9"
               placeholder="1234567..."
               icon=""
               v-model="state.numeroTelefonico!.numero"
@@ -1546,7 +1544,7 @@ const schema = object({
     .required("Requerido")
     .positive()
     .integer()
-    .typeError("El R.U.C debe ser un número de 11 digitos"),
+    .typeError("El R.U.C o D.N.I debe ser un número de 11 digitos"),
   razonSocial: string()
     .required("Requerido")
     .min(5, "debe tener un minimo de 5 caracteres"),
@@ -1649,7 +1647,6 @@ const validations = (stat: any): FormError[] => {
   return errors;
 };
 
-console.log(useUser.dataUser);
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   load.value = true;
@@ -1679,7 +1676,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     const verificarRuc = responseVerificacion.some(
       (productor: any) => productor.ruc === state.ruc
     );
-    console.log(responseVerificacion);
     const verificarRazonSocial = responseVerificacion.some(
       (productor: any) =>
         productor.razonSocial.toLowerCase() === state.razonSocial!.toLowerCase()
@@ -1782,7 +1778,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         );
 
         const resUpdate = await update.json();
-        console.log(resUpdate);
 
         const dataUserSaved: localStoreDataUser = await JSON.parse(
           localStorage.getItem("dataUser") ?? "{}"
@@ -1803,7 +1798,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 }
 
 function agregarGuiones(cadena: any) {
-  console.log(cadena.data);
   return cadena.data.replace(/(\d{3})/g, "$1-");
 }
 const prueba = [

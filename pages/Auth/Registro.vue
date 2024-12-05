@@ -188,7 +188,6 @@ const faltaTipo = ref(false);
 const tipoUser: Ref<"comprador" | "productor" | undefined> = ref(undefined);
 
 const tipoU = (tipo: "comprador" | "productor") => {
-  console.log(tipo);
   tipoUser.value = tipo;
 };
 const nombreWeb = import.meta.env.VITE_NOMBRE_1;
@@ -261,7 +260,6 @@ async function verificarEmail(data: User) {
   //AQUI HACES UN FETCH PARA VERIFICAR EL EMAIL
   if(data.tipoUser === 'productor')  data.perfilProductor = { _model: 'productores', _id: '' }
   if(data.tipoUser === 'comprador')  data.perfilComprador = { _model: 'compradores', _id: '' }
-  console.log(data);
 
   try {
     const correoVerificado = await fetch(
@@ -307,7 +305,6 @@ async function verificarEmail(data: User) {
           }
         ).then((res) => {
           if (res.status === 412) {
-            console.log(res);
           } else {
             delete res.data._state
             delete res.data._modified
@@ -315,7 +312,6 @@ async function verificarEmail(data: User) {
             delete res.data._created
             delete res.data._cby
             useUser.dataUser = res.data;
-            // console.log(useUser.dataUser);
             toast.success("Usuario creado satisfactoriamente.", {
               onClose: () => {
                 router.push(`/dashboard/${data.tipoUser}`);

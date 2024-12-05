@@ -11,7 +11,6 @@
       >
       <article class="p-4 ">
         <h1 v-if="data?.title"
-        @click="console.log(data, body)"
         >
             {{ data.title }}
           </h1>
@@ -23,7 +22,7 @@
         </article>
       </MDC>
     </div>
-    <BotonesBotonPrimary @click="console.log(md)" />
+    <BotonesBotonPrimary  />
   </div>
 </template>
 

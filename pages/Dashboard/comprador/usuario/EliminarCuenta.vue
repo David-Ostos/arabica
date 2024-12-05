@@ -1,21 +1,25 @@
 <template>
-  <div class="bg-white m-10 p-8 rounded-xl border">
-    <div class=" max-w-fit flex flex-col gap-8">
-      <h1 class="uppercase text-gray-600 font-medium text-xs"> eliminar cuenta</h1>
-      <div>
-        <p class="text-gray-800" >Ten en cuenta que no podrás recuperar ninguno de tus datos ni reactivar tu cuenta.</p>
-        <p class="text-gray-800" >Haz clic en "Eliminar cuenta" si aún quieres borrar tu cuenta.</p>
+  <div class=" h-full my-auto ">
+    <div class="bg-white m-4 md:m-10 p-4 md:p-8 rounded-xl border ">
+      <div class=" max-w-fit flex flex-col gap-8">
+        <h1 class="uppercase text-gray-600 font-bold md:font-medium md:text-xs"> eliminar cuenta</h1>
+        <div class="flex flex-col gap-4">
+          <p class="text-gray-800" >Ten en cuenta que no podrás recuperar ninguno de tus datos ni reactivar tu cuenta.</p>
+          <p class="text-gray-800" >Haz clic en "Eliminar cuenta" si aún quieres borrar tu cuenta.</p>
+        </div>
+        <p class="text-gray-800 flex gap-1 items-center text-sm md:text-base "><UIcon class="text-rose-500" name="i-material-symbols-warning-outline-rounded" dynamic/> <b class="font-bold" > Precaución:</b> esto no se puede deshacer.</p>
+        <UButton color="red" class="w-fit py-3 px-4" @click="isOpenModal = true" >
+          Eliminar cuenta
+        </UButton>
       </div>
-      <p class="text-gray-800 flex gap-1 items-center"><UIcon class="text-rose-500" name="i-material-symbols-warning-outline-rounded" dynamic/> <b class="font-bold" > Precaución:</b> esto no se puede deshacer.</p>
-      <UButton color="red" class="w-fit py-3 px-4" @click="isOpenModal = true" >
-        Eliminar cuenta
-      </UButton>
     </div>
   </div>
 
   <!-- Modal de eliminar cuenta -->
   <div>
-    <UModal v-model="isOpenModal">
+    <UModal v-model="isOpenModal" :ui="{
+      container: 'items-center'
+    }">
       <div class="p-8">
         <div class="flex flex-col gap-4 items-center text-center">
           <UIcon name="i-heroicons-x-circle" class="text-rose-500 text-6xl" />
@@ -69,7 +73,6 @@ const eliminarCuenta =async ()=>{
           }
         )
         .then(res =>{
-          console.log(res.data);
         })
     } catch (error) {
       console.log(error);
@@ -89,7 +92,6 @@ const eliminarCuenta =async ()=>{
           }
         )
         .then((res)=>{
-          console.log(res.data);
           toast.success('Se a eliminado el usuario', {
             onClose: (()=>{
               useUser.logout()

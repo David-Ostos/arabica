@@ -23,6 +23,7 @@ export default {
         },
         prim: "#02AC66",
         secundary: "#707a89",
+        thirdary: "#1e4148",
       },
       backgroundImage: {
         hero: "url('./public/img/arabicagc-1-1024x511.jpg",

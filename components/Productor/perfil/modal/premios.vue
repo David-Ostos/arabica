@@ -78,7 +78,6 @@ const useProductor = useProductorStore()
 const selectActiveYear = ref(false);
 const premiosModal = ref([] as any)
 
-console.log(props.premio)
 onMounted(()=>{
   premiosModal.value = props.premio;
   premiosModal.value._id = props.index.toString()

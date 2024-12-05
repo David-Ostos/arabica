@@ -15,7 +15,7 @@
         @submit="onSubmit"
         class="flex flex-col p-4 md:p-8 w-full md:mt-4"
       >
-        <div class=" gap-8 md:grid grid-cols-5  flex flex-col-reverse justify-center w-full border-b pb-4">
+        <div class=" gap-8 sm:grid grid-cols-5  flex flex-col-reverse justify-center w-full border-b pb-4">
 
           <div class="grid grid-cols-8 col-span-3 w-full gap-8 h-fit capitalize"
           >
@@ -504,7 +504,6 @@ async function UploadFiles(files: any) {
           },
           data: formData,
           onUploadProgress: (progressEvent) => {
-            console.log(progressEvent);
             faseUpload.value = "Subiendo Imagenes...";
             const progressPercent = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total!
@@ -1720,7 +1719,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           },
           data: {data: state},
           onUploadProgress: (progressEvent) => {
-            console.log(progressEvent);
             faseUpload.value = "Actualizando datos del productor...";
             const progressPercent = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total!

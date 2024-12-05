@@ -34,7 +34,6 @@ interface Filters {
 /* watch(
   () => props.filtersSearch,
   (val, oldVal) => {
-    console.log(val);
   },
   { deep: true }
 ); */
@@ -52,7 +51,6 @@ const handleShowFilter = (param: keyof Filters) => {
 };
 
 const handleFilter = (param: string, value: any = undefined) => {
-  console.log(param, value);
   const updatedFilters: any = {};
   updatedFilters[param] = value;
   if (param === "samplesAvailable" && value === false) {
@@ -139,14 +137,12 @@ const handlerCheckCertification = (cert: string) => {
     value = [];
   }
 
-  console.log(certActive);
   if (certActive === false) {
     value.push(cert);
   } else {
     value = props.filtersSearch.certifications.filter(
       (item: string) => item != cert
     );
-    console.log(value);
   }
 
   if (value.length === 0) {

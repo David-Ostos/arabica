@@ -57,11 +57,8 @@ const useProductor = useProductorStore()
 const isOpenModal = ref(false)
 const isLoadingModal = ref(false)
 
-console.log(useProductor.perfilProductor._id)
-console.log(useProductor.perfilProductor)
-useProductor.perfilProductor.lotes?.forEach((lote)=>{
-      console.log(lote._id);
-    })
+
+
 
 const eliminarCuenta =async ()=>{
   isLoadingModal.value = true
@@ -109,7 +106,6 @@ const eliminarCuenta =async ()=>{
           }
         )
         .then(res =>{
-          console.log(res.data);
         })
     } catch (error) {
       console.log(error);
@@ -129,7 +125,6 @@ const eliminarCuenta =async ()=>{
           }
         )
         .then((res)=>{
-          console.log(res.data);
           toast.success('Se a eliminado el usuario', {
             onClose: (()=>{
               useUser.logout()

@@ -567,7 +567,6 @@ function validacionesArray<T extends TipoPrestigio>(
   arrayActualizado: T[],
   cerrarModal: () => void,
 ): boolean {
-  console.log({arrayOriginal, arrayActualizado});
   // Validación 1: Comprobar si hay cambios
   if (JSON.stringify(arrayOriginal) === JSON.stringify(arrayActualizado)) {
     toast.info("No hay cambios");

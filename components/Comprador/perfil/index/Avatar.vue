@@ -33,7 +33,6 @@
 </template>
 
 <script lang="ts" setup>
-const useGlobal = useGlobalStore()
 
 const props = defineProps({
   picture: String,
@@ -41,10 +40,6 @@ const props = defineProps({
   origen: String,
   tipoProductor: String
 })
-onMounted(()=>{
-console.log(props.picture);
-})
-  // console.log(props.nombre)
 
 </script>
 

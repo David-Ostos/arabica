@@ -22,8 +22,6 @@ import type { PerfilProductor } from '~/interfaces/PerfilProductor';
 import { useProfile } from '~/composables/useProfile'
 
 const { profile } = useProfile()
-const global = useGlobalStore()
-const route = useRoute()
 const useGlobal = useGlobalStore()
 const perfil:Ref<PerfilProductor | undefined> = ref()
 
@@ -40,7 +38,6 @@ async function getDatosPerfil(){
 // Default values shown  
 
 onMounted(()=>{
-  console.log(route.params.id);
   getDatosPerfil()
 })
 </script>

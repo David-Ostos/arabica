@@ -239,7 +239,6 @@ const inputImgUser = ref()
 
 
 const clickInputFile = (event:any)=>{
-  console.log(inputImgUser.value);
   inputImgUser.value.click();
 }
 
@@ -263,12 +262,10 @@ async function handleFileUpload(event: any) {
     "image/*",
   ];
 
-  console.log(files);
   const cumpleConTipos = verificar.every((file: any) => {
     return archivosPermitidos.includes(file.type);
   });
 
-  console.log(cumpleConTipos);
 
   if (cumpleConTipos) {
     if (files.length > 0 && files.length <= 4) {
@@ -305,7 +302,6 @@ async function handleFileUpload(event: any) {
 }
 
 async function uploadFiles(files: any) {
-  console.log(files);
   let status;
   if (files) {
     const formData = new FormData();
@@ -325,7 +321,6 @@ async function uploadFiles(files: any) {
           },
           data: formData,
           onUploadProgress: (progressEvent) => {
-            console.log(progressEvent);
             faseUpload.value = "Subiendo Imagenes...";
             const progressPercent = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total!
@@ -336,7 +331,6 @@ async function uploadFiles(files: any) {
         }
       )
         .then((res) => {
-          console.log(res.data);
           state.picture = `https://cockpit.arabicagc.com/storage/uploads${res.data.assets[0].path}`
           return (status = {status: true, tipo: "success"});
         })
@@ -366,14 +360,12 @@ async function uploadFiles(files: any) {
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with event.data
   loading.value = true
-  console.log(state);
   let uploadImgStatus;
   if(imgUser.value){
     uploadImgStatus = await uploadFiles(filesSave.value)
   }else{
     uploadImgStatus = {status: true}
   }
-  console.log(event.data);
   if(uploadImgStatus!.status){
     try {
         // @ts-ignore
@@ -388,7 +380,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           },
           data: {data: state},
           onUploadProgress: (progressEvent) => {
-            console.log(progressEvent);
             faseUpload.value = "Actualizando datos del usuario...";
             const progressPercent = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total!

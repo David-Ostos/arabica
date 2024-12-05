@@ -27,7 +27,6 @@ const useLotes = useLotesStore()
 const useProductor = useProductorStore()
 
 const lotes = useLotes.lotes.filter((lote: any) => useProductor.perfilProductor.lotes?.some(idLote => idLote._id === lote._id))
-console.log(lotes);
 </script>
 
 <style scoped >

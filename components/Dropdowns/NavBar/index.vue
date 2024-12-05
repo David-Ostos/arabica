@@ -10,7 +10,6 @@ const items = [
     icon: 'i-heroicons-pencil-square-20-solid',
     shortcuts: ['E'],
     click: () => {
-      console.log('Edit')
     }
   }, {
     label: 'Duplicate',

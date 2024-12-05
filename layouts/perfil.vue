@@ -1,19 +1,21 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useGlobalStore } from "~/stores/global";
+import { Bars3Icon } from "@heroicons/vue/24/outline";
+import imgLogoLitgh from "/img/logo_ligth_new.png";
 
 import imgLoginLitgh from "~/public/img/logo_ligth_new.png";
 import BotonSecondary from "~/components/Botones/BotonSecondary.vue";
-import BotonPrimary from "~/components/Botones/BotonPrimary.vue";
 import Cart from "~/components/Cart/Cart.vue";
 import { useCartStore } from "~/stores/cart";
+
+const {isScreenSmall} = useGlobalComposable()
 
 const useGlobal = useGlobalStore();
 const useUser = useUserStore();
 const useCart = useCartStore();
 
 //problema logged en false
-/* console.log(useUser); */
 
 const typeUser = useUser.dataUser.tipoUser;
 const showCart = ref(false);
@@ -27,6 +29,10 @@ const activeCart = () => {
   //activar modal cart
   showCart.value = !showCart.value;
 };
+
+const closeSlide = (data: boolean) => {
+  mobileMenuOpen.value = data
+}
 
 const items = [
   {
@@ -105,9 +111,9 @@ function handleScroll() {
             </NuxtLink>
           </div>
 
-          <SearchComprador />
+          <SearchComprador v-if="!isScreenSmall" />
 
-          <ul class="flex gap-4">
+          <ul v-if="!isScreenSmall" class="flex gap-4">
             <li v-if="!loggedTem">
               <BotonSecondary link="/auth/login" contenido="Iniciar Sesión" />
             </li>
@@ -139,6 +145,18 @@ function handleScroll() {
             </li>
           </ul>
 
+          <div v-else class=" flex gap-4 items-center">
+            <UChip :text="useCart.cart.length" size="2xl">
+                <div class="p-2 rounded-lg  bg-primary flex justify-center items-center cursor-pointer" @click="activeCart">
+                  <UIcon class="text-white text-xl font-bold" name="i-material-symbols-shopping-cart" dynamic />
+                </div>
+              </UChip>
+            <button  type="button" class="p-1 border rounded-md inline-flex items-center justify-center"
+                  @click="mobileMenuOpen = true">
+                  <span class="sr-only">Abrir menu</span>
+                  <Bars3Icon class="h-6 w-6" aria-hidden="true" />
+                </button>
+          </div>
         </div>
       </header>
     </div>
@@ -149,6 +167,24 @@ function handleScroll() {
           <slot  />
     <ProductorFooter />
   </div>
+
+  <USlideover side="left" v-model="mobileMenuOpen" :ui="{ width: 'w-[80%] max-w-[80%]' }">
+    <UCard class="flex flex-col flex-1"
+      :ui="{ backgound: 'dark:bg-white', body: { base: 'flex-1' }, ring: '', divide: '' }">
+      <template #header>
+        <div class="flex items-center justify-between">
+          <img class="h-14 w-auto" :src="imgLogoLitgh" alt="" />
+          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+            @click="mobileMenuOpen = false" />
+        </div>
+      </template>
+
+      <LazyMobileNavigationVerticalNavigation @close="closeSlide" />
+      
+      
+    </UCard>
+  </USlideover>
+
 </template>
 
 <style scoped lang="scss">

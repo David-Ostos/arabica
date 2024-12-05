@@ -22,12 +22,12 @@
         @click="isActiveCodePhone = !isActiveCodePhone"
       ></div>
 
-      <div class="sm:grid m-4 sm:m-0 sm:grid-cols-2 md:mx-8 gap-4">
+      <div class="sm:grid flex flex-col m-4 sm:m-0 sm:grid-cols-2 md:mx-8 gap-4">
         <UFormGroup
           label="¿Cómo se llama tu negocio?"
           size="xl"
           name="nombre"
-          class="col-span-1 w-full"
+          class="col-span-1 "
           required
         >
           <UInput
@@ -122,7 +122,7 @@
         </UFormGroup>
 
         <UFormGroup
-          label="R.U.C"
+          label="R.U.C / D.N.I"
           size="xl"
           name="ruc"
           class="col-span-1"
@@ -153,10 +153,10 @@
           >
         </UFormGroup>
 
-        <div class="col-span-2 my-4" name="direccion">
-          <h1 class="mb-2 font-medium text-gray-700 mx-4">Dirección:</h1>
+        <div class="col-span-2 my-4 " name="direccion">
+          <h1 class="hidden sm:block mb-2 font-medium text-gray-700 mx-4">Dirección:</h1>
           <div
-            class="col-span-2 gap-4 grid grid-cols-3 shadow border bg-gray-100 p-8 rounded-xl"
+            class="col-span-2 gap-4 grid grid-cols-3 sm:shadow sm:border sm:bg-gray-100 sm:p-8 rounded-xl"
           >
             <UFormGroup
               label="Dirección del negocio"
@@ -184,7 +184,7 @@
               />
             </UFormGroup>
 
-            <div class="col-span-1 relative">
+            <div class="hidden sm:block col-span-1 relative">
               <div
                 class="bg-white shadow-inner w-10 h-10 rounded-full border-2 absolute bottom-0 left-0"
               ></div>
@@ -216,7 +216,6 @@
         </div>
 
         <UFormGroup
-          required
           size="xl"
           label="Redes"
           name="reder"
@@ -226,10 +225,10 @@
             help: 'text-sm ',
           }"
         >
-          <div class="sm:grid grid-cols-3 gap-4">
+          <div class="flex flex-col sm:grid grid-cols-3 gap-4">
             <div v-for="item in state.redes" class="col-span-1">
               <UFormGroup
-                :label="item.name"
+                :label="item.tipoRed"
                 :ui="{
                   label: {base:'capitalize'}
                 }"
@@ -278,7 +277,6 @@
               <div
                 @click="
                   isActiveCodePhone = !isActiveCodePhone;
-                  console.log(isActiveCodePhone);
                 "
                 class="grid grid-cols-3 gap-1 justify-center items-center w-full h-full border rounded-r-none rounded-md border-[#d1d5db] shadow cursor-pointer"
               >
@@ -484,21 +482,21 @@ const state: PerfilComprador = reactive({
   },
   loteslikes: [],
   redes: [
-    {
-      name:"perfil de facebook",
+  {
+      tipoRed:"facebook",
       linkbase: "facebook.com/",
       linkUsuario: "",
       icon: "i-mdi-facebook",
     },
     {
-      name:"perfil de instagram",
+      tipoRed:"instagram",
       linkbase: "instagram.com/",
       linkUsuario: "",
       icon: "i-mdi-instagram",
     },
     {
-      name:"URL de pagina ",
-      linkbase: "web",
+      tipoRed:"web",
+      linkbase: "",
       linkUsuario: "",
       icon: "i-mdi-web",
     },
@@ -532,7 +530,6 @@ const validations = (stat: any): FormError[] => {
   return errors;
 };
 
-console.log(useUser.dataUser);
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   load.value = true;
@@ -644,7 +641,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         );
 
         const resUpdate = await update.json();
-        console.log(resUpdate);
 
         const dataUserSaved: localStoreDataUser = await JSON.parse(
           localStorage.getItem("dataUser") ?? "{}"
@@ -666,7 +662,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 }
 
 function agregarGuiones(cadena: any) {
-  console.log(cadena.data);
   return cadena.data.replace(/(\d{3})/g, "$1-");
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <ModalsNotificacion v-if="useModals.openModalNotificacion" @close="closeModal"
     titulo="Registro del usuario incompleto" :contenido-one="useModals.textoModalNotidicaciones" contenido-two=""
-    icon="info" texto-boton="Terminar el registro" :to="`/dashboard/${useUser.dataUser.tipoUser}`" />
+    icon="info" texto-boton="Terminar el registro" :onClick="notificacionRegistroIncompleto" :to="`/dashboard/${useUser.dataUser.tipoUser}`" />
 
 
   <div :class="[!scrolled ? 'bg-white !text-dar md:bg-transparent md:!text-white' : 'bg-white border-b text-dar  shadow-sm', {
@@ -223,4 +223,11 @@ function handleScroll() {
 }
 
 const mobileMenuOpen = ref(false);
+
+const notificacionRegistroIncompleto = () =>{
+  useModals.openModalNotificacion = false
+  useModal.showModalCompradorPerfilCompleto = true
+  mobileMenuOpen.value = false
+}
+
 </script>

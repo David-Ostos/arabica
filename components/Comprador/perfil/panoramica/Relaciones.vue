@@ -22,9 +22,6 @@
     } 
   })
 
-  onMounted(()=>{
-    console.log(props.relaciones);
-  })
 
 </script>
 

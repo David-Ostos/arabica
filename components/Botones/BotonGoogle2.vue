@@ -53,7 +53,6 @@ import {
 // handle success event
 const handleLoginSuccess = (response: CredentialResponse) => {
   const { credential } = response;
-  console.log("Access Token", credential);
 };
 
 // handle an error event

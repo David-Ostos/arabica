@@ -115,7 +115,6 @@
                             :name="item.icon!"
                             dynamic
                             class="text-2xl"
-                            @click="console.log(item.tipoRed)"
                           />
                         </div>
                       </div>
@@ -150,7 +149,6 @@
                   <div
                     @click="
                       isActiveCodePhone = !isActiveCodePhone;
-                      console.log(isActiveCodePhone);
                     "
                     class="grid grid-cols-3 gap-1 justify-center items-center w-full h-full border rounded-r-none rounded-md border-[#d1d5db] shadow cursor-pointer"
                   >
@@ -372,7 +370,6 @@
                             :name="item.icon!"
                             dynamic
                             class="text-2xl"
-                            @click="console.log(state.redes)"
                           />
                         </div>
                       </div>
@@ -407,7 +404,6 @@
                   <div
                     @click="
                       isActiveCodePhone = !isActiveCodePhone;
-                      console.log(isActiveCodePhone);
                     "
                     class="grid grid-cols-3 gap-1 justify-center items-center w-full h-full border rounded-r-none rounded-md border-[#d1d5db] shadow cursor-pointer"
                   >
@@ -702,8 +698,6 @@ const onSubmitDatos = async (event: FormSubmitEvent<any>) => {
       },
       data: {data: state}
     }).then(res =>{
-      console.log(res.data)
-
       useProductor.perfilProductor.nombre = state.nombre
       useProductor.perfilProductor.numeroTelefonico = state.numeroTelefonico
       useProductor.perfilProductor.redes = state.redes

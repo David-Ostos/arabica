@@ -1,5 +1,4 @@
 import axios from "axios";
-import type { MyAxiosRequestConfig } from "~/interfaces/axios";
 
 export interface TopLevel {
   name: string;
@@ -10,11 +9,15 @@ export interface TopLevel {
 
 
 export const useGlobalStore = defineStore("global",() => {
-  const route = useRoute()
   const heightNavProductor = ref();
   const heightNavLote = ref();
   const heightNavPerfil = ref();
   const heightNavComprador = ref();
+
+  const heightFooterProductor = ref();
+  const heightFooterLote = ref()
+
+
   const isActiveSelectCodePhone = ref(false)
 
   const perfilComercial = ref()
@@ -1172,7 +1175,6 @@ export const useGlobalStore = defineStore("global",() => {
 
 
   const getPerfil =  async (id: string)=>{try {
-    console.log(id);
     await axios.get(`${import.meta.env.VITE_URL_API}/api/content/item/productores/${id}?fields={"_state": false,"_modified": false,"_mby": false,"_created": false,"_cby": false,"verificacion": false,}&populate=1`,{
       headers: {
         "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
@@ -1181,7 +1183,6 @@ export const useGlobalStore = defineStore("global",() => {
     })
     .then( async (res) =>{
       perfilComercial.value = res.data
-      console.log(perfilComercial.value);
     })
 
   } catch (error) {
@@ -1263,6 +1264,8 @@ export const useGlobalStore = defineStore("global",() => {
     heightNavLote ,
     heightNavPerfil ,
     heightNavComprador ,
+    heightFooterProductor,
+    heightFooterLote,
     isActiveSelectCodePhone,
     codeCountry,
     perfilComercial,

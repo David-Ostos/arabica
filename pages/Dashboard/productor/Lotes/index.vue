@@ -422,17 +422,12 @@ async function deleteLote(id: string, nombre: string) {
             useProductor.perfilProductor.lotes!.findIndex(
               (lote) => lote._id === id
             );
-
-          console.log(useProductor.perfilProductor.lotes);
-
           if (indicePerfilProductor > -1) {
             useProductor.perfilProductor.lotes!.splice(
               indicePerfilProductor,
               1
             );
           }
-          console.log(useProductor.perfilProductor.lotes);
-
           const data = {
             _id: useProductor.perfilProductor._id,
             lotes: useProductor.perfilProductor.lotes,
@@ -447,7 +442,7 @@ async function deleteLote(id: string, nombre: string) {
             },
             data: {data},
           } as MyAxiosRequestConfig)
-            .then((res) => console.log(res))
+            .then((res) => {})
             .catch((err) => {
               console.log(err)
             });
@@ -530,9 +525,6 @@ async function ocultarLote(id: string, ocultar: boolean, nombre: string) {
     .then((res) => {
       lotesVisibles.value = [];
       lotesOcultos.value = [];
-      console.log(lotesVisibles.value);
-      console.log(lotesOcultos.value);
-      console.log(res.data);
       const indiceLote = useLotes.lotes.findIndex((lote) => lote._id === id);
       const indiceLoteProductor = lotes.findIndex((lote) => lote._id === id);
 

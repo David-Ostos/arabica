@@ -49,7 +49,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits, defineProps } from "vue";
 import { XIcon, PlusIcon } from "lucide-vue-next";
 
 interface Imagen {
@@ -137,7 +136,6 @@ const alSoltar = (evento: DragEvent, indice: number): void => {
 
 const emitirActualizacion = (): void => {
   emit("update:imagenes", imagenes.value);
-  console.log(imagenes.value);
 };
 
 const enviarImagenesAlBackend = async () => {
@@ -154,7 +152,6 @@ const enviarImagenesAlBackend = async () => {
     });
     
     if (response.ok) {
-      console.log('Imágenes enviadas con éxito');
       // Aquí puedes manejar la respuesta exitosa
     } else {
       console.error('Error al enviar las imágenes');
