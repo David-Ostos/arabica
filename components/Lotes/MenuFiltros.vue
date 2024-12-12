@@ -1,92 +1,125 @@
 <template>
-
-  <!-- Modal paises -->
   <div>
-    <UModal :ui="{ container: 'sm:items-start', width: ' sm:max-w-[800px]' }" v-model="showPaises">
-      <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-        <template #header>
-          <div class="flex items-center justify-between">
-            <h3 class=" text-base font-semibold leading-6 text-thirdary dark:text-thirdary">
-              Seleccione su país
-            </h3>
-            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
-              @click="showPaises = false" />
-          </div>
-        </template>
+    <!-- Modal paises -->
+    <div>
+      <UModal :ui="{ container: 'items-start sm:items-start', width: ' sm:max-w-[800px]' }" v-model="showPaises">
+        <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+          <template #header>
+            <div class="flex items-center justify-between">
+              <h3 class=" text-base font-semibold leading-6 text-thirdary dark:text-thirdary">
+                Seleccione su país
+              </h3>
+              <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+                @click="showPaises = false" />
+            </div>
+          </template>
 
-        <div>
-          <UButton @click="selectTodosLosPaises" size="xl" :color="paisesActivo ? 'white' : 'primary'" block>
-            Todos los paises
-          </UButton>
-
-          <div class="mt-4 grid grid-cols-6 gap-4 ">
-
-            <UButton v-for="pais in filtros[0].value" class="" size="xl" :color="pais.isActive ? 'primary' : 'white'"
-              :ui="{
-                base: 'flex justify-center items-center '
-              }" @click="paisSeleccionado(pais.pais)">
-              <template #leading>
-                <UIcon class="text-xl" :name="pais.icon" dynamic />
-              </template>
-
-              <h3 class="">{{ pais.pais }}</h3>
+          <div>
+            <UButton @click="selectTodosLosPaises" size="xl" :color="paisesActivo ? 'white' : 'primary'" block>
+              Todos los paises
             </UButton>
 
+            <div class="mt-4 grid grid-cols-3 md:grid-cols-6 gap-4 ">
+
+              <UButton v-for="pais in filtros[0].value" class="" size="xl" :color="pais.isActive ? 'primary' : 'white'"
+                :ui="{
+                  base: 'flex justify-center items-center '
+                }" @click="paisSeleccionado(pais.pais)">
+                <template #leading>
+                  <UIcon class="text-xl" :name="pais.icon" dynamic />
+                </template>
+
+                <h3 class="">{{ pais.pais }}</h3>
+              </UButton>
+
+
+            </div>
 
           </div>
 
-        </div>
-
-      </UCard>
-    </UModal>
-  </div>
-  <!-- /Modal paises -->
-
-  <!-- Modal origenes -->
-  <div>
-    <UModal :ui="{ container: 'sm:items-start', width: ' sm:max-w-[800px]' }" v-model="showOrigins">
-      <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-        <template #header>
-          <div class="flex items-center justify-between">
-            <h3 class=" text-base font-semibold leading-6 text-thirdary dark:text-thirdary">
-              Seleccione su país
-            </h3>
-            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
-              @click="showOrigins = false" />
-          </div>
-        </template>
-
-        <div>
-          <UButton @click="selectTodosLosOrigenes" size="xl" :color="origenesActivo ? 'white' : 'primary'" block>
-            Todos los origenes
-          </UButton>
-
-          <div class="mt-4 grid grid-cols-6 gap-4 ">
-
-            <UButton v-for="origen in filtros[1].value as Origen[]" block class="col-span-1 " size="xl"
-              :color="origen.isActive ? 'primary' : 'white'" :ui="{
-                padding: { xl: 'px-8 py-2.5' }
-              }" @click="origenSeleccionado(origen.origen)">
-              <h3 class="capitalize">{{ origen.origen }}</h3>
-            </UButton>
-          </div>
-
-        </div>
-
-      </UCard>
-    </UModal>
-  </div>
-  <!-- /Modal origenes -->
-
-
-  <div class="">
-    <div class="py-6 mx-4 border-y">
-      <UCheckbox v-model="muestras" name="muestras" label="Muestras disponibles" @click="filtroMuestra" />
+        </UCard>
+      </UModal>
     </div>
+    <!-- /Modal paises -->
 
-    <div class="mb-4 mx-4 text-thirdary">
-      <div v-for="item in filtros as Filtros[]">
-        <div class="py-6 border-b overflow-auto">
+    <!-- Modal origenes -->
+    <div class="">
+      <UModal :ui="{ container: 'items-start sm:items-start', width: ' sm:max-w-[800px]' }" v-model="showOrigins">
+        <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+          <template #header>
+            <div class="flex items-center justify-between">
+              <h3 class=" text-base font-semibold leading-6 text-thirdary dark:text-thirdary">
+                Seleccione su país
+              </h3>
+              <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+                @click="showOrigins = false" />
+            </div>
+          </template>
+
+          <div>
+            <UButton @click="selectTodosLosOrigenes" size="xl" :color="origenesActivo ? 'white' : 'primary'" block>
+              Todos los origenes
+            </UButton>
+
+            <div class="mt-4 grid grid-cols-3 md:grid-cols-6 gap-4 ">
+
+              <UButton v-for="origen in filtros[1].value as Origen[]" block class="col-span-1 " size="xl"
+                :color="origen.isActive ? 'primary' : 'white'" :ui="{
+                  padding: { xl: 'px-8 py-2.5' }
+                }" @click="origenSeleccionado(origen.origen)">
+                <h3 class="capitalize">{{ origen.origen }}</h3>
+              </UButton>
+            </div>
+
+          </div>
+
+        </UCard>
+      </UModal>
+    </div>
+    <!-- /Modal origenes -->
+  </div>
+
+
+  <div :style="isScreenSmall ? 'height: calc(100vh - 120px)' : ''"
+    :class="[isScreenSmall ? 'scrollbar-hide overflow-auto' : '']">
+
+    <div class=" mx-4 text-thirdary">
+
+      <div class="py-6 border-t" v-if="algunFiltroActivo">
+        <div>
+
+          <div v-for="item, key in filtrosActivos">
+            <!-- <UButton  @click="console.log(filtrosActivos[key])">{{ key }}</UButton> -->
+            <div v-if="item.isActive" class="text-sm border border-primary bg-primary-100 text-primary-600 rounded-full w-fit px-2 py-[2px] capitalize overflow-hidden mb-2 max-w-full flex items-center justify-between gap-2 relative ">
+                <UTooltip 
+                  :text="Array.isArray(item.value) ? item.value.join(', ') : item.value" 
+                  :popper="{ placement: 'bottom-start',strategy : 'fixed', adaptive:true }"                  
+                  :ui="{
+                    container: 'z-[500]',
+                    base: 'whitespace-normal h-full ',
+                    width: 'max-w-48'
+                  }"
+                  >
+                  <div class="line-clamp-1">
+                    <p>{{ item.name }}: {{ Array.isArray(item.value) ? item.value.join(', ') : item.value }}</p> 
+                  </div>
+                </UTooltip>
+                <div  class="w-4 h-4">
+                  <UIcon class="text-base cursor-pointer" name="i-heroicons-x-mark-16-solid" @click=" resetFilter(key, item.value as string[]) /* item.isActive = false */ " />
+                </div>
+              
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class=" py-6 border-y">
+        <UCheckbox v-model="muestras" name="muestras" label="Muestras disponibles" @click="filtroMuestra" />
+      </div>
+
+      <div v-for="item in filtros">
+        <div class="py-6 border-b overflow-auto truncate">
 
           <div class="flex justify-between items-center cursor-pointer" @click="item.isOpen = !item.isOpen">
             <h2 class="z-50 font-medium text-gray-700 text-xs dark:text-gray-200 uppercase">
@@ -129,17 +162,20 @@
 
             <div class=" mt-4 mx-4 ">
               <div v-for="select in item.value">
-                <UCheckbox  @click="filtrosSelect(item.label, select.tipo)" v-model="select.isActive" :name="select.tipo" :label="select.tipo" class="capitalize" />
+                <UCheckbox @click="selectsSeleccionado(item.label, select.tipo) /* filtrosSelect(item.label, select.tipo, select.isActive) */" v-model="select.isActive"
+                  :name="select.tipo" :label="select.tipo" class="capitalize" />
               </div>
-              
-            </div>     
+
+            </div>
 
           </div>
-        
+
           <div v-if="item.tipe === 'range'" class="transition-all duration-300 ease-in-out overflow-hidden"
             :class="item.isOpen ? 'h-full opacity-100' : ' h-0 opacity-0'">
-            <div class="py-4">
-              <LotesRange :max="item.max" :min="item.min" :step="item.step" :value="item.value" />
+            <div class="py-4 mx-4">
+              <!-- <LotesRange :max="item.max" :min="item.min" :step="item.step" :value="item.value" /> -->
+              <LotesRangeSlider :name="item.label" v-model="item.value" :min="item.min!" :max="item.max!"
+                :step="item.step!" :formatValue="item.formatValue" @update:modelValue="fitrarRango" />
             </div>
           </div>
 
@@ -147,26 +183,32 @@
 
 
       </div>
+
     </div>
+
   </div>
 </template>
 
 <script lang="ts" setup>
-import type { Lotes } from "~/interfaces/Lotes";
-/* 
 interface Props {
-  lotes: Lotes[];
-  isOpen: boolean;
+  filtroProductores: string[],
+  filtroVariedades: string[],
+  filtroProcesos: string[],
+  filtroPerfil: string[],
+  filtroCertificaciones: string[],
 }
 
-const props = defineProps<{ items: Props }>(); */
 const emits = defineEmits<{
   (e: "close", value: boolean): void;
-  (e: "filtrosSelect", tipo: string , value: string): void;
+  (e: "filtrosSelect", tipo: string, value: string[]): void;
   (e: "filtroMuestra", value: boolean): void;
   (e: "filtroPais", pais: string[]): void;
   (e: "filtroOrigen", origen: string[]): void;
+  (e: "filtrosRange", tipo: string, value: [number, number] | []): void;
+  
 }>();
+
+const { isScreenSmall } = useGlobalComposable()
 
 interface Filtros {
   label: string,
@@ -191,19 +233,38 @@ interface Select {
   tipo: string,
   isActive: boolean
 }
+interface Range{ 
+  label: string; 
+  min: number; 
+  max: number; 
+  value: [number, number] | []; 
+  tipe: string; 
+  formatValue: (valor: number) => string; 
+  step: number; 
+  isOpen: boolean;
+}
+
+
 
 /* muestras */
 const muestras = ref(false)
-const filtroMuestra = () =>{
-emits("filtroMuestra", muestras.value)
+watch(muestras, (nuevoValor) => {
+  filtrosActivos.muestra.isActive = nuevoValor
+  emits("filtroMuestra", nuevoValor)
+})
+const filtroMuestra = () => {
 }
 /* /muestras */
 
+/* paises  */
 const paisesActivo = ref(false);
-const origenesActivo = ref(false);
-
 const filtroPais = ref<string[]>([])
-const filtroOrigen = ref<string[]>([])
+const showPaises = ref(false)
+
+
+watch(paisesActivo, (nuevoValor) => {
+  filtrosActivos.paises.isActive = nuevoValor
+})
 
 const paisSeleccionado = (pais: string) => {
   const index = filtroPais.value.indexOf(pais)
@@ -229,6 +290,16 @@ const selectTodosLosPaises = () => {
   emits("filtroPais", filtroPais.value)
 
 }
+/* /paises  */
+
+/* origenes */
+const showOrigins = ref(false)
+const origenesActivo = ref(false);
+const filtroOrigen = ref<string[]>([])
+
+watch(origenesActivo, (nuevoValor) => {
+  filtrosActivos.origenes.isActive = nuevoValor
+})
 
 const origenSeleccionado = (origen: string) => {
   const index = filtroOrigen.value.indexOf(origen)
@@ -253,235 +324,394 @@ const selectTodosLosOrigenes = () => {
   origenesActivo.value = false
   emits("filtroOrigen", filtroOrigen.value)
 }
+/* /origenes */
 
-const closeMenu = () => {
-  emits("close", false);
-};
+/* select */
+  const filtroProductores = ref([])
+  const filtroVariedades = ref([])
+  const filtroProcesos = ref([])
+  const filtroPerfil = ref([])
+  const filtroCertificaciones = ref([])
 
+const selectsSeleccionado = (filterKey: string, value:string) => {
+  let filter;
+  if(filterKey === 'Clasificación de Lotes'){
+    filter = filtrosActivos['clasificacion' as keyof typeof filtrosActivos]
+  }else{
+    filter = filtrosActivos[filterKey.toLowerCase() as keyof typeof filtrosActivos]
+  }
+  const filterIndex = filtros.findIndex(f => f.label === filterKey);
+  console.log({filterKey, value})
+  let index;
+  console.log({filter})
+  if(Array.isArray(filter.value) && filter.value.every(item => typeof item === 'string')){
+    index = (filter.value as string[]).indexOf(value)
+    let targetArray: string[] = [] as string[];
+    
+    switch (filterKey) {
+        case 'Certificaciones' :
+          targetArray = filtrosActivos.certificaciones.value ;
+          break;
+        case 'Perfil':
+        targetArray = filtrosActivos.perfil.value;
+        break;
+        case 'Procesos':
+          targetArray = filtrosActivos.procesos.value;
+          break;
+        case 'Variedades':
+          targetArray = filtrosActivos.variedades.value;
+          break;
+        case 'Productores':
+          targetArray = filtrosActivos.productores.value;
+          break;
+        case 'Clasificación de Lotes':
+          targetArray = filtrosActivos.clasificacion.value;
+          break;
+        default:
+          console.error('Tipo de filtro no reconocido:', value);
+          return;
+        }
+    if (index > -1) {
+    // Si el origen ya está seleccionado, lo quitamos
+    targetArray.splice(index, 1)
+    filtros[filterIndex].value.find((item: Select) => item.tipo === value)!.isActive = false
+  } else {
+    // Si el origen no está seleccionado, lo añadimos
+    targetArray.push(value)
+    filtros[filterIndex].value.find((item: Select) => item.tipo === value)!.isActive = true
+  }
+  console.log({targetArray})
+  filter.isActive = filter.value.length > 0;
 
-const showPaises = ref(false)
-const showOrigins = ref(false)
-
-const productores = ref([])
-const variedades = ref([])
-const procesos = ref([])
-const perfil = ref([])
-const certificaciones = ref([])
-
-const filtrosSelect = (tipo: string, value: string) => {
-emits("filtrosSelect", tipo, value)
+  emits("filtrosSelect", filterKey , targetArray )
+  
+}
 }
 
-  const prueba = () => { };
 
-  // Estado para los rangos
-  const precioRango = ref<[number, number]>([0, 1000]);
-  const puntuacionRango = ref<[number, number]>([0, 5]);
+// const filtrosSelect = (tipo: string, value: string, isActive: boolean) => {
+//   emits("filtrosSelect", tipo, value, false)
+// }
 
-  // Funciones de formato
-  const formatPrecio = (valor: number) => `$${valor}`;
-  const formatPuntuacion = (valor: number) => valor.toFixed(1);
+const filtros: Filtros[] = reactive([
+  {label: "Paises",
+    value: [
+      {
+        pais: 'perú',
+        icon: 'i-openmoji-flag-peru',
+        isActive: false
+      }
+    ],
+    tipe: "pais",
+  }, {label: "Orígenes",
+    value: [
+      {
+        origen: "piura",
+        isActive: false
+      }, {
+        origen: "amazonas",
+        isActive: false
+      }, {
+        origen: "cajamarca",
+        isActive: false
+      }, {
+        origen: "san",
+        isActive: false
+      }, {
+        origen: "martin",
+        isActive: false
+      }, {
+        origen: "huanuco",
+        isActive: false
+      }, {
+        origen: "pasco",
+        isActive: false
+      }, {
+        origen: "junin",
+        isActive: false
+      }, {
+        origen: "ayacucho",
+        isActive: false
+      }, {
+        origen: "cusco",
+        isActive: false
+      }, {
+        origen: "puno",
+        isActive: false
+      },],
+    tipe: "origenes",
+  }, {label: "Productores",
+    value: [
+      {
+        tipo: "independiente",
+        isActive: false
+      },
+      {
+        tipo: "asociacion",
+        isActive: false
+      },
+      {
+        tipo: "cooperativa",
+        isActive: false
+      }
+    ],
+    tipe: "select",
+  }, {label: "Variedades",
+    value: [
+      {
+        tipo: "geisha",
+        isActive: false
+      },
+      {
+        tipo: "típica",
+        isActive: false
+      },
+      {
+        tipo: "bourbon",
+        isActive: false
+      },
+      {
+        tipo: "maragogipe",
+        isActive: false
+      },
+      {
+        tipo: "pacamara",
+        isActive: false
+      },
+      {
+        tipo: "caturra",
+        isActive: false
+      },
+      {
+        tipo: "catuai",
+        isActive: false
+      },
+      {
+        tipo: "tabi",
+        isActive: false
+      },
+      {
+        tipo: "mundo novo",
+        isActive: false
+      },
+      {
+        tipo: "costa rica",
+        isActive: false
+      },
+      {
+        tipo: "castilla",
+        isActive: false
+      },
+      {
+        tipo: "catimor",
+        isActive: false
+      },
+      {
+        tipo: "otros",
+        isActive: false
+      },
+    ],
+    tipe: "select",
+  }, {label: "Procesos",
+    value: [
+      { tipo: "sueves lavado", isActive: false },
+      { tipo: "lavado anaeróbico", isActive: false },
+      { tipo: "honey", isActive: false },
+      { tipo: "fermentación prolongada", isActive: false },
+      { tipo: "natural", isActive: false },
+      { tipo: "natural anaeróbico", isActive: false },
+      { tipo: "experimental", isActive: false },
+    ],
+    tipe: "select",
+  }, {label: "Perfil",
+    value: [
+      { tipo: "floral", isActive: false },
+      { tipo: "frutal", isActive: false },
+      { tipo: "vegetal", isActive: false },
+      { tipo: "cítrico", isActive: false },
+      { tipo: "dulce", isActive: false },
+      { tipo: "azucares caramelizados", isActive: false },
+      { tipo: "frutos secos", isActive: false },
+      { tipo: "nuez / chocolate", isActive: false },
+      { tipo: "taza limpia", isActive: false },
+    ],
+    tipe: "select",
+  }, {label: "Certificaciones",
+    value: [
+      { tipo: "organic", isActive: false },
+      { tipo: "fair trade", isActive: false },
+      { tipo: "rain forest", isActive: false },
+      { tipo: "imocert", isActive: false },
+      { tipo: "jas", isActive: false }
+    ],
+    tipe: "select",
+  },{label: "Clasificación de Lotes",
+    value: [
+      { tipo: "Lote", isActive: false },
+      { tipo: "Micro lote", isActive: false },
+      { tipo: "Nano lote", isActive: false },
+    ],
+    tipe: "select",
+  },{label: "puntaje",
+    min: 80,
+    max: 90,
+    value: [80, 90],
+    tipe: "range",
+    formatValue: (valor: number) => valor.toFixed(2),
+    step: 0.25,
+    isOpen: false,
+  }, {label: "precio",
+    min: 0,
+    max: 20,
+    value: [0, 20],
+    tipe: "range",
+    formatValue: (valor: number) => `$${valor}`,
+    step: 1,
+    isOpen: false,
+  },
+]);
 
-  const filtros: Filtros[] = reactive([
-    {
-      label: "Paises",
-      value: [
-        {
-          pais: 'perú',
-          icon: 'i-openmoji-flag-peru',
-          isActive: false
-        }
-      ],
-      tipe: "pais",
-    },
-    {
-      label: "Orígenes",
-      value: [
-        {
-          origen: "piura",
-          isActive: false
-        }, {
-          origen: "amazonas",
-          isActive: false
-        }, {
-          origen: "cajamarca",
-          isActive: false
-        }, {
-          origen: "san",
-          isActive: false
-        }, {
-          origen: "martin",
-          isActive: false
-        }, {
-          origen: "huanuco",
-          isActive: false
-        }, {
-          origen: "pasco",
-          isActive: false
-        }, {
-          origen: "junin",
-          isActive: false
-        }, {
-          origen: "ayacucho",
-          isActive: false
-        }, {
-          origen: "cusco",
-          isActive: false
-        }, {
-          origen: "puno",
-          isActive: false
-        },],
-      tipe: "origenes",
-    },
-    {
-      label: "Productores",
-      value: [
-        {
-          tipo: "independiente",
-          isActive: false
-        },
-        {
-          tipo: "asociacion",
-          isActive: false
-        },
-        {
-          tipo: "cooperativa",
-          isActive: false
-        }
-      ],
-      tipe: "select",
-    },
-    {
-      label: "Variedades",
-      value: [
-        {
-          tipo: "geisha",
-          isActive: false
-        },
-        {
-          tipo: "típica",
-          isActive: false
-        },
-        {
-          tipo: "bourbon",
-          isActive: false
-        },
-        {
-          tipo: "maragogipe",
-          isActive: false
-        },
-        {
-          tipo: "pacamara",
-          isActive: false
-        },
-        {
-          tipo: "caturra",
-          isActive: false
-        },
-        {
-          tipo: "catuai",
-          isActive: false
-        },
-        {
-          tipo: "tabi",
-          isActive: false
-        },
-        {
-          tipo: "mundo novo",
-          isActive: false
-        },
-        {
-          tipo: "costa rica",
-          isActive: false
-        },
-        {
-          tipo: "castilla",
-          isActive: false
-        },
-        {
-          tipo: "catimor",
-          isActive: false
-        },
-        {
-          tipo: "otros",
-          isActive: false
-        },
-      ],
-      tipe: "select",
-    },
-    {
-      label: "Procesos",
-      value: [
-        { tipo: "sueves lavado", isActive: false },
-        { tipo: "lavado anaeróbico", isActive: false },
-        { tipo: "honey", isActive: false },
-        { tipo: "fermentación prolongada", isActive: false },
-        { tipo: "natural", isActive: false },
-        { tipo: "natural anaeróbico", isActive: false },
-        { tipo: "experimental", isActive: false },
-      ],
-      tipe: "select",
-    },
-    {
-      label: "Perfil",
-      value: [
-        { tipo: "floral", isActive: false },
-        { tipo: "frutal", isActive: false },
-        { tipo: "vegetal", isActive: false },
-        { tipo: "cítrico", isActive: false },
-        { tipo: "dulce", isActive: false },
-        { tipo: "azucares caramelizados", isActive: false },
-        { tipo: "frutos secos", isActive: false },
-        { tipo: "nuez / chocolate", isActive: false },
-        { tipo: "taza limpia", isActive: false },
-      ],
-      tipe: "select",
-    },
-    {
-      label: "Certificaciones",
-      value: [
-        { tipo: "organic", isActive: false },
-        { tipo: "fair trade", isActive: false },
-        { tipo: "rain forest", isActive: false },
-        { tipo: "imocert", isActive: false },
-        { tipo: "jas", isActive: false }
-      ],
-      tipe: "select",
-    },
-    {
-      min: 0,
-      max: 100,
-      label: "puntaje",
-      value: [0, 100],
-      tipe: "range",
-      formatValue: formatPuntuacion,
-      step: 5,
-      isOpen: false,
-    },
-    {
-      min: 0,
-      max: 50,
-      label: "precio",
-      value: [0, 50],
-      tipe: "range",
-      step: 5,
-      formatValue: formatPrecio,
-      isOpen: false,
-    },
-  ]);
+// watch(filtros[8].)
 
-  // Vigilar cambios en los rangos
-  watch([precioRango, puntuacionRango], ([nuevoPrecio, nuevaPuntuacion]) => {
-    /*   if(nuevoPrecio !== precioRango.value){
-      console.log('nuevo precio');
-      console.log('Rango de precio:', nuevoPrecio);
+/* /select */
+
+/* rangos */
+
+const filtroPrecio = ref([] as [number,number] | [])
+const filtroPuntaje = ref([] as [number,number] | [])
+const precioDefault = ref([] as [number, number] | [])
+const puntajeDefault = ref([] as [number, number] | []) 
+
+const fitrarRango = (value: [number, number], valueDefault: [number, number], name: string) => {
+
+  if (JSON.stringify(value) === JSON.stringify(valueDefault)) {
+    if(name === 'precio'){
+      filtrosActivos.precio.isActive = false
+      filtrosActivos.precio.value = []
+      precioDefault.value = valueDefault
+    }else{
+      filtrosActivos.puntaje.isActive = false
+      filtrosActivos.puntaje.value = []
+      puntajeDefault.value = valueDefault
+
+    } 
+  } else {
+    if(name === 'precio'){
+      filtrosActivos.precio.isActive = true
+      filtrosActivos.precio.value = value
+      precioDefault.value = valueDefault
+    }else{
+      filtrosActivos.puntaje.isActive = true
+      filtrosActivos.puntaje.value = value
+      puntajeDefault.value = valueDefault
     }
-    if(nuevaPuntuacion){
-      console.log('nueva puntuación');
-      console.log('Rango de puntuación:', nuevaPuntuacion);
-    } */
-    // Aquí puedes implementar tu lógica de filtrado
-  });
+  }
+  emits('filtrosRange', name, value)
+}
+/* /rangos */
+
+const filtrosActivos = reactive({
+  muestra: { isActive: false, value: 'si' , name: 'muestras disponibles' },
+  paises: { isActive: false, value: [] as string[] , name: 'paises' },
+  origenes: { isActive: false, value: [] as string[], name: 'origenes' },
+  productores: { isActive: false, value: [] as string[], name: 'productores' },
+  variedades: { isActive: false, value: [] as string[], name: 'variedades' },
+  procesos: { isActive: false, value: [] as string[], name: 'procesos' },
+  perfil: { isActive: false, value: [] as string[], name: 'perfil' },
+  certificaciones: { isActive: false, value: [] as string[], name: 'certificaciones' },
+  clasificacion: { isActive: false, value: [] as string[], name: 'clasificacion' },
+  precio: { isActive: false, value: [] as [number, number] | [], name: 'precio' },
+  puntaje: { isActive: false, value: [] as [number, number] | [], name: 'puntaje' }
+})
+watch(filtrosActivos.muestra , (nuevoValor)=>{
+  if(!nuevoValor.isActive){
+    muestras.value = false
+  }
+})
+
+watch(filtroPais.value, (nuevoValor)=>{
+  filtrosActivos.paises.value = filtroPais.value 
+})
+
+watch(filtrosActivos.paises , (nuevoValor)=>{
+  if(!nuevoValor.isActive){
+    selectTodosLosPaises()
+  }
+})
+
+watch(filtroOrigen.value, (nuevoValor) =>{
+  filtrosActivos.origenes.value = filtroOrigen.value
+})
+
+
+watch(filtrosActivos.origenes , (nuevoValor)=>{
+  if(!nuevoValor.isActive){
+    selectTodosLosOrigenes()
+  }
+})
+
+const algunFiltroActivo = computed(() => {
+  return Object.values(filtrosActivos).some(value => value.isActive);
+});
+
+const resetFilter = (filterKey: string, value: string[]) => {
+  const filter = filtrosActivos[filterKey as keyof typeof filtrosActivos];
+  filter.isActive = false
+  if(filterKey !== 'muestra'){
+    filter.value = Array.isArray(filter.value) ? [] : '';
+  }
+
+  switch (filterKey) {
+      case 'muestra':
+        muestras.value = false;
+        emits("filtroMuestra", false);
+        break;
+      case 'paises':
+        selectTodosLosPaises();
+        break;
+      case 'origenes':
+        selectTodosLosOrigenes();
+        break;
+      case 'productores':
+      case 'variedades':
+      case 'procesos':
+      case 'perfil':
+      case 'certificaciones':
+      case 'clasificacion':
+        resetSelectFilter(filterKey);
+        break;
+      case 'precio':
+      case 'puntaje':
+        resetRangeFilter(filterKey);
+        break;
+    }
+
+}
+
+const resetSelectFilter = (filterKey: string) => {
+  let filterIndex;
+  if(filterKey === 'clasificacion'){
+    filterIndex = filtros.findIndex(f => f.label === 'Clasificación de Lotes');
+  }else{
+    filterIndex = filtros.findIndex(f => f.label.toLowerCase() === filterKey);
+  }
+    if (filterIndex !== -1) {
+      filtros[filterIndex].value.forEach((item: Select) => {
+        if(item.isActive){
+          item.isActive = false;
+        }
+      });
+      emits('filtrosSelect', filterKey, [])
+    }
+  }
+
+const resetRangeFilter = (filterKey: string) =>{
+  const filterIndex = filtros.findIndex(f => f.label.toLowerCase() === filterKey);
+    if (filterIndex !== -1) {
+      filtros[filterIndex].value = [filtros[filterIndex].min, filtros[filterIndex].max];
+    }
+    emits('filtrosRange', filterKey, [])
+}
 </script>
 
 <style></style>

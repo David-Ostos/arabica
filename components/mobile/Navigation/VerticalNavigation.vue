@@ -194,7 +194,7 @@ const linksMobileProductor: LinksMobile[][]= reactive([
     {
       label: "Lotes de Café",
       icon: "i-heroicons-archive-box",
-      to: `/lotes`,
+      to: `/dashboard/productor/lotes`,
     },
   ],
   [

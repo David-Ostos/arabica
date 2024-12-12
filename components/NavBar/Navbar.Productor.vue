@@ -4,9 +4,11 @@
     titulo="Registro del usuario incompleto" :contenido-one="useModals.textoModalNotidicaciones" contenido-two=""
     icon="info" texto-boton="Terminar el registro" :to="`/dashboard/${useUser.dataUser.tipoUser}`" />
 
-  <div ref="navRef" :class="[!scrolled ? 'bg-white !text-dar md:bg-transparent md:!text-white' : 'bg-white border-b text-dar  shadow-sm', {
+    
+
+  <div ref="navRef" :class="[!scrolled  ? 'bg-white !text-dar md:bg-transparent md:!text-white' : 'bg-white border-b text-dar  shadow-sm', {
     ' !text-dar bg-white dark:bg-white rounded-b-xl shadow-md ': scrolled,
-  }, navShow ? 'opacity-100' : 'opacity-0']" class="fixed w-screen top-0 z-50 transition-all duration-300 opacity-0 ">
+  }, navShow  ? 'opacity-100' : 'opacity-0']" class="fixed w-screen top-0 z-50 transition-all duration-300 opacity-0 ">
     <div class=" bg-white dark:bg-white">
       <div class="relative z-50">
         <header
@@ -234,20 +236,24 @@ onUnmounted(() => {
 const lastScrollTop: Ref<number> = ref(0);
 
 function handleScroll() {
-  scrolled.value = window.scrollY > 50;
-
-  var st = window.scrollY || document.documentElement.scrollTop;
-  if (st > lastScrollTop.value) {
-    // El scroll se está moviendo hacia abajo
-
-    navShow.value = false;
-
-  } else {
-    // El scroll se está moviendo hacia arriba
+  if(route.path.includes('/dashboard/productor/lotes')){
     navShow.value = true;
-
+  }else{
+    scrolled.value = window.scrollY > 50;
+  
+    var st = window.scrollY || document.documentElement.scrollTop;
+    if (st > lastScrollTop.value) {
+      // El scroll se está moviendo hacia abajo
+  
+      navShow.value = false;
+  
+    } else {
+      // El scroll se está moviendo hacia arriba
+      navShow.value = true;
+  
+    }
+    lastScrollTop.value = st;
   }
-  lastScrollTop.value = st;
 }
 
 /* const products = [

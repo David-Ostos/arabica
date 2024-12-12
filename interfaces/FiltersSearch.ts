@@ -1,8 +1,13 @@
 export interface FiltersSearch {
-  samplesAvailable: boolean | undefined;
-  origin: [string] | [] | undefined;
-  points: [number, number] | undefined;
-  price: [number, number] | undefined;
-  process: string[] | undefined;
-  certifications: string[] | undefined;
+  muestra: boolean | undefined ;
+  paises:string[] | [] | undefined 
+  origenes: string[] | [] | undefined ;
+  productores: string[] | [] | undefined ;
+  variedades: string[] | [] | undefined ;
+  procesos: string[] | [] | undefined ;
+  perfil: string[] | [] | undefined ;
+  certificaciones: string[] | [] | undefined ;
+  clasificacion: string[] | [] | undefined ;
+  precio: [number, number] | [] | undefined ;
+  puntaje: [number, number] | [] | undefined  ;
 }

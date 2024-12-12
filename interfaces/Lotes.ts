@@ -1,15 +1,15 @@
 export interface Lotes{
   _id?: string
   nombre?: string;
+  pais?: Paises;
   origen?: Origen;
-  departamento?: Departamento;
+  productores?: Productores;
   variedad?: Variedad;
   proceso?: Porceso;
-  puntaje?: Puntaje ;
   perfil?: Perfil;
-  cantidadLote?: CantidadLote;
   certificaciones?: Certificaciones;
-  pais?: Paises;
+  cantidadLote?: CantidadLote;
+  puntaje?: number ;
   precio?: number;
   descripcion?: string;
   galeria?: Galeria[];
@@ -29,25 +29,21 @@ export type Muestra = {
   cantidad?: number
 } 
 
-export type Certificaciones = 'organic' | 'fair trade' | 'rain fores' | 'imocert o jas' /* {
-  tipo: 'organic' | 'fair trade' | 'rain fores' | 'imocert o jas',
-  nombre: string,
-  url?: string
-} */
+export type Productores = 'independiente' | 'asociacion' | 'cooperativa'
 
-export type Origen = 'chavin' | 'moche' | 'nasca';
+export type Certificaciones = 'organic' | 'fair trade' | 'rain fores' | 'imocert' | 'jas' 
 
-export type Departamento = 'piura' | 'amazonas' | 'cajamarca' | 'san martin' | 'huanuco' | 'pasco' | 'junin' | 'ayacucho' | 'cusco' | 'puno'
+export type Origen = 'piura' | 'amazonas' | 'cajamarca' | 'san martin' | 'huanuco' | 'pasco' | 'junin' | 'ayacucho' | 'cusco' | 'puno'
 
-export type Variedad = 'geisha' | 'typical' | 'bourbon' | 'maragogipe' | 'pacamara' | 'caturra' | 'catui' | 'tabi' | 'new world' | 'costa rica' | 'castilla' | 'catimor' | 'otros'
+export type Variedad = 'geisha' | 'tipica' | 'bourbon' | 'maragogipe' | 'pacamara' | 'caturra' | 'catuai' | 'tabi' | 'mundo novo' | 'costa rica' | 'castilla' | 'catimor' | 'otros'
 
-export type Porceso = 'sueves washing' |'anaerobic washing' |'honey' |'prolonged fermentation' |'natural' |'natural anaerobic' |'experimental'
+export type Porceso = 'sueves lavado' |'lavado anaeróbico' |'honey' |'fermentación prolongada' |'natural' |'natural anaeróbico' |'experimental'
 
-export type Puntaje = '80-90+' | '70-80+' | '60-70+'; 
+export type Puntaje = [number, number]; 
 
-export type Perfil = 'floral' | 'fruit tree' | 'vegetable' | 'citrus o sweet' | 'caramelized sugars' | 'dried fruit' | 'pecan / chocolate' | 'clean cup'
+export type Perfil = 'floral' | 'frutal' | 'vegetal' | 'cítrico' | 'dulce' | 'azucares caramelizados' | 'frutos secos' | 'nuez / chocolate' | 'taza limpia'
 
-export type CantidadLote = 'lotes completos' | 'micro lote (5pp - 20qq)' | 'nano lote'
+export type CantidadLote = 'lote' | 'micro lote' | 'nano lote'
 
 export type Paises = 'perú'
 

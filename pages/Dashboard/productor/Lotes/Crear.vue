@@ -146,29 +146,14 @@
         >
           <UForm
             :schema="schema"
+            :validate="validate"
             :state="state"
             @submit="onSubmit"
             class="grid grid-col-3 sm:grid-cols-6 gap-4 "
             >
             <input class="hidden" type="file" ref="inputSmFile" @change="handleFileUpload" multiple/>
-            <UFormGroup 
-             v-if="!isScreenSmall"
-              label="Sube tus imagenes"
-              name="galeria"
-              class="col-span-3"
-            >
-              <!-- @ts-ignore -->
-              <UInput
-                class="hidden sm:block"
-                type="file"
-                icon="i-heroicons-folder"
-                multiple
-                accept="image/*"
-                max="4"
-                v-model="inputFile"
-                @change="handleFileUpload"
-              />
-            </UFormGroup>
+            
+            
             <UFormGroup label="Nombre" name="nombre" class="col-span-3">
               <UInput v-model="state.nombre" placeholder="Ingresa tu nombre" />
             </UFormGroup>
@@ -180,21 +165,20 @@
               </UInput>
             </UFormGroup>
 
-            <UFormGroup label="Origen" name="origen" class="col-span-3">
+            <UFormGroup label="Origenes" name="origen" class="col-span-3">
               <USelectMenu
                 :ui="{select: 'capitalize'}"
                 searchable
                 searchable-placeholder="Buscar origen..."
                 class="w-full capitalize"
                 placeholder="Selecciona el origen"
-                :options="['chavin', 'moche', 'nasca']"
+                :options="['piura', 'amazonas', 'cajamarca', 'san martin', 'huanuco', 'pasco', 'junin', 'ayacucho', 'cusco', 'puno']"
                 v-model="state.origen"
               />
             </UFormGroup>
 
-            <UFormGroup
-              label="Departamento"
-              name="departamento"
+            <UFormGroup label="Productores"
+              name="productores"
               class="col-span-3"
             >
               <USelectMenu
@@ -203,19 +187,8 @@
                 searchable-placeholder="Buscar departamento..."
                 class="w-full capitalize"
                 placeholder="Selecciona el departamento"
-                :options="[
-                  'piura',
-                  'amazonas',
-                  'cajamarca',
-                  'san martin',
-                  'huanuco',
-                  'pasco',
-                  'junin',
-                  'ayacucho',
-                  'cusco',
-                  'puno',
-                ]"
-                v-model="state.departamento"
+                :options="['independiente', 'asociacion', 'cooperativa']"
+                v-model="state.productores"
               />
             </UFormGroup>
 
@@ -226,21 +199,7 @@
                 searchable-placeholder="Buscar variedad..."
                 class="w-full capitalize"
                 placeholder="Selecciona el variedad"
-                :options="[
-                  'geisha',
-                  'typical',
-                  'bourbon',
-                  'maragogipe',
-                  'pacamara',
-                  'caturra',
-                  'catui',
-                  'tabi',
-                  'new world',
-                  'costa rica',
-                  'castilla',
-                  'catimor',
-                  'otros',
-                ]"
+                :options="['geisha', 'tipica', 'bourbon', 'maragogipe', 'pacamara', 'caturra', 'catuai', 'tabi', 'mundo novo', 'costa rica', 'castilla', 'catimor', 'otros']"
                 v-model="state.variedad"
               />
             </UFormGroup>
@@ -251,29 +210,15 @@
                 searchable-placeholder="Buscar proceso..."
                 class="w-full capitalize"
                 placeholder="Selecciona el proceso"
-                :options="[
-                  'sueves washing',
-                  'anaerobic washing',
-                  'honey',
-                  'prolonged fermentation',
-                  'natural',
-                  'natural anaerobic',
-                  'experimental',
-                ]"
+                :options="['sueves lavado', 'lavado anaeróbico', 'honey', 'fermentación prolongada', 'natural', 'natural anaeróbico', 'experimental']"
                 v-model="state.proceso"
               />
             </UFormGroup>
+
             <UFormGroup label="Puntaje" name="puntaje" class="col-span-3">
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar puntaje..."
-                class="w-full capitalize"
-                placeholder="Selecciona el puntaje"
-                :options="['80-90+', '70-80+', '60-70+']"
-                v-model="state.puntaje"
-              />
+              <UInput v-model="state.puntaje" type="number" placeholder="85.25"/> 
             </UFormGroup>
+
             <UFormGroup label="Perfil" name="perfil" class="col-span-3">
               <USelectMenu
                 :ui="{select: 'capitalize'}"
@@ -281,22 +226,12 @@
                 searchable-placeholder="Buscar perfil..."
                 class="w-full capitalize"
                 placeholder="Selecciona el perfil"
-                :options="[
-                  'floral',
-                  'fruit tree',
-                  'vegetable',
-                  'citrus o sweet',
-                  'caramelized sugars',
-                  'dried fruit',
-                  'pecan / chocolate',
-                  'clean cup',
-                ]"
+                :options="['floral', 'frutal', 'vegetal', 'cítrico', 'dulce', 'azucares caramelizados', 'frutos secos', 'nuez / chocolate', 'taza limpia']"
                 v-model="state.perfil"
               />
             </UFormGroup>
 
-            <UFormGroup
-              label="Cantidad del lote"
+            <UFormGroup label="Cantidad del lote"
               name="cantidadLote"
               class="col-span-3"
             >
@@ -307,8 +242,8 @@
                 class="w-full capitalize"
                 placeholder="Selecciona la cantidad del lote"
                 :options="[
-                  'lotes completos',
-                  'micro lote (5pp - 20qq)',
+                  'lote',
+                  'micro lote',
                   'nano lote',
                 ]"
                 v-model="state.cantidadLote"
@@ -328,7 +263,6 @@
 
             <UFormGroup
               label="¿Este lote Tiene muestra? "
-              name="muestra.muestra"
               class="col-span-3"
               >
               <UToggle
@@ -343,7 +277,7 @@
 
               <UFormGroup
               label="¿Este lote Tiene muestra gratis? "
-              name="muestra.muestraGratis"
+              name="muestra.muestra"
               class="col-span-6 sm:col-span-2"
               >
               <UToggle
@@ -361,7 +295,7 @@
               </UInput>
             </UFormGroup>
 
-            <UFormGroup label="Cantidad" name="muestra.precio" class="col-span-3 sm:col-span-2">
+            <UFormGroup label="Cantidad" name="muestra.cantidad" class="col-span-3 sm:col-span-2">
               <UInput v-model="state.muestra.cantidad" type="number" placeholder="1"> 
                 <template #leading>
                   <span class="text-gray-500 dark:text-gray-400">lb/</span>
@@ -392,8 +326,8 @@
 
 <script lang="ts" setup>
 import axios from "axios";
-import {boolean, object, string, number, type InferType} from "yup";
-import type {FormSubmitEvent} from "#ui/types";
+import {boolean, object, string, number, type InferType, array, mixed} from "yup";
+import type {FormError, FormSubmitEvent} from "#ui/types";
 import type {Lotes} from "~/interfaces/Lotes";
 import {squircle} from "ldrs";
 import {toast} from "vue3-toastify";
@@ -443,7 +377,6 @@ onUnmounted(() => {
 const useProductor = useProductorStore();
 const useUser = useUserStore();
 const useLotes = useLotesStore();
-const router = useRouter();
 
 const pictures = ref([{
         _id: "1",
@@ -538,16 +471,16 @@ function verificarGaleria() {
 }
 const state: Lotes = reactive({
   nombre: undefined,
+  pais: "perú",
   origen: undefined,
-  departamento: undefined,
+  productores: undefined,
   variedad: undefined,
   proceso: undefined,
-  puntaje: undefined,
   perfil: undefined,
-  cantidadLote: undefined,
-  pais: "perú",
-  precio: undefined,
   certificaciones: undefined,
+  cantidadLote: undefined,
+  puntaje: 0,
+  precio: 0,
   descripcion: undefined,
   galeria: [],
   productor: {
@@ -558,8 +491,8 @@ const state: Lotes = reactive({
   muestra: {
     muestra: false,
     muestraGratis: false,
-    precio: undefined,
-    cantidad: undefined,
+    precio: 0,
+    cantidad: 0,
   },
   ocultar: false,
 });
@@ -576,18 +509,36 @@ watch(muestra, (nuevoValor) => {
 });
 
 const schema = object({
-  nombre: string().required("Este campo es requerido"),
-  origen: string().required("Este campo es requerido"),
-  departamento: string().required("Este campo es requerido"),
-  variedad: string().required("Este campo es requerido"),
-  proceso: string().required("Este campo es requerido"),
-  puntaje: string().required("Este campo es requerido"),
-  perfil: string().required("Este campo es requerido"),
-  cantidadLote: string().required("Este campo es requerido"),
-  pais: string().required("Este campo es requerido"),
-  precio: number().positive().required("Este campo es requerido"),
-  pruebaGratis: boolean(),
+  nombre: string().required("Este campo es obligatorio"),
+  pais: string().required("Este campo es obligatorio"),
+  origen: string().required("Este campo es obligatorio"),
+  productores: string().required("Este campo es obligatorio"),
+  variedad: string().required("Este campo es obligatorio"),
+  proceso: string().required("Este campo es obligatorio"),
+  perfil: string().required("Este campo es obligatorio"),
+  cantidadLote: string().required("Este campo es obligatorio"),
+  puntaje: number().min(80, 'El puntaje tiene que ser mayor de 80').max(90,'El puntaje no puede de pasar de 90').required("Este campo es obligatorio"),
+  precio: number().positive('Tiene que ser un precio mayor a 0').required("Este campo es obligatorio"),
+
 });
+
+const validate = (state: any): FormError[] => {
+  const errors = []
+
+  if (state.puntaje === '') errors.push({ path: 'puntaje', message: 'Este campo es obligatorio' })
+
+  if (state.precio === '') errors.push({ path: 'precio', message: 'Este campo es obligatorio' })
+  
+  if(state.muestra.muestra && !state.muestra.muestraGratis && state.muestra.precio <= 0) errors.push({ path: 'muestra.precio', message: 'El precio tiene que ser mayor que 0' })
+
+  if(state.muestra.muestra && !state.muestra.muestraGratis && !state.muestra.precio) errors.push({ path: 'muestra.precio', message: 'Este campo es obligatorio' })
+
+  if(state.muestra.muestra && state.muestra.cantidad <= 0) errors.push({ path: 'muestra.cantidad', message: 'La cantidad tiene que ser mayor que 0' })
+
+  if(state.muestra.muestra && !state.muestra.cantidad) errors.push({ path: 'muestra.cantidad', message: 'Este campo es obligatorio'})
+
+  return errors
+}
 
 type Schema = InferType<typeof schema>;
 async function addLoteProductor(newLote: {_id: string; _model: string}[]) {
@@ -623,15 +574,10 @@ async function addLoteProductor(newLote: {_id: string; _model: string}[]) {
 async function handleFileUpload(event: any) {
   loading.value = true;
 
-  filesSave.value = event;
 
-  let files;
+  filesSave.value = event.target.files;
 
-  if(isScreenSmall.value){
-    files = [...event.target.files];
-  }else{
-    files = [...event];
-  }
+  const files = event.target.files;
 
 
   pictures.value = [];
@@ -793,12 +739,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
           state.nombre = undefined;
           state.origen = undefined;
-          state.departamento = undefined;
+          state.productores = undefined;
           state.variedad = undefined;
           state.proceso = undefined;
-          state.puntaje = undefined;
           state.perfil = undefined;
           state.cantidadLote = undefined;
+          state.puntaje = undefined;
           state.precio = undefined;
           state.galeria = [];
           state.muestra = {

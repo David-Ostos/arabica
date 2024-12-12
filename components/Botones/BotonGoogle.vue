@@ -100,21 +100,13 @@ async function verificarEmail(data: any) {
       const dataUserFetch: User = await correoVerificado.json();
   
       const dataUserSaved = {
-        email: dataUserFetch?.email,
-        picture: data.picture,
-        logged: true,
-        tipoUser: dataUserFetch.tipoUser,
-        perfilCompleto: dataUserFetch.perfilCompleto,
-        verificado: dataUserFetch.verificado,
-        perfilBase: dataUserFetch.perfilBase,
+        email: dataUserFetch?.email
       };
   
       localStorage.clear();
       localStorage.setItem("dataUser", JSON.stringify(dataUserSaved));
   
-      await useUser.fetchDataUser().then(() => {
-        router.push(`/dashboard/${dataUserFetch.tipoUser}`);
-      });
+      await useUser.fetchDataUser().then(() => router.push(`/dashboard/${dataUserFetch.tipoUser}`));
     }
   } catch (error) {
     console.log(error);

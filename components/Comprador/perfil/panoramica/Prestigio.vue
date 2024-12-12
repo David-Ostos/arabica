@@ -19,8 +19,8 @@
           <div aria-hidden="true" v-if="index !== 0 && index % 3 === 0"
             class="absolute -top-1 left-0 right-0 h-[1px] w-screen bg-gray-200"></div>
         </div>
-        <div v-else class="col-span-3 col-start-2 flex items-center justify-center">
-          <span class="w-full text-gray-600">Ningún equipo añadido</span>
+        <div v-else class="col-span-3 w-full flex items-center justify-center">
+          <span class="w-fit text-gray-600">Ningún equipo añadido</span>
         </div>
       </div>
 
@@ -46,8 +46,8 @@
           <div aria-hidden="true" v-if="index !== 0 && index % 3 === 0"
             class="absolute -top-1 left-0 right-0 h-[1px] w-screen bg-gray-200"></div>
         </div>
-        <div v-else class="col-span-3 col-start-2 flex items-center justify-center">
-          <span class="w-full text-gray-600">No se han añadido certificados</span>
+        <div v-else class="col-span-3 w-full flex items-center justify-center">
+          <span class="w-fit text-gray-600">No se han añadido certificados</span>
         </div>
       </div>
     </div>
@@ -71,8 +71,8 @@
           <div aria-hidden="true" v-if="index !== 0 && index % 3 === 0"
             class="absolute -top-1 left-0 right-0 h-[1px] w-screen bg-gray-200"></div>
         </div>
-        <div v-else class="col-span-3 col-start-2 flex items-center justify-center">
-          <span class="w-full text-gray-600">No se han añadido certificados</span>
+        <div v-else class="col-span-3 w-full flex items-center justify-center">
+          <span class="w-fit text-gray-600">No se han añadido certificados</span>
         </div>
       </div>
     </div>

@@ -37,30 +37,33 @@
       ></div>
     </div>
   </div>
+  <div>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import type { Lotes } from '~/interfaces/Lotes';
-
-
-
-const emits = defineEmits<{
-  (e: 'update:modelValue', number: number[] ): void,
-}>()
-
 
 interface Props {
   modelValue: [number, number];
   min: number;
   max: number;
   step?: number;
+  name: string;
   formatValue?: (value: number) => string;
 }
+
 
 const props = withDefaults(defineProps<Props>(), {
   step: 1,
   formatValue: (value: number) => value.toString()
 });
+const modelValueCopy: [number, number] = [...props.modelValue]
+
+
+const emits = defineEmits<{
+  (e: 'update:modelValue', value: [number,number], valueDefault: [number, number] , name: string ): void,
+}>()
 
 const sliderTrack = ref<HTMLElement | null>(null);
 const activeThumb = ref<'min' | 'max' | null>(null);
@@ -87,11 +90,11 @@ const updateValue = (clientX: number) => {
 
   if (activeThumb.value === 'min') {
     if (newValue <= currentMax) {
-      emits('update:modelValue', [newValue, currentMax]);
+      emits('update:modelValue', [newValue, currentMax], modelValueCopy, props.name);
     }
   } else {
     if (newValue >= currentMin) {
-      emits('update:modelValue', [currentMin, newValue]);
+      emits('update:modelValue', [currentMin, newValue], modelValueCopy , props.name);
     }
   }
 };

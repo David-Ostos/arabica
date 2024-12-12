@@ -29,56 +29,115 @@
       <div class="md:grid grid-cols-2 gap-8">
         <!-- Galerria -->
         <div
-          class="col-span-1 grid-area-1 h-[510px] h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4">
+          @click="clickInputFile"
+          class="col-span-1 grid-area-1 h-[510px] h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4"
+        >
           <div class="grid grid-cols-4 col-span-2 grid-rows-4 gap-4 h-full">
-            <div v-if="loading"
-              class="row-span-2 col-span-4 flex justify-center items-center border rounded-xl cursor-pointer overflow-hidden brightness-75 bg-gray-100 opacity-55">
-              <l-squircle size="37" stroke="5" stroke-length="0.15" bg-opacity="0.1" speed="0.9"
-                color="black"></l-squircle>
+            <div
+              v-if="loading"
+              class="row-span-2 col-span-4 flex justify-center items-center border rounded-xl p-4 cursor-pointer overflow-hidden brightness-75 bg-gray-100 opacity-55"
+            >
+              <l-squircle
+                size="37"
+                stroke="5"
+                stroke-length="0.15"
+                bg-opacity="0.1"
+                speed="0.9"
+                color="black"
+              ></l-squircle>
             </div>
 
-            <div v-show="!loading"
-              class="row-span-2 col-span-4 rounded-xl cursor-pointer overflow-hidden hover:brightness-75" :class="!pictures[0].enty
+            <div
+              v-if="!loading && pictures.length > 0"
+              class="row-span-2 col-span-4 border rounded-xl  cursor-pointer overflow-hidden hover:brightness-75"
+              :class="
+                pictures[0]?.link !== 'i-icon-park-outline-add-picture' || undefined
                   ? 'flex justify-center items-center h-full w-full '
-                  : 'hover:bg-gray-100 border'
-                " @click="">
-              <img v-if="!pictures[0].enty" @click="openModalPicture(pictures[0].link)" :src="pictures[0].link" class="rounded-xl h-full w-full object-cover"
-                alt="" />
-              <UIcon v-else name="i-icon-park-outline-add-picture" class="h-full w-full opacity-55 hover:scale-105"
-                dynamic />
+                  : 'hover:bg-gray-100 p-4'
+              "
+            >
+              <img
+                v-if="pictures[0].link !== 'i-icon-park-outline-add-picture' "
+                :src="pictures[0].link"
+                class="rounded-xl h-full w-full object-cover"
+                alt=""
+              />
+              <UIcon
+                v-if="pictures[0].link === 'i-icon-park-outline-add-picture'"
+                name="i-icon-park-outline-add-picture"
+                class="h-full w-full opacity-55 hover:scale-105"
+                dynamic
+              />
             </div>
 
-            <div class="flex justify-around items-center row-span-2 gap-4 col-span-4 h-full w-full">
-              <div v-for="img in pictures.slice(1) "
-                class="h-full w-full flex items-center justify-center cursor-pointer overflow-hidden hover:brightness-75 hover:bg-gray-100 rounded-xl">
-                <div v-if="loading"
-                  class="flex justify-center items-center border rounded-xl w-full h-full brightness-75 bg-gray-100 opacity-55">
-                  <l-squircle size="37" stroke="5" stroke-length="0.15" bg-opacity="0.1" speed="0.9"
-                    color="black"></l-squircle>
+            <div
+              class="flex justify-around items-center row-span-2 gap-4 col-span-4 h-full w-full"
+            >
+              <div
+                v-for="img in pictures.slice(1)"
+                class="h-full w-full flex items-center justify-center cursor-pointer overflow-hidden hover:brightness-75 hover:bg-gray-100 rounded-xl hover:scale-105"
+              >
+                <div
+                  v-if="loading"
+                  class="flex justify-center items-center border rounded-xl w-full h-full brightness-75 bg-gray-100 opacity-55"
+                >
+                  <l-squircle
+                    size="37"
+                    stroke="5"
+                    stroke-length="0.15"
+                    bg-opacity="0.1"
+                    speed="0.9"
+                    color="black"
+                  ></l-squircle>
                 </div>
-                <div v-show="!loading" v-if="img.enty === true" class="">
-                  <UIcon :name="img.link" class="rounded-xl h-28 w-full object-cover opacity-55" alt="" dynamic />
+                <div v-if="!loading && img.link === 'i-icon-park-outline-add-picture'"  class="" >
+                  <UIcon
+                    :name="img.link"
+                    class="rounded-xl h-28 w-full object-cover opacity-55 hover:scale-105"
+                    alt=""
+                    dynamic
+                  />
                 </div>
-                <div v-show="!loading" v-else class="rounded-xl">
-                  <img @click="openModalPicture(img.link)" :src="img.link" class="rounded-xl h-72 w-full object-cover" alt="" />
+                <div
+                  v-show="!loading && img.link !== 'i-icon-park-outline-add-picture'"
+                  class="rounded-xl hover:brightness-50"
+                >
+                  <img
+                    :src="img.link"
+                    class="rounded-xl h-full w-full object-cover hover:scale-105"
+                    alt=""
+                  />
                 </div>
               </div>
-
             </div>
             <!-- barrar de carga -->
 
-            <UProgress :value="porcentaje" :color="color" class="col-span-4 animate-pulse">
-              <template #indicator="{ percent }">
-                <div class="text-right" :style="{ width: `${percent}%` }">
-                  <span v-if="faseUpload === 'none'" class="text-gray-500 w-fit">Esperando...</span>
-                  <span v-else-if="faseUpload === 'Subiendo Imagenes...'" class="text-blue-500 w-fit">{{ faseUpload
-                    }}</span>
-                  <span v-else-if="faseUpload === 'Actualizando el lote...'" class="text-amber-500 w-fit">{{ faseUpload
-                    }}</span>
-
-                  <span v-else-if="faseUpload === 'Subida Completada'" class="text-primary-500">✔ Subida
-                    completada.</span>
-                  <span v-else-if="faseUpload === 'error'" class="text-red-500 font-bold">X Hubo un error.</span>
+            <UProgress :value="porcentaje" :color="color" class="col-span-4">
+              <template #indicator="{percent}">
+                <div class="text-right" :style="{width: `${percent}%`}">
+                  <span v-if="faseUpload === 'none'" class="text-gray-500 w-fit"
+                    >Esperando...</span
+                  >
+                  <span
+                    v-else-if="faseUpload === 'Subiendo Imagenes...'"
+                    class="text-blue-500 w-fit"
+                    >{{ faseUpload }}</span
+                  >
+                  <span
+                    v-else-if="faseUpload === 'Actualizando el lote...'"
+                    class="text-amber-500 w-fit"
+                    >{{ faseUpload }}</span
+                  >
+                  <span
+                    v-else-if="faseUpload === 'Subida Completada'"
+                    class="text-primary-500"
+                    >✔ Subida completada.</span
+                  >
+                  <span
+                    v-else-if="faseUpload === 'error'"
+                    class="text-red-500 font-bold"
+                    >X Hubo un error.</span
+                  >
                 </div>
               </template>
             </UProgress>
@@ -90,118 +149,125 @@
         <!-- Formulario -->
         <div
           class="flex flex-col w-full p-4 rounded-xl border justify-between h-ful shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400">
-          <UForm :schema="schema" :state="state" @submit="onSubmit" class="grid grid-cols-6 gap-4">
-            <UFormGroup label="Nombre" name="nombre" class="col-span-6 md:col-span-3">
-              <UInput v-model="state.nombre" />
-            </UFormGroup>
-
-            <UFormGroup label="Sube tus imagenes" name="galeria" class="col-span-3">
-              <!-- @ts-ignore -->
-              <UInput type="file" icon="i-heroicons-folder" multiple accept="image/*" max="4" v-model="inputFile"
-                @change="handleFileUpload" />
-            </UFormGroup>
+          <UForm
+            :schema="schema"
+            :validate="validate"
+            :state="state"
+            @submit="onSubmit"
+            class="grid grid-col-3 sm:grid-cols-6 gap-4 "
+            >
+            <input class="hidden" type="file" ref="inputSmFile" @change="handleFileUpload" multiple/>
             
+            <UFormGroup label="Nombre" name="nombre" class="col-span-3">
+              <UInput v-model="state.nombre" placeholder="Ingresa tu nombre" />
+            </UFormGroup>
             <UFormGroup label="Precio" name="precio" class="col-span-3">
-              <UInput v-model="state.precio" />
+              <UInput v-model="state.precio" type="number" placeholder="5"> 
+                <template #leading>
+                  <span class="text-gray-500 dark:text-gray-400">$</span>
+                </template>
+              </UInput>
             </UFormGroup>
 
-            <UFormGroup label="Origen" name="origen" class="col-span-3">
-              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar origen..."
-                class="w-full capitalize" placeholder="Selecciona el origen" :options="['chavin', 'moche', 'nasca']"
-                v-model="state.origen" />
+            <UFormGroup label="Origenes" name="origen" class="col-span-3">
+              <USelectMenu
+                :ui="{select: 'capitalize'}"
+                searchable
+                searchable-placeholder="Buscar origen..."
+                class="w-full capitalize"
+                placeholder="Selecciona el origen"
+                :options="['piura', 'amazonas', 'cajamarca', 'san martin', 'huanuco', 'pasco', 'junin', 'ayacucho', 'cusco', 'puno']"
+                v-model="state.origen"
+              />
             </UFormGroup>
 
-            <UFormGroup label="Departamento" name="departamento" class="col-span-3">
-              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar departamento..."
-                class="w-full capitalize" placeholder="Selecciona el departamento" :options="[
-                  'piura',
-                  'amazonas',
-                  'cajamarca',
-                  'san martin',
-                  'huanuco',
-                  'pasco',
-                  'junin',
-                  'ayacucho',
-                  'cusco',
-                  'puno',
-                ]" v-model="state.departamento" />
-            </UFormGroup>
-
-
-
-            <UFormGroup label="Proceso" name="proceso" class="col-span-6 md:col-span-3">
-              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar proceso..."
-                class="w-full capitalize" placeholder="Selecciona el proceso" :options="[
-                  'sueves washing',
-                  'anaerobic washing',
-                  'honey',
-                  'prolonged fermentation',
-                  'natural',
-                  'natural anaerobic',
-                  'experimental',
-                ]" v-model="state.proceso" />
-            </UFormGroup>
-
-            <UFormGroup label="Cantidad del lote" name="cantidadLote" class="col-span-6 md:col-span-3">
-              <USelectMenu :ui="{ select: 'capitalize' }" searchable
-                searchable-placeholder="Buscar la cantidad del lote...." class="w-full capitalize"
-                placeholder="Selecciona la cantidad del lote" :options="[
-                  'lotes completos',
-                  'micro lote (5pp - 20qq)',
-                  'nano lote',
-                ]" v-model="state.cantidadLote" />
+            <UFormGroup label="Productores"
+              name="productores"
+              class="col-span-3"
+            >
+              <USelectMenu
+                :ui="{select: 'capitalize'}"
+                searchable
+                searchable-placeholder="Buscar departamento..."
+                class="w-full capitalize"
+                placeholder="Selecciona el departamento"
+                :options="['independiente', 'asociacion', 'cooperativa']"
+                v-model="state.productores"
+              />
             </UFormGroup>
 
             <UFormGroup label="Variedad" name="variedad" class="col-span-3">
-              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar variedad..."
-                class="w-full capitalize" placeholder="Selecciona el variedad" :options="[
-                  'geisha',
-                  'typical',
-                  'bourbon',
-                  'maragogipe',
-                  'pacamara',
-                  'caturra',
-                  'catui',
-                  'tabi',
-                  'new world',
-                  'costa rica',
-                  'castilla',
-                  'catimor',
-                  'otros',
-                ]" v-model="state.variedad" />
+              <USelectMenu
+                :ui="{select: 'capitalize'}"
+                searchable
+                searchable-placeholder="Buscar variedad..."
+                class="w-full capitalize"
+                placeholder="Selecciona el variedad"
+                :options="['geisha', 'tipica', 'bourbon', 'maragogipe', 'pacamara', 'caturra', 'catuai', 'tabi', 'mundo novo', 'costa rica', 'castilla', 'catimor', 'otros']"
+                v-model="state.variedad"
+              />
+            </UFormGroup>
+            <UFormGroup label="Proceso" name="proceso" class="col-span-3">
+              <USelectMenu
+                :ui="{select: 'capitalize'}"
+                searchable
+                searchable-placeholder="Buscar proceso..."
+                class="w-full capitalize"
+                placeholder="Selecciona el proceso"
+                :options="['sueves lavado', 'lavado anaeróbico', 'honey', 'fermentación prolongada', 'natural', 'natural anaeróbico', 'experimental']"
+                v-model="state.proceso"
+              />
             </UFormGroup>
 
             <UFormGroup label="Puntaje" name="puntaje" class="col-span-3">
-              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar puntaje..."
-                class="w-full capitalize" placeholder="Selecciona el puntaje" :options="['80-90+', '70-80+', '60-70+']"
-                v-model="state.puntaje" />
+              <UInput v-model="state.puntaje" type="number" placeholder="85.25"/> 
             </UFormGroup>
 
             <UFormGroup label="Perfil" name="perfil" class="col-span-3">
-              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar perfil..."
-                class="w-full capitalize" placeholder="Selecciona el perfil" :options="[
-                  'floral',
-                  'fruit tree',
-                  'vegetable',
-                  'citrus o sweet',
-                  'caramelized sugars',
-                  'dried fruit',
-                  'pecan / chocolate',
-                  'clean cup',
-                ]" v-model="state.perfil" />
+              <USelectMenu
+                :ui="{select: 'capitalize'}"
+                searchable
+                searchable-placeholder="Buscar perfil..."
+                class="w-full capitalize"
+                placeholder="Selecciona el perfil"
+                :options="['floral', 'frutal', 'vegetal', 'cítrico', 'dulce', 'azucares caramelizados', 'frutos secos', 'nuez / chocolate', 'taza limpia']"
+                v-model="state.perfil"
+              />
             </UFormGroup>
 
-
-
+            <UFormGroup label="Cantidad del lote"
+              name="cantidadLote"
+              class="col-span-3"
+            >
+              <USelectMenu
+                :ui="{select: 'capitalize'}"
+                searchable
+                searchable-plotesVisibles.valuelaceholder="Buscar la cantidad del lote...."
+                class="w-full capitalize"
+                placeholder="Selecciona la cantidad del lote"
+                :options="[
+                  'lote',
+                  'micro lote',
+                  'nano lote',
+                ]"
+                v-model="state.cantidadLote"
+              />
+            </UFormGroup>
             <UFormGroup label="País" name="pais" class="col-span-3">
-              <USelectMenu :ui="{ select: 'capitalize' }" searchable searchable-placeholder="Buscar País..."
-                class="w-full capitalize" placeholder="Selecciona el País" :options="['peru']" v-model="state.pais" />
+              <USelectMenu
+                :ui="{select: 'capitalize'}"
+                searchable
+                searchable-placeholder="Buscar País..."
+                class="w-full capitalize"
+                placeholder="Selecciona el País"
+                :options="['perú']"
+                v-model="state.pais"
+              />
             </UFormGroup>
 
             <UFormGroup
               label="¿Este lote Tiene muestra? "
-              name="muestra.muestra"
-              class="md:col-span-3 col-span-6"
+              class="col-span-3"
               >
               <UToggle
               v-model="muestra"
@@ -210,13 +276,13 @@
               />
             </UFormGroup>
 
-            <div v-if="state.muestra?.muestra" class="col-span-6 grid grid-cols-6 gap-4"> 
+            <div v-if="state.muestra?.muestra" class=" col-span-3 sm:col-span-6 grid grid-cols-6 gap-4"> 
 
 
               <UFormGroup
               label="¿Este lote Tiene muestra gratis? "
-              name="muestra.muestraGratis"
-              class="col-span-6 md:col-span-2"
+              name="muestra.muestra"
+              class="col-span-6 sm:col-span-2"
               >
               <UToggle
               v-model="muestraGratis"
@@ -225,7 +291,7 @@
               />
             </UFormGroup>
 
-            <UFormGroup v-if="!state.muestra.muestraGratis" label="Precio" name="muestra.precio" class="col-span-3 md:col-span-2">
+            <UFormGroup v-if="!state.muestra.muestraGratis" label="Precio" name="muestra.precio" class="col-span-3 sm:col-span-2">
               <UInput v-model="state.muestra.precio" type="number" placeholder="5"> 
                 <template #leading>
                   <span class="text-gray-500 dark:text-gray-400">$</span>
@@ -233,7 +299,7 @@
               </UInput>
             </UFormGroup>
 
-            <UFormGroup label="Cantidad" name="muestra.precio" class="col-span-3 md:col-span-2">
+            <UFormGroup label="Cantidad" name="muestra.cantidad" class="col-span-3 sm:col-span-2">
               <UInput v-model="state.muestra.cantidad" type="number" placeholder="1"> 
                 <template #leading>
                   <span class="text-gray-500 dark:text-gray-400">lb/</span>
@@ -242,10 +308,19 @@
             </UFormGroup>
 
             </div>
-            <UButton size="xl" :padded="true" type="submit" :loading="loading" :ui="{
-              inline: 'inline-block flex item-center justify-center',
-            }" class="col-start-2 text-center col-span-4">
-              Editar Lote</UButton>
+
+            <UButton
+              size="xl"
+              :padded="true"
+              type="submit"
+              :loading="loading"
+              :ui="{
+                inline: 'inline-block flex item-center justify-center',
+              }"
+              class="col-start-2 text-center col-span-4"
+            >
+              Editar Lote</UButton
+            >
           </UForm>
         </div>
       </div>
@@ -256,8 +331,8 @@
 <script lang="ts" setup>
 import axios from "axios";
 import { boolean, object, string, number, type InferType } from "yup";
-import type { FormSubmitEvent } from "#ui/types";
-import type { Galeria, Lotes } from "~/interfaces/Lotes";
+import type { FormError, FormSubmitEvent } from "#ui/types";
+import type {  Lotes } from "~/interfaces/Lotes";
 import { squircle } from "ldrs";
 import { toast } from "vue3-toastify";
 
@@ -265,6 +340,7 @@ type Schema = InferType<typeof schema>;
 
 squircle.register();
 
+const {isScreenSmall} = useGlobalComposable()
 
 definePageMeta({
   middleware: "productor",
@@ -293,20 +369,21 @@ const closeModalPicture = ()=>{
 
 const state: Lotes = reactive({
   nombre: lote.nombre,
+  pais: lote.pais,
   origen: lote.origen,
-  departamento: lote.departamento,
+  productores: lote.productores,
   variedad: lote.variedad,
   proceso: lote.proceso,
-  puntaje: lote.puntaje,
   perfil: lote.perfil,
-  cantidadLote: lote.cantidadLote,
-  pais: lote.pais,
-  precio: lote.precio,
   certificaciones: lote.certificaciones,
+  cantidadLote: lote.cantidadLote,
+  puntaje: lote.puntaje,
+  precio: lote.precio,
   descripcion: lote.descripcion,
   galeria: lote.galeria,
   productor: lote.productor,
-  muestra: lote.muestra
+  muestra: lote.muestra,
+  ocultar: lote.ocultar
 });
 
 const muestra = ref(state.muestra?.muestra)
@@ -324,11 +401,10 @@ const pictures = ref(state.galeria as any);
 const loading = ref(false);
 const inputFile = ref();
 const filesSave = ref();
-const lotes = useProductor.lotes;
 verificarGaleria();
 
 const porcentaje = ref(0);
-
+const inputSmFile = ref()
 const faseUpload = ref(
   "none" as
   | "none"
@@ -337,6 +413,10 @@ const faseUpload = ref(
   | "Subida Completada"
   | "error"
 );
+
+const clickInputFile = ()=>{
+  inputSmFile.value.click()
+}
 
 const color = computed(() => {
   switch (true) {
@@ -397,24 +477,44 @@ function verificarGaleria() {
 }
 
 const schema = object({
-  nombre: string().required("Este campo es requerido"),
-  origen: string().required("Este campo es requerido"),
-  departamento: string().required("Este campo es requerido"),
-  variedad: string().required("Este campo es requerido"),
-  proceso: string().required("Este campo es requerido"),
-  puntaje: string().required("Este campo es requerido"),
-  perfil: string().required("Este campo es requerido"),
-  cantidadLote: string().required("Este campo es requerido"),
-  pais: string().required("Este campo es requerido"),
-  precio: number().positive().required("Este campo es requerido"),
-  pruebaGratis: boolean(),
+  nombre: string().required("Este campo es obligatorio"),
+  pais: string().required("Este campo es obligatorio"),
+  origen: string().required("Este campo es obligatorio"),
+  productores: string().required("Este campo es obligatorio"),
+  variedad: string().required("Este campo es obligatorio"),
+  proceso: string().required("Este campo es obligatorio"),
+  perfil: string().required("Este campo es obligatorio"),
+  cantidadLote: string().required("Este campo es obligatorio"),
+  puntaje: number().min(80, 'El puntaje tiene que ser mayor de 80').max(90,'El puntaje no puede de pasar de 90').required("Este campo es obligatorio"),
+  precio: number().positive('Tiene que ser un precio mayor a 0').required("Este campo es obligatorio"),
+
 });
+
+const validate = (state: any): FormError[] => {
+  const errors = []
+
+  if (state.puntaje === '') errors.push({ path: 'puntaje', message: 'Este campo es obligatorio' })
+
+  if (state.precio === '') errors.push({ path: 'precio', message: 'Este campo es obligatorio' })
+  
+  if(state.muestra.muestra && !state.muestra.muestraGratis && state.muestra.precio <= 0) errors.push({ path: 'muestra.precio', message: 'El precio tiene que ser mayor que 0' })
+
+  if(state.muestra.muestra && !state.muestra.muestraGratis && !state.muestra.precio) errors.push({ path: 'muestra.precio', message: 'Este campo es obligatorio' })
+
+  if(state.muestra.muestra && state.muestra.cantidad <= 0) errors.push({ path: 'muestra.cantidad', message: 'La cantidad tiene que ser mayor que 0' })
+
+  if(state.muestra.muestra && !state.muestra.cantidad) errors.push({ path: 'muestra.cantidad', message: 'Este campo es obligatorio'})
+  return errors
+}
+
 
 // funcion para agegar las imagenes a la galeria para que el usuario las visualice antes de subirlas
 async function handleFileUpload(event: any) {
-  filesSave.value = event;
-  const files = [...event];
+  loading.value = true;
 
+  filesSave.value = event.target.files;
+
+  const files = event.target.files;
 
   pictures.value = [];
 
@@ -434,6 +534,7 @@ async function handleFileUpload(event: any) {
     return archivosPermitidos.includes(file.type);
   });
 
+
   if (cumpleConTipos) {
     if (files.length > 0 && files.length <= 4) {
       for (let i = 0; i < files.length; i++) {
@@ -444,7 +545,7 @@ async function handleFileUpload(event: any) {
         const imagePromise = new Promise((resolve, reject) => {
           reader.onload = () => {
             const dataURL = reader.result;
-            resolve({ id: i, link: dataURL, enty: false });
+            resolve({_id: i, link: dataURL, position: 0});
           };
           reader.onerror = reject;
           reader.readAsDataURL(file);
@@ -456,10 +557,6 @@ async function handleFileUpload(event: any) {
       // Espera a que todas las promesas se resuelvan (imágenes cargadas)
       const imagesData = await Promise.all(imagePromises);
       pictures.value = imagesData;
-      toast.success(
-        "Imagenes preparadas para subir"
-      );
-      state.galeria = []
     } else {
       toast.error(
         "Solo se aceptan archivos de formato .gif, .png, .jpg, .jpeg, webp"
@@ -472,11 +569,13 @@ async function handleFileUpload(event: any) {
     );
     inputFile.value = "";
   }
+  loading.value = false;
   verificarGaleria();
 }
 
 // funcion para subir las imagenes 
 async function UploadFiles(files: any) {
+  console.log(files)
   if (files) {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
@@ -536,17 +635,23 @@ async function UploadFiles(files: any) {
   }
 }
 
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with event.data
   loading.value = true;
   state.precio = +state.precio!;
+  const picturesFilter = pictures.value.filter((objeto:any) => !objeto.enty);
+
+
   let uploadImg;
-  if (state.galeria !== lote.galeria) {
+  if (JSON.stringify(picturesFilter) !== JSON.stringify(state.galeria)) {
     uploadImg = await UploadFiles(filesSave.value);
   } else {
     uploadImg = { status: true };
   }
-  if (uploadImg.status) {
+  
+    
+if (uploadImg.status) {
     try {
       // @ts-ignore
 

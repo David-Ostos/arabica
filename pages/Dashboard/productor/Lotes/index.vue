@@ -1,5 +1,5 @@
 <template>
-
+<div>
   <ModalsNotificacion v-if="openModalNotificacion" @close="closeModal" titulo="Registro del usuario incompleto" 
     contenido-one="Debes registrarte e introducir todos los datos requeridos para agregar algun lote." 
     contenido-two="" icon="info"  
@@ -14,12 +14,13 @@
     icon="loading"  
     texto-boton=""
     />
-
-  <div class="flex gap-8 z-0 justify-between relative flex-grow mr-8 mx-8 md:mx-0">
-
+    
+    <div class="flex gap-8 z-0 justify-between relative flex-grow mr-8 mx-8 md:mx-0">
+      
+      <!-- muestra los lotes del productor -->
     <ProductorLotesMenuDeskot :isOpen="isOpen" :links="links" @chage-menu="changeMenu" :lotes="lotes"/>
+      <!-- /muestra los lotes del productor -->
 
-    <!-- muestra los lotes del productor -->
     <div
       v-if="lotes.length > 0"
       :class="['md:pt-5 md:pb-10 transition-width ease-in-out duration-700 w-1 mx-auto flex-grow h-screen-topBar-footer overflow-auto ', {'scrollbar-hide': isScreenSmall}]"
@@ -82,11 +83,7 @@
               <UIcon
                 v-if="isEdit"
                 name="i-material-symbols-light-build-circle-outline"
-                @click="toast.info(`Se va a editar el lote ${item.nombre}`, {
-                  onClose(props) {
-                      $router.push(`lotes/edit/${item._id}`)
-                  },
-                })"
+                @click="$router.push(`lotes/edit/${item._id}`)"
                 class="text-cyan-500 cursor-pointer hover:bg-white hover:scale-110 rounded-full"
                 dynamic
               />
@@ -114,9 +111,9 @@
           </div>
         </div>
       </div>
+      <!-- /estos son los lotes visibles-->
 
       <!-- estos son los lotes ocultos -->
-
       <div class="border-t">
         <div
           class="flex gap-1 items-center mt-6 mb-4 md:mb-8 md:py-4 cursor-pointer text-gray-800 hover:!text-primary-600 transition-all duration-100 w-fit"
@@ -192,6 +189,8 @@
         </div>
       </div>
     </div>
+      <!-- /estos son los lotes ocultos -->
+
     <!-- /muestra los lotes del productor -->
 
     <!-- cuado no hay lotes creados -->
@@ -208,9 +207,11 @@
         >
           ¿Que esperas? Agrega tu primer Lote de café.
         </h1>
-        <p class="font-mediun text-white max-w-[800px]">
-          En el menu de la izquierda puedes agregar tus lotes o en el boton de
-          abajo.
+        <p class="hidden sm:block font-mediun text-white max-w-[800px]">
+          En el menu de la izquierda o en el boton de abajo puedes agregar tus lotes.
+        </p>
+        <p class="sm:hidden font-mediun text-white max-w-[800px]">
+          En el boton de abajo puedes agregar tu primer lotede café.
         </p>
         <div>
           <Button
@@ -251,8 +252,7 @@
       </div>
     </UModal>
   </div>
-
-
+</div>
 </template>
 <script lang="ts" setup>
 import {toast} from "vue3-toastify";
@@ -274,9 +274,9 @@ const useUser = useUserStore()
 const {isScreenSmall} = useGlobalComposable()
 
 const isOpen = ref(false);
-const isEdit = ref(false);
-const isRemove = ref(false);
-const isShow = ref(false);
+const isEdit = ref(true);
+const isRemove = ref(true);
+const isShow = ref(true);
 
 const lotesVisibles = ref([] as any);
 const lotesOcultos = ref([] as any);
@@ -381,10 +381,10 @@ const links:Ref<Link[]> = ref([
     color: "text-rose-600 border-rose-600",
     isActive: false,
     accion: () => {
-      if (lotes.length > 0) {
+      if (lotes.length > 0 || lotesOcultos.value.length > 0 ) {
         links.value[2].isActive = !links.value[2].isActive;
         isRemove.value = !isRemove.value;
-      } else {
+      }else{
         toast.info("Tienes que agregar un producto para poder eliminar.");
       }
     },
@@ -456,7 +456,7 @@ async function deleteLote(id: string, nombre: string) {
 
           const indiceLoteOculto = lotesOcultos.value.findIndex(
             (lote: Lotes) => lote._id === id
-          ).value;
+          );
 
           const indiceLoteVisible = lotesVisibles.value.findIndex(
             (lote: Lotes) => lote._id === id
