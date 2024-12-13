@@ -11,6 +11,7 @@ export const useUserStore = defineStore("user", () => {
   const useProductor = useProductorStore();
   const useComprador = useCompradorStore();
   const useLotes = useLotesStore();
+  const favoritos = useFavoritosStore();
 
   const dataUser = ref({} as User);
   const logged = ref(false);
@@ -111,6 +112,9 @@ export const useUserStore = defineStore("user", () => {
             ...dataUserFetch,
           };
           logged.value = true;
+          favoritos.getFavoritos(dataUser.value._id!);
+          console.log(favoritos.favoritos)
+
 
         } catch (error) {
           toast.info('Hubo un error en la conexion vuelva a intentar mas tarde.')

@@ -182,6 +182,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         event.data.email.toLowerCase()}'}&fields={_state: false, _modified: false, _mby: false, _created: false, _cby: false}`,
       {
         cache: "no-cache",
+        mode: "cors",
         headers: {
           "api-key": import.meta.env.VITE_COCKPIT_API_KEY
         }

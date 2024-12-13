@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="2xl:container 2xl:mx-auto">
     <NavbarComprador class="mt-[4.2rem]"/>
       <div :style=" containerStyles"  :class="$route.path.includes('usuario') ? 'sm:grid grid-cols-8 bg-gray-100 h-full ' : ''">
         <CompradorUsuarioLayout class=" h-full sm:col-span-2"/>

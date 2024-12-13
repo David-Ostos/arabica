@@ -1,6 +1,6 @@
 <template>
   <div class="bg-[url('/img/bg-testimonio.png')] py-20" :class="`bg-[url('${bg}')]`">
-    <div class="flex flex-col justify-center items-center">
+    <div class="flex flex-col justify-center items-center mx-20">
       <span class="text-primary text-center uppercase">Testimonios</span>
 
       <h2 class="text-xl md:text-6xl font-bold md:leading-[1.2] my-4">

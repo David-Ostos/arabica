@@ -159,8 +159,9 @@ onMounted(()=>{
 
 
 const activeFilters = ref<Partial<Record<keyof Lotes, any>>>({});
-
+  
   const filtrarLotes = <K extends keyof Lotes>(tipo: K, filtro: boolean | string[] | [number, number]) => {
+    console.log(tipo)
   if (tipo === 'muestra') {
     if (filtro === true) {
       activeFilters.value[tipo] = filtro;

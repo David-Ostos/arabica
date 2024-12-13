@@ -7,7 +7,7 @@
   >
     <header ref="nav1">
       <nav
-        class="flex items-center justify-between pt-2 px-10 lg:px-16 rounded-xl"
+        class="flex items-center container mx-auto justify-between pt-2 px-10 lg:px-16 rounded-xl "
         aria-label="Global"
       >
         <div class="flex lg:flex-1">

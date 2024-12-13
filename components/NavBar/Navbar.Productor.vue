@@ -10,10 +10,10 @@
     ' !text-dar bg-white dark:bg-white rounded-b-xl shadow-md ': scrolled,
   }, navShow  ? 'opacity-100' : 'opacity-0']" class="fixed w-screen top-0 z-50 transition-all duration-300 opacity-0 ">
     <div class=" bg-white dark:bg-white">
-      <div class="relative z-50">
+      <div class="mx-auto z-50">
         <header
-          class="w-screen top-0 z-50 transition-all text-dar bg-white dark:bg-white border-b-2 rounded-xl shadow-md">
-          <div class="container mx-auto py-1  px-12 flex justify-between items-center">
+          class=" w-screen top-0 z-50 transition-all text-dar bg-white dark:bg-white border-b-2 rounded-xl shadow-md">
+          <div class=" container  mx-auto py-1  px-12 flex justify-between items-center">
             <div class="flex ">
               <NuxtLink to="/" class="-m-1.5 p-1.5">
                 <span class="sr-only">Arabica</span>
@@ -57,10 +57,10 @@
 
         </header>
 
-        <div v-if="validarRuta()" :class="['hidden md:block']">
+        <div v-if="validarRuta()" :class="['hidden md:block w-full bg-white']">
           <!-- <ProductorHorizontalPerfil class=""/> -->
           <UHorizontalNavigation :links="items"
-            class=" flex  !justify-center border-b border-gray-200  dark:border-gray-800 shadow-md rounded-b-xl"
+            class=" flex !justify-center border-b border-gray-200 mx-auto dark:border-gray-800 shadow-md rounded-b-xl"
             :ui="{}" />
 
         </div>
@@ -236,7 +236,7 @@ onUnmounted(() => {
 const lastScrollTop: Ref<number> = ref(0);
 
 function handleScroll() {
-  if(route.path.includes('/dashboard/productor/lotes')){
+  if(route.path.includes('/dashboard/productor')){
     navShow.value = true;
   }else{
     scrolled.value = window.scrollY > 50;

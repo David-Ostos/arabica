@@ -19,7 +19,7 @@
           ></polygon> -->
         </svg>
       </div>
-      <div class="container mx-auto px-4">
+      <div class="2xl:container mx-auto px-4">
         <div class="flex flex-wrap text-center lg:text-left">
           <div class="w-full lg:w-6/12 px-4">
             <h4 class="text-3xl font-semibold">¡Buscanos en nuestras redes sociales!</h4>

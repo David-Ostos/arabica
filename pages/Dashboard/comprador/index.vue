@@ -8,7 +8,6 @@ definePageMeta({
 const useUser = useUserStore();
 const favoritos = useFavoritosStore();
 
-favoritos.getFavoritos(useUser.dataUser._id!);
 </script>
 
 <template>

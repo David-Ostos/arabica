@@ -21,6 +21,7 @@ router.options.scrollBehavior = (to, from) => {
   }
 }
 
+
 await useUser.fetchDataUser()
 .catch((e) => console.log(e))
 await useLotes.getDataLotes()
@@ -29,9 +30,11 @@ await useLotes.getDataLotes()
 
 <template>
   <TipoUserModal/>
-  <div class="font-roboto dark:bg-white bg-white text-dar dark:text-dar">
+  <div class="font-roboto dark:bg-gray-100 bg-gray-100 text-dar dark:text-dar">
     <NuxtLayout>
-      <NuxtPage />
+      <div class="2xl:container 2xl:mx-auto">
+        <NuxtPage />
+      </div>
     </NuxtLayout>
   </div>
 </template>
@@ -62,7 +65,7 @@ await useLotes.getDataLotes()
 }
 
 :root {
-  --background-color: #ffffff; /* Color de fondo claro */
+  --background-color: rgb(243 244 246); /* Color de fondo claro */
 }
 
 body {
@@ -70,7 +73,7 @@ body {
 }
 @media (prefers-color-scheme: dark) {
   body {
-    background-color: #ffffff; /* Color de fondo claro */
+    background-color: var(--background-color); /* Color de fondo claro */
   }
 }
 

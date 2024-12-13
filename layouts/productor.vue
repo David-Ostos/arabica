@@ -30,7 +30,7 @@ const containerStyles = computed(() => {
     <div>
       <NavbarProductor />
       <ProductorPerfilLayout/>
-      <div :style="containerStyles" :class="[,$route.path.includes('usuario') && !isScreenSmall ? `grid grid-cols-8 bg-gray-100  ` : '']">
+      <div :style="containerStyles" class="2xl:container 2xl:mx-auto" :class="[,$route.path.includes('usuario') && !isScreenSmall ? `grid grid-cols-8 bg-gray-100  ` : '']">
         <ProductorUsuarioLayout class=" h-full md:col-span-2"/>
         <div class="col-span-6">
         <div  :class="[$route.path.includes('productor/lotes') ? 'hidden': '']">

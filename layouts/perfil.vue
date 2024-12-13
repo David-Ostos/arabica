@@ -97,7 +97,7 @@ function handleScroll() {
         class="fixed w-screen top-0 z-50 transition-all text-dar bg-white dark:bg-white border-b-2 rounded-xl shadow-md"
       >
         <div
-          class="container mx-auto py-1 px-12 flex justify-between items-center"
+          class="2xl:container 2xl:mx-auto py-1 px-12 flex justify-between items-center"
         >
           <div class="flex">
             <NuxtLink to="/" class="-m-1.5 p-1.5">

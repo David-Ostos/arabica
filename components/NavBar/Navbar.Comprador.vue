@@ -51,7 +51,7 @@
       </header>
       <div ref="nav1" >
         <UHorizontalNavigation :links="items"
-          class="hidden sm:flex mt-[60px] !justify-center border-b border-gray-200 dark:border-gray-800" :ui="{}" />
+          class="hidden sm:flex mt-[60px] !justify-center bg-white border-b border-gray-200 dark:border-gray-800" :ui="{}" />
       </div>
     </div>
   </div>
@@ -87,6 +87,8 @@ const useModal = useShowModalsStore()
 const useUser = useUserStore();
 const useModals = useShowModalsStore()
 const useCart = useCartStore()
+
+const route = useRoute()
 
 const scrolled = ref(false);
 
@@ -129,7 +131,6 @@ onMounted(() => {
       intersectionObserver.disconnect()
     })
   }
-
   // Actualizar altura inicial
   updateHeight()
 })
@@ -205,21 +206,25 @@ onUnmounted(() => {
 });
 const lastScrollTop: Ref<number> = ref(0);
 
-function handleScroll() {
-  scrolled.value = window.scrollY > 50;
-
-  var st = window.scrollY || document.documentElement.scrollTop;
-  if (st > lastScrollTop.value) {
-    // El scroll se está moviendo hacia abajo
-
-    navShow.value = false;
-
-  } else {
-    // El scroll se está moviendo hacia arriba
+  function handleScroll() {
+  if(route.path.includes('/dashboard')){
     navShow.value = true;
-
+  }else{
+    scrolled.value = window.scrollY > 50;
+  
+    var st = window.scrollY || document.documentElement.scrollTop;
+    if (st > lastScrollTop.value) {
+      // El scroll se está moviendo hacia abajo
+  
+      navShow.value = false;
+  
+    } else {
+      // El scroll se está moviendo hacia arriba
+      navShow.value = true;
+  
+    }
+    lastScrollTop.value = st;
   }
-  lastScrollTop.value = st;
 }
 
 const mobileMenuOpen = ref(false);

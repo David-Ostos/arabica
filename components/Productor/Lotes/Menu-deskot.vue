@@ -1,7 +1,7 @@
 <template>
       <!-- Menu desplegable -->
       <div
-      class=" hidden  md:block relative transition-width ease-in-out duration-700 shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar border-r border-inset border-gray-300 dark:border-gray-700 focus:border-2 focus:border-primary-500 dark:focus:border-primary-400 py-5 px-4"
+      class=" hidden  md:block relative transition-width ease-in-out duration-700 shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar border-x border-inset border-gray-300 dark:border-gray-700 focus:border-2 focus:border-primary-500 dark:focus:border-primary-400 py-5 px-4"
       :class="[
         isOpen ? ' w-[237px]' : ' w-[74px]',
         lotes.length > 0 ? ' w-1/3' : 'w-1/4',

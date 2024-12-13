@@ -1,5 +1,5 @@
 <template>
-  <div class=" bg-white relative my-10 ">
+  <div class=" relative my-10 ">
     <div class="mx-auto  px-6 lg:px-20">
       <dl class=" flex-col md:flex-row gap-6 flex justify-center text-center ">
         <div

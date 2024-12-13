@@ -3,7 +3,7 @@
 
     <div 
     v-if="$route.path.includes('perfil')"
-    class="rounded-b-3xl shadow-lg"
+    class="rounded-b-3xl shadow-lg 2xl:container 2xl:mx-auto"
     >
     <ProductorPerfilIndexPortada />
     <div class="mx-8 md:mx-20">

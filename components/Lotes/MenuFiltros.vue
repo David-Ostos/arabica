@@ -250,6 +250,7 @@ interface Range{
   isOpen: boolean;
 }
 
+
 const resetAll = () => {
   muestras.value = false;
   paisesActivo.value = false;
@@ -592,9 +593,9 @@ const filtros: Filtros[] = reactive([
     tipe: "select",
   },{label: "Clasificación de Lotes",
     value: [
-      { tipo: "Lote", isActive: false },
-      { tipo: "Micro lote", isActive: false },
-      { tipo: "Nano lote", isActive: false },
+      { tipo: "lote", isActive: false },
+      { tipo: "micro lote", isActive: false },
+      { tipo: "nano lote", isActive: false },
     ],
     tipe: "select",
   },{label: "puntaje",

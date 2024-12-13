@@ -231,7 +231,9 @@ const validations = (stat: any): FormError[] => {
   }
 
   if (stat.password !== stat.rePassword) {
-    toast.error('Las contraseñas no coinciden.')
+    setTimeout(()=>{
+      toast.error('Las contraseñas no coinciden.')
+    }, 2000)
     errors.push({
       path: "password",
       message: "Las contraseñas no coinciden",

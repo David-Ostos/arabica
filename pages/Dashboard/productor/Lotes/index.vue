@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="overflow-hidden">
   <ModalsNotificacion v-if="openModalNotificacion" @close="closeModal" titulo="Registro del usuario incompleto" 
     contenido-one="Debes registrarte e introducir todos los datos requeridos para agregar algun lote." 
     contenido-two="" icon="info"  
@@ -15,7 +15,7 @@
     texto-boton=""
     />
     
-    <div class="flex gap-8 z-0 justify-between relative flex-grow mr-8 mx-8 md:mx-0">
+    <div :style="containerStyles" class="flex gap-8 z-0 justify-between relative flex-grow mr-8 mx-8 md:mx-0 overflow-hidden">
       
       <!-- muestra los lotes del productor -->
     <ProductorLotesMenuDeskot :isOpen="isOpen" :links="links" @chage-menu="changeMenu" :lotes="lotes"/>
@@ -23,14 +23,14 @@
 
     <div
       v-if="lotes.length > 0"
-      :class="['md:pt-5 md:pb-10 transition-width ease-in-out duration-700 w-1 mx-auto flex-grow h-screen-topBar-footer overflow-auto ', {'scrollbar-hide': isScreenSmall}]"
+      :class="['  transition-width ease-in-out duration-700 w-1 mx-auto flex-grow h-screen-topBar-footer overflow-auto ', {'scrollbar-hide': isScreenSmall}]"
 
     >
       <!-- estos son los lotes visibles-->
 
       <div class="">
           <div
-            class="flex justify-between gap-1  my-4 md:mb-8 md:py-4 cursor-pointer  transition-all duration-100 w-full"
+            class="flex justify-between gap-1  my-4 md:mb-4 md:py-4 cursor-pointer  transition-all duration-100 w-full"
           >
           <div class="flex items-center text-gray-800  hover:!text-primary-600"
             @click="hiddenVisibles = !hiddenVisibles">
@@ -270,8 +270,18 @@ const useLotes = useLotesStore();
 const router = useRouter();
 const useProductor = useProductorStore();
 const useUser = useUserStore()
+const useGlobal = useGlobalStore()
 
 const {isScreenSmall} = useGlobalComposable()
+
+const containerStyles = computed(() => {
+  if(isScreenSmall.value){
+    return `max-height: calc(100vh - ${useGlobal.heightNavProductor}px)`
+  }else{
+    return `max-height: calc(100vh - (${useGlobal.heightNavProductor}px + ${useGlobal.heightFooterProductor}px) )`
+  }
+});
+
 
 const isOpen = ref(false);
 const isEdit = ref(true);
