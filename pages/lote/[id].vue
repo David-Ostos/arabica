@@ -100,7 +100,7 @@
         class="col-span-3 h-screen-topBar-footer p-8 rounded-xl border flex flex-col justify-between py-8 shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400">
         <div class="">
           <div class="flex items-center justify-between mb-8">
-            <div class="overflow-hidden rounded-xl h-24 w-24">
+            <div class="overflow-hidden rounded-xl h-24 w-24" @click="console.log({loadingImg, lote})">
               <USkeleton v-if="!loadingImg" class="h-24 w-24 rounded-xl" :ui="{
                 background: 'bg-secundary',
               }" />
@@ -108,8 +108,8 @@
               <div class="h-24 w-24 rounded-xl">
                 <img v-if="lote.productor!.picture" :src="lote.productor!.picture" @load="loadingImg = true"
                   class="rounded-xl" alt="" />
-                <div v-else class="flex justify-center items-center h-24 bg-gray-300">
-                  <UIcon name="i-heroicons-photo" class="rounded-xl" />
+                <div v-else class="flex justify-center items-center h-24 bg-gray-300 rounded-xl border border-gray-700">
+                  <UIcon name="i-heroicons-photo" class="rounded-xl text-gray-700 h-16 w-16" />
                 </div>
               </div>
             </div>
@@ -223,7 +223,6 @@ definePageMeta({
   layout: "lote",
 });
 
-const router = useRoute();
 const exist = ref(false);
 
 const { isScreenSmall } = useGlobalComposable()
@@ -248,7 +247,19 @@ const useLotes = useLotesStore();
 const useFavoritos = useFavoritosStore();
 
 const modalMuestra = ref(false);
-const loadingImg = ref(false);
+
+const lotes: Lotes[] = useLotes.lotes.filter(
+  (lote) => lote._id === route.params.id
+);
+const lote = ref(lotes[0]);
+
+const loadingImg = computed((any: any)=>{
+  if(lote.value.productor!.picture){
+    return false
+  } else{
+    return true
+  }
+});
 
 const onClickMuestra = () => {
   if (validatePerfilBase()) {
@@ -257,10 +268,6 @@ const onClickMuestra = () => {
   }
 };
 
-const lotes: Lotes[] = useLotes.lotes.filter(
-  (lote) => lote._id === route.params.id
-);
-const lote = ref(lotes[0]);
 const galeria = ref();
 
 const openModal = ref(false);

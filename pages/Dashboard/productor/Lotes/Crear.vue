@@ -1,8 +1,8 @@
 <template>
-  <div class="m-8 mt-20 sm:m-20">
+  <div :style="containerStyles" class="m-8  sm:m-20">
     <div class="sm:overflow-auto">
       <div>
-        <h1 class="text-center text-xl sm:text-3xl text-gray-700 font-bold">
+        <h1 class="text-center text-xl sm:text-3xl text-gray-700 font-bold mt-">
         Crea tu Lote de Café
         </h1>
         <h3 class="sm:text-2xl text-center sm:text-inherit text-xl mb-8 text-gray-600">Agrega las imagenes</h3>
@@ -199,7 +199,7 @@
                 searchable-placeholder="Buscar variedad..."
                 class="w-full capitalize"
                 placeholder="Selecciona el variedad"
-                :options="['geisha', 'tipica', 'bourbon', 'maragogipe', 'pacamara', 'caturra', 'catuai', 'tabi', 'mundo novo', 'costa rica', 'castilla', 'catimor', 'otros']"
+                :options="['geisha', 'typica', 'bourbon', 'bourbon mayaguez', 'ls 14', 'ls 28', 'ls34', 'rume sudan', 'maragogype ', 'pacamara ', 'caturra', 'catuai ', 'tabi', 'mundo novo', 'costa rica 95', 'castilla', 'catimor', 'blend', 'otro']"
                 v-model="state.variedad"
               />
             </UFormGroup>
@@ -210,7 +210,8 @@
                 searchable-placeholder="Buscar proceso..."
                 class="w-full capitalize"
                 placeholder="Selecciona el proceso"
-                :options="['sueves lavado', 'lavado anaeróbico', 'honey', 'fermentación prolongada', 'natural', 'natural anaeróbico', 'experimental']"
+                :options="['lavado', 'lavado anaeróbico', 'lavado oxidación', 'lavado fermentación láctica', 'yellow honey', 'red honey', 'back honey', 'natural', 'natural anaeróbico', 'experimental' 
+]"
                 v-model="state.proceso"
               />
             </UFormGroup>
@@ -226,7 +227,7 @@
                 searchable-placeholder="Buscar perfil..."
                 class="w-full capitalize"
                 placeholder="Selecciona el perfil"
-                :options="['floral', 'frutal', 'vegetal', 'cítrico', 'dulce', 'azucares caramelizados', 'frutos secos', 'nuez / chocolate', 'taza limpia']"
+                :options="['floral', 'frutal', 'vegetal', 'cítrico', 'vinoso', 'dulce', 'azucares caramelizados', 'frutos secos', 'chocolate', 'nuez', 'taza limpia']"
                 v-model="state.perfil"
               />
             </UFormGroup>
@@ -343,6 +344,12 @@ definePageMeta({
   middleware: "productor",
   layout: "productor",
 });
+
+const useGlobal = useGlobalStore()
+
+const containerStyles = computed(() => ({
+  'margin-top': `calc( ${useGlobal.heightNavProductor}px + 32px )`,
+}))
 
 const componentRef = ref<HTMLElement>();
   const createObserver = (element: HTMLElement) => {

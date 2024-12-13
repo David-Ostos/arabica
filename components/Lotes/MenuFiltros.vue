@@ -105,11 +105,16 @@
                   </div>
                 </UTooltip>
                 <div  class="w-4 h-4">
-                  <UIcon class="text-base cursor-pointer" name="i-heroicons-x-mark-16-solid" @click=" resetFilter(key, item.value as string[]) /* item.isActive = false */ " />
+                  <UIcon class="text-base cursor-pointer" name="i-heroicons-x-mark-16-solid" @click=" resetFilter(key)  " />
                 </div>
               
             </div>
           </div>
+
+          <UButton class="mt-4" color="white" variant="outline" block @click=" resetAll()" > 
+            <UIcon name="i-streamline-interface-delete-bin-1-remove-delete-empty-bin-trash-garbage" dynamic/> 
+            Eliminar todos los filtros
+          </UButton>
 
         </div>
       </div>
@@ -205,6 +210,7 @@ const emits = defineEmits<{
   (e: "filtroPais", pais: string[]): void;
   (e: "filtroOrigen", origen: string[]): void;
   (e: "filtrosRange", tipo: string, value: [number, number] | []): void;
+  (e: "resetAll") :void
   
 }>();
 
@@ -244,6 +250,25 @@ interface Range{
   isOpen: boolean;
 }
 
+const resetAll = () => {
+  muestras.value = false;
+  paisesActivo.value = false;
+  filtroPais.value = [];
+  origenesActivo.value = false;
+  filtroOrigen.value = [];
+  filtros.forEach(filter => {
+    if (filter.tipe === 'select') {
+      filter.value.forEach((item: Select) => item.isActive = false);
+    } else if (filter.tipe === 'range') {
+      filter.value = [filter.min!, filter.max!];
+    }
+  });
+  Object.keys(filtrosActivos).forEach(key => {
+    filtrosActivos[key as keyof typeof filtrosActivos].isActive = false;
+    filtrosActivos[key as keyof typeof filtrosActivos].value = Array.isArray(filtrosActivos[key as keyof typeof filtrosActivos].value) ? [] : '';
+  });
+  emits('resetAll');
+};
 
 
 /* muestras */
@@ -327,11 +352,7 @@ const selectTodosLosOrigenes = () => {
 /* /origenes */
 
 /* select */
-  const filtroProductores = ref([])
-  const filtroVariedades = ref([])
-  const filtroProcesos = ref([])
-  const filtroPerfil = ref([])
-  const filtroCertificaciones = ref([])
+
 
 const selectsSeleccionado = (filterKey: string, value:string) => {
   let filter;
@@ -341,9 +362,7 @@ const selectsSeleccionado = (filterKey: string, value:string) => {
     filter = filtrosActivos[filterKey.toLowerCase() as keyof typeof filtrosActivos]
   }
   const filterIndex = filtros.findIndex(f => f.label === filterKey);
-  console.log({filterKey, value})
   let index;
-  console.log({filter})
   if(Array.isArray(filter.value) && filter.value.every(item => typeof item === 'string')){
     index = (filter.value as string[]).indexOf(value)
     let targetArray: string[] = [] as string[];
@@ -380,7 +399,6 @@ const selectsSeleccionado = (filterKey: string, value:string) => {
     targetArray.push(value)
     filtros[filterIndex].value.find((item: Select) => item.tipo === value)!.isActive = true
   }
-  console.log({targetArray})
   filter.isActive = filter.value.length > 0;
 
   emits("filtrosSelect", filterKey , targetArray )
@@ -463,11 +481,31 @@ const filtros: Filtros[] = reactive([
         isActive: false
       },
       {
-        tipo: "típica",
+        tipo: "typica",
         isActive: false
       },
       {
         tipo: "bourbon",
+        isActive: false
+      },
+      {
+        tipo: "bourbon mayaguez",
+        isActive: false
+      },
+      {
+        tipo: "ls 14",
+        isActive: false
+      },
+      {
+        tipo: "ls 28",
+        isActive: false
+      },
+      {
+        tipo: "ls34",
+        isActive: false
+      },
+      {
+        tipo: "rume sudan",
         isActive: false
       },
       {
@@ -495,7 +533,7 @@ const filtros: Filtros[] = reactive([
         isActive: false
       },
       {
-        tipo: "costa rica",
+        tipo: "costa rica 95",
         isActive: false
       },
       {
@@ -514,10 +552,14 @@ const filtros: Filtros[] = reactive([
     tipe: "select",
   }, {label: "Procesos",
     value: [
-      { tipo: "sueves lavado", isActive: false },
+
+      { tipo: "lavado", isActive: false },
       { tipo: "lavado anaeróbico", isActive: false },
-      { tipo: "honey", isActive: false },
-      { tipo: "fermentación prolongada", isActive: false },
+      { tipo: "lavado oxidación", isActive: false },
+      { tipo: "lavado fermentación láctica", isActive: false },
+      { tipo: "yellow honey", isActive: false },
+      { tipo: "red honey", isActive: false },
+      { tipo: "back honey", isActive: false },
       { tipo: "natural", isActive: false },
       { tipo: "natural anaeróbico", isActive: false },
       { tipo: "experimental", isActive: false },
@@ -529,10 +571,12 @@ const filtros: Filtros[] = reactive([
       { tipo: "frutal", isActive: false },
       { tipo: "vegetal", isActive: false },
       { tipo: "cítrico", isActive: false },
+      { tipo: "vinoso", isActive: false },
       { tipo: "dulce", isActive: false },
       { tipo: "azucares caramelizados", isActive: false },
       { tipo: "frutos secos", isActive: false },
-      { tipo: "nuez / chocolate", isActive: false },
+      { tipo: "chocolate", isActive: false },
+      { tipo: "nuez", isActive: false },
       { tipo: "taza limpia", isActive: false },
     ],
     tipe: "select",
@@ -540,6 +584,7 @@ const filtros: Filtros[] = reactive([
     value: [
       { tipo: "organic", isActive: false },
       { tipo: "fair trade", isActive: false },
+      { tipo: 'fairtrade organic', isActive: false },
       { tipo: "rain forest", isActive: false },
       { tipo: "imocert", isActive: false },
       { tipo: "jas", isActive: false }
@@ -577,8 +622,6 @@ const filtros: Filtros[] = reactive([
 
 /* rangos */
 
-const filtroPrecio = ref([] as [number,number] | [])
-const filtroPuntaje = ref([] as [number,number] | [])
 const precioDefault = ref([] as [number, number] | [])
 const puntajeDefault = ref([] as [number, number] | []) 
 
@@ -654,7 +697,7 @@ const algunFiltroActivo = computed(() => {
   return Object.values(filtrosActivos).some(value => value.isActive);
 });
 
-const resetFilter = (filterKey: string, value: string[]) => {
+const resetFilter = (filterKey: string) => {
   const filter = filtrosActivos[filterKey as keyof typeof filtrosActivos];
   filter.isActive = false
   if(filterKey !== 'muestra'){
@@ -684,17 +727,29 @@ const resetFilter = (filterKey: string, value: string[]) => {
       case 'puntaje':
         resetRangeFilter(filterKey);
         break;
+      case 'all':
+        emits("filtroMuestra", false);
+        selectTodosLosOrigenes();
+        selectTodosLosPaises();
+        resetRangeFilter(filterKey);
+        resetSelectFilter(filterKey);
+        break;
     }
 
 }
 
+
 const resetSelectFilter = (filterKey: string) => {
   let filterIndex;
-  if(filterKey === 'clasificacion'){
-    filterIndex = filtros.findIndex(f => f.label === 'Clasificación de Lotes');
-  }else{
-    filterIndex = filtros.findIndex(f => f.label.toLowerCase() === filterKey);
-  }
+  if(filterKey === 'all'){
+    emits('filtrosSelect', filterKey, [])
+  } else{
+    if(filterKey === 'clasificacion'){
+      filterIndex = filtros.findIndex(f => f.label === 'Clasificación de Lotes');
+    }else{
+      filterIndex = filtros.findIndex(f => f.label.toLowerCase() === filterKey);
+    }
+
     if (filterIndex !== -1) {
       filtros[filterIndex].value.forEach((item: Select) => {
         if(item.isActive){
@@ -704,13 +759,18 @@ const resetSelectFilter = (filterKey: string) => {
       emits('filtrosSelect', filterKey, [])
     }
   }
+}
 
 const resetRangeFilter = (filterKey: string) =>{
-  const filterIndex = filtros.findIndex(f => f.label.toLowerCase() === filterKey);
-    if (filterIndex !== -1) {
-      filtros[filterIndex].value = [filtros[filterIndex].min, filtros[filterIndex].max];
-    }
+  if(filterKey === 'all'){
     emits('filtrosRange', filterKey, [])
+  }else{
+    const filterIndex = filtros.findIndex(f => f.label.toLowerCase() === filterKey);
+      if (filterIndex !== -1) {
+        filtros[filterIndex].value = [filtros[filterIndex].min, filtros[filterIndex].max];
+      }
+      emits('filtrosRange', filterKey, [])
+  }
 }
 </script>
 

@@ -136,23 +136,7 @@ const years = computed(() => {
 const searchQueryCertificacion = ref("");
 const searchQueryYear = ref("");
 
-const certificados = [
-  "Bird Friendly",
-  "C.A.F.E practices",
-  "4C",
-  "Q Certified",
-  "UTZ Certified",
-  "FairTrade",
-  "B Corp",
-  "Organic Bio Suisse",
-  "Global G.A.P.",
-  "IWCA",
-  "SCA Member",
-  "Organic",
-  "US Organic",
-  "Organic Demeter",
-  "Rainforest Alliance",
-];
+const certificados = ['organic','fair trade','rain forest','imocert','jas','fairtrade organic'];
 
 const filterYear = () => {
   if (!searchQueryYear.value) return years.value;

@@ -13,13 +13,15 @@ export interface Lotes{
   precio?: number;
   descripcion?: string;
   galeria?: Galeria[];
-  productor?: {
-    _id?: string,
-    nombre?: string,
-    picture?: string 
-  };
+  productor?: Productor;
   muestra?: Muestra,
   ocultar?: boolean
+}
+
+export type Productor = {
+  _id?: string,
+  nombre?: string,
+  picture?: string 
 }
 
 export type Muestra = {
@@ -31,17 +33,21 @@ export type Muestra = {
 
 export type Productores = 'independiente' | 'asociacion' | 'cooperativa'
 
-export type Certificaciones = 'organic' | 'fair trade' | 'rain fores' | 'imocert' | 'jas' 
+export type Certificaciones = 'organic' | 'fair trade' | 'fairtrade organic' | 'rain fores' | 'imocert' | 'jas' 
+
 
 export type Origen = 'piura' | 'amazonas' | 'cajamarca' | 'san martin' | 'huanuco' | 'pasco' | 'junin' | 'ayacucho' | 'cusco' | 'puno'
 
-export type Variedad = 'geisha' | 'tipica' | 'bourbon' | 'maragogipe' | 'pacamara' | 'caturra' | 'catuai' | 'tabi' | 'mundo novo' | 'costa rica' | 'castilla' | 'catimor' | 'otros'
 
-export type Porceso = 'sueves lavado' |'lavado anaeróbico' |'honey' |'fermentación prolongada' |'natural' |'natural anaeróbico' |'experimental'
+export type Variedad = 'geisha' | 'typica' | 'bourbon' | 'bourbon mayaguez' | 'ls 14' | 'ls 28' | 'ls 34' | 'rume sudan' | 'maragogype ' | 'pacamara ' | 'caturra' | 'catuai ' | 'tabi' | 'mundo novo' | 'costa rica 95' | 'castilla' | 'catimor' | 'blend' | 'otro'
+
+export type Porceso = "lavado" | "lavado anaeróbico" | "lavado oxidación" | "lavado fermentación láctica" | "yellow honey" | "red honey" | "back honey" | "natural" | "natural anaeróbico" | "experimental" 
+
 
 export type Puntaje = [number, number]; 
 
-export type Perfil = 'floral' | 'frutal' | 'vegetal' | 'cítrico' | 'dulce' | 'azucares caramelizados' | 'frutos secos' | 'nuez / chocolate' | 'taza limpia'
+
+export type Perfil = 'floral' | 'frutal' | 'vegetal' | 'cítrico' | 'vinoso' | 'dulce' | 'azucares caramelizados' | 'frutos secos' | 'chocolate' | 'nuez' | 'taza limpia'
 
 export type CantidadLote = 'lote' | 'micro lote' | 'nano lote'
 

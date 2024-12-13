@@ -105,7 +105,6 @@ function handleScroll() {
               <img
                 class="h-14 w-auto"
                 :src="imgLoginLitgh"
-                :class="{ hidden: mobileMenuOpen === true }"
                 alt="Logo Arabica"
               />
             </NuxtLink>

@@ -3,7 +3,7 @@
     class="relative shadow-xl rounded-3xl"
     :class="!useUser.dataUser.verificado ? '-mt-2 z-0 block' : ''"
   >
-    <div class="overflow-hidden rounded-b-3xl h-[400px]  object-center transition-all duration-700">
+    <div class="overflow-hidden rounded-b-3xl md:h-[400px]  object-center transition-all duration-700">
       <USkeleton v-show="loadingImg" class="w-full h-full transition-all duration-700" :ui="{
 								background: 'bg-secundary'
 							}" />
@@ -17,7 +17,7 @@
         alt="Imagen portada"
         height="400"
         @load="loadingImg = false"
-        class="h-[400px] w-full object-cover object-center rounded-b-3xl cursor-pointer hover:brightness-75 transition-all duration-1000"
+        class="md:h-[400px] w-full object-cover object-center rounded-b-3xl cursor-pointer hover:brightness-75 transition-all duration-1000"
       />
     </div>
   </div>

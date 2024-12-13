@@ -227,9 +227,12 @@ const linksMobileProductor: LinksMobile[][]= reactive([
         ]
       }
     },
-  ],
-    
-    [
+  ],[
+    {
+      label: "Comprar Lotes de Café",
+      icon: "i-streamline-money-cashier-tag-codes-tags-tag-product-label",
+      to: `/lotes`,
+    },
     {
       label: "Ayuda",
       icon: "i-tabler-help",

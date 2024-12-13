@@ -4,7 +4,7 @@
     <div class="-mt-16 relative w-fit">
       <Avatar
         class="ring-4 ring-offset-[3px] ring-primary bg-white"
-        clases="h-[120px] w-[120px]"
+        clases="h-[90px] w-[90px] md:h-[120px] md:w-[120px]"
         clases-icon="text-3xl"
         :picture="picture"
         alt="Avatar"

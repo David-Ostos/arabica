@@ -203,7 +203,7 @@
                 searchable-placeholder="Buscar variedad..."
                 class="w-full capitalize"
                 placeholder="Selecciona el variedad"
-                :options="['geisha', 'tipica', 'bourbon', 'maragogipe', 'pacamara', 'caturra', 'catuai', 'tabi', 'mundo novo', 'costa rica', 'castilla', 'catimor', 'otros']"
+                :options="['geisha', 'typica', 'bourbon', 'bourbon mayaguez', 'ls 14', 'ls 28', 'ls34', 'rume sudan', 'maragogype ', 'pacamara ', 'caturra', 'catuai ', 'tabi', 'mundo novo', 'costa rica 95', 'castilla', 'catimor', 'blend', 'otro']"
                 v-model="state.variedad"
               />
             </UFormGroup>
@@ -214,7 +214,8 @@
                 searchable-placeholder="Buscar proceso..."
                 class="w-full capitalize"
                 placeholder="Selecciona el proceso"
-                :options="['sueves lavado', 'lavado anaeróbico', 'honey', 'fermentación prolongada', 'natural', 'natural anaeróbico', 'experimental']"
+                :options="['lavado', 'lavado anaeróbico', 'lavado oxidación', 'lavado fermentación láctica', 'yellow honey', 'red honey', 'back honey', 'natural', 'natural anaeróbico', 'experimental' 
+]"
                 v-model="state.proceso"
               />
             </UFormGroup>
@@ -230,7 +231,7 @@
                 searchable-placeholder="Buscar perfil..."
                 class="w-full capitalize"
                 placeholder="Selecciona el perfil"
-                :options="['floral', 'frutal', 'vegetal', 'cítrico', 'dulce', 'azucares caramelizados', 'frutos secos', 'nuez / chocolate', 'taza limpia']"
+                :options="['floral', 'frutal', 'vegetal', 'cítrico', 'vinoso', 'dulce', 'azucares caramelizados', 'frutos secos', 'chocolate', 'nuez', 'taza limpia']"
                 v-model="state.perfil"
               />
             </UFormGroup>

@@ -1,170 +1,86 @@
 <template>
   <div class="flex flex-col sm:flex-row gap-8 mt-16 z-0 justify-between relative flex-grow sm:mr-8"
     :style="containerStyles">
-    <!-- Menu de filtros pc -->
-    <div v-if="!isScreenSmall" :style="containerStyles"
-      class="relative -z-10 overflow-x-hidden max-h-screen transition-width ease-in-out duration-700 dark:bg-gray-800 text-gray-900 dark:-text-dar border-r border-inset border-gray-300 dark:border-gray-700 focus:border-2 focus:border-primary-500 dark:focus:border-primary-400 pb-8 px-4"
-      :class="[
-        isOpen ? ' w-1/4 overflow-y-auto ' : ' w-[74px] overflow-y-hidden',
-        useLotes.lotes.length > 0 ? ' w-1/3' : 'w-1/4',
-      ]">
-      <div class="sticky w-full top-0 flex justify-between items-center bg-white z-[60] py-4"
-        :class="isOpen ? 'px-4' : ''">
-        <h1 class="font-semibold text-xl text-thirdary overflow-hidden transition-width duration-700 ease-in-out"
-          :class="!isOpen ? 'w-0 opacity-0' : 'opacity-100'">
-          Filtros
-        </h1>
-        <div class="text-xl border rounded-md p-2 flex justify-center items-center cursor-pointer"
-          @click="isOpen = !isOpen">
-          <UIcon name="i-ic-round-menu" class="" dynamic />
-        </div>
-      </div>
-      <div :class="isOpen ? '  opacity-100' : 'opacity-0'"
-        class="overflow-auto transition-all ease-in-out duration-700 mt-4">
-        <div>
-          <UButton color="white" @click="console.log(filtersSearch)">filtersSearch</UButton>
-        </div>
-        <LotesMenuFiltros 
-          @filtro-muestra="filtrarMuestra" 
-          @close="closeMenuFiltro" 
-          @filtros-select="filtrarSelect"
-          @filtro-pais="filtrarPais" 
-          @filtro-origen="filtrarOrigen" 
-          @filtros-range="filtrarRange"
-        />
-      </div>
-    </div>
-    <!-- /Menu de filtros pc -->
+    <!-- Menu de filtros -->
+    <div class="">
+      <div v-if="isOpen" class="fixed z-40 opacity-15 h-screen bg-gray-700 w-screen" @click="isOpen = false" ></div>
+        
+        <div  :style="containerStyles"
+          class="transform  fixed z-50 overflow-x-hidden  transition-width ease-in-out duration-700 dark:bg-gray-800 text-gray-900 dark:-text-dar border-r border-inset bg-white border-gray-300 dark:border-gray-700 focus:border-2 focus:border-primary-500 dark:focus:border-primary-400 pb-8 px-4 "
+          :class="[ 
+            isOpen ? ' w-[350px] overflow-y-auto translate-x-0 ' : `w-0 sm:w-[74px] overflow-y-hidden ${styleMobileContainer}`,
+            isScreenSmall ? 'scrollbar-hide overflow-auto' : ''
+          ]">
+          <div class="sticky w-full top-0 right-0 flex justify-between items-center bg-white z-[60] py-4"
+            :class="isOpen ? 'px-4' : ''">
+            <h1 class="font-semibold text-xl text-thirdary overflow-hidden transition-width duration-700 ease-in-out"
+              :class="!isOpen ? 'w-0 opacity-0' : 'opacity-100'">
+              Filtros
+            </h1>
+            <div v-if="!isScreenSmall" class="text-xl border rounded-md p-2 flex justify-center items-center cursor-pointer"
+              @click="isOpen = !isOpen">
+              <UIcon name="i-ic-round-menu" class="" dynamic />
+            </div>
 
-    <!-- menu mobile -->
+            <div v-if="isScreenSmall" :class="isOpen ? '' : 'hidden'" class="text-xl border rounded-md p-2 flex justify-center items-center cursor-pointer"
+              @click="isOpen = !isOpen">
+              <UIcon name="i-heroicons-x-mark-16-solid" class="" dynamic />
+            </div>
+            
+          </div>
+          <div :class="isOpen ? '  opacity-100' : 'opacity-0'"
+            class="overflow-auto z-50 transition-all ease-in-out duration-700 mt-4">
+            <LotesMenuFiltros 
+              @filtro-muestra="filtrarMuestra" 
+              @close="closeMenuFiltro" 
+              @filtros-select="filtrarSelect"
+              @filtro-pais="filtrarPais" 
+              @filtro-origen="filtrarOrigen" 
+              @filtros-range="filtrarRange"
+              @reset-all="resetAllFilters"
+              />
+            </div>
+          </div>
+        </div>
+    <!-- /Menu de filtros -->
+
     <div v-if="isScreenSmall">
-      <div class="fixed flex justify-center gap-4 items-center border-b shadow-sm pt-6 py-4 bg-white z-50 w-full">
-        <button @click="mobileFiltroMenu = true"
+      <div class="fixed flex justify-center gap-4 items-center border-b shadow-sm pt-6 py-4 bg-white z-30 w-full">
+        <button @click="isOpen = true"
           class="focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed disabled:opacity-75 flex-shrink-0 font-medium rounded-md text-sm gap-x-1.5 px-2.5 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 text-gray-900 dark:text-white bg-white hover:bg-gray-50 disabled:bg-white dark:bg-gray-900 dark:hover:bg-gray-800/50 dark:disabled:bg-gray-900 focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 inline-flex items-center">
           <UIcon name="i-material-symbols-filter-alt-outline" dynamic /> Filtros
         </button>
 
-        <LotesMenuOrdenar />
+        <LotesMenuOrdenar :sortFunction="sortLotes" :initialSort="selected" @updateSort="selected = $event" />
+
       </div>
     </div>
 
-    <!-- Menu filtro -->
-    <!--  <USlideover side="left" v-model="mobileFiltroMenu" :ui="{ width: 'w-[80%] max-w-[80%]' }">
-    <UCard class="flex flex-col flex-1"
-      :ui="{ backgound: 'dark:bg-white', body: { base: 'flex-1' }, ring: '', divide: '' }">
-      <template #header>
-        <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:-text-dar capitalize">
-            Filtros
-          </h3>
-          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="mobileFiltroMenu = false" />
-        </div>
-      </template>
-
-
-
-</UCard>
-</USlideover> -->
-    <USlideover side="left" v-model="mobileFiltroMenu" :ui="{ width: 'w-[80%] max-w-[80%]' }">
-      <UCard class="flex flex-col flex-1" :ui="{
-        backgound: 'dark:bg-white',
-        body: { base: 'flex-1' },
-        ring: '',
-        divide: '',
-      }">
-        <template #header>
-          <div ref="headerMobileSlider" class="flex items-center justify-between">
-            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:-text-dar capitalize">
-              Filtros
-            </h3>
-            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
-              @click="mobileFiltroMenu = false" />
-          </div>
-        </template>
-        
-        <div>  
-        
-          <div class="grid grid-cols-2 gap-2 w-full">
-          <UButton color="white" @click="console.log(filtersSearch)">filtersSearch</UButton>
-          </div>
-          
-          
-          
-
-          <!-- <div class="grid grid-cols-2 gap-2 w-fit">
-            <UButton class="col-span-1" block variant="outline" @click="console.log({ filtroMuestra })"> filtroMuestra
-            </UButton>
-            <UButton class="col-span-1" block variant="outline" @click="console.log({ filtroPais })"> filtroPais
-            </UButton>
-            <UButton class="col-span-1" block variant="outline" @click="console.log({ filtroOrigen })"> filtroOrigen
-            </UButton>
-            <UButton class="col-span-1" block variant="outline" @click="console.log({ filtroProductores })">
-              filtroProductores
-            </UButton>
-            <UButton class="col-span-1" block variant="outline" @click="console.log({ filtroVariedades })">
-              filtroVariedades
-            </UButton>
-            <UButton class="col-span-1" block variant="outline" @click="console.log({ filtroProcesos })"> filtroProcesos
-            </UButton>
-            <UButton class="col-span-1" block variant="outline" @click="console.log({ filtroPerfil })"> filtroPerfil
-            </UButton>
-            <UButton class="col-span-1" block variant="outline" @click="console.log({ filtroCertificaciones })">
-              filtroCertificaciones</UButton>
-
-          </div> -->
-
-          <LotesMenuFiltros 
-          @filtro-muestra="filtrarMuestra" 
-          @close="closeMenuFiltro" 
-          @filtros-select="filtrarSelect"  
-          @filtro-pais="filtrarPais" 
-          @filtro-origen="filtrarOrigen" 
-          @filtros-range="filtrarRange"
-          />
-        </div>
-      </UCard>
-    </USlideover>
-
-    <!-- /Menu filtro -->
-
-    <!-- Menu Ordenar -->
-
-    <!-- <LotesMenuFiltros 
-      
-      :items="{
-        lotes:lotesFilter,
-        isOpen:mobileFiltroMenu
-      }"
-      @close="closeMenuFiltro" /> -->
-    <!-- /Menu Ordenar -->
-
-    <!-- /menu mobile -->
-
     <!-- show card lote -->
-    <div class="flex gap-8 mx-4 z-0 justify-between relative flex-grow sm:overflow-auto sm:w-3/4"
+    <div :style="containerStyles" class="flex gap-8 mx-4 z-0 justify-between relative flex-grow sm:overflow-auto sm:ml-[74px] h-screen"
       :class="isScreenSmall ? 'scrollbar-hide' : ''">
       <div class="mt-5 pb-10 transition-width ease-in-out duration-700 mx-auto flex-grow">
-        <h1
-          class="font-bold text-base md:text-lg text-gray-800 line-clamp-2 hover:line-clamp-none transition-all duration-1000 mb-4">
-          {{
-            filtersActive === false ? useLotes.lotes.length : lotesFilter.length
-          }}
-          Lotes disponibles
-        </h1>
-        <div class="grid sm:grid-cols-3 grid-cols-1 gap-4 justify-center sm:justify-start sm:mr-4 mb-10">
-          <div v-for="item in filtersActive === false
-            ? useLotes.lotes
-            : lotesFilter" class="col-span-1 min-w-64 mb-4 relative">
+        <div class="flex justify-between mr-4">
+          <h1
+            class="font-bold text-base md:text-lg text-gray-800 line-clamp-2 hover:line-clamp-none transition-all duration-1000 mb-4">
+            {{
+              lotesFilter.length
+            }}
+            {{lotesFilter.length === 1 ? "Lote disponible" : 'Lotes disponibles'}}
+          </h1>
+        <LotesMenuOrdenar :sortFunction="sortLotes" :initialSort="selected" @updateSort="selected = $event" />
+
+
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-4 justify-center sm:justify-start sm:mr-4 mb-10">
+          <div v-for="item in lotesFilter" :key="item._id" class="col-span-1 min-w-64 mb-4 relative">
             <LotesCard :item="item" />
           </div>
         </div>
 
-        <div v-if="
-          filtersActive === false
-            ? useLotes.lotes.length === 0
-            : lotesFilter.length === 0
-        ">
-          <p>No hay lotes disponibles</p>
+        <div v-if="lotesFilter.length === 0"
+          class="flex justify-center items-center">
+          <p class="text-gray-600 font-medium md:text-2xl">No hay lotes disponibles</p>
         </div>
       </div>
     </div>
@@ -172,8 +88,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { Wheat } from "lucide-vue-next";
-import type { FiltersSearch } from "~/interfaces/FiltersSearch";
+import type { Lotes } from "~/interfaces/Lotes";
 
 definePageMeta({
   layout: "lote",
@@ -181,182 +96,201 @@ definePageMeta({
 
 const { isScreenSmall } = useGlobalComposable();
 const useGlobal = useGlobalStore();
-const headerMobileSlider = ref();
-const headerMobileSliderHeight = ref(0);
 const mobileFiltroMenu = ref(false);
 
 const isOpen = ref(false);
-const showOrigins = ref(false);
-const selectedorigin = ref("");
 const useLotes = useLotesStore();
-const filtersActive = ref(false);
-const lotesFilter = ref<any>([]);
+const lotes: Ref<Lotes[]> = ref(useLotes.lotes)
+const lotesFilter = ref<Lotes[]>(JSON.parse(JSON.stringify(lotes.value)));
 
-const containerStyles = computed(() => ({
-  "max-height": `calc(100vh - (${useGlobal.heightNavLote}px + ${useGlobal.heightFooterLote}px) )`,
-}));
+const sortLotes = (sortType: string) => {
+  selected.value = sortType;
+  if (sortType === 'disponibilidad') {
+    // Maintain filters but reset to original order
+    const filteredLotes = lotes.value.filter(lote => 
+      lotesFilter.value.some(filteredLote => filteredLote._id === lote._id)
+    );
+    lotesFilter.value = filteredLotes;
+  } else {
+    lotesFilter.value.sort((a, b) => {
+      switch (sortType) {
+        case 'precioMenor':
+          return (a.precio || 0) - (b.precio || 0);
+        case 'precioMayor':
+          return (b.precio || 0) - (a.precio || 0);
+        case 'puntuacionMenor':
+          return (a.puntaje || 0) - (b.puntaje || 0);
+        case 'puntuacionMayor':
+          return (b.puntaje || 0) - (a.puntaje || 0);
+        default:
+          return 0;
+      }
+    });
+  }
+};
 
-const mobileOrdenarMenu = ref(false);
 
-const filtersSearch = reactive<FiltersSearch>({
-  muestra: undefined,
-  paises: undefined,
-  origenes: undefined,
-  productores: undefined,
-  variedades: undefined,
-  procesos: undefined,
-  perfil: undefined,
-  certificaciones: undefined,
-  clasificacion: undefined,
-  precio: undefined,
-  puntaje: undefined,
+
+
+const containerStyles = computed(() => {
+  if(isScreenSmall.value){
+    return `max-height: calc(100vh - ${useGlobal.heightNavLote}px)`
+  }else{
+    return `max-height: calc(100vh - (${useGlobal.heightNavLote}px + ${useGlobal.heightFooterLote}px) )`
+  }
+});
+const styleMobileContainer = ref(''); 
+
+watch(isOpen, (newValue) => { 
+  if (!newValue && isScreenSmall.value) { 
+    setTimeout(() => { 
+      styleMobileContainer.value = '-translate-x-full rtl:translate-x-full'; 
+    }, 500); 
+  } else { styleMobileContainer.value = ''; 
+
+  } 
 });
 
-const options = [
-  {
-    value: "disponibilidad",
-    label: "Disponibilidad",
-  },
-  {
-    value: "precioMenor",
-    label: "precio: de menor a mayor",
-  },
-  {
-    value: "precioMayor",
-    label: "precio: de mayor a menor",
-  },
-  {
-    value: "puntuacionMayor",
-    label: "puntuacion: de menor a mayor",
-  },
-  {
-    value: "puntuacionMenor",
-    label: "puntuacion: de mayor a menor",
-  },
-  {
-    value: "masReciente",
-    label: "cosecha mas reciente",
-  },
-];
+onMounted(()=>{
+  if(isScreenSmall.value){
+    styleMobileContainer.value = '-translate-x-full rtl:translate-x-full'; 
+  }
+})
+
+
+const activeFilters = ref<Partial<Record<keyof Lotes, any>>>({});
+
+  const filtrarLotes = <K extends keyof Lotes>(tipo: K, filtro: boolean | string[] | [number, number]) => {
+  if (tipo === 'muestra') {
+    if (filtro === true) {
+      activeFilters.value[tipo] = filtro;
+    } else {
+      delete activeFilters.value[tipo];
+    }
+  } else if (Array.isArray(filtro)) {
+    if (filtro.length === 0) {
+      delete activeFilters.value[tipo];
+    } else if (filtro.length === 2 && typeof filtro[0] === 'number' && typeof filtro[1] === 'number') {
+      // Caso especial para rangos (puntaje y precio)
+      activeFilters.value[tipo] = filtro;
+    } else {
+      activeFilters.value[tipo] = filtro;
+    }
+  } else {
+    activeFilters.value[tipo] = filtro;
+  }
+
+  lotesFilter.value = lotes.value.filter(lote => {
+    return Object.entries(activeFilters.value).every(([key, value]) => {
+      const tipoKey = key as keyof Lotes;
+      if (tipoKey === 'muestra') {
+        return value === true ? lote.muestra?.muestra === true : true;
+      }
+      if (Array.isArray(value)) {
+        if (tipoKey === 'puntaje' || tipoKey === 'precio') {
+          // Manejo de rangos para puntaje y precio
+          const [min, max] = value as [number, number];
+          const loteValue = lote[tipoKey] as number;
+          return loteValue >= min && loteValue <= max;
+        } else {
+          const loteValue = lote[tipoKey];
+          return Array.isArray(loteValue) 
+            ? value.some(v => loteValue.includes(v))
+            : value.includes(loteValue as string);
+        }
+      }
+      return true;
+    });
+  });
+  const filtroCopia = [...lotesFilter.value]
+  lotesFilter.value = [];
+  lotesFilter.value = [...filtroCopia]
+  sortLotes(selected.value)
+};
+
 
 const selected = ref("disponibilidad");
 
 /* filtros */
 
+const resetAllFilters = () => {
+  activeFilters.value = {};
+  lotesFilter.value = JSON.parse(JSON.stringify(lotes.value));
+  selected.value = "disponibilidad";
+  sortLotes("disponibilidad");
+};
+
+/* const resetAll = () => {
+  resetAllFilters();
+  // Emit an event to reset filters in child components
+  $emit('reset-all-filters');
+}; */
+
 /* muestra */
-const filtroMuestra = ref(false);
 const filtrarMuestra = (value: boolean) => {
-  console.log(value);
-  filtersSearch.muestra = value;
+  filtrarLotes('muestra', value)
 };
 /* /muestra */
 
 /* pais */
-const filtroPais: Ref<string[]> = ref([]);
 const filtrarPais = (pais: string[]) => {
-  filtersSearch.paises = pais;
+  filtrarLotes('pais', pais)
+
 };
 /* /pais */
 /* origen  */
-const filtroOrigen = ref([] as string[]);
 const filtrarOrigen = (origen: string[]) => {
-  filtersSearch.origenes = origen;
+  filtrarLotes('origen', origen)
 };
 /* /origen  */
 
 /* filtros select */
-const filtroProductores = ref([] as string[]);
-const filtroVariedades = ref([] as string[]);
-const filtroProcesos = ref([] as string[]);
-const filtroPerfil = ref([] as string[]);
-const filtroCertificaciones = ref([] as string[]);
-const filtroClasificaciones = ref([] as string[]);
 
 const filtrarSelect = (tipo: string, value: string[]) => {
   switch (tipo) {
     case "Certificaciones":
     case "certificaciones":
-      filtersSearch.certificaciones = value;
+      filtrarLotes('certificaciones', value)
+
       break;
     case "Perfil":
     case "perfil":
-      filtersSearch.perfil = value;
+      filtrarLotes('perfil', value)
       break;
     case "Procesos":
     case "procesos":
-      filtersSearch.procesos = value;
+      filtrarLotes('proceso', value)
       break;
     case "Variedades":
     case "variedades":
-      filtersSearch.variedades = value;
+      filtrarLotes('variedad', value)
       break;
     case "Productores":
     case "productores":
-      filtersSearch.productores = value;
+      filtrarLotes('productores', value)
       break;
       case "clasificacion":
       case "Clasificación de Lotes":
-      filtersSearch.clasificacion = value;
+      filtrarLotes('cantidadLote', value)
       break;
     default:
       console.error("Tipo de filtro no reconocido:", tipo);
       return;
   }
-
-  // console.log(filtroProductores.value);
-  // console.log(`${tipo}:`, targetArray);
-
-  // const index = targetArray.indexOf(value);
-  // if (index > -1) {
-  //   // Si el valor ya está en el array, lo quitamos
-  //   targetArray.splice(index, 1);
-  // } else {
-  //   // Si el valor no está en el array, lo añadimos
-  //   targetArray.push(value);
-
-  // }else{
-  //   switch (tipo) {
-  //   case 'certificaciones':
-  //     filtroCertificaciones.value = [];
-  //     break;
-  //     case 'perfil':
-  //     filtroPerfil.value = [];
-  //     break;
-  //   case 'procesos':
-  //     filtroProcesos.value = [];
-  //     break;
-  //   case 'variedades':
-  //     filtroVariedades.value = [];
-  //     break;
-  //   case 'productores':
-  //     filtroProductores.value = [];
-  //     break;
-  //     default:
-  //       console.error('Tipo de filtro no reconocido:', tipo);
-  //       return;
-  //     }
-  // }
-};
-/* /filtros select */
-
-/* /filtros range */
-const filtroPuntaje = ref([] as  [number, number] | [])
-const filtroPrecio = ref([] as [number, number] | [])
+}
 
 const filtrarRange = (tipo: string, value: [number, number] | [] ) =>{
   switch (tipo) {
     case 'puntaje':
-      filtersSearch.puntaje = value
+      filtrarLotes('puntaje', value)
       break;
     case 'precio':
-      filtersSearch.precio = value
+      filtrarLotes('precio', value)
       break;
     default:
       console.error("Tipo de filtro no reconocido:", tipo);
       return;
   }
-  console.log({puntaje:filtersSearch.puntaje })
-  console.log({precio: filtersSearch.precio})
 }
 /* filtros range */
 
@@ -364,128 +298,6 @@ const filtrarRange = (tipo: string, value: [number, number] | [] ) =>{
 
 const closeMenuFiltro = () => {
   mobileFiltroMenu.value = false;
-};
-
-
-
-watch(filtersSearch, () => {
-  applyFilter()
-})
-
-const applyFilter = () => {
-  const filteredLotes = useLotes.lotes.filter((lote) => {
-    if (
-      filtersSearch.muestra !== undefined &&
-      lote.muestra?.muestra !== filtersSearch.muestra
-    ) {
-      return false;
-    }
-
-    if (filtersSearch.paises !== undefined) {
-      for (let i of filtersSearch.paises) {
-        if (lote.pais?.toLowerCase() === i?.toLowerCase()) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    }
-    
-    if (filtersSearch.origenes !== undefined) {
-      for (let i of filtersSearch.origenes) {
-        if (lote.origen?.toLowerCase() === i?.toLowerCase()) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    }
-
-    if(filtersSearch.productores && filtersSearch.productores.length > 0 ){
-      if(lote.productores! === null){
-        return
-      }
-      return filtersSearch.productores
-        .map((productores) => productores.toLowerCase())
-        .includes(lote.productores!.toLowerCase());
-    }
-
-    if (filtersSearch.variedades && filtersSearch.variedades.length > 0) {
-      if (lote.variedad! === null) {
-        return;
-      }
-      return filtersSearch.variedades
-        .map((variedad) => variedad.toLowerCase())
-        .includes(lote.variedad!.toLowerCase());
-    }
-
-
-    if (filtersSearch.procesos && filtersSearch.procesos.length > 0) {
-      if (lote.proceso! === null) {
-        return;
-      }
-
-      return filtersSearch.procesos
-        .map((procesos) => procesos.toLowerCase())
-        .includes(lote.proceso!.toLowerCase());
-    }
-
-    if (filtersSearch.perfil && filtersSearch.perfil.length > 0) {
-      if (lote.proceso! === null) {
-        return;
-      }
-
-      return filtersSearch.perfil
-        .map((perfil) => perfil.toLowerCase())
-        .includes(lote.perfil!.toLowerCase());
-    }
-
-    if (filtersSearch.certificaciones && filtersSearch.certificaciones.length > 0) {
-      if (lote.certificaciones! === null) {
-        return;
-      }
-
-      return filtersSearch.certificaciones
-        .map((cert) => cert.toLowerCase())
-        .includes(lote.certificaciones!.toLowerCase());
-    }
-
-    if (filtersSearch.clasificacion && filtersSearch.clasificacion.length > 0) {
-      if (lote.cantidadLote! === null) {
-        return;
-      }
-
-      return filtersSearch.clasificacion
-        .map((clasificacion) => clasificacion.toLowerCase())
-        .includes(lote.cantidadLote!.toLowerCase());
-    }
-
-    if (filtersSearch.puntaje) {
-      const numeros = lote.puntaje;
-
-      if (!numeros) {
-        return;
-      }
-      // Convertimos los strings a números
-      // const puntajeMinimo = Number(numeros[0]);
-      // const puntajeMaximo = Number(numeros[1]) || Infinity; // Si hay "+" asumimos infinito
-      return (
-        numeros >= filtersSearch.puntaje[0]! &&
-        numeros <= filtersSearch.puntaje[1]!
-      );
-    }
-
-    if (filtersSearch.precio !== undefined) {
-      return (
-        lote.precio! >= filtersSearch.precio[0]! &&
-        lote.precio! <= filtersSearch.precio[1]!
-      );
-    }
-
-    return true;
-  });
-
-  lotesFilter.value = filteredLotes;
 };
 
 </script>

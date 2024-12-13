@@ -1,5 +1,5 @@
 <template>
-  <div v-if="item" class="relative mx-auto w-auto">
+  <div v-if="item" class="relative z-0 mx-auto w-auto">
     <NuxtLink
       :to="`/lote/${item._id}`"
       class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full"
@@ -45,14 +45,15 @@
         <div class="mt-1 mb-1 transition-all duration-1000 capitalize">
           <UTooltip
             :text="item.nombre"
-            :popper="{ placement: 'bottom-end' }"
+            :popper="{ placement: 'bottom-start' }"
             :ui="{
-              background: 'bg-dark',
+              background: 'bg-dar',
               color: 'text-white',
             }"
+            class="w-full"
           >
             <h2
-              class="font-bold text-base md:text-lg text-gray-600 transition-all duration-1000"
+              class="font-bold text-base md:text-lg w-full truncate text-gray-600 transition-all duration-1000"
             >
               {{ item.nombre }}
             </h2>
@@ -168,7 +169,7 @@ const campos:Ref<Campos > = ref({} as Campos);
 const loadingImg = ref(true);
 
 
-onMounted(() => {
+
   campos.value ={
       pais: {
         icon: "🇵🇪",
@@ -187,7 +188,7 @@ onMounted(() => {
         value: props.item.cantidadLote!,
       },
     }
-});
+
 </script>
 
 <style>

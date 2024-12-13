@@ -121,23 +121,7 @@ const selectActiveCertificado = ref(false);
 const selectActiveYear = ref(false);
 const certificacionesModal = ref([] as any)
 
-type Certificados = 
-""|
-"Bird Friendly"|
-"C.A.F.E practices"|
-"4C"|
-"Q Certified"|
-"UTZ Certified"|
-"FairTrade"|
-"B Corp"|
-"Organic Bio Suisse"|
-"Global G.A.P."|
-"IWCA"|
-"SCA Member"|
-"Organic"|
-"US Organic"|
-"Organic Demeter"|
-"e"
+type Certificados = "" | 'organic' | 'fair trade' | 'fairtrade organic' | 'rain fores' | 'imocert' | 'jas'
 
 
 onMounted(()=>{
@@ -157,6 +141,16 @@ const searchQueryCertificacion = ref("");
 const searchQueryYear = ref("");
 const imagenCertificado:Ref<Certificados> = ref('')
 const certificadosImagenes: any = {
+  "organic": "https://cockpit.arabicagc.com/assets/link/eff87d24623264674800038a",
+  "fair trade": "https://cockpit.arabicagc.com/assets/link/eff86c723031375f5300031b",
+  "fairtrade organic": "https://cockpit.arabicagc.com/assets/link/eff86ca5353533bbde000184",
+  "rain fores": "https://cockpit.arabicagc.com/assets/link/eff88cd06337318c2e000284",
+  "imocert": "https://cockpit.arabicagc.com/assets/link/eff89f903661618dcc000142",
+  "jas": "https://cockpit.arabicagc.com/assets/link/eff88c0c3337633e7300024c",
+};
+
+/* 
+{
   "Bird Friendly": "https://cockpit.arabicagc.com/assets/link/eff84e6e3163324839000121",
   "C.A.F.E practices": "https://cockpit.arabicagc.com/assets/link/eff85482386464ca1200000f",
   "4C": "https://cockpit.arabicagc.com/assets/link/eff86ca5353533bbde000184",
@@ -173,6 +167,8 @@ const certificadosImagenes: any = {
   "Organic Demeter": "https://cockpit.arabicagc.com/assets/link/eff855156533338db40001b7",
   "Rainforest Alliance": "https://cockpit.arabicagc.com/assets/link/eff88cd06337318c2e000284"
 };
+*/
+
 const actualizarImagenCertificado = (certificado: Certificados) => {
   if(certificado){
     imagenCertificado.value = certificadosImagenes[certificado];
@@ -182,23 +178,7 @@ const actualizarImagenCertificado = (certificado: Certificados) => {
   }
 };
 
-const certificados = [
-  "Bird Friendly",
-  "C.A.F.E practices",
-  "4C",
-  "Q Certified",
-  "UTZ Certified",
-  "FairTrade",
-  "B Corp",
-  "Organic Bio Suisse",
-  "Global G.A.P.",
-  "IWCA",
-  "SCA Member",
-  "Organic",
-  "US Organic",
-  "Organic Demeter",
-  "Rainforest Alliance",
-];
+const certificados = ['organic','fair trade','rain forest','imocert','jas','fairtrade organic'];
 
 
 

@@ -5,7 +5,7 @@
     >
     <CompradorPerfilIndexPortada />
 
-    <div class="mx-20">
+    <div class="mx-8 md:mx-20">
       <CompradorPerfilIndexAvatar 
         :picture="profile?.logo" 
         :nombre="profile?.nombre" 

@@ -1,5 +1,5 @@
 <template>
-  <footer ref="footer"  class=" hidden sm:flex items-center px-8 md:px-20 rounded-t-xl border-t">
+  <footer ref="footer"  class=" hidden sm:flex items-center px-8 md:px-20 rounded-t-xl border-t z-50">
     <UHorizontalNavigation
       :links="links"
       :ui="{
