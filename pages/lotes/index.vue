@@ -1,51 +1,7 @@
 <template>
-  <div class="flex flex-col sm:flex-row gap-8 mt-16 z-0 justify-between relative flex-grow sm:mr-8"
-    :style="containerStyles">
-    <!-- Menu de filtros -->
-    <div class="">
-      <div v-if="isOpen" class="fixed z-40 opacity-15 h-screen bg-gray-700 w-screen" @click="isOpen = false" ></div>
-        
-        <div  :style="containerStyles"
-          class="transform  fixed z-50 overflow-x-hidden  transition-width ease-in-out duration-700 dark:bg-gray-800 text-gray-900 dark:-text-dar border-r border-inset bg-white border-gray-300 dark:border-gray-700 focus:border-2 focus:border-primary-500 dark:focus:border-primary-400 pb-8 px-4 "
-          :class="[ 
-            isOpen ? ' w-[350px] overflow-y-auto translate-x-0 ' : `w-0 sm:w-[74px] overflow-y-hidden ${styleMobileContainer}`,
-            isScreenSmall ? 'scrollbar-hide overflow-auto' : ''
-          ]">
-          <div class="sticky w-full top-0 right-0 flex justify-between items-center bg-white z-[60] py-4"
-            :class="isOpen ? 'px-4' : ''">
-            <h1 class="font-semibold text-xl text-thirdary overflow-hidden transition-width duration-700 ease-in-out"
-              :class="!isOpen ? 'w-0 opacity-0' : 'opacity-100'">
-              Filtros
-            </h1>
-            <div v-if="!isScreenSmall" class="text-xl border rounded-md p-2 flex justify-center items-center cursor-pointer"
-              @click="isOpen = !isOpen">
-              <UIcon name="i-ic-round-menu" class="" dynamic />
-            </div>
-
-            <div v-if="isScreenSmall" :class="isOpen ? '' : 'hidden'" class="text-xl border rounded-md p-2 flex justify-center items-center cursor-pointer"
-              @click="isOpen = !isOpen">
-              <UIcon name="i-heroicons-x-mark-16-solid" class="" dynamic />
-            </div>
-            
-          </div>
-          <div :class="isOpen ? '  opacity-100' : 'opacity-0'"
-            class="overflow-auto z-50 transition-all ease-in-out duration-700 mt-4">
-            <LotesMenuFiltros 
-              @filtro-muestra="filtrarMuestra" 
-              @close="closeMenuFiltro" 
-              @filtros-select="filtrarSelect"
-              @filtro-pais="filtrarPais" 
-              @filtro-origen="filtrarOrigen" 
-              @filtros-range="filtrarRange"
-              @reset-all="resetAllFilters"
-              />
-            </div>
-          </div>
-        </div>
-    <!-- /Menu de filtros -->
-
-    <div v-if="isScreenSmall">
-      <div class="fixed flex justify-center gap-4 items-center border-b shadow-sm pt-6 py-4 bg-white z-30 w-full">
+  <div>
+    <div  class="" v-if="isScreenSmall">
+      <div ref="botonesFiltro" class="fixed flex justify-center gap-4 items-center border-b shadow-sm pt-6 py-4 bg-white z-30 w-full">
         <button @click="isOpen = true"
           class="focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed disabled:opacity-75 flex-shrink-0 font-medium rounded-md text-sm gap-x-1.5 px-2.5 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 text-gray-900 dark:text-white bg-white hover:bg-gray-50 disabled:bg-white dark:bg-gray-900 dark:hover:bg-gray-800/50 dark:disabled:bg-gray-900 focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 inline-flex items-center">
           <UIcon name="i-material-symbols-filter-alt-outline" dynamic /> Filtros
@@ -55,36 +11,82 @@
 
       </div>
     </div>
+    <!-- Menu de filtros -->
+    <div class="">
+      <div v-if="isOpen" class="fixed z-40 opacity-15 h-screen bg-gray-700 w-screen" @click="isOpen = false"></div>
 
-    <!-- show card lote -->
-    <div :style="containerStyles" class="flex gap-8 mx-4 z-0 justify-between relative flex-grow sm:overflow-auto sm:ml-[74px] h-screen"
-      :class="isScreenSmall ? 'scrollbar-hide' : ''">
-      <div class="mt-5 pb-10 transition-width ease-in-out duration-700 mx-auto flex-grow">
-        <div class="flex justify-between mr-4">
-          <h1
-            class="font-bold text-base md:text-lg text-gray-800 line-clamp-2 hover:line-clamp-none transition-all duration-1000 mb-4">
-            {{
-              lotesFilter.length
-            }}
-            {{lotesFilter.length === 1 ? "Lote disponible" : 'Lotes disponibles'}}
+      <div :style="containerStyles"
+        class="transform  fixed z-50 overflow-x-hidden  transition-width ease-in-out duration-700 dark:bg-gray-800 text-gray-900 dark:-text-dar border-r border-inset bg-white border-gray-300 dark:border-gray-700 focus:border-2 focus:border-primary-500 dark:focus:border-primary-400 pb-8 px-4 "
+        :class="[
+          isOpen ? ' w-[350px] overflow-y-auto translate-x-0 ' : `w-0 sm:w-[74px] overflow-y-hidden ${styleMobileContainer}`,
+          isScreenSmall ? 'scrollbar-hide overflow-auto' : ''
+        ]">
+        <div class="sticky w-full top-0 right-0 flex justify-between items-center bg-white z-[60] py-4"
+          :class="isOpen ? 'px-4' : ''">
+          <h1 class="font-semibold text-xl text-thirdary overflow-hidden transition-width duration-700 ease-in-out"
+            :class="!isOpen ? 'w-0 opacity-0' : 'opacity-100'">
+            Filtros
           </h1>
-        <LotesMenuOrdenar :sortFunction="sortLotes" :initialSort="selected" @updateSort="selected = $event" />
-
-
-        </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-4 justify-center sm:justify-start sm:mr-4 mb-10">
-          <div v-for="item in lotesFilter" :key="item._id" class="col-span-1 min-w-64 mb-4 relative">
-            <LotesCard :item="item" />
+          <div v-if="!isScreenSmall"
+            class="text-xl border rounded-md p-2 flex justify-center items-center cursor-pointer"
+            @click="isOpen = !isOpen">
+            <UIcon name="i-ic-round-menu" class="" dynamic />
           </div>
-        </div>
 
-        <div v-if="lotesFilter.length === 0"
-          class="flex justify-center items-center">
-          <p class="text-gray-600 font-medium md:text-2xl">No hay lotes disponibles</p>
+          <div v-if="isScreenSmall" :class="isOpen ? '' : 'hidden'"
+            class="text-xl border rounded-md p-2 flex justify-center items-center cursor-pointer"
+            @click="isOpen = !isOpen">
+            <UIcon name="i-heroicons-x-mark-16-solid" class="" dynamic />
+          </div>
+
+        </div>
+        <div :class="isOpen ? '  opacity-100' : 'opacity-0'"
+          class="overflow-auto z-50 transition-all ease-in-out duration-700 mt-4">
+          <LotesMenuFiltros @filtro-muestra="filtrarMuestra" @close="closeMenuFiltro" @filtros-select="filtrarSelect"
+            @filtro-pais="filtrarPais" @filtro-origen="filtrarOrigen" @filtros-range="filtrarRange"
+            @reset-all="resetAllFilters" />
         </div>
       </div>
     </div>
-    <!-- /show card lote -->
+    <!-- /Menu de filtros -->
+    <div class="flex flex-col sm:flex-row gap-8 mt-16 z-0 justify-between relative flex-grow sm:mr-8"
+      :style="containerStyles">
+
+
+
+      <!-- show card lote -->
+      <div :style="marginBotonesFiltro"
+        class="flex gap-8 mx-4 z-0 justify-between relative flex-grow sm:overflow-auto sm:ml-[74px] h-screen"
+        :class="isScreenSmall ? 'scrollbar-hide' : ''">
+        <div class="mt-5 pb-10 transition-width ease-in-out duration-700 mx-auto flex-grow">
+          <div class="flex justify-between mr-4">
+            <h1
+              class="font-bold text-base md:text-lg text-gray-800 line-clamp-2 hover:line-clamp-none transition-all duration-1000 mb-4">
+              {{
+                lotesFilter.length
+              }}
+              {{ lotesFilter.length === 1 ? "Lote disponible" : 'Lotes disponibles' }}
+            </h1>
+            <div v-if="!isScreenSmall">
+              <LotesMenuOrdenar :sortFunction="sortLotes" :initialSort="selected" @updateSort="selected = $event" />
+            </div>
+
+
+          </div>
+          <div
+            class="grid sm:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-4 justify-center sm:justify-start sm:mr-4 mb-10">
+            <div v-for="item in lotesFilter" :key="item._id" class="col-span-1 min-w-64 mb-4 relative">
+              <LotesCard :item="item" />
+            </div>
+          </div>
+
+          <div v-if="lotesFilter.length === 0" class="flex justify-center items-center">
+            <p class="text-gray-600 font-medium md:text-2xl">No hay lotes disponibles</p>
+          </div>
+        </div>
+      </div>
+      <!-- /show card lote -->
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -103,11 +105,19 @@ const useLotes = useLotesStore();
 const lotes: Ref<Lotes[]> = ref(useLotes.lotes)
 const lotesFilter = ref<Lotes[]>(JSON.parse(JSON.stringify(lotes.value)));
 
+const botonesFiltro = ref()
+const heightbotonesFiltro = ref(0)
+
+onMounted(()=>{
+  heightbotonesFiltro.value = botonesFiltro.value.offsetHeight
+  console.log(marginBotonesFiltro.value)
+})
+
 const sortLotes = (sortType: string) => {
   selected.value = sortType;
   if (sortType === 'disponibilidad') {
     // Maintain filters but reset to original order
-    const filteredLotes = lotes.value.filter(lote => 
+    const filteredLotes = lotes.value.filter(lote =>
       lotesFilter.value.some(filteredLote => filteredLote._id === lote._id)
     );
     lotesFilter.value = filteredLotes;
@@ -130,38 +140,45 @@ const sortLotes = (sortType: string) => {
 };
 
 
-
-
-const containerStyles = computed(() => {
-  if(isScreenSmall.value){
-    return `max-height: calc(100vh - ${useGlobal.heightNavLote}px)`
-  }else{
+const marginBotonesFiltro = computed(() => {
+  if (isScreenSmall.value) {
+    return `max-height: calc(100vh - ${useGlobal.heightNavLote}px); margin-top: ${heightbotonesFiltro.value}px`
+  } else {
     return `max-height: calc(100vh - (${useGlobal.heightNavLote}px + ${useGlobal.heightFooterLote}px) )`
   }
 });
-const styleMobileContainer = ref(''); 
 
-watch(isOpen, (newValue) => { 
-  if (!newValue && isScreenSmall.value) { 
-    setTimeout(() => { 
-      styleMobileContainer.value = '-translate-x-full rtl:translate-x-full'; 
-    }, 500); 
-  } else { styleMobileContainer.value = ''; 
+const containerStyles = computed(() => {
+  if (isScreenSmall.value) {
+    return `max-height: calc(100vh - ${useGlobal.heightNavLote}px)`
+  } else {
+    return `max-height: calc(100vh - (${useGlobal.heightNavLote}px + ${useGlobal.heightFooterLote}px) )`
+  }
+});
+const styleMobileContainer = ref('');
 
-  } 
+watch(isOpen, (newValue) => {
+  if (!newValue && isScreenSmall.value) {
+    setTimeout(() => {
+      styleMobileContainer.value = '-translate-x-full rtl:translate-x-full';
+    }, 500);
+  } else {
+    styleMobileContainer.value = '';
+
+  }
 });
 
-onMounted(()=>{
-  if(isScreenSmall.value){
-    styleMobileContainer.value = '-translate-x-full rtl:translate-x-full'; 
+onMounted(() => {
+  if (isScreenSmall.value) {
+    styleMobileContainer.value = '-translate-x-full rtl:translate-x-full';
   }
 })
 
 
 const activeFilters = ref<Partial<Record<keyof Lotes, any>>>({});
-  
-  const filtrarLotes = <K extends keyof Lotes>(tipo: K, filtro: boolean | string[] | [number, number]) => {
-    console.log(tipo)
+
+const filtrarLotes = <K extends keyof Lotes>(tipo: K, filtro: boolean | string[] | [number, number]) => {
+  console.log(tipo)
   if (tipo === 'muestra') {
     if (filtro === true) {
       activeFilters.value[tipo] = filtro;
@@ -195,7 +212,7 @@ const activeFilters = ref<Partial<Record<keyof Lotes, any>>>({});
           return loteValue >= min && loteValue <= max;
         } else {
           const loteValue = lote[tipoKey];
-          return Array.isArray(loteValue) 
+          return Array.isArray(loteValue)
             ? value.some(v => loteValue.includes(v))
             : value.includes(loteValue as string);
         }
@@ -270,8 +287,8 @@ const filtrarSelect = (tipo: string, value: string[]) => {
     case "productores":
       filtrarLotes('productores', value)
       break;
-      case "clasificacion":
-      case "Clasificación de Lotes":
+    case "clasificacion":
+    case "Clasificación de Lotes":
       filtrarLotes('cantidadLote', value)
       break;
     default:
@@ -280,7 +297,7 @@ const filtrarSelect = (tipo: string, value: string[]) => {
   }
 }
 
-const filtrarRange = (tipo: string, value: [number, number] | [] ) =>{
+const filtrarRange = (tipo: string, value: [number, number] | []) => {
   switch (tipo) {
     case 'puntaje':
       filtrarLotes('puntaje', value)
