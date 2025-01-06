@@ -1,7 +1,7 @@
 export interface User {
   _id?: string | undefined;
-  nombre: string | undefined;
-  apellido: string | undefined;
+  nombre?: string | undefined;
+  apellido?: string | undefined;
   password?: string | undefined;
   email: string | undefined;
   picture?: string | undefined;

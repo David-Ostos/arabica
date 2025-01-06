@@ -1,10 +1,14 @@
 export interface Lotes{
   _id?: string
   nombre?: string;
+  nombreProductor?: string;
   pais?: Paises;
   origen?: Origen;
+  nombreFinca?: string;
+  altitud?: string;
+  periodoCosecha?: [string, string] | [];
   productores?: Productores;
-  variedad?: Variedad;
+  variedad?: Variedad[];
   proceso?: Porceso;
   perfil?: Perfil;
   certificaciones?: Certificaciones;

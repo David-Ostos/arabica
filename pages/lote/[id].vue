@@ -24,16 +24,21 @@
 
           <div class="mx-4 sm:mx-8">
             <div class=" ">
-              <UCarousel v-slot="{ item }" :items="galeria"
-                :ui="{ item: 'basis-full md:basis-1/2 lg:basis-1/3 cursor-grab' }" indicators class=""
+              <UCarousel  :items="lote.galeria"
+                v-slot="{ item }"
+                :ui="{ 
+                  item: 'basis-full md:basis-1/2 lg:basis-1/3 cursor-grab', 
+                  container : 'gap-2 w-full',
+                  indicators: { wrapper: 'bg-dar w-fit mx-auto rounded-full p-1', inactive: 'border border-primary bg-gray-300 dark:bg-gray-800'} 
+                }" indicators class=""
                 arrows>
-                <div v-if="item.link" class="">
-                  <img :src="item.link" class="  object-cover w-full h-full" draggable="false" />
-                </div>
 
-                <div v-else class="border  w-full h-full rounded-xl flex items-center">
-                  <UIcon :name="item.img" class="rounded-xl h-28 w-full object-cover opacity-55" alt="" />
-                </div>
+
+                  <div v-if="item.link" class="">
+                    <img :src="item.link" class="  object-cover w-full h-52 " draggable="true" />
+                  </div>
+
+
               </UCarousel>
             </div>
 
@@ -71,26 +76,71 @@
     </div>
     <!-- /modal muestra -->
 
-    <div class="flex flex-col sm:grid grid-cols-7 gap-8 mx-4 sm:mx-20">
-      <!-- Galeria del lote -->
-      <div v-if="!isScreenSmall"
-        class="col-span-4 h-screen-topBar-footer overflow-hidden h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4">
-        <div class="grid grid-cols-4 col-span-2 grid-rows-4 gap-4 h-full">
-          <div class="row-span-2 col-span-4">
-            <img :src="galeria[0].link" class="rounded-xl h-full w-full object-cover" alt="" />
-          </div>
+        <!-- modal galeria -->
+    <div>
+      <UModal v-model="modalGaleria" prevent-close :ui="{
+        width: 'sm:max-w-[750px]',
+      }">
+        <UCard :ui="{
+          ring: '',
+          divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+        }">
+          <template #header>
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-semibold leading-6 text-gray-800 dark:-text-dar">
+                Solicitud de Muestras
+              </h3>
+              <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+                @click="modalGaleria = false" />
+            </div>
+          </template>
 
-          <div class="flex justify-around items-center row-span-2 gap-4 col-span-4 h-full w-full">
-            <div v-for="img in galeria.slice(1)"
-              class="h-full w-full flex items-center justify-between overflow-hidden rounded-xl">
-              <div v-if="img.enty === true" class="border px-4 h-56 w-56 rounded-xl flex items-center">
-                <UIcon :name="img.img" class="rounded-xl h-28 w-full object-cover opacity-55" alt="" />
-              </div>
-              <div v-else class="rounded-xl">
-                <img :src="img.link" class="rounded-xl h-72 w-56 object-cover" alt="" />
-              </div>
+          <div class="mx-4 sm:mx-8 ">
+            <div class=" ">
+              <UCarousel v-slot="{ item }" :items="lote.galeria"
+                :ui="{  item: 'basis-full justify-center mx-8 rounded-md' }" 
+                indicators
+                :prev-button="{
+                  color: 'gray',
+                  icon: 'i-heroicons-arrow-left-20-solid',
+                  class: '-start-11'
+                }"
+                :next-button="{
+                  color: 'gray',
+                  icon: 'i-heroicons-arrow-right-20-solid',
+                  class: '-end-11'
+                }" 
+                arrows>
+                <div v-if="item.link" class="">
+                  <img :src="item.link" class=" rounded-md object-cover w-full h-[600px]" draggable="false" />
+                </div>
+
+                <div v-else class="border  w-full h-full rounded-xl flex items-center">
+                  <UIcon :name="item.img" class="rounded-xl h-28 w-full object-cover opacity-55" alt="" />
+                </div>
+              </UCarousel>
             </div>
           </div>
+        </UCard>
+      </UModal>
+    </div>
+    <!-- /modal galeria -->
+
+
+    <div class="flex flex-col sm:grid grid-cols-7 gap-8 mx-4 sm:mx-20">
+      <!-- Galeria del lote -->
+      <div v-if="!isScreenSmall" @click="modalGaleria = true"
+        ref="containerGaleria"
+        class="col-span-4 h-screen-topBar-footer overflow-hidden h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4" >
+        <div class="grid grid-cols-2 justify-center gap-4" >
+          <div v-if="lote.galeria" v-for="galeria, index in lote.galeria" :key="index"
+          :class="{'col-span-2 w-full': index === 0, 'col-span-1': index !== 0}" class="mx-auto aspect-ratio">
+            <div >
+              <img :style="index === 0 ? containerGaleria1 : containerGaleriaAll" :src="galeria.link" class="rounded-xl min-w-72 w-full object-cover" alt="" />
+            </div>
+
+        </div>
+
         </div>
       </div>
       <!-- /Galeria del lote -->
@@ -100,15 +150,15 @@
         class="col-span-3 h-screen-topBar-footer p-8 rounded-xl border flex flex-col justify-between py-8 shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400">
         <div class="">
           <div class="flex items-center justify-between mb-8">
-            <div class="overflow-hidden rounded-xl h-24 w-24" @click="console.log({loadingImg, lote})">
-              <USkeleton v-if="!loadingImg" class="h-24 w-24 rounded-xl" :ui="{
+            <div class="overflow-hidden rounded-xl h-24 w-24">
+              <USkeleton v-show="!loadingImg" class="h-24 w-24 rounded-xl" :ui="{
                 background: 'bg-secundary',
               }" />
 
               <div class="h-24 w-24 rounded-xl">
-                <img v-if="lote.productor!.picture" :src="lote.productor!.picture" @load="loadingImg = true"
+                <img v-show="lote.productor!.picture" :src="lote.productor!.picture" @load="loadingImg = true"
                   class="rounded-xl" alt="" />
-                <div v-else class="flex justify-center items-center h-24 bg-gray-300 rounded-xl border border-gray-700">
+                <div v-show="!lote.productor!.picture" class="flex justify-center items-center h-24 bg-gray-300 rounded-xl border border-gray-700">
                   <UIcon name="i-heroicons-photo" class="rounded-xl text-gray-700 h-16 w-16" />
                 </div>
               </div>
@@ -227,7 +277,7 @@ const exist = ref(false);
 
 const { isScreenSmall } = useGlobalComposable()
 
-const copiarUrl = () => {
+const copiarUrl = (): any => {
   const url = window.location.href;
   navigator.clipboard
     .writeText(url)
@@ -238,6 +288,7 @@ const copiarUrl = () => {
       toast.error("Error al copiar la URL:", err);
     });
 };
+
 const like = ref(false);
 
 const route = useRoute();
@@ -247,19 +298,36 @@ const useLotes = useLotesStore();
 const useFavoritos = useFavoritosStore();
 
 const modalMuestra = ref(false);
+const modalGaleria = ref(false);
+
+const containerGaleria = ref()
+const heightGaleria = ref(0)
+const widthGaleria = ref(0)
+const containerGaleria1 = computed(()=>{
+  return {
+    height: `calc((${heightGaleria.value}px / 2) - 1.5rem)`,
+    width: `100%`
+  }
+})
+
+const containerGaleriaAll = computed(()=>{
+  return{
+    height: `calc((${heightGaleria.value}px / 2) - 1.5rem)`,
+    width: `calc((${widthGaleria.value}px / 2) )`
+  }
+})
+
+onMounted(()=>{
+  heightGaleria.value = containerGaleria.value.offsetHeight
+  widthGaleria.value = containerGaleria.value.offsetWidth
+})
 
 const lotes: Lotes[] = useLotes.lotes.filter(
   (lote) => lote._id === route.params.id
 );
 const lote = ref(lotes[0]);
 
-const loadingImg = computed((any: any)=>{
-  if(lote.value.productor!.picture){
-    return false
-  } else{
-    return true
-  }
-});
+const loadingImg = ref(false);
 
 const onClickMuestra = () => {
   if (validatePerfilBase()) {
@@ -322,7 +390,9 @@ const item = [
     contenido: {
       origen: lote.value.origen,
       productores: lote.value.productores,
-      variedad: lote.value.variedad,
+      variedad: Array.isArray(lote.value.variedad)
+        ? lote.value.variedad.join(", ")
+        : lote.value.variedad,
       proceso: lote.value.proceso,
       puntaje: lote.value.puntaje?.toFixed(2),
       productor: lote.value.productor!.nombre,

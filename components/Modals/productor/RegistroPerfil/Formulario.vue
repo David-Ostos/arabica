@@ -152,39 +152,48 @@
               required
             >
               <UInput
-                v-model="state.direccion!.direccion1"
+                v-model="state.direccion!.direccion"
                 placeholder="Jr. Unión 234, Cusco"
               />
             </UFormGroup>
 
             <UFormGroup
-              label="Linea 2 de dirección"
+              label="Departamento"
               size="xl"
-              name="direccion.direccion2"
-              class="col-span-3"
-              required
-            >
-              <UInput
-                v-model="state.direccion!.direccion2"
-                placeholder="Linea 2 de dirección..."
-              />
-            </UFormGroup>
-
-            <div class="hidden sm:block col-span-1 relative">
-              <div
-                class="bg-white shadow-inner w-10 h-10 rounded-full border-2 absolute bottom-0 left-0"
-              ></div>
-            </div>
-
-            <UFormGroup
-              label="Ciudad"
-              size="xl"
-              name="direccion.ciudad"
+              name="direccion.departamento"
               class="col-span-1"
               required
             >
-              <UInput v-model="state.direccion!.ciudad" placeholder="Cusco" />
+              <UInput
+                v-model="state.direccion!.departamento"
+                placeholder="Departamento."
+              />
             </UFormGroup>
+
+            <UFormGroup
+              label="Provincia"
+              size="xl"
+              name="direccion.provincia"
+              class="col-span-1"
+              required
+            >
+              <UInput
+                v-model="state.direccion!.provincia"
+                placeholder="Provincia"
+              />
+            </UFormGroup>
+            
+            <UFormGroup
+              label="Distrito"
+              size="xl"
+              name="direccion.distrito"
+              class="col-span-1"
+              required
+            >
+              <UInput v-model="state.direccion!.distrito" placeholder="Distrito" />
+            </UFormGroup>
+
+
 
             <UFormGroup
               label="Codigo Postal"
@@ -198,6 +207,14 @@
                 placeholder="2006"
               />
             </UFormGroup>
+
+            
+            <div class="hidden sm:block col-span-1 col-start-3  relative">
+              <div
+                class="bg-white shadow-inner w-10 h-10 rounded-full border-2 absolute bottom-0 right-0"
+              ></div>
+            </div>
+
           </div>
         </div>
 
@@ -1549,14 +1566,13 @@ const schema = object({
     .required("Requerido")
     .min(5, "debe tener un minimo de 5 caracteres"),
   direccion: object({
-    ciudad: string().required("Requerido"),
-    codigoPostal: string().required("Requerido"),
-    direccion1: string()
+    direccion: string()
       .min(10, "Debe tener minimo 10 caracteres")
       .required("Requerido"),
-    direccion2: string()
-      .min(4, "Debe tener minimo 4 caracteres")
-      .required("Requerido"),
+    departamento: string().required("Requerido"),
+    provincia: string().required("Requerido"),
+    distrito: string().required("Requerido"),
+    codigoPostal: string().required("Requerido"),
   }).required("Requerido"),
   correo: string().email("correo invalido").required("Requerido"),
   numeroTelefonico: object({
@@ -1574,10 +1590,11 @@ const state: PerfilProductor = reactive({
   ruc: undefined,
   razonSocial: undefined,
   direccion: {
-    ciudad: undefined,
+    direccion: undefined,
+    departamento: undefined,
+    provincia: undefined,
+    distrito: undefined,
     codigoPostal: undefined,
-    direccion1: undefined,
-    direccion2: undefined,
   },
   correo: useUser.dataUser.email,
   numeroTelefonico: {

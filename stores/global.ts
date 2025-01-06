@@ -22,6 +22,22 @@ export const useGlobalStore = defineStore("global",() => {
 
   const perfilComercial = ref()
 
+  const meses = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
+  
+
   const codeCountry = [
     {
       code: "+93",
@@ -1270,7 +1286,7 @@ export const useGlobalStore = defineStore("global",() => {
     codeCountry,
     perfilComercial,
     years,
-
+    meses,
     getPerfil
   };
 });

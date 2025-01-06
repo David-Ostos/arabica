@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isOpen && !$route.path.includes('usuario') " :class="['mx-4 my-8 sm:my-0 md:m-8 md:mx-20 rounded-3xl shadow-md border-b-2']">
+  <div v-if="isOpen && !$route.path.includes('usuario') && !useUser.dataUser.perfilBase " :class="['mx-4 my-8 sm:my-0 md:m-8 md:mx-20 rounded-3xl shadow-md border-b-2']">
     <div class="px-4 md:px-8 py-4 rounded-3xl border-2 bg-gray-200 font-medium ">
       <div class="flex justify-between ">
         <h3 class="text-xl md:text-2xl mb-4 font-bold ">Complete su perﬁl para solicitar la veriﬁcación.</h3>
@@ -19,6 +19,7 @@
 <script lang="ts" setup>
 
 const isOpen = ref(true)
+const useUser = useUserStore()
 
 
 

@@ -14,9 +14,9 @@
         </button>
         </div>
           <div v-for="contenido, key in item.contenido" :class="item.isActive ? 'h-auto opacity-100 ' : 'h-0 opacity-0'">
-              <div class="flex justify-between mx-8 mb-2 pb-2 border-b h-auto transform delay-150 transition-height duration-500 ease-in-out  text-[#6B7280] overflow-hidden text-lg z-0 relative capitalize">
+              <div class="flex justify-between gap-2 mx-8 mb-2 pb-2 border-b h-auto transform delay-150 transition-height duration-500 ease-in-out  text-[#6B7280]  text-lg z-0 relative capitalize truncate">
                 <p class=""> {{ key}}:</p>
-                <p><span v-if="contenido === 'perú'">🇵🇪</span> {{ contenido }}</p>
+                <p class="max-w-full"><span v-if="contenido === 'perú'">🇵🇪</span> {{ contenido }}</p>
           </div>
         </div>
       </div>

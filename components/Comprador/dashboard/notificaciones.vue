@@ -8,7 +8,7 @@
       <div class="flex flex-col gap-1 w-[150px]">
         <span class="font-bold text-xl">{{ item.cantidad }}</span>
         <p class="text-[#707a89] text-sm font-bold">{{ item.titulo }}</p>
-        <span v-if="!useUser.dataUser.verificado" 
+        <span v-if="!useUser.dataUser.perfilBase" 
           class="text-primary font-bold text-xs cursor-pointer"
         >Verifíquese. > </span>
       </div>
@@ -19,8 +19,6 @@
 <script lang="ts" setup>
 
 const useUser = useUserStore()
-
-const useModal = useShowModalsStore()
 
 const items = ref([
 {

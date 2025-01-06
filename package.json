@@ -21,7 +21,7 @@
     "@pinia/nuxt": "^0.5.1",
     "@vesp/nuxt-fontawesome": "^1.0.4",
     "axios": "^1.7.2",
-    "date-fns": "^3.6.0",
+    "date-fns": "^4.1.0",
     "jwt-decode": "^4.0.0",
     "ldrs": "^1.0.2",
     "lucide-vue-next": "^0.456.0",

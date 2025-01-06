@@ -38,7 +38,7 @@
           </div>
 
           <!-- nombre y apellido-->
-          <div class="flex justify-between gap-4 max-w-[540px] mx-auto">
+          <!-- <div class="flex justify-between gap-4 max-w-[540px] mx-auto">
             <UFormGroup label="Nombre" name="nombre" required>
               <UInput
                 v-model="state.nombre"
@@ -60,7 +60,7 @@
                 class="[&_input]:dark:bg-white"
               />
             </UFormGroup>
-          </div>
+          </div> -->
           <!-- /nombre y apellido -->
 
           <!-- email -->
@@ -193,8 +193,8 @@ const tipoU = (tipo: "comprador" | "productor") => {
 const nombreWeb = import.meta.env.VITE_NOMBRE_1;
 
 const schema = object({
-  nombre: string().required("Requerido"),
-  apellido: string().required("Requerido"),
+/*   nombre: string().required("Requerido"),
+  apellido: string().required("Requerido"), */
   email: string().email("Email invalido").required("Requerido"),
   password: string()
     .min(8, "La contraseña debe tener 8 caracteres")
@@ -207,8 +207,8 @@ const schema = object({
 type Schema = InferType<typeof schema>;
 
 let state: User = reactive({
-  nombre: undefined,
-  apellido: undefined,
+/*   nombre: undefined,
+  apellido: undefined, */
   password: undefined,
   email: undefined,
   picture: "",
@@ -231,9 +231,6 @@ const validations = (stat: any): FormError[] => {
   }
 
   if (stat.password !== stat.rePassword) {
-    setTimeout(()=>{
-      toast.error('Las contraseñas no coinciden.')
-    }, 2000)
     errors.push({
       path: "password",
       message: "Las contraseñas no coinciden",
@@ -244,8 +241,8 @@ const validations = (stat: any): FormError[] => {
 
 async function onSubmit(event: any) {
   loading.value = true;
-  state.nombre = state.nombre!.toLowerCase();
-  state.apellido = state.apellido!.toLowerCase();
+/*   state.nombre = state.nombre!.toLowerCase();
+  state.apellido = state.apellido!.toLowerCase(); */
   delete state.rePassword;
   state.tipoUser = tipoUser.value;
 

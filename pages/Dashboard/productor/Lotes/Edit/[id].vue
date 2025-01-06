@@ -20,17 +20,24 @@
 
   </UModal>
 
-  <div class="mx-4 my-8 md:m-20">
+  <div :style="containerStyles" class="m-8 sm:m-20">
     <div class="overflow-auto">
-      <h1 class="text-center text-3xl text-gray-700 font-bold pt-4">
-        Edite su Lote de Café
-      </h1>
-      <h3 class="text-2xl mb-8 text-gray-600 text-center md:text-start">Agrega las imagenes</h3>
-      <div class="md:grid grid-cols-2 gap-8">
-        <!-- Galerria -->
+      <div>
+        <h1 class="text-center mb-8 text-xl sm:text-3xl text-gray-700 font-bold">
+          Edita tu Lote de Café
+        </h1>
+        <!-- <h3 class="sm:text-2xl text-center sm:text-inherit text-xl mb-8 text-gray-600">Agrega las imagenes</h3> -->
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-8">
+        <!-- <div>
+          <AddImg @update:imagenes="prueba" :max-imagenes="4"/>
+        </div> -->
+
+        <!-- galeria -->
         <div
           @click="clickInputFile"
-          class="col-span-1 grid-area-1 h-[510px] h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4"
+          class="col-span-1 grid-area-1 h-[430px] h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4"
         >
           <div class="grid grid-cols-4 col-span-2 grid-rows-4 gap-4 h-full">
             <div
@@ -49,15 +56,16 @@
 
             <div
               v-if="!loading && pictures.length > 0"
-              class="row-span-2 col-span-4 border rounded-xl  cursor-pointer overflow-hidden hover:brightness-75"
+              class="row-span-2 col-span-4 border rounded-xl cursor-pointer overflow-hidden hover:brightness-75"
               :class="
-                pictures[0]?.link !== 'i-icon-park-outline-add-picture' || undefined
+                pictures[0]?.link !== 'i-icon-park-outline-add-picture' ||
+                undefined
                   ? 'flex justify-center items-center h-full w-full '
                   : 'hover:bg-gray-100 p-4'
               "
             >
               <img
-                v-if="pictures[0].link !== 'i-icon-park-outline-add-picture' "
+                v-if="pictures[0].link !== 'i-icon-park-outline-add-picture'"
                 :src="pictures[0].link"
                 class="rounded-xl h-full w-full object-cover"
                 alt=""
@@ -90,7 +98,12 @@
                     color="black"
                   ></l-squircle>
                 </div>
-                <div v-if="!loading && img.link === 'i-icon-park-outline-add-picture'"  class="" >
+                <div
+                  v-if="
+                    !loading && img.link === 'i-icon-park-outline-add-picture'
+                  "
+                  class=""
+                >
                   <UIcon
                     :name="img.link"
                     class="rounded-xl h-28 w-full object-cover opacity-55 hover:scale-105"
@@ -99,7 +112,9 @@
                   />
                 </div>
                 <div
-                  v-show="!loading && img.link !== 'i-icon-park-outline-add-picture'"
+                  v-show="
+                    !loading && img.link !== 'i-icon-park-outline-add-picture'
+                  "
                   class="rounded-xl hover:brightness-50"
                 >
                   <img
@@ -112,7 +127,7 @@
             </div>
             <!-- barrar de carga -->
 
-            <UProgress :value="porcentaje" :color="color" class="col-span-4">
+            <UProgress :class="faseUpload === 'none' ? 'hidden' : ''" :value="porcentaje" :color="color" class="col-span-4">
               <template #indicator="{percent}">
                 <div class="text-right" :style="{width: `${percent}%`}">
                   <span v-if="faseUpload === 'none'" class="text-gray-500 w-fit"
@@ -126,6 +141,11 @@
                   <span
                     v-else-if="faseUpload === 'Actualizando el lote...'"
                     class="text-amber-500 w-fit"
+                    >{{ faseUpload }}</span
+                  >
+                  <span
+                    v-else-if="faseUpload === 'Actualizando Lotes locales...'"
+                    class="text-orange-500"
                     >{{ faseUpload }}</span
                   >
                   <span
@@ -144,29 +164,63 @@
             <!-- /barra de carga -->
           </div>
         </div>
-        <!-- /Galeria -->
+        <!-- !galeria -->
 
-        <!-- Formulario -->
+        <!-- formulartio -->
         <div
-          class="flex flex-col w-full p-4 rounded-xl border justify-between h-ful shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400">
+          ref="componentRef"
+          :class="[
+            'flex flex-col w-full  p-4 rounded-xl border justify-between h-ful shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400',
+            isScreenSmall ? 'scrollbar-hide ' : 'h-[430px] overflow-auto',
+          ]"
+        >
           <UForm
             :schema="schema"
             :validate="validate"
             :state="state"
             @submit="onSubmit"
-            class="grid grid-col-3 sm:grid-cols-6 gap-4 "
+            class="grid grid-col-3 sm:grid-cols-6 gap-4"
+          >
+            <input
+              class="hidden"
+              type="file"
+              ref="inputSmFile"
+              @change="handleFileUpload"
+              multiple
+            />
+
+            <UFormGroup
+              label="Nombre del lote"
+              name="nombre"
+              class="col-span-3"
             >
-            <input class="hidden" type="file" ref="inputSmFile" @change="handleFileUpload" multiple/>
-            
-            <UFormGroup label="Nombre" name="nombre" class="col-span-3">
-              <UInput v-model="state.nombre" placeholder="Ingresa tu nombre" />
+              <UInput
+                v-model="state.nombre"
+                placeholder="Ingresa el nombre del lote"
+              />
             </UFormGroup>
-            <UFormGroup label="Precio" name="precio" class="col-span-3">
-              <UInput v-model="state.precio" type="number" placeholder="5"> 
-                <template #leading>
-                  <span class="text-gray-500 dark:text-gray-400">$</span>
-                </template>
-              </UInput>
+
+            <UFormGroup
+              label="Nombre del productor"
+              name="nombreProductor"
+              class="col-span-3"
+            >
+              <UInput
+                v-model="state.nombreProductor"
+                placeholder="Ingresa el nombre del productor"
+              />
+            </UFormGroup>
+
+            <UFormGroup label="País" name="pais" class="col-span-3">
+              <USelectMenu
+                :ui="{select: 'capitalize'}"
+                searchable
+                searchable-placeholder="Buscar País..."
+                class="w-full capitalize"
+                placeholder="Selecciona el País"
+                :options="['perú']"
+                v-model="state.pais"
+              />
             </UFormGroup>
 
             <UFormGroup label="Origenes" name="origen" class="col-span-3">
@@ -175,13 +229,152 @@
                 searchable
                 searchable-placeholder="Buscar origen..."
                 class="w-full capitalize"
-                placeholder="Selecciona el origen"
-                :options="['piura', 'amazonas', 'cajamarca', 'san martin', 'huanuco', 'pasco', 'junin', 'ayacucho', 'cusco', 'puno']"
+                placeholder="Selecciona el origen (departamento)"
+                :options="[
+                  'piura',
+                  'amazonas',
+                  'cajamarca',
+                  'san martin',
+                  'huanuco',
+                  'pasco',
+                  'junin',
+                  'ayacucho',
+                  'cusco',
+                  'puno',
+                ]"
                 v-model="state.origen"
               />
             </UFormGroup>
 
-            <UFormGroup label="Productores"
+            <UFormGroup
+              label="Nombre de la finca"
+              name="nombreFinca"
+              class="col-span-3"
+            >
+              <UInput
+                v-model="state.nombreFinca"
+                placeholder="Ingresa el nombre de la finca"
+              />
+            </UFormGroup>
+
+            <UFormGroup label="Variedad/es" name="variedad" class="col-span-3">
+              <USelectMenu
+                :ui="{select: 'capitalize'}"
+                multiple
+                searchable
+                searchable-placeholder="Buscar variedades..."
+                class="w-full capitalize"
+                placeholder="Selecciona la/s variedad/es"
+                :options="[
+                  'geisha',
+                  'typica',
+                  'bourbon',
+                  'bourbon mayaguez',
+                  'ls 14',
+                  'ls 28',
+                  'ls34',
+                  'rume sudan',
+                  'maragogype ',
+                  'pacamara ',
+                  'caturra',
+                  'catuai ',
+                  'tabi',
+                  'mundo novo',
+                  'costa rica 95',
+                  'castilla',
+                  'catimor',
+                  'blend',
+                  'otro',
+                ]"
+                v-model="state.variedad"
+              />
+            </UFormGroup>
+
+            <UFormGroup label="Proceso" name="proceso" class="col-span-3">
+              <USelectMenu
+                :ui="{select: 'capitalize'}"
+                searchable
+                searchable-placeholder="Buscar proceso..."
+                class="w-full capitalize"
+                placeholder="Selecciona el proceso"
+                :options="[
+                  'lavado',
+                  'lavado anaeróbico',
+                  'lavado oxidación',
+                  'lavado fermentación láctica',
+                  'yellow honey',
+                  'red honey',
+                  'back honey',
+                  'natural',
+                  'natural anaeróbico',
+                  'experimental',
+                ]"
+                v-model="state.proceso"
+              />
+            </UFormGroup>
+
+            <UFormGroup label="Precio" name="precio" class="col-span-3">
+              <UInput v-model="state.precio" type="number" placeholder="5">
+                <template #leading>
+                  <span class="text-gray-500 dark:text-gray-400">$</span>
+                </template>
+              </UInput>
+            </UFormGroup>
+
+            <UFormGroup
+              label="Periodo de cosecha"
+              name="periodoCosecha"
+              class="col-span-6"
+            >
+              <div class="grid grid-cols-2 gap-4 border-t pt-4 mt-4">
+                <UFormGroup
+                  label="Mes inicial"
+                  name="periodoCosecha[0]"
+                  class="col-span-1"
+                >
+                  <USelectMenu
+                    :ui="{select: 'capitalize'}"
+                    searchable
+                    searchable-placeholder="Buscar mes..."
+                    class="w-full capitalize"
+                    placeholder="Selecciona el mes inicial"
+                    :options="meses"
+                    v-model="state.periodoCosecha![0]"
+                  />
+                </UFormGroup>
+
+                <UFormGroup
+                  label="Mes final"
+                  name="periodoCosecha[0]"
+                  class="col-span-1"
+                >
+                  <USelectMenu
+                    :ui="{select: 'capitalize'}"
+                    searchable
+                    searchable-placeholder="Buscar mes..."
+                    class="w-full capitalize"
+                    placeholder="Selecciona el mes final"
+                    :options="meses"
+                    v-model="state.periodoCosecha![1]"
+                  />
+                </UFormGroup>
+              </div>
+            </UFormGroup>
+
+            <UFormGroup
+              label="Altitud"
+              help="Coloque la altitud sobre el nivel del mar"
+              name="altitud"
+              class="col-span-3"
+            >
+              <UInput trailing v-model="state.altitud" placeholder="1500">
+                <template #trailing>
+                  <span class="text-gray-500 dark:text-gray-400">m.s.n.m</span>
+                </template>
+              </UInput>
+            </UFormGroup>
+
+            <!--             <UFormGroup label="Productores"
               name="productores"
               class="col-span-3"
             >
@@ -194,37 +387,13 @@
                 :options="['independiente', 'asociacion', 'cooperativa']"
                 v-model="state.productores"
               />
-            </UFormGroup>
+            </UFormGroup> -->
 
-            <UFormGroup label="Variedad" name="variedad" class="col-span-3">
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar variedad..."
-                class="w-full capitalize"
-                placeholder="Selecciona el variedad"
-                :options="['geisha', 'typica', 'bourbon', 'bourbon mayaguez', 'ls 14', 'ls 28', 'ls34', 'rume sudan', 'maragogype ', 'pacamara ', 'caturra', 'catuai ', 'tabi', 'mundo novo', 'costa rica 95', 'castilla', 'catimor', 'blend', 'otro']"
-                v-model="state.variedad"
-              />
-            </UFormGroup>
-            <UFormGroup label="Proceso" name="proceso" class="col-span-3">
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar proceso..."
-                class="w-full capitalize"
-                placeholder="Selecciona el proceso"
-                :options="['lavado', 'lavado anaeróbico', 'lavado oxidación', 'lavado fermentación láctica', 'yellow honey', 'red honey', 'back honey', 'natural', 'natural anaeróbico', 'experimental' 
-]"
-                v-model="state.proceso"
-              />
-            </UFormGroup>
-
-            <UFormGroup label="Puntaje" name="puntaje" class="col-span-3">
+            <!--             <UFormGroup label="Puntaje" name="puntaje" class="col-span-3">
               <UInput v-model="state.puntaje" type="number" placeholder="85.25"/> 
-            </UFormGroup>
+            </UFormGroup> -->
 
-            <UFormGroup label="Perfil" name="perfil" class="col-span-3">
+            <!--             <UFormGroup label="Perfil" name="perfil" class="col-span-3">
               <USelectMenu
                 :ui="{select: 'capitalize'}"
                 searchable
@@ -234,9 +403,9 @@
                 :options="['floral', 'frutal', 'vegetal', 'cítrico', 'vinoso', 'dulce', 'azucares caramelizados', 'frutos secos', 'chocolate', 'nuez', 'taza limpia']"
                 v-model="state.perfil"
               />
-            </UFormGroup>
+            </UFormGroup> -->
 
-            <UFormGroup label="Cantidad del lote"
+            <!--             <UFormGroup label="Cantidad del lote"
               name="cantidadLote"
               class="col-span-3"
             >
@@ -253,62 +422,77 @@
                 ]"
                 v-model="state.cantidadLote"
               />
-            </UFormGroup>
-            <UFormGroup label="País" name="pais" class="col-span-3">
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar País..."
-                class="w-full capitalize"
-                placeholder="Selecciona el País"
-                :options="['perú']"
-                v-model="state.pais"
-              />
-            </UFormGroup>
+            </UFormGroup> -->
 
-            <UFormGroup
-              label="¿Este lote Tiene muestra? "
-              class="col-span-3"
-              >
+            <UFormGroup label="¿Este lote Tiene muestra? " class="col-span-3">
               <UToggle
-              v-model="muestra"
-              on-icon="i-heroicons-check-20-solid"
-              off-icon="i-heroicons-x-mark-20-solid"
+                v-model="muestra"
+                on-icon="i-heroicons-check-20-solid"
+                off-icon="i-heroicons-x-mark-20-solid"
               />
             </UFormGroup>
 
-            <div v-if="state.muestra?.muestra" class=" col-span-3 sm:col-span-6 grid grid-cols-6 gap-4"> 
-
+            <div
+              v-if="state.muestra?.muestra"
+              class="col-span-3 sm:col-span-6 grid grid-cols-6 gap-4"
+            >
+              <UFormGroup
+                label="¿Este lote Tiene muestra gratis? "
+                name="muestra.muestra"
+                class="col-span-6 sm:col-span-2"
+              >
+                <UToggle
+                  v-model="muestraGratis"
+                  on-icon="i-heroicons-check-20-solid"
+                  off-icon="i-heroicons-x-mark-20-solid"
+                />
+              </UFormGroup>
 
               <UFormGroup
-              label="¿Este lote Tiene muestra gratis? "
-              name="muestra.muestra"
-              class="col-span-6 sm:col-span-2"
+                v-if="!state.muestra.muestraGratis"
+                label="Precio"
+                name="muestra.precio"
+                class="col-span-3 sm:col-span-2"
               >
-              <UToggle
-              v-model="muestraGratis"
-              on-icon="i-heroicons-check-20-solid"
-              off-icon="i-heroicons-x-mark-20-solid"
+                <UInput
+                  v-model="state.muestra.precio"
+                  type="number"
+                  placeholder="5"
+                >
+                  <template #leading>
+                    <span class="text-gray-500 dark:text-gray-400">$</span>
+                  </template>
+                </UInput>
+              </UFormGroup>
+
+              <UFormGroup
+                label="Cantidad"
+                name="muestra.cantidad"
+                class="col-span-3 sm:col-span-2"
+              >
+                <UInput
+                  v-model="state.muestra.cantidad"
+                  type="number"
+                  placeholder="1"
+                >
+                  <template #leading>
+                    <span class="text-gray-500 dark:text-gray-400">lb/</span>
+                  </template>
+                </UInput>
+              </UFormGroup>
+            </div>
+
+            <UFormGroup
+              label="Historia del lote"
+              name="descripcion"
+              class="col-span-6"
+            >
+              <UTextarea
+                autoresize
+                v-model="state.descripcion"
+                placeholder="Escribe una descripción del lote"
               />
             </UFormGroup>
-
-            <UFormGroup v-if="!state.muestra.muestraGratis" label="Precio" name="muestra.precio" class="col-span-3 sm:col-span-2">
-              <UInput v-model="state.muestra.precio" type="number" placeholder="5"> 
-                <template #leading>
-                  <span class="text-gray-500 dark:text-gray-400">$</span>
-                </template>
-              </UInput>
-            </UFormGroup>
-
-            <UFormGroup label="Cantidad" name="muestra.cantidad" class="col-span-3 sm:col-span-2">
-              <UInput v-model="state.muestra.cantidad" type="number" placeholder="1"> 
-                <template #leading>
-                  <span class="text-gray-500 dark:text-gray-400">lb/</span>
-                </template>
-              </UInput>
-            </UFormGroup>
-
-            </div>
 
             <UButton
               size="xl"
@@ -331,16 +515,17 @@
 
 <script lang="ts" setup>
 import axios from "axios";
-import { boolean, object, string, number, type InferType } from "yup";
+import { boolean, object, string, number, type InferType, array } from 'yup';
 import type { FormError, FormSubmitEvent } from "#ui/types";
 import type {  Lotes } from "~/interfaces/Lotes";
 import { squircle } from "ldrs";
 import { toast } from "vue3-toastify";
 
 type Schema = InferType<typeof schema>;
+  
+  squircle.register();
 
-squircle.register();
-
+  const useGlobal = useGlobalStore();
 const {isScreenSmall} = useGlobalComposable()
 
 definePageMeta({
@@ -354,6 +539,11 @@ const route = useRoute();
 
 
 const lote = useLotes.lotes.filter((lote) => lote._id === route.params.id)[0];
+
+const containerStyles = computed(() => ({
+  "margin-top": `calc( ${useGlobal.heightNavProductor}px + 32px )`,
+  "max-height": `calc(100vh - (${useGlobal.heightNavProductor}px + ${useGlobal.heightFooterProductor}px + ${useGlobal.heightNavProductor}px ))`,
+}));
 
 const isOpenModalPicture = ref(false)
 const pictureModal = ref('')
@@ -370,8 +560,12 @@ const closeModalPicture = ()=>{
 
 const state: Lotes = reactive({
   nombre: lote.nombre,
+  nombreProductor: lote.nombreProductor,
   pais: lote.pais,
   origen: lote.origen,
+  nombreFinca: lote.nombreFinca,
+  altitud: lote.altitud,
+  periodoCosecha: lote.periodoCosecha,
   productores: lote.productores,
   variedad: lote.variedad,
   proceso: lote.proceso,
@@ -398,6 +592,7 @@ watch(muestra, (nuevoValor) => {
   state.muestra!.muestra = nuevoValor
 });
 
+const meses = useGlobal.meses;
 const pictures = ref(state.galeria as any);
 const loading = ref(false);
 const inputFile = ref();
@@ -411,6 +606,7 @@ const faseUpload = ref(
   | "none"
   | "Subiendo Imagenes..."
   | "Actualizando el lote..."
+  | "Actualizando Lotes locales..."
   | "Subida Completada"
   | "error"
 );
@@ -479,16 +675,16 @@ function verificarGaleria() {
 
 const schema = object({
   nombre: string().required("Este campo es obligatorio"),
+  nombreProductor: string().required("Este campo es obligatorio"),
   pais: string().required("Este campo es obligatorio"),
   origen: string().required("Este campo es obligatorio"),
-  productores: string().required("Este campo es obligatorio"),
-  variedad: string().required("Este campo es obligatorio"),
+  nombreFinca: string().required("Este campo es obligatorio"),
+  altitud: string().required("Este campo es obligatorio"),
+  variedad: array().required("Este campo es obligatorio"),
   proceso: string().required("Este campo es obligatorio"),
-  perfil: string().required("Este campo es obligatorio"),
-  cantidadLote: string().required("Este campo es obligatorio"),
-  puntaje: number().min(80, 'El puntaje tiene que ser mayor de 80').max(90,'El puntaje no puede de pasar de 90').required("Este campo es obligatorio"),
-  precio: number().positive('Tiene que ser un precio mayor a 0').required("Este campo es obligatorio"),
-
+  periodoCosecha: array().required("Este campo es obligatorio"),
+  precio: number().positive("Tiene que ser un precio mayor a 0").required("Este campo es obligatorio"),
+  descripcion: string().required("Este campo es obligatorio"),
 });
 
 const validate = (state: any): FormError[] => {

@@ -35,9 +35,10 @@ export type Redes = {
 }
 
 export type Direccion = {
-  direccion1?: string,
-  direccion2?: string,
-  ciudad?: string,
+  direccion?: string,
+  departamento?: string,
+  provincia?: string,
+  distrito?: string,
   codigoPostal?: string,
 }
 

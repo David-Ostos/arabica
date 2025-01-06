@@ -3,14 +3,14 @@
       <div class="flex items-center gap-4">
         <Avatar :picture="picture"/>
         <div>
-          <h1 class="text-2xl font-raleway font-bold capitalize [&_b]:hover:text-primary">Bienvenido, <b class="font-bold"> {{ useUser.dataUser.nombre }} </b></h1>
-          <div v-if="useUser.dataUser.verificado"
+          <h1 class="text-2xl font-raleway font-bold capitalize [&_b]:hover:text-primary">Bienvenido<b v-if="useUser.dataUser.nombre" class="font-bold"> , {{ useUser.dataUser.nombre }} </b></h1>
+          <div v-if="useUser.dataUser.perfilBase"
             class="flex gap-4 items-center">
           
             <div class="gap-1 flex items-center">
-              <UIcon class="text-primary text-xl" name="i-tabler-rosette-discount-check-filled" dynamic/>
               <span
               >Vendedor Verificado</span>
+              <UIcon class="text-primary text-xl" name="i-tabler-rosette-discount-check-filled" dynamic/>
             </div>
             
             <!-- <div class="gap-1 flex items-center">

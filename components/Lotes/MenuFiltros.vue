@@ -83,9 +83,9 @@
   <div :style="isScreenSmall ? 'height: calc(100vh - 120px)' : ''"
     :class="[isScreenSmall ? 'scrollbar-hide overflow-auto' : '']">
 
-    <div class=" mx-4 text-thirdary">
+    <div class="  text-thirdary">
 
-      <div class="py-6 border-t" v-if="algunFiltroActivo">
+      <div class="pb-6 mb-6 border-b" v-if="algunFiltroActivo">
         <div>
 
           <div v-for="item, key in filtrosActivos">
@@ -119,7 +119,7 @@
         </div>
       </div>
 
-      <div class=" py-6 border-y">
+      <div class=" pb-6 border-b">
         <UCheckbox v-model="muestras" name="muestras" label="Muestras disponibles" @click="filtroMuestra" />
       </div>
 
@@ -459,6 +459,22 @@ const filtros: Filtros[] = reactive([
         isActive: false
       },],
     tipe: "origenes",
+  },{label: "puntaje",
+    min: 80,
+    max: 90,
+    value: [80, 90],
+    tipe: "range",
+    formatValue: (valor: number) => valor.toFixed(2),
+    step: 0.25,
+    isOpen: true,
+  }, {label: "precio",
+    min: 0,
+    max: 20,
+    value: [0, 20],
+    tipe: "range",
+    formatValue: (valor: number) => `$${valor}`,
+    step: 1,
+    isOpen: true,
   }, {label: "Productores",
     value: [
       {
@@ -598,22 +614,6 @@ const filtros: Filtros[] = reactive([
       { tipo: "nano lote", isActive: false },
     ],
     tipe: "select",
-  },{label: "puntaje",
-    min: 80,
-    max: 90,
-    value: [80, 90],
-    tipe: "range",
-    formatValue: (valor: number) => valor.toFixed(2),
-    step: 0.25,
-    isOpen: false,
-  }, {label: "precio",
-    min: 0,
-    max: 20,
-    value: [0, 20],
-    tipe: "range",
-    formatValue: (valor: number) => `$${valor}`,
-    step: 1,
-    isOpen: false,
   },
 ]);
 

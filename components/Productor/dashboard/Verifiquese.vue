@@ -1,5 +1,5 @@
 <template>
-  <div class=" bg-[url('/img/fondo-cafe-2.jpg')] py-10 md:h-[550px] flex flex-col justify-center items-center text-center my-10 px-4 rounded-2xl shadow-xl bg-center gap-4 bg-cover ">
+  <div v-if="!useUser.dataUser.perfilBase" class=" bg-[url('/img/fondo-cafe-2.jpg')] py-10 md:h-[550px] flex flex-col justify-center items-center text-center my-10 px-4 rounded-2xl shadow-xl bg-center gap-4 bg-cover ">
     <h1 class="text-3xl md:text-[32px] font-bold text-white max-w-[891px] text-stroke">Verifíquese y conviértase en un proveedor de confianza en Arabica.</h1>
     <p class="font-medium text-white max-w-[800px] mx-2 mb-4 ">Obtenga nuestro apoyo para el pedido de muestras, garantía de calidad, coordinación del envío, contratación e incluso financiación.</p>
     <BotonesBotonPrimary contenido="Verifiquese."  />
@@ -8,6 +8,9 @@
 </template>
 
 <script lang="ts" setup>
+
+const useUser = useUserStore()
+
 </script>
 
 <style>

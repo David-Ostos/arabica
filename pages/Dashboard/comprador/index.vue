@@ -1,17 +1,19 @@
 <script lang="ts" setup>
-import { useFavoritosStore } from "../../../stores/favoritos";
+
 definePageMeta({
   middleware: "comprador",
   layout: "comprador",
 });
-
 const useUser = useUserStore();
-const favoritos = useFavoritosStore();
+const useGlobal = useGlobalStore()
+const containerStyles = computed(() => ({
+  'max-height': `calc(100vh - (${useGlobal.heightNavComprador}px + ${useGlobal.heightFooterProductor}px) )`
 
+}))
 </script>
 
 <template>
-  <div class="mx-4 md:mx-20 font-roboto mb-10">
+  <div :style="containerStyles" class="mx-4 md:mx-20 font-roboto mb-10 h-screen">
     <CompradorDashboardDatosUser />
     <CompradorDashboardVerifiquese v-if="!useUser.dataUser.verificado" />
     <CompradorDashboardVerificado v-if="useUser.dataUser.verificado" />

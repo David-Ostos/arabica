@@ -4,14 +4,19 @@ definePageMeta({
   middleware: 'productor',
   layout: 'productor'
 })
+const useGlobal = useGlobalStore()
+const containerStyles = computed(() => ({
+  'max-height': `calc(100vh - (${useGlobal.heightNavProductor}px * 2))`
+
+}))
+
 
 const favoritos = useFavoritosStore();
 
-favoritos.getFavoritos(useUser.dataUser._id!);
 </script>
 
 <template>
-  <div  class="mx-8 md:mx-20 font-roboto mt-8 md:mt-0 mb-10">
+  <div :style="containerStyles"  class="mx-8 md:mx-20 font-roboto mt-8 md:mt-0 mb-10 h-screen">
     <ProductorDashboardDatosUser/>
     <ProductorDashboardVerifiquese v-if="!useUser.dataUser.verificado"/>
     <ProductorDashboardVerificado v-if="useUser.dataUser.verificado"/>

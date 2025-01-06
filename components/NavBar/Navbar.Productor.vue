@@ -21,7 +21,7 @@
               </NuxtLink>
             </div>
 
-            <SearchComprador class="hidden md:block" />
+            <SearchComprador ref="searchInput" class="hidden md:block" />
 
             <div class=" hidden md:flex justify-center items-center gap-2">
               <BotonesBotonSecondary v-if="!useUser.dataUser.perfilBase" contenido="Completar Registro"
@@ -97,6 +97,7 @@ import { Bars3Icon } from "@heroicons/vue/24/outline";
 // import imgLogo from "/img/Arabica-Green-coffee.png";
 import imgLogoLitgh from "/img/logo_ligth_new.png";
 import { useRoute } from "vue-router";
+import type { SearchComprador } from "#build/components";
 
 const useGlobal = useGlobalStore();
 const useUser = useUserStore()
@@ -106,7 +107,17 @@ const useCart = useCartStore()
 
 const route = useRoute()
 
+const searchInput = ref<InstanceType<typeof SearchComprador> | null>(null)
 
+  onUpdated(()=>{
+    prueba()
+  })
+
+const prueba = () =>{
+  if(searchInput.value){
+    console.log(searchInput.value)
+  }
+}
 
 const navRef = ref()
 

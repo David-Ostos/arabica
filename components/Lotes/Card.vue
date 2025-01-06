@@ -132,7 +132,7 @@
                 >
               </p>
 
-              <p class="block capitalize">origen de {{ item.origen}}</p>
+              <p class="block capitalize">En Origen</p>
             </div>
           </div>
         </div>
@@ -143,11 +143,14 @@
 
 <script lang="ts" setup>
 import type { Lotes } from "~/interfaces/Lotes";
-const useUser = useUserStore();
 const props = defineProps<{ item: Lotes }>();
 
 interface Campos {
   pais:{
+    icon: string,
+    value: string
+  },
+  origen:{
     icon: string,
     value: string
   },
@@ -175,6 +178,10 @@ const loadingImg = ref(true);
         icon: "🇵🇪",
         value: props.item.pais!,
       },
+      origen: {
+        icon: "🇵🇪",
+        value: props.item.origen!,
+      },
       proceso: {
         icon: "",
         value: props.item.proceso!,
@@ -185,7 +192,7 @@ const loadingImg = ref(true);
       },
       cantidad: {
         icon: "",
-        value: props.item.cantidadLote!,
+        value: '195 x 70 kg',
       },
     }
 
