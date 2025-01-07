@@ -411,56 +411,6 @@
               </UInput>
             </UFormGroup>
 
-            <!--             <UFormGroup label="Productores"
-              name="productores"
-              class="col-span-3"
-            >
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar departamento..."
-                class="w-full capitalize"
-                placeholder="Selecciona el departamento"
-                :options="['independiente', 'asociacion', 'cooperativa']"
-                v-model="state.productores"
-              />
-            </UFormGroup> -->
-
-            <!--             <UFormGroup label="Puntaje" name="puntaje" class="col-span-3">
-              <UInput v-model="state.puntaje" type="number" placeholder="85.25"/> 
-            </UFormGroup> -->
-
-            <!--             <UFormGroup label="Perfil" name="perfil" class="col-span-3">
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-placeholder="Buscar perfil..."
-                class="w-full capitalize"
-                placeholder="Selecciona el perfil"
-                :options="['floral', 'frutal', 'vegetal', 'cítrico', 'vinoso', 'dulce', 'azucares caramelizados', 'frutos secos', 'chocolate', 'nuez', 'taza limpia']"
-                v-model="state.perfil"
-              />
-            </UFormGroup> -->
-
-            <!--             <UFormGroup label="Cantidad del lote"
-              name="cantidadLote"
-              class="col-span-3"
-            >
-              <USelectMenu
-                :ui="{select: 'capitalize'}"
-                searchable
-                searchable-plotesVisibles.valuelaceholder="Buscar la cantidad del lote...."
-                class="w-full capitalize"
-                placeholder="Selecciona la cantidad del lote"
-                :options="[
-                  'lote',
-                  'micro lote',
-                  'nano lote',
-                ]"
-                v-model="state.cantidadLote"
-              />
-            </UFormGroup> -->
-
             <UFormGroup label="¿Este lote Tiene muestra? " class="col-span-3">
               <UToggle
                 v-model="muestra"
