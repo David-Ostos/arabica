@@ -10,7 +10,8 @@
         :picture="profile?.logo" 
         :nombre="profile?.nombre" 
         :origen="profile?.origen"
-        :tipo-productor="profile?.tipoProductor" 
+        :tipo-productor="profile?.tipoProductor"
+        :redes="profile?.redes"
       />
       <CompradorPerfilHorizontalNavigation />
     </div>

@@ -98,7 +98,13 @@
           <div class="mx-4 sm:mx-8 ">
             <div class=" ">
               <UCarousel v-slot="{ item }" :items="lote.galeria"
-                :ui="{  item: 'basis-full justify-center mx-8 rounded-md' }" 
+                :ui="{  
+                  item: 'basis-full justify-center mx-8 rounded-md',
+                  indicators: { 
+                    wrapper: 'bg-dar w-fit mx-auto rounded-full p-1 ', 
+                    inactive: 'border border-primary bg-gray-300 dark:bg-gray-800'
+                  }
+                }" 
                 indicators
                 :prev-button="{
                   color: 'gray',
@@ -221,24 +227,35 @@
       <!-- /card del lote -->
 
       <!-- Galeria del lote mobile -->
-      <div v-if="isScreenSmall"
-        class="col-span-4 h-screen-topBar-footer overflow-hidden h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4">
-        <div class="grid grid-cols-4 col-span-2 grid-rows-4 gap-4 h-full">
-          <div class="row-span-2 col-span-4">
-            <img :src="galeria[0].link" class="rounded-xl h-full w-full object-cover" alt="" />
-          </div>
+      <div v-if="isScreenSmall" 
+        ref="containerGaleria"
+        class="" >
+        <div class="mb-4" >
+          <UCarousel v-slot="{ item }" :items="lote.galeria"
+                :ui="{  item: 'basis-full md:basis-1/2 lg:basis-1/3 cursor-grab justify-center mx-8 rounded-md', 
+                  container : 'gap-2 w-full',
+                  indicators: { wrapper: 'bg-dar w-fit mx-auto rounded-full p-1 sm:bottom-4 -bottom-8', inactive: 'border border-primary bg-gray-300 dark:bg-gray-800'}  }" 
+                indicators
+                :prev-button="{
+                  color: 'gray',
+                  icon: 'i-heroicons-arrow-left-20-solid',
+                  class: '-start-11'
+                }"
+                :next-button="{
+                  color: 'gray',
+                  icon: 'i-heroicons-arrow-right-20-solid',
+                  class: ' -end-11'
+                }" 
+                arrows>
+                <div v-if="item.link" class="" @click="modalGaleria = true">
+                  <img :src="item.link" class=" rounded-md object-cover w-full h-80" draggable="false" />
+                </div>
 
-          <div class="flex justify-around items-center row-span-2 gap-4 col-span-4 h-full w-full">
-            <div v-for="img in galeria.slice(1)"
-              class="h-full w-full flex items-center justify-between overflow-hidden rounded-xl">
-              <div v-if="img.enty === true" class="border px-4 h-56 w-56 rounded-xl flex items-center">
-                <UIcon :name="img.img" class="rounded-xl h-28 w-full object-cover opacity-55" alt="" />
-              </div>
-              <div v-else class="rounded-xl">
-                <img :src="img.link" class="rounded-xl h-72 w-56 object-cover" alt="" />
-              </div>
-            </div>
-          </div>
+                <div v-else class="border  w-full h-52 rounded-xl flex items-center">
+                  <UIcon :name="item.img" class="rounded-xl h-28 w-full object-cover opacity-55" alt="" />
+                </div>
+              </UCarousel>
+
         </div>
       </div>
       <!-- /Galeria del lote mobile -->

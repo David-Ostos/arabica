@@ -15,8 +15,9 @@ export default defineNuxtConfig({
   ],
   fonts:{
     families:[
-      {name: 'Roboto', provider: 'google',weights:[100,300,400,500,700,800,900]},
-      {name: 'Raleway', provider: 'google'},
+      {name: 'Roboto', provider: 'google', weights:[100,300,400,500,700,800,900]},
+      {name: 'Raleway', provider: 'google', weights:[100,300,400,500,700,800,900]},
+      {name: 'Instrument Sans', provider: 'google', weights:[100,300,400,500,700,800,900]},
     ]
   },
 

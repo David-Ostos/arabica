@@ -13,7 +13,7 @@
         </template>
 
         <UCarousel v-if="image!.length > 0" v-slot="{ item }" :items="image"
-          :ui="{ container: ' w-full' }" indicators arrows >
+          :ui="{item: 'basis-full', container: 'gap-4 w-full' }" indicators arrows >
           <img :src="item.link" class="max-h-[500px] w-full object-cover cursor-pointer" draggable="true" />
         </UCarousel>
 

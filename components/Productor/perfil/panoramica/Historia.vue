@@ -1,38 +1,34 @@
 <template>
   <div class="flex flex-col gap-8">
     <div
-      class="flex gap-1 items-center justify-between shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-full py-2 px-3"
+      class="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar border rounded-md py-5 px-4"
     >
-      <div>
-        <p>
-          Historia de
-          <b class="text-primary capitalize">{{
-            useProductor.perfilProductor.nombre
-          }}</b>
-        </p>
+      <div class="flex justify-between pb-4">
+        <div class="flex justify-between pb-4">
+          <h2 class="font-medium text-lg text-gray-600">
+            Historia de
+            <b class="text-primary capitalize">{{
+              useProductor.perfilProductor.nombre
+            }}</b>
+          </h2>
+          <UIcon
+            name="i-ph-pencil-fill"
+            class="cursor-pointer text-primary self-stretch text-xl p-1 box-content"
+            dynamic
+            @click="isOpen = true"
+          />
+        </div>
       </div>
-      <UIcon
-        name="i-ph-pencil-fill"
-        class="cursor-pointer text-primary self-stretch  text-xl p-1 box-content"
-        dynamic
-        @click="isOpen = true"
-      />
+      <div>
+        <p
+          v-if="useProductor.perfilProductor.descripcion"
+          class="text-sm text-secundary text-justify"
+        >
+          {{ useProductor.perfilProductor.descripcion }}
+        </p>
+        <p class="text-sm text-secundary text-justify" v-else>Todavia no has proporcionado una descripcion...</p>
+      </div>
     </div>
-    <div class="">
-      <UTextarea
-        :ui="{
-          base: 'disabled:cursor-text h-[333px] overflow-auto',
-        }"
-        class="shadow-md"
-        size="sm"
-        disabled
-        color="gray"
-        variant="outline"
-        placeholder="Todavia no has proporcionado tu descripción..."
-        :model-value="useProductor.perfilProductor.descripcion"
-      />
-    </div>
-    <ProductorPerfilPanoramicaImagenesDestacadas />
   </div>
 
   <!-- Modals -->
@@ -105,13 +101,13 @@ const schema = object({
 
 type Schema = InferType<typeof schema>;
 
-  onUpdated(()=>{
-    if(!isOpen.value){
-      state.nombre = useProductor.perfilProductor.nombre;
-      state.descripcion = useProductor.perfilProductor.descripcion;
-      isLoading.value = false
-    }
-  })
+onUpdated(() => {
+  if (!isOpen.value) {
+    state.nombre = useProductor.perfilProductor.nombre;
+    state.descripcion = useProductor.perfilProductor.descripcion;
+    isLoading.value = false;
+  }
+});
 const state = reactive({
   nombre: useProductor.perfilProductor.nombre,
   descripcion: useProductor.perfilProductor.descripcion,
@@ -136,7 +132,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   } else {
     try {
       let productorExistente = false;
-      let id ;
+      let id;
 
       try {
         const resGet = await axios.get(
@@ -153,7 +149,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         );
         if (resGet.data) {
           productorExistente = true;
-          id = resGet.data
+          id = resGet.data;
         }
       } catch (error) {
         {
@@ -165,7 +161,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         }
       }
 
-      if (productorExistente && id._id !== useProductor.perfilProductor._id ) {
+      if (productorExistente && id._id !== useProductor.perfilProductor._id) {
         toast.error("El nombre del productor ya está en uso.");
         isLoading.value = false;
         return false;

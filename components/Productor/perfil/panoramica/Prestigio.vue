@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-4">
     <div>
       <div
-        class="shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-md py-5 px-4"
+        class=" bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar rounded-md py-5 px-4"
       >
-        <div class="flex justify-between border-b pb-4">
-          <h2 class="uppercase font-medium text-sm text-gray-600">equipo</h2>
+        <div class="flex justify-between">
+          <h2 class="font-medium text-secundary text-[12px] uppercase font-instrumentry">equipo</h2>
           <UIcon
             name="i-ph-pencil-fill"
             class="text-primary justify-self-stretch text-xl cursor-pointer"
@@ -14,7 +14,7 @@
           />
         </div>
         <div
-          class="grid grid-cols-3 gap-2 py-4 w-full overflow-x-hidden h-[144px] overflow-y-auto"
+          class="grid grid-cols-1 gap-2 py-4 w-full overflow-x-hidden "
         >
           <div
             v-if="
@@ -45,7 +45,7 @@
             v-else
             class="col-span-3 w-full flex items-center justify-center"
           >
-            <span class="w-fit text-gray-600">Ningún equipo añadido</span>
+            <span class="font-medium text-secundary text-[12px] uppercase font-instrument">No se ha añadido ningún miembro del equipo</span>
           </div>
         </div>
       </div>
@@ -196,10 +196,10 @@
 
     <div>
       <div
-        class="shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-md py-5 px-4"
+        class=" bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar rounded-md py-5 px-4"
       >
-        <div class="flex justify-between border-b pb-4">
-          <h2 class="uppercase font-medium text-sm text-gray-600">
+        <div class="flex justify-between">
+          <h2 class="font-medium text-secundary text-[12px] uppercase font-instrument">
             Certificaciones
           </h2>
           <UIcon
@@ -210,7 +210,7 @@
           />
         </div>
         <div
-          class="grid grid-cols-3 gap-2 w-full py-4 overflow-x-hidden h-[144px] overflow-y-auto"
+          class="grid grid-cols-1 gap-2 py-4 w-full overflow-x-hidden"
         >
           <div
             v-if="useProductor.perfilProductor.certificaciones && useProductor.perfilProductor.certificaciones.length > 0"
@@ -237,7 +237,7 @@
             v-else
             class="col-span-3 w-full flex items-center justify-center"
           >
-            <span class="w-fit text-gray-600"
+            <span class="font-medium text-secundary text-[12px] uppercase font-instrument"
               >No se han añadido certificados</span
             >
           </div>
@@ -337,10 +337,10 @@
 
     <div>
       <div
-        class="shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-md py-5 px-4"
+        class=" bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar rounded-md py-5 px-4"
       >
-        <div class="flex justify-between border-b pb-4">
-          <h2 class="uppercase font-medium text-sm text-gray-600">Premios</h2>
+        <div class="flex justify-between">
+          <h2 class="font-medium text-secundary text-[12px] uppercase font-instrument">Premios</h2>
           <UIcon
             name="i-ph-pencil-fill"
             class="text-primary justify-self-stretch text-xl cursor-pointer"
@@ -349,7 +349,7 @@
           />
         </div>
         <div
-          class="grid grid-cols-3 gap-2 w-full overflow-x-hidden py-4 h-[144px] overflow-y-auto"
+          class="grid grid-cols-1 gap-2 py-4 w-full overflow-x-hidden"
         >
           <div
             v-if="useProductor.perfilProductor.premios && useProductor.perfilProductor.premios.length > 0"
@@ -375,7 +375,7 @@
             v-else
             class="col-span-3 w-full flex items-center justify-center"
           >
-            <span class="w-fit text-gray-600"
+            <span class="font-medium text-secundary text-[12px] uppercase font-instrument"
               >No se han añadido certificados</span
             >
           </div>

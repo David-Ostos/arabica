@@ -1,22 +1,19 @@
 <template>
   <div>
     <div
-      class="shadow-md bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-md px-5 py-5 h-[287px]">
+      class=" bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar rounded-md px-5 py-5 h-[287px]">
       <div class="flex justify-between mb-4">
-        <h3 class="capitalize font-medium text-xl">Imagenes Destacadas</h3>
+        <h3 class="font-medium text-secundary text-[12px] uppercase font-instrument">Imagenes Destacadas</h3>
         <UIcon @click="openModal" name="i-ph-pencil-fill"
           class="text-primary justify-self-stretch text-xl cursor-pointer" dynamic />
       </div>
       <div class="flex justify-center items-center overflow-auto "> <!-- gap-4 -->
-        <!-- <div v-if="imgDestacadas.length > 0" v-for="img in imgDestacadas" :key="img._id" class="rounded-md h-[186px] w-full min-w-[120px] flex justify-center items-center">
-          <img :src="img.link" alt="" class="border rounded-md h-full object-cover" />
-        </div> -->
 
         <UCarousel v-if="imgDestacadas.length > 0" 
           ref="carouselRef"
           v-slot="{ item }" :items="imgDestacadas" 
-          :ui="{ item: 'basis-full h-[144px] md:basis-1/2 lg:basis-1/3', container: ' h-[200px]' }" 
-          class="rounded-lg  overflow-hidden" 
+          :ui="{ item: 'basis-full h-[144px] md:basis-1/2 lg:basis-1/3', container: ' w-full h-[200px]' }" 
+          class="rounded-lg w-full" 
           arrows
           indicators 
           :prev-button="{
@@ -39,24 +36,6 @@
         <ProductorPerfilModalImgMuestraImg :image="imgDestacadas" />
         <!-- /Modal de muestra -->
 
-        <!--         <UCarousel v-if="imgDestacadas.length === 0" v-slot="{ item }" :items="imgRelleno"
-          :ui="{ container: 'h-[186px] w-full min-w-[120px] gap-4 ' }" arrows 
-          :prev-button="{
-          color: 'gray',
-          icon: 'i-heroicons-arrow-left-20-solid',
-          class: 'start-12 top-full '
-          }"
-          :next-button="{
-            color: 'gray',
-            icon: 'i-heroicons-arrow-right-20-solid',
-            class: 'end-12 top-full'
-          }" >
-          <div class="border p-4 h-[186px] w-full min-w-[120px]  flex justify-center items-center bo" draggable="true">
-            <UIcon :name="item.link!" class="text-4xl text-secundary" dynamic />
-
-          </div>
-
-        </UCarousel> -->
 
         <div v-if="imgDestacadas.length === 0" v-for="img in imgRelleno" :key="img._id"
           class="border p-4 h-[186px] w-full min-w-[120px] flex justify-center items-center">
@@ -131,6 +110,7 @@ import axios from "axios";
 import type { ImgDestacadas } from "../../../../interfaces/PerfilProductor";
 import { useFileUpload } from "~/composables/useFileUpload";
 
+
 const useProductor = useProductorStore();
 const useShowModals = useShowModalsStore();
 
@@ -151,15 +131,17 @@ const displayedImages = computed(() => {
 });
 
 onMounted(() => {
-  setInterval(() => {
-    if (!carouselRef.value) return
-
-    if (carouselRef.value.page === carouselRef.value.pages) {
-      return carouselRef.value.select(0)
-    }
-
-    carouselRef.value.next()
-  }, 3000)
+  if(displayedImages.value.length > 1){
+    setInterval(() => {
+      if (!carouselRef.value) return
+  
+      if (carouselRef.value.page === carouselRef.value.pages) {
+        return carouselRef.value.select(0)
+      }
+  
+      carouselRef.value.next()
+    }, 3000)
+  }
 })
 
 onMounted(() => {
@@ -215,6 +197,9 @@ const closeModal = () => {
   // Descartar cambios no guardados
   uploadedFiles.value = [];
 };
+
+
+
 const removeImage = (index: number) => {
   if (index < imgDestacadas.value.length) {
     // Es una imagen existente

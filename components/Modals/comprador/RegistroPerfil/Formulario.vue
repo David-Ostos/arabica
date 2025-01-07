@@ -253,7 +253,7 @@
                       :ui="{
                         rounded: 'rounded-l-none',
                       }"
-                      placeholder="usuario"
+                      :placeholder="item.tipoRed !== 'web' ? `https://www.${item.linkbase}tu_usuario` : 'url de tu pagina web' "
                     />
                   </div>
                 </div>

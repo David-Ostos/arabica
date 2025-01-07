@@ -6,6 +6,7 @@ export default {
       fontFamily: {
         roboto: "Roboto",
         raleway: "Raleway",
+        instrument: "Instrument Sans",
       },
       height: {
         "screen-topBar-footer": "calc(100vh - 130px)",

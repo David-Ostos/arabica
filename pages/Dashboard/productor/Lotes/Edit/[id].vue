@@ -1,24 +1,62 @@
 <template>
 
-  <UModal v-model="isOpenModalPicture" :ui="{ container: 'items-center' }" prevent-close>
 
-    <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-      <template #header>
-        <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:-text-dar capitalize">
-            Vista de imagen
-          </h3>
-          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="closeModalPicture" />
+      <!-- Modal para agregar y eliminar imagenes -->
+      <UModal :ui="{ width: 'sm:max-w-[900px]' }" prevent-close v-model="isOpenModalPicture">
+      <UCard :ui="{
+        ring: '',
+        divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+        width: 'sm:max-w-2xl',
+      }">
+        <template #header>
+          <div class="flex items-center justify-between">
+            <h3 @click="" class="text-base font-semibold text-gray-900 dark:-text-dar">
+              Agregar Imagenes destacadas
+            </h3>
+            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+              @click="closeModalPicture" />
+          </div>
+        </template>
+
+        <div>
+          <div class="flex justify-between items-center mb-8">
+            <h1 class="text-gray-700 text-sm font-medium">
+              {{ displayedImages.length }}
+              {{ displayedImages.length === 1 ? "imagen" : "imágenes" }}
+            </h1>
+            <UButton @click="clickInputFile" variant="outline" class="text-secundary">
+              <UIcon name="i-ic-baseline-add-circle-outline" class="text-secundary text-2xl font-bold" dynamic />
+              Agregar imagenes
+            </UButton>
+            <input ref="inputImg" type="file" @change="handleFileUpload" class="hidden" multiple />
+          </div>
+
+          <div v-if="displayedImages.length > 0" class="grid grid-cols-3 gap-4">
+            <div v-for="(item, index) in displayedImages" v-show="!item.enty"  :key="item._id" class="rounded-md gap-2 col-span-1">
+              <div class="relative rounded-md col-span-1">
+                <UIcon @click="removeImage(index)"
+                  class="absolute top-2 right-2 text-red-500 bg-white p-1 text-2xl rounded-full cursor-pointer"
+                  name="i-clarity-remove-line" dynamic />
+                <img :src="item.link" class="w-full object-cover h-48 rounded-md cursor-pointer" draggable="false"
+                  @click="openImageModal(item.link!)" />
+              </div>
+
+              <!-- Modal de muestra -->
+              <LazyProductorPerfilModalImgMuestraMuestrasImgs :image="selectedImage" :open="isImageModalOpen"
+                @close="closeImageModal" />
+              <!-- /Modal de muestra -->
+
+            </div>
+          </div>
         </div>
-      </template>
 
-      <div>
-        <img :src="pictureModal" class="w-full h-full" />
-      </div>
-
-    </UCard>
-
-  </UModal>
+        <UButton type="button" :loading="loading" class="w-fit self-end px-3 h-10 mt-8 font-bold" @click="onSubmit">
+          <UIcon name="i-ic-baseline-add-circle-outline" class="text-white text-2xl font-bold" dynamic />
+          Actualizar imagenes destacadas
+        </UButton>
+      </UCard>
+    </UModal>
+    <!-- /Modal para agregar y eliminar imagenes -->
 
   <div :style="containerStyles" class="m-8 sm:m-20">
     <div class="overflow-auto">
@@ -35,8 +73,7 @@
         </div> -->
 
         <!-- galeria -->
-        <div
-          @click="clickInputFile"
+        <div @click="openModalPicture(); console.log(pictures)"
           class="col-span-1 grid-area-1 h-[430px] h-ful shadow-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:-text-dar ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-xl p-4"
         >
           <div class="grid grid-cols-4 col-span-2 grid-rows-4 gap-4 h-full">
@@ -515,9 +552,9 @@
 
 <script lang="ts" setup>
 import axios from "axios";
-import { boolean, object, string, number, type InferType, array } from 'yup';
+import { object, string, number, type InferType, array } from 'yup';
 import type { FormError, FormSubmitEvent } from "#ui/types";
-import type {  Lotes } from "~/interfaces/Lotes";
+import type {  Galeria, Lotes } from "~/interfaces/Lotes";
 import { squircle } from "ldrs";
 import { toast } from "vue3-toastify";
 
@@ -533,9 +570,10 @@ definePageMeta({
   layout: "productor",
 });
 
-const useProductor = useProductorStore();
 const useLotes = useLotesStore();
 const route = useRoute();
+const { uploadedFiles, handleFileUpload, removeFile, filesArray, uploadFiles } =
+  useFileUpload();
 
 
 const lote = useLotes.lotes.filter((lote) => lote._id === route.params.id)[0];
@@ -544,19 +582,6 @@ const containerStyles = computed(() => ({
   "margin-top": `calc( ${useGlobal.heightNavProductor}px + 32px )`,
   "max-height": `calc(100vh - (${useGlobal.heightNavProductor}px + ${useGlobal.heightFooterProductor}px + ${useGlobal.heightNavProductor}px ))`,
 }));
-
-const isOpenModalPicture = ref(false)
-const pictureModal = ref('')
-
-const openModalPicture = (picture: string ) => {
-  pictureModal.value  = picture
-  isOpenModalPicture.value = true
-}
-const closeModalPicture = ()=>{
-  pictureModal.value = ''
-  isOpenModalPicture.value = false
-
-}
 
 const state: Lotes = reactive({
   nombre: lote.nombre,
@@ -581,6 +606,52 @@ const state: Lotes = reactive({
   ocultar: lote.ocultar
 });
 
+const pictures = ref(state.galeria as any);
+
+const displayedImages = computed(() => {
+  return [...pictures.value, ...uploadedFiles.value];
+});
+
+const isOpenModalPicture = ref(false)
+const pictureModal = ref('')
+const backupImages = ref<Galeria[]>([])
+
+const openModalPicture = ( ) => {
+  // pictureModal.value  = picture
+  isOpenModalPicture.value = true
+  backupImages.value = JSON.parse(JSON.stringify(pictures.value));
+  // Resetear uploadedFiles al abrir el modal
+  uploadedFiles.value = [];
+}
+const closeModalPicture = ()=>{
+  // pictureModal.value = ''
+  isOpenModalPicture.value = false
+  uploadedFiles.value = []
+}
+const selectedImage = ref('')
+const isImageModalOpen = ref(false)
+
+const openImageModal = (imageUrl: string) => {
+  selectedImage.value = imageUrl
+  isImageModalOpen.value = true
+}
+
+const closeImageModal = () => {
+  isImageModalOpen.value = false
+}
+
+const removeImage = (index: number) => {
+  if (index < pictures.value.length) {
+    // Es una imagen existente
+    pictures.value.splice(index, 1);
+  } else {
+    // Es una imagen nueva
+    removeFile(index - pictures.value.length);
+  }
+};
+
+
+
 const muestra = ref(state.muestra?.muestra)
 const muestraGratis = ref(state.muestra?.muestraGratis)
 
@@ -593,7 +664,6 @@ watch(muestra, (nuevoValor) => {
 });
 
 const meses = useGlobal.meses;
-const pictures = ref(state.galeria as any);
 const loading = ref(false);
 const inputFile = ref();
 const filesSave = ref();
@@ -705,150 +775,34 @@ const validate = (state: any): FormError[] => {
 }
 
 
-// funcion para agegar las imagenes a la galeria para que el usuario las visualice antes de subirlas
-async function handleFileUpload(event: any) {
-  loading.value = true;
-
-  filesSave.value = event.target.files;
-
-  const files = event.target.files;
-
-  pictures.value = [];
-
-  // Array para almacenar las promesas de lectura de archivos
-  const imagePromises = [];
-  const verificar = [...files];
-  const archivosPermitidos = [
-    "image/gif",
-    "image/png",
-    "image/jpg",
-    "image/jpeg",
-    "image/webp",
-    "image/*",
-  ];
-
-  const cumpleConTipos = verificar.every((file: any) => {
-    return archivosPermitidos.includes(file.type);
-  });
-
-
-  if (cumpleConTipos) {
-    if (files.length > 0 && files.length <= 4) {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const reader = new FileReader();
-
-        // Crea una promesa para cada lectura de archivo
-        const imagePromise = new Promise((resolve, reject) => {
-          reader.onload = () => {
-            const dataURL = reader.result;
-            resolve({_id: i, link: dataURL, position: 0});
-          };
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
-
-        imagePromises.push(imagePromise);
-      }
-
-      // Espera a que todas las promesas se resuelvan (imágenes cargadas)
-      const imagesData = await Promise.all(imagePromises);
-      pictures.value = imagesData;
-    } else {
-      toast.error(
-        "Solo se aceptan archivos de formato .gif, .png, .jpg, .jpeg, webp"
-      );
-      inputFile.value = "";
-    }
-  } else {
-    toast.error(
-      "Solo se aceptan archivos de formato .gif, .png, .jpg, .jpeg, webp"
-    );
-    inputFile.value = "";
-  }
-  loading.value = false;
-  verificarGaleria();
-}
-
-// funcion para subir las imagenes 
-async function UploadFiles(files: any) {
-  console.log(files)
-  if (files) {
-    const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append("files[]", files[i]);
-    }
-
-    try {
-      // @ts-ignore
-      await axios(
-        // @ts-ignore
-        {
-          url: `${import.meta.env.VITE_URL_API}/api/assets/upload`,
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "api-key": import.meta.env.VITE_COCKPIT_API_KEY,
-          },
-          onUploadProgress: (progressEvent: any) => {
-            faseUpload.value = "Subiendo Imagenes...";
-            const progressPercent = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total!
-            );
-            porcentaje.value = progressPercent;
-            // Actualiza tu interfaz con el porcentaje de progreso
-          },
-          data: formData,
-        }
-      )
-        .then((res) => {
-          let count = 0;
-          res.data.assets.forEach((file: any) => {
-            state.galeria!.push({
-              _id: file._id,
-              link: `https://cockpit.arabicagc.com/storage/uploads${file.path}`,
-              position: count,
-            });
-            return ++count;
-          });
-          return { status: true, tipo: "success" };
-        })
-        .catch((e) => {
-          console.log(e);
-          if (e.code === "ERR_NETWORK") {
-            toast.info("Problemas en la conexion intente mas tarde.");
-            return { status: false, tipo: "otros" };
-          }
-          return { status: false, tipo: "error" };
-        });
-      return { status: true };
-    } catch (e) {
-      console.log(e);
-      return { status: false, tipo: "error" };
-    }
-  } else {
-    toast.error("No hay imagenes para subir.");
-    return { status: false, tipo: "otros" };
-  }
-}
-
-
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with event.data
   loading.value = true;
-  state.precio = +state.precio!;
-  const picturesFilter = pictures.value.filter((objeto:any) => !objeto.enty);
-
-
+  state.precio = state.precio!;
   let uploadImg;
-  if (JSON.stringify(picturesFilter) !== JSON.stringify(state.galeria)) {
-    uploadImg = await UploadFiles(filesSave.value);
+  console.log(pictures.value)
+
+  if (JSON.stringify(pictures.value) !== JSON.stringify(state.galeria)) {
+    if (filesArray.value.length > 0) {
+        console.log({uploadImg})
+        uploadImg = await uploadFiles();
+        if (uploadImg.status) {
+          console.log({uploadImg})
+          // Agregar las nuevas imágenes subidas a imgDestacadas
+          pictures.value = [...pictures.value, ...uploadImg.data];
+        } else {
+          throw new Error(uploadImg.message);
+        }
+      }
   } else {
     uploadImg = { status: true };
+    console.log('')
   }
-  
-    
-if (uploadImg.status) {
+  pictures.value = pictures.value.filter((objeto:any) => !objeto.enty);
+  state.galeria = pictures.value;
+  console.log(state.galeria)
+
+if (uploadImg!.status) {
     try {
       // @ts-ignore
 
@@ -889,7 +843,9 @@ if (uploadImg.status) {
           if (updateLoteIndice !== -1) {
             useLotes.lotes[updateLoteIndice] = { ...res.data };
           }
-          toast.success("Se ha editado el lote satisfactoriamente");
+          toast.success("Se ha editado el lote satisfactoriamente",{onClose:()=>{
+            closeModalPicture()
+          }});
         })
         .catch((error) => {
           faseUpload.value = "error";
@@ -916,13 +872,6 @@ if (uploadImg.status) {
   } else {
     faseUpload.value = "error";
     loading.value = false;
-    if (uploadImg.tipo === "otros") {
-      return false;
-    } else {
-      toast.warn(
-        "Hubo un problema, por favor inténtelo de nuevo, si el error se repite por favor ponerse en contacto con soporte."
-      );
-    }
   }
 
   loading.value = false;
